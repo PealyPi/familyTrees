@@ -2,7 +2,7 @@
 <html>
 <head>			
    <title id="treeTitle">Family Trees</title>
-   <a href="https://www.vecteezy.com/free-vector/vector">Vector Vectors by Vecteezy</a>
+   <a hidden href="https://www.vecteezy.com/free-vector/vector">Vector Vectors by Vecteezy</a>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet"> 
 	
@@ -21,11 +21,35 @@
 		</div>
 	</div>
 	<div class="header">
-		<div class="top_navbar">
-			<button id="home_navTab" 	 class="navTab active"><i class="fas fa-info-circle"></button>
-			<button id="1_navTab" 	 class="navTab"><i class="fas fa-info-circle"></button>
-			<button id="2_navTab"  class="navTab"><i class="fas fa-info-circle"></button>
-		</div>
+		<div class="top_navbar homeTabColour">
+			<div class="left_navbar">
+				<button id="homeTab" class="navTab active">
+					<i class="fas fa-home"></i>
+				</button>
+				<div id="homeTab_div" class="navTabDiv active">Home</div>
+				
+				<button id="treeTab" class="navTab">
+					<i class="fas fa-info-circle"></i>
+				</button>
+				<div id="treeTab_div" class="navTabDiv">Tree</div>
+				
+				<button id="infoTab" class="navTab">
+					<i class="fas fa-info-circle"></i>
+				</button>				
+				<div id="infoTab_div" class="navTabDiv">Info</div>
+				
+				<button id="imgsTab" class="navTab">
+					<i class="far fa-images"></i>
+				</button>
+				<div id="imgsTab_div" class="navTabDiv">Images</div>
+			</div>
+			
+			<div class="right_navbar">
+				<div id="pplTab_div" class="navTabDiv">People</div>	
+				<button id="pplTab" class="navTab">
+					<i class="fas fa-user"></i>
+				</button>		
+		</div>		
 	</div>
 	
 	<div class="main">
@@ -37,8 +61,8 @@
 	<div class="footer"></div>	
 	
 	
-	<script src="js/panzoom.js"></script>	
-
+	<script src="js/panzoom.js"></script>		
+	<script src="js/generalScripts.js"></script>	
 	
 </body>
 </html>
