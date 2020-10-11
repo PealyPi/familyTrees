@@ -91,6 +91,7 @@ body{
 	
 	margin: 12px;
 	
+	font-size: 24px;
 	cursor:pointer;	
 	text-align:center;	
 	background-color: rgb(0, 0, 0, 0);	
@@ -126,7 +127,6 @@ body{
 	speak: none;
 	display: block;
 	line-height: 90px;
-	font-size: 48px;
 	font-style: normal;	
 	font-weight: normal;	
 	font-variant: normal;
