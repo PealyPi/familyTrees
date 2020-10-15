@@ -268,10 +268,11 @@ body{
 	width: 600px;
 	height: 600px;
 	margin: 20px auto;
+	background-image: url('media/peachyTree.svg');
 }
-.peachyTree img{
+/*.peachyTree img{
 	height: 600px;
-}
+}*/
 
 
 
