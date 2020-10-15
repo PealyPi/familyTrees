@@ -1,3 +1,39 @@
+/* Preset Colours */
+:root{
+	/* Orange */
+	--colour1: #FFAC81; 
+	--colour1_RGB: rgb(255, 172, 129); 
+  
+	/* Pink */
+	--colour2: #FF928B; 
+	--colour2_RGB: rgb(255, 146, 139); 
+  
+	/* Peach */
+	--colour3: #FEC3A6; 
+	--colour3_RGB: rgb(254, 195, 166); 
+  
+	/* Green */
+	--colour4: #EFE9AE; 
+	--colour4_RGB: rgb(239, 233, 174); 
+  
+	/* Mint */
+	--colour5: #CDEAC0; 
+	--colour5_RGB: rgb(205, 234, 192); 
+  
+	/* Brown */
+	--colour6: #AB7878; 
+	
+	/* Purple */
+	--colour7: #ADAADF; 
+	
+	/* Dark Purple */
+	--colour8: #241F26; 
+	--colour8_RGB: rgb(36, 31, 38); 
+	
+	--fontColour: #fff;
+	--maskColour_RGB: rgb(102, 88, 108, 0.9); 
+}
+
 body,html{
 	min-height:100%;
 	min-width:250px;
@@ -11,7 +47,7 @@ body{
 	
 	background:transparent center center;
 	background-attachment:fixed;
-	background-color: #241F26;	
+	background-color: var(--colour8);	
 	
 	font-family: 'Josefin Sans', sans-serif;
 	color:#fff;	
@@ -30,7 +66,7 @@ body{
 	top:0;
 	left:0;
 	
-	background-color: rgba(61, 3, 77, 0.9); 
+	background-color: var(--maskColour_RGB);	
 	position: fixed;
 	
 }	
@@ -147,50 +183,50 @@ body{
 }
 
 .top_navbar button#homeTab:after{
-	box-shadow: 0 0 0 2px #F1671F;	
+	box-shadow: 0 0 0 2px var(--colour1);	
 }
 .top_navbar button#treeTab:after{
-	box-shadow: 0 0 0 2px #9B0F5F;	
+	box-shadow: 0 0 0 2px var(--colour2);	
 }
 .top_navbar button#infoTab:after{
-	box-shadow: 0 0 0 2px #C81B26;	
+	box-shadow: 0 0 0 2px var(--colour3);	
 }
 .top_navbar button#imgsTab:after{
-	box-shadow: 0 0 0 2px #35BFA6;	
+	box-shadow: 0 0 0 2px var(--colour4);	
 }
 .top_navbar button#pplTab:after{
-	box-shadow: 0 0 0 2px #600479;	
+	box-shadow: 0 0 0 2px var(--colour5);	
 }
 .top_navbar button#homeTab:hover, .top_navbar button#homeTab.active{
-	box-shadow: 0 0 0 6px #F1671F;	
+	box-shadow: 0 0 0 6px var(--colour1);	
 }
 .top_navbar button#treeTab:hover, .top_navbar button#treeTab.active{
-	box-shadow: 0 0 0 6px #9B0F5F;	
+	box-shadow: 0 0 0 6px var(--colour2);	
 }
 .top_navbar button#infoTab:hover, .top_navbar button#infoTab.active{
-	box-shadow: 0 0 0 6px #C81B26;	
+	box-shadow: 0 0 0 6px var(--colour3);	
 }
 .top_navbar button#imgsTab:hover, .top_navbar button#imgsTab.active{
-	box-shadow: 0 0 0 6px #35BFA6;	
+	box-shadow: 0 0 0 6px var(--colour4);	
 }
 .top_navbar button#pplTab:hover, .top_navbar button#pplTab.active{
-	box-shadow: 0 0 0 6px #600479;	
+	box-shadow: 0 0 0 6px var(--colour5);	
 }
 
 .top_navbar.homeTabColour{
-	border-bottom-color: #F1671F;
+	border-bottom-color: var(--colour1);
 }
 .top_navbar.treeTabColour{
-	border-bottom-color: #9B0F5F;
+	border-bottom-color: var(--colour2);
 }
 .top_navbar.infoTabColour{
-	border-bottom-color: #C81B26;
+	border-bottom-color: var(--colour3);
 }
 .top_navbar.imgsTabColour{
-	border-bottom-color: #35BFA6;
+	border-bottom-color: var(--colour4);
 }
 .top_navbar.pplTabColour{
-	border-bottom-color: #600479;
+	border-bottom-color: var(--colour5);
 }
 
 .top_navbar .navTabDiv{
@@ -203,18 +239,13 @@ body{
 	display:inline-block;
 }
 
+.icon-tree{	
+  height: 18px;
+  width: 18px;
+}
 
 
 /* -----------    ------------- */
 
-.texturingMask{
-	-webkit-mask-image: url(media/texturing-mask.png);
-	mask-image: url(media/texturing-mask.png);
-
-}
-
-.main_startCircle{
-	width: 400px;
-}
 
 /* -------------------- */
