@@ -240,9 +240,11 @@ body{
 }
 
 .icon-tree{	
-  height: 18px;
-  width: 18px;
+	height: 24px;
+	width: 24px;
+	transform: scale(1) translate(0, 2px);
 }
+
 
 
 /* -----------    ------------- */
