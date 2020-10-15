@@ -268,7 +268,7 @@ body{
 	width: 600px;
 	height: 600px;
 	margin: 20px auto;
-	background-image: url('media/peachyTree.svg');
+	background-image: url(media/peachyTree.svg);
 }
 /*.peachyTree img{
 	height: 600px;
