@@ -1,5 +1,10 @@
 /* Preset Colours */
 :root{
+	/*font*/
+	--mainFontFamily: 'Josefin Sans', sans-serif;
+	
+	
+	/*Colours*/
 	/* Orange */
 	--colour1: #FFAC81; 
 	--colour1_RGB: rgb(255, 172, 129); 
@@ -55,7 +60,7 @@ body{
 	background-attachment:fixed;
 	background-color: var(--colour8);	
 	
-	font-family: 'Josefin Sans', sans-serif;
+	font-family: var(--mainFontFamily);
 	color:#fff;	
 	font-size: 10px;
 	
@@ -236,9 +241,8 @@ body{
 }
 
 .top_navbar .navTabDiv{
-	display:none;
-	
-	font-family: 'Josefin Sans', sans-serif;
+	display:none;	
+	font-family: var(--mainFontFamily);
 	font-size:14px;
 }
 .top_navbar .navTabDiv.active{
@@ -255,6 +259,18 @@ body{
 	height: 24px;
 	width: 24px;
 	transform: scale(1) translate(0, 2px);
+}
+
+.mainDiv{
+	width: 100%;
+}
+.peachyTree{
+	width: 600px;
+	height: 600px;
+	margin: 20px auto;
+}
+.peachyTree img{
+	height: 600px;
 }
 
 
