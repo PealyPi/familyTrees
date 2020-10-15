@@ -268,12 +268,10 @@ body{
 	width:600px;
 	height: 600px;
 	margin: 20px auto;
+	
 	background-image: url('../media/peachyTree.svg'); 
 	background-repeat: no-repeat;
 }
-/*.peachyTree img{
-	height: 600px;
-}*/
 
 
 
