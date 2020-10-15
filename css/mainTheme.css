@@ -265,14 +265,38 @@ body{
 	width: 100%;
 }
 .peachyTree{
-	width:600px;
+	width: 600px;
 	height: 600px;
 	margin: 20px auto;
 	
 	background-image: url('../media/peachyTree.svg'); 
 	background-repeat: no-repeat;
 }
+#svgDiv{
+	display: none;
+	width: 90%;
+	height: 600px;
+	position: absolute;
+	top: calc(var(--navBarHeight) + 20px);	
+}
 
+.personCircle{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;	
+	
+	background-color:#FFAC81;
+	border-width: 3px;
+	border-style: solid;
+	border-left-color: #FFFFCB;
+	border-bottom-color: #FFC997;
+	border-right-color: #FFDFA7;
+	border-top-color: #FFE7AD;
+	
+	box-shadow: 
+		0 0 0 1px #BF6A3E,
+		2px 2px 5px 1px rgb(0, 0, 0, 0.6);
+}
 
 
 /* -----------    ------------- */
