@@ -5,38 +5,40 @@
 	
 	
 	/*Colours*/
-	/* Orange */
-	--colour1: #FFAC81; 
-	--colour1_RGB: rgb(255, 172, 129); 
+	--colourOrange: #FFAC81; 
+	--colourOrange_RGB: rgb(255, 172, 129); 
   
-	/* Pink */
-	--colour2: #FF928B; 
-	--colour2_RGB: rgb(255, 146, 139); 
+	--colourPink: #FF928B; 
+	--colourPink_RGB: rgb(255, 146, 139); 
   
 	/* Peach */
-	--colour3: #FEC3A6; 
-	--colour3_RGB: rgb(254, 195, 166); 
+	--colourPeach: #FEC3A6; 
+	--colourPeach_RGB: rgb(254, 195, 166); 
   
 	/* Green */
-	--colour4: #EFE9AE; 
-	--colour4_RGB: rgb(239, 233, 174); 
+	--colourGreen: #EFE9AE; 
+	--colourGreen_RGB: rgb(239, 233, 174); 
   
 	/* Mint */
-	--colour5: #CDEAC0; 
-	--colour5_RGB: rgb(205, 234, 192); 
+	--colourMint: #CDEAC0; 
+	--colourMint_RGB: rgb(205, 234, 192); 
   
 	/* Brown */
-	--colour6: #AB7878; 
+	--colourBrown: #AB7878; 
 	
 	/* Purple */
-	--colour7: #ADAADF; 
+	--colourPurple: #ADAADF; 
 	
 	/* Dark Purple */
-	--colour8: #241F26; 
-	--colour8_RGB: rgb(36, 31, 38); 
+	--colourDarkPurple: #241F26; 
+	--colourDarkPurple_RGB: rgb(36, 31, 38); 
+	--colourDarkPurple_RGB_Transparent: rgb(36, 31, 38, 0.8); 
 	
 	--fontColour: #fff;
+	--maskColour: #66586C;
 	--maskColour_RGB: rgb(102, 88, 108, 0.9); 
+	
+	/*--infoDivColour: ;*/
 	
 	
 	/*Dimensions*/
@@ -58,7 +60,7 @@ body{
 	
 	background:transparent center center;
 	background-attachment:fixed;
-	background-color: var(--colour8);	
+	background-color: var(--colourDarkPurple);	
 	
 	font-family: var(--mainFontFamily);
 	color:#fff;	
@@ -81,6 +83,24 @@ body{
 	position: fixed;
 	
 }	
+
+.loading-mask_topBar{
+	background-color: var(--maskColour);
+	height: 100px;
+	width: 100%;
+	top:0;
+	z-index:1000;	
+	position: fixed;
+}
+.loading-mask_bottomBar{
+	background-color: var(--maskColour);
+	height: 100px;
+	width: 100%;
+	bottom: 0;
+	z-index:1000;	
+	position: fixed;
+}
+
 .loading-spinner{
 	color: white;
 	text-align: center;
@@ -194,50 +214,50 @@ body{
 }
 
 .top_navbar button#homeTab:after{
-	box-shadow: 0 0 0 2px var(--colour1);	
+	box-shadow: 0 0 0 2px var(--colourOrange);	
 }
 .top_navbar button#treeTab:after{
-	box-shadow: 0 0 0 2px var(--colour2);	
+	box-shadow: 0 0 0 2px var(--colourPink);	
 }
 .top_navbar button#infoTab:after{
-	box-shadow: 0 0 0 2px var(--colour3);	
+	box-shadow: 0 0 0 2px var(--colourPeach);	
 }
 .top_navbar button#imgsTab:after{
-	box-shadow: 0 0 0 2px var(--colour4);	
+	box-shadow: 0 0 0 2px var(--colourGreen);	
 }
 .top_navbar button#pplTab:after{
-	box-shadow: 0 0 0 2px var(--colour5);	
+	box-shadow: 0 0 0 2px var(--colourMint);	
 }
 .top_navbar button#homeTab:hover, .top_navbar button#homeTab.active{
-	box-shadow: 0 0 0 6px var(--colour1);	
+	box-shadow: 0 0 0 6px var(--colourOrange);	
 }
 .top_navbar button#treeTab:hover, .top_navbar button#treeTab.active{
-	box-shadow: 0 0 0 6px var(--colour2);	
+	box-shadow: 0 0 0 6px var(--colourPink);	
 }
 .top_navbar button#infoTab:hover, .top_navbar button#infoTab.active{
-	box-shadow: 0 0 0 6px var(--colour3);	
+	box-shadow: 0 0 0 6px var(--colourPeach);	
 }
 .top_navbar button#imgsTab:hover, .top_navbar button#imgsTab.active{
-	box-shadow: 0 0 0 6px var(--colour4);	
+	box-shadow: 0 0 0 6px var(--colourGreen);	
 }
 .top_navbar button#pplTab:hover, .top_navbar button#pplTab.active{
-	box-shadow: 0 0 0 6px var(--colour5);	
+	box-shadow: 0 0 0 6px var(--colourMint);	
 }
 
 .top_navbar.homeTabColour{
-	border-bottom-color: var(--colour1);
+	border-bottom-color: var(--colourOrange);
 }
 .top_navbar.treeTabColour{
-	border-bottom-color: var(--colour2);
+	border-bottom-color: var(--colourPink);
 }
 .top_navbar.infoTabColour{
-	border-bottom-color: var(--colour3);
+	border-bottom-color: var(--colourPeach);
 }
 .top_navbar.imgsTabColour{
-	border-bottom-color: var(--colour4);
+	border-bottom-color: var(--colourGreen);
 }
 .top_navbar.pplTabColour{
-	border-bottom-color: var(--colour5);
+	border-bottom-color: var(--colourMint);
 }
 
 .top_navbar .navTabDiv{
@@ -261,7 +281,7 @@ body{
 	transform: scale(1) translate(0, 2px);
 }
 
-.mainDiv{
+#mainDiv{
 	width: 100%;
 }
 .peachyTree{
@@ -269,15 +289,24 @@ body{
 	height: 600px;
 	margin: 20px auto;
 	
+	position: absolute; 	
+	left: 0; 
+	right: 0; 
+	margin-left: auto; 
+	margin-right: auto;
+	
 	background-image: url('../media/peachyTree.svg'); 
 	background-repeat: no-repeat;
 }
+
 #svgDiv{
 	display: none;
-	width: 90%;
+	width: 100%;
 	height: 600px;
-	position: absolute;
-	top: calc(var(--navBarHeight) + 20px);	
+	position: relative;
+	/*top: calc(var(--navBarHeight) + 20px);	*/
+	top: 0;
+	background-color: var(--colourDarkPurple_RGB_Transparent);
 }
 
 .personCircle{
@@ -298,6 +327,65 @@ body{
 		2px 2px 5px 1px rgb(0, 0, 0, 0.6);
 }
 
+.personName{
+	cursor: default;
+}
+.arrowButtonsDiv{
+	width: 50%;
+	margin: auto;
+	position: relative;
+	bottom: 100px;
+}
+.leftArrow_button, .rightArrow_button{
+	cursor: pointer;
+	height: 56px;
+	width: 48px;
+	
+	font-size: 48px;
+	
+	border:none;
+	background: none;
+	color: white;
+}
+.leftArrow_button button:hover, .leftArrow_button button:active, .leftArrow_button button:focus, 
+.rightArrow_button button:hover, .rightArrow_button button:active, .rightArrow_button button:focus{
+	border: none;
+	outline: none;
+	color: white;
+}
+.leftArrow_button{	
+	display:inline-block;	
+	float: left;
+}
+.rightArrow_button{		
+	display:inline-block;
+	float: right;
+}
+
+
+
+.vineLine{
+	width: 100%;
+	height: 107.4px;
+	margin: auto;
+	position: relative;
+	top: -75px;
+	
+	background-image: url('../media/vineLine.svg'); 
+	background-repeat: repeat-x;
+	
+}
+#infoDiv{
+	display: none;
+	position: relative;
+	top: 0;
+	width: 100%;
+	height:500px;
+	
+	background-color: var(--infoDivColour);
+	border-top: 45px solid var(--colourBrown);
+	
+}
 
 /* -----------    ------------- */
 

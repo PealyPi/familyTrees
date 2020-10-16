@@ -37,8 +37,8 @@ function navBar_openPage(event) {
 		navDiv.classList.remove(oldTabColor);
 		
 		
-		const newActiveID = btn.id;
 		const newActive = btn;
+		const newActiveID = btn.id;
 		const newActiveDiv = document.getElementById(newActiveID + '_div');
 		const newTabColor = newActiveID + "Colour";		
 		
@@ -46,6 +46,31 @@ function navBar_openPage(event) {
 		newActiveDiv.classList.add("active");
 		navDiv.classList.add(newTabColor);
 		
+		
+		const mainDiv = document.getElementById('mainDiv');
+		const svgDiv = document.getElementById('svgDiv');
+		const infoDiv = document.getElementById('infoDiv');
+		switch (newActiveID){
+			case 'homeTab':				
+				svgDiv.style.display = 'none';
+				
+			break;
+			case 'treeTab':		
+				svgDiv.style.display = 'block';
+				createSVG();
+				infoDiv.style.display = 'block';
+			break;
+			case 'infoTab':		
+				svgDiv.style.display = 'none';
+				infoDiv.style.display = 'block';
+			break;
+			case 'imgsTab':
+				svgDiv.style.display = 'none';
+			break;
+			case 'pplTab':
+			break;
+			
+		}
 	}
 	
 	
@@ -56,7 +81,122 @@ function navBar_openPage(event) {
 /* -------------------- */
 
 /*svg*/
+class personNode {
+	constructor(svg, family, personTag){
+		this.svg = svg;
+		this.personTag = personTag;
+		this.family = family;
+	}
+	
+	createCircle(positionXY){
+		this.positionXY = positionXY;
+		
+		const circleRadius = 100;
+		const circleBorder = 6;
+		const circleFullWidth = circleRadius + circleBorder;
+		
+		
+		const circleGrp = new createElement('g', {
+			'id': this.personTag + 'CircleGrp',
+			'class': 'personCircleGrp',
+			'transform': 'translate(' + this.positionXY.x + ' ' + this.positionXY.y + ')',
+		});
+		
+		const circleDefine = {
+			'r': circleRadius,
+			//'cx': circleFullWidth, 'cy': circleFullWidth,	
+			'cx': 0, 'cy': 0,	
+			'stroke-width': circleBorder,
+		}
+		
+		const circle = new createElement('circle', Object.assign({}, circleDefine, {
+			'class': 'circle',
+			'fill': '#FFAC81',
+			'stroke': 'none',
+		}));
+		
+		//bevelborder
+		const circleBorderRight = new createElement('circle', Object.assign({}, circleDefine, {
+			'class': 'circleBorder',
+			'fill': 'none',
+			'stroke': '#FFDFA7',
+		}));
+		const circleBorderTop = new createElement('circle', Object.assign({}, circleDefine, {
+			'class': 'circleBorder',
+			'fill': 'none',
+			'stroke': '#FFE7AD',
+		}));
+		const circleBorderLeft = new createElement('circle', Object.assign({}, circleDefine, {
+			'class': 'circleBorder',
+			'fill': 'none',
+			'stroke': '#FFFFCB', 
+		}));
+		const circleBorderBot = new createElement('circle', Object.assign({}, circleDefine, {
+			'class': 'circleBorder',
+			'fill': 'none',
+			'stroke': '#FFC997',
+		}));
+		this.svg.appendChild(circleGrp);
+		circleGrp.appendChild(circle);
+		circleGrp.appendChild(circleBorderRight);
+		circleGrp.appendChild(circleBorderTop);
+		circleGrp.appendChild(circleBorderLeft);
+		circleGrp.appendChild(circleBorderBot);
+		
+		const circleBorderLength = circleBorderRight.getTotalLength();
+		var offsetLngths = [0, (circleBorderLength/4), (circleBorderLength/2), ((3*circleBorderLength)/4)];
+		
+		offsetLngths = offsetLngths.map(x => (x + 70));
+		
+		const dashStr = circleBorderLength/4 + ", " + ((3*circleBorderLength)/4);
+		circleBorderRight.setAttribute('stroke-dasharray', dashStr);
+		circleBorderTop.setAttribute('stroke-dasharray', dashStr);
+		circleBorderLeft.setAttribute('stroke-dasharray', dashStr);
+		circleBorderBot.setAttribute('stroke-dasharray', dashStr);
+		
+		circleBorderRight.setAttribute('stroke-dashoffset', offsetLngths[0]);	
+		circleBorderTop.setAttribute('stroke-dashoffset', offsetLngths[1]);
+		circleBorderLeft.setAttribute('stroke-dashoffset', offsetLngths[2]);
+		circleBorderBot.setAttribute('stroke-dashoffset', offsetLngths[3]);
+		
+		//contour
+		const circleContour = new createElement('circle', Object.assign({}, circleDefine, {
+			'r': circleRadius,
+			'cx': 0, 'cy': 0,	
+			'stroke-width': circleBorder+2,
+			'stroke-opacity': 0.6,
+			'class': 'circleContour',
+			'fill': 'none',
+			'stroke': '#BF6A3E',
+		}));
+		circleGrp.prepend(circleContour);
+		
+		//shadow
+		const circleShadow1 = new createElement('circle', Object.assign({}, circleDefine, {
+			'r': circleRadius,
+			'cx': 1, 'cy': 1,	
+			'stroke-width': circleBorder+2,
+			'stroke-opacity': 0.3,
+			'class': 'circleShadow',
+			'fill': 'none',
+			'stroke': '#000',
+		}));
+		const circleShadow2 = new createElement('circle', Object.assign({}, circleDefine, {
+			'r': circleRadius,
+			'cx': 2, 'cy': 2,	
+			'stroke-width': circleBorder+2,
+			'stroke-opacity': 0.1,
+			'class': 'circleShadow',
+			'fill': 'none',
+			'stroke': '#000',
+		}));
+		circleGrp.prepend(circleShadow1);
+		circleGrp.prepend(circleShadow2);
+	}
+}
+
 function createSVG(){
+	const svgDiv = document.getElementById("svgDiv");
 	const svg = document.getElementById("mainSVG");
 	const pageWidth = document.getElementsByTagName('body')[0].offsetWidth;
 	
@@ -65,66 +205,65 @@ function createSVG(){
 	const newViewBox =  oldViewBoxArray[0] + ' ' + oldViewBoxArray[1] + ' ' + pageWidth + ' ' + oldViewBoxArray[3];
 	svg.setAttribute('viewBox', newViewBox); 
 	
+	const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
 	
-	
-	const circleDefine = {
-		'r': '100',
-		'cx': (50 + (pageWidth/2)),
-		'cy': (oldViewBoxArray[3]/2),	
-		'stroke-width': 6,
-	}
-	
-	const circle = new createSVGobj('circle', Object.assign({}, circleDefine, {
-		'class': 'circle',
-		'fill': '#FFAC81',
-		'stroke': 'none',
-	}));
-	const circleBorderRight = new createSVGobj('circle', Object.assign({}, circleDefine, {
-		'class': 'circleBorder',
+	//line
+	const lineGrp = new createElement('g', {
+		'class': 'mainLine_GRP',
+	});
+	const mainLine = new createElement('line', {
+		'class': 'mainLine',
+		'x1': 0, 'y1': svgCenterPt.y, 
+		'x2': pageWidth, 'y2': svgCenterPt.y,
 		'fill': 'none',
-		'stroke': '#FFDFA7',
-	}));
-	const circleBorderTop = new createSVGobj('circle', Object.assign({}, circleDefine, {
-		'class': 'circleBorder',
+		'stroke': '#FF928B',
+		'stroke-width': 10,		
+	});
+	const mainLineShadow1 = new createElement('line', {
+		'class': 'mainLineShadow',
+		'x1': 0, 'y1': (svgCenterPt.y+3), 
+		'x2': pageWidth, 'y2': (svgCenterPt.y+3),
 		'fill': 'none',
-		'stroke': '#FFE7AD',
-	}));
-	const circleBorderLeft = new createSVGobj('circle', Object.assign({}, circleDefine, {
-		'class': 'circleBorder',
+		'stroke': '#000',
+		'stroke-width': 10,	
+		'stroke-opacity': 0.1,
+	});
+	const mainLineShadow2 = new createElement('line', {
+		'class': 'mainLineShadow',
+		'x1': 0, 'y1': (svgCenterPt.y+1.5), 
+		'x2': pageWidth, 'y2': (svgCenterPt.y+1.5),
 		'fill': 'none',
-		'stroke': '#FFFFCB', 
-	}));
-	const circleBorderBot = new createSVGobj('circle', Object.assign({}, circleDefine, {
-		'class': 'circleBorder',
-		'fill': 'none',
-		'stroke': '#FFC997',
-	}));
-	svg.appendChild(circle);
-	svg.appendChild(circleBorderRight);
-	svg.appendChild(circleBorderTop);
-	svg.appendChild(circleBorderLeft);
-	svg.appendChild(circleBorderBot);
+		'stroke': '#000',
+		'stroke-width': 10,	
+		'stroke-opacity': 0.1,
+	});
+	svg.appendChild(lineGrp);
+	lineGrp.appendChild(mainLine);
+	lineGrp.prepend(mainLineShadow1);
+	lineGrp.prepend(mainLineShadow2);
 	
-	const circleBorderLength = circleBorderRight.getTotalLength();
-	var offsetLngths = [0, (circleBorderLength/4), (circleBorderLength/2), ((3*circleBorderLength)/4)];
 	
-	offsetLngths = offsetLngths.map(x => (x + 70));
+	const initialPersonNode = new personNode(svg, 'kesby', 'roseHadkiss').createCircle(svgCenterPt);
 	
-	const dashStr = circleBorderLength/4 + ", " + ((3*circleBorderLength)/4);
-	circleBorderRight.setAttribute('stroke-dasharray', dashStr);
-	circleBorderTop.setAttribute('stroke-dasharray', dashStr);
-	circleBorderLeft.setAttribute('stroke-dasharray', dashStr);
-	circleBorderBot.setAttribute('stroke-dasharray', dashStr);
+	//text
+	const personNameText = new createElement('text', {
+		'class': 		'personName',
+		'text-anchor': 	'middle',
+		'font-family': 	"'Josefin Sans', sans-serif",
+		'font-size': 	'36px',
+		'fill':	'white',
+		'x': 	svgCenterPt.x,	
+		'y': 	(svgCenterPt.y + 150),	
+		
+		'textContent': 	'Person Name',			
+	});	
+	svg.appendChild(personNameText);
 	
-	circleBorderRight.setAttribute('stroke-dashoffset', offsetLngths[0]);	
-	circleBorderTop.setAttribute('stroke-dashoffset', offsetLngths[1]);
-	circleBorderLeft.setAttribute('stroke-dashoffset', offsetLngths[2]);
-	circleBorderBot.setAttribute('stroke-dashoffset', offsetLngths[3]);
 	
 }
 /* -------------------- */
 
-function createSVGobj(type, obj, noNS=false){
+function createElement(type, obj, noNS=false){
     var created = !noNS ? document.createElementNS('http://www.w3.org/2000/svg', type) 
 	: document.createElement(type);
 	
@@ -137,7 +276,6 @@ function createSVGobj(type, obj, noNS=false){
 	
     return created;
 }
-
 
 
 /* ------ Run on Page Load -------- */
@@ -153,6 +291,5 @@ $(document).ready(function(){
 		tab.addEventListener("click", (btn) => navBar_openPage(btn));	
 	}
 	
-	//createSVG();
 });
 /* ------------------------------------------------ */

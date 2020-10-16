@@ -16,9 +16,11 @@
   
 <body>	
 	<div class="loading-mask">
+		<div class="loading-mask_topBar"></div>
 		<div class="loading-spinner">
 			<i class="fa fa-spinner" aria-hidden="true"></i>
 		</div>
+		<div class="loading-mask_bottomBar"></div>
 	</div>
 	<div class="header">
 		<div class="top_navbar homeTabColour">
@@ -52,10 +54,20 @@
 		</div>		
 	</div>
 	
-	<div class="mainDiv">
+	<div id="mainDiv">
 		<div class="peachyTree"></div>
-		<div id="svgDiv"><svg id="mainSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg"></div>
-		</svg>
+		<div id="svgDiv">
+			<svg id="mainSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
+			</svg>
+			<div class="arrowButtonsDiv">
+				<button class="leftArrow_button"><i class="fas fa-chevron-left"></i></button>
+				<button class="rightArrow_button"><i class="fas fa-chevron-right"></i></button>
+			</div>
+			<button class="zoom_button"></button>
+		</div>
+		<div id="infoDiv">
+			<div class="vineLine"></div>
+		</div>
 	</div>
 
 	<div class="footer"></div>	
