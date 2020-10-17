@@ -47,7 +47,6 @@
 			</div>
 			
 			<div class="right_navbar">
-				<div id="pplTab_div" class="navTabDiv">People</div>	
 				<button id="pplTab" class="navTab">
 					<i class="fas fa-user"></i>
 				</button>	
@@ -74,6 +73,16 @@
 			</svg>
 			
 		</div>
+	</div>
+	<div id="peopleDiv">
+		<button id="peopleDivExit" onclick="closePeopleTab();"><i class="fas fa-times"></i></button>
+		<input type="text" id="peopleSearching" onkeyup="peopleListSearch()" placeholder="Search for Person">
+		<ul id="peopleList">
+			<label>Kesby</label>			
+			<li>Rose Hadkiss</li>
+			<label>Hadkiss</label>			
+			<li>Ron Hadkiss</li>
+		</ul>
 	</div>
 
 	<div class="footer"></div>	

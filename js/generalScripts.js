@@ -2,7 +2,7 @@
 /* ===                    Custom Scripts                    === */
 /* ============================================================ */
 
-/* ------ loader -------- */
+/* ------ loader ------ */
 function loader_onReady(callback) {
 	var intervalId = window.setInterval(function() {
 		if (document.getElementsByTagName('body')[0] !== undefined) {
@@ -16,11 +16,27 @@ function mask_setVisible(selector, visible) {
   document.querySelector(selector).style.display = visible ? 'block' : 'none';
 }
 
-/* ------ navbar -------- */
+/* ------ navbar ------ */
 function navBar_openPage(event) {
+	const mainDiv = document.getElementById('mainDiv');
+	const svgDiv = document.getElementById('svgDiv');
+	const infoDiv = document.getElementById('infoDiv');
+	const svg = document.getElementById("mainSVG");
+	const peopleDiv = document.getElementById('peopleDiv');
+	
 	const btn = event.target;
-	//if already activated, ignore
-	if (!btn.classList.contains('active')){
+	const newActive = btn;
+	const newActiveID = btn.id;	
+	const navDiv = document.querySelector('.top_navbar');
+	
+	const newActiveDiv = document.getElementById(newActiveID + '_div');
+	const newTabColor = newActiveID + "Colour";		
+	
+	if ( newActiveID == 'pplTab'){
+		peopleDiv.classList.toggle("sliding");
+		newActive.classList.toggle("active");
+		
+	} else if (!btn.classList.contains('active')){//if already activated, ignore
 		
 		const navDiv = document.querySelector('.top_navbar');
 		
@@ -37,20 +53,11 @@ function navBar_openPage(event) {
 		navDiv.classList.remove(oldTabColor);
 		
 		
-		const newActive = btn;
-		const newActiveID = btn.id;
-		const newActiveDiv = document.getElementById(newActiveID + '_div');
-		const newTabColor = newActiveID + "Colour";		
-		
 		newActive.classList.add("active");
 		newActiveDiv.classList.add("active");
 		navDiv.classList.add(newTabColor);
 		
 		
-		const mainDiv = document.getElementById('mainDiv');
-		const svgDiv = document.getElementById('svgDiv');
-		const infoDiv = document.getElementById('infoDiv');
-		const svg = document.getElementById("mainSVG");
 		
 		switch (newActiveID){
 			case 'homeTab':				
@@ -72,8 +79,6 @@ function navBar_openPage(event) {
 				svgDiv.style.display = 'none';
 				infoDiv.style.display = 'none';
 			break;
-			case 'pplTab':
-			break;
 			
 		}
 	}
@@ -82,6 +87,35 @@ function navBar_openPage(event) {
 	
 }
 
+/* ------ peopleSlideTab ------ */
+function closePeopleTab(){
+	const peopleDiv = document.getElementById('peopleDiv');
+	const pplTab = document.getElementById('pplTab');
+
+	peopleDiv.classList.toggle("sliding");
+	pplTab.classList.toggle("active");	
+}
+
+//add list of people
+
+function peopleListSearch() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('peopleSearching');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("peopleList");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    txtValue = li[i].textContent || li[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
 
 /* -------------------- */
 
@@ -252,7 +286,7 @@ function createSVG(){
 	
 	//text
 	const personNameText = new createElement('text', {
-		'class': 		'personName',
+		'class': 		'svgTxt',
 		'text-anchor': 	'middle',
 		'font-family': 	"'Josefin Sans', sans-serif",
 		'font-size': 	'36px',
@@ -264,6 +298,19 @@ function createSVG(){
 	});	
 	svg.appendChild(personNameText);
 	
+	const familyNameText = new createElement('text', {
+		'class': 		'svgTxt',
+		'text-anchor': 	'middle',
+		'font-family': 	"'Josefin Sans', sans-serif",
+		'font-size': 	'38px',
+		'fill':	'white',
+		'x': 	150,	
+		'y': 	70,	
+		
+		'textContent': 	'Kesby',			
+	});	
+	svg.appendChild(familyNameText);
+	
 	
 }
 
@@ -272,6 +319,7 @@ function createLeafSVG() {
 	const leafSVG = document.getElementById("leafSVG");
 	
 	const leafPaths = getLeafPathData();
+	const fillColour = '#EFE9AE';
 	
 	const defs = new createElement('defs', {
 		'id': 'clipPaths',
@@ -291,12 +339,12 @@ function createLeafSVG() {
 	});
 	const bottomLeaf_fill = new createElement('path', {
 		'id': 'bottomLeaf_fill', 
-		'style': 'fill:#CDEAC0; fill-opacity:0.75502;',
+		'style': 'fill:' + fillColour + '; fill-opacity:0.75502;',
 		'd': leafPaths.bottomLeaf_fill,
 	});
 	const bottomLeaf_outer = new createElement('path', {
 		'id': 'bottomLeaf_outer', 
-		'style': 'fill:#CDEAC0; fill-opacity:1;',
+		'style': 'fill:' + fillColour + '; fill-opacity:1;',
 		'd': leafPaths.bottomLeaf_outer,
 	});
 	leafSVG.appendChild(bottomLeafGRP);
@@ -309,12 +357,12 @@ function createLeafSVG() {
 	});
 	const topLeaf_fill = new createElement('path', {
 		'id': 'topLeaf_fill', 
-		'style': 'fill:#CDEAC0; fill-opacity:0.75502;',
+		'style': 'fill:' + fillColour + '; fill-opacity:0.75502;',
 		'd': leafPaths.topLeaf_fill,
 	});
 	const topLeaf_outer = new createElement('path', {
 		'id': 'topLeaf_outer', 
-		'style': 'fill:#CDEAC0; fill-opacity:1;',
+		'style': 'fill:' + fillColour + '; fill-opacity:1;',
 		'd': leafPaths.topLeaf_outer,
 	});
 	leafSVG.appendChild(topLeafGRP);
@@ -322,8 +370,6 @@ function createLeafSVG() {
 	topLeafGRP.appendChild(topLeaf_outer);
 	
 }
-
-/* -------------------- */
 
 function createElement(type, obj, noNS=false){
     var created = !noNS ? document.createElementNS('http://www.w3.org/2000/svg', type) 
@@ -338,6 +384,7 @@ function createElement(type, obj, noNS=false){
 	
     return created;
 }
+
 
 
 /* ------ Run on Page Load -------- */
