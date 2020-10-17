@@ -50,14 +50,18 @@ function navBar_openPage(event) {
 		const mainDiv = document.getElementById('mainDiv');
 		const svgDiv = document.getElementById('svgDiv');
 		const infoDiv = document.getElementById('infoDiv');
+		const svg = document.getElementById("mainSVG");
+		
 		switch (newActiveID){
 			case 'homeTab':				
 				svgDiv.style.display = 'none';
+				infoDiv.style.display = 'none';
 				
 			break;
 			case 'treeTab':		
 				svgDiv.style.display = 'block';
-				createSVG();
+				if (svg.children.length == 0)
+					createSVG();
 				infoDiv.style.display = 'block';
 			break;
 			case 'infoTab':		
@@ -66,6 +70,7 @@ function navBar_openPage(event) {
 			break;
 			case 'imgsTab':
 				svgDiv.style.display = 'none';
+				infoDiv.style.display = 'none';
 			break;
 			case 'pplTab':
 			break;
@@ -261,6 +266,63 @@ function createSVG(){
 	
 	
 }
+
+function createLeafSVG() {
+	const infoDiv = document.getElementById("infoDiv");
+	const leafSVG = document.getElementById("leafSVG");
+	
+	const leafPaths = getLeafPathData();
+	
+	const defs = new createElement('defs', {
+		'id': 'clipPaths',
+	});
+	const topClip = new createElement('clipPath', {
+		'id': 'topLeaf_clipPath',
+	});
+	const topClipPath = new createElement('path', {
+		'd': leafPaths.topLeaf_fill,
+	});
+	leafSVG.appendChild(defs);
+	defs.appendChild(topClip);
+	topClip.appendChild(topClipPath);
+	
+	const bottomLeafGRP = new createElement('g', {
+		'id': 'bottomLeaf_GRP',
+	});
+	const bottomLeaf_fill = new createElement('path', {
+		'id': 'bottomLeaf_fill', 
+		'style': 'fill:#CDEAC0; fill-opacity:0.75502;',
+		'd': leafPaths.bottomLeaf_fill,
+	});
+	const bottomLeaf_outer = new createElement('path', {
+		'id': 'bottomLeaf_outer', 
+		'style': 'fill:#CDEAC0; fill-opacity:1;',
+		'd': leafPaths.bottomLeaf_outer,
+	});
+	leafSVG.appendChild(bottomLeafGRP);
+	bottomLeafGRP.appendChild(bottomLeaf_fill);
+	bottomLeafGRP.appendChild(bottomLeaf_outer);
+	
+	
+	const topLeafGRP = new createElement('g', {
+		'id': 'topLeaf_GRP',
+	});
+	const topLeaf_fill = new createElement('path', {
+		'id': 'topLeaf_fill', 
+		'style': 'fill:#CDEAC0; fill-opacity:0.75502;',
+		'd': leafPaths.topLeaf_fill,
+	});
+	const topLeaf_outer = new createElement('path', {
+		'id': 'topLeaf_outer', 
+		'style': 'fill:#CDEAC0; fill-opacity:1;',
+		'd': leafPaths.topLeaf_outer,
+	});
+	leafSVG.appendChild(topLeafGRP);
+	topLeafGRP.appendChild(topLeaf_fill);
+	topLeafGRP.appendChild(topLeaf_outer);
+	
+}
+
 /* -------------------- */
 
 function createElement(type, obj, noNS=false){
@@ -290,6 +352,9 @@ $(document).ready(function(){
 	for (const tab of navTabs) {
 		tab.addEventListener("click", (btn) => navBar_openPage(btn));	
 	}
+	
+	//infoDiv
+	createLeafSVG();
 	
 });
 /* ------------------------------------------------ */
