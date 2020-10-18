@@ -17,14 +17,18 @@ function mask_setVisible(selector, visible) {
 }
 
 /* ------ navbar ------ */
-function navBar_openPage(event) {
+function navBar_clickEvnt(event){
+	const btn = event.target;
+	navBar_openPage(btn);
+}
+
+function navBar_openPage(btn) {
 	const mainDiv = document.getElementById('mainDiv');
 	const svgDiv = document.getElementById('svgDiv');
 	const infoDiv = document.getElementById('infoDiv');
 	const svg = document.getElementById("mainSVG");
 	const peopleDiv = document.getElementById('peopleDiv');
 	
-	const btn = event.target;
 	const newActive = btn;
 	const newActiveID = btn.id;	
 	const navDiv = document.querySelector('.top_navbar');
@@ -45,39 +49,64 @@ function navBar_openPage(event) {
 		const oldActiveDiv = navDiv.querySelector('.navTabDiv.active');
 		
 		const oldActiveID = oldActive.id;
-		const oldTabColor = oldActiveID + "Colour";	
-		
+		const oldTabColor = oldActiveID + "Colour";			
 		
 		oldActive.classList.remove("active");
 		oldActiveDiv.classList.remove("active");
-		navDiv.classList.remove(oldTabColor);
-		
+		navDiv.classList.remove(oldTabColor);		
 		
 		newActive.classList.add("active");
 		newActiveDiv.classList.add("active");
-		navDiv.classList.add(newTabColor);
+		navDiv.classList.add(newTabColor);	
 		
-		
-		
-		switch (newActiveID){
-			case 'homeTab':				
-				svgDiv.style.display = 'none';
-				infoDiv.style.display = 'none';
-				
+		switch (oldActiveID){
+			case 'homeTab':						
 			break;
 			case 'treeTab':		
-				svgDiv.style.display = 'block';
-				if (svg.children.length == 0)
-					createSVG();
-				infoDiv.style.display = 'block';
+				const vineLine = svgDiv.querySelector(".vineLine");
+				$(vineLine).fadeOut(1000);
+				$(svgDiv).hide("clip", 1000);
+				$(infoDiv).hide("clip", 1000);
 			break;
 			case 'infoTab':		
-				svgDiv.style.display = 'none';
-				infoDiv.style.display = 'block';
+				const infoInner = infoDiv.querySelector(".infoDivSec");
+				const leafSVG = infoDiv.querySelector("#leafSVG");
+				$(infoDiv).hide("clip", 1000);	
+				setTimeout(() => {infoInner.style.display = "none";
+					leafSVG.style.display = "none";}, 1000);
 			break;
 			case 'imgsTab':
-				svgDiv.style.display = 'none';
-				infoDiv.style.display = 'none';
+			break;			
+		}
+		
+		switch (newActiveID){
+			case 'homeTab':					
+			break;
+			case 'treeTab':					
+				const vineLine = svgDiv.querySelector(".vineLine");
+				$(svgDiv).show("clip", 1000);
+				setTimeout(() => {$(vineLine).fadeIn(1000);}, 1000);	
+				
+				setTimeout(() => {
+					$(infoDiv).fadeIn(1000);
+				}, 1500);	
+				
+				if (svg.children.length == 0)
+					createSVG();			
+				
+			break;
+			case 'infoTab':	
+				infoDiv.style.display = "block";
+				const infoInner = infoDiv.querySelector(".infoDivSec");
+				const leafSVG = infoDiv.querySelector("#leafSVG");
+				if (oldActiveID != "treeTab"){		
+					$(infoInner).show("clip", 1000);
+					setTimeout(() => {	
+						$(leafSVG).show("fold", 1000);	
+					} , 1000);	
+				}
+			break;
+			case 'imgsTab':
 			break;
 			
 		}
@@ -86,6 +115,7 @@ function navBar_openPage(event) {
 	
 	
 }
+
 
 /* ------ peopleSlideTab ------ */
 function closePeopleTab(){
@@ -105,17 +135,66 @@ function peopleDropdownDo(event) {
 	
 	const peopleListUL = document.getElementById("peopleList");
 	const relativeDiv = peopleListUL.querySelector("#" + famName + 'DropdownDiv');
-	relativeDiv.classList.toggle("dropdownActive");	
 	
 	const dropdownCaret_down = "fa-caret-down";
 	const dropdownCaret_up = "fa-caret-up";
-	
 	const btnIcon = btn.querySelector("i");
+	
+	//check if going up or down
+	if (relativeDiv.classList.contains('dropdownActive')){
+		//open -> close
+		$(relativeDiv).slideUp(function(){
+			relativeDiv.classList.toggle("dropdownActive");	
+		});	
+	} else {
+		//close -> open
+		$(relativeDiv).slideDown(function(){
+			relativeDiv.classList.toggle("dropdownActive");	
+		});			
+	}
+	
 	btnIcon.classList.toggle(dropdownCaret_down); 
 	btnIcon.classList.toggle(dropdownCaret_up);
 }
 
 //add list of people
+function addPeopleToList(){
+	//use infoFile and add completed people
+	const peopleDiv = document.getElementById("peopleDiv");
+	const peopleListUL = peopleDiv.querySelector("#peopleList");
+	
+	const kesbyDiv = peopleListUL.querySelector("#kesbyDropdownDiv");
+	const hadkissDiv = peopleListUL.querySelector("#hadkissDropdownDiv");
+	const pealDiv = peopleListUL.querySelector("#pealDropdownDiv");
+	const mckenzieDiv = peopleListUL.querySelector("#mckenzieDropdownDiv");
+	
+	//guide: <li class="pplChooseLI" id="li_ronHadkiss"><i class="fas fa-chevron-left"></i><span>Ron Hadkiss</span></li>
+	
+	const kesbyData = personInfoStorage('kesby');
+	var kesbyKeys = Object.keys(kesbyData);		
+	kesbyKeys.forEach(function( personTag, i ) {
+		const personName = kesbyData[personTag].name;
+		
+		const personLI = new createElement("li", {
+			'id': 'li_' + personTag,		
+			'class': 'pplChooseLI',
+		});	
+		const liIcon = new createElement("i", {
+			'class': 'fas fa-chevron-left',		
+		});
+		const liSpan = new createElement("span");
+		kesbyDiv.appendChild(personLI);
+		personLI.appendChild(liIcon);
+		personLI.appendChild(liSpan);
+		liSpan.innerHTML = personName;
+	});
+	
+	//add click event
+	const peopleChoose = document.querySelectorAll('.pplChooseLI');
+	for (const ppl of peopleChoose) {
+		ppl.addEventListener("click", (evnt) => openTree(evnt));	
+	}
+}
 
 function peopleListSearch() {
 	// Declare variables
@@ -161,6 +240,7 @@ function peopleListSearch() {
 		}
 	};
 }
+
 function toggleSearchIcon(type){
 	const exitIcon = "fa-times-circle";
 	const searchIcon = "fa-search";
@@ -188,6 +268,7 @@ function toggleSearchIcon(type){
 		
 	}
 }
+
 function peopleListSearchExit(){
 	const exitIcon = "fa-times-circle";
 	const searchIcon = "fa-search";
@@ -207,6 +288,19 @@ function peopleListSearchExit(){
 	
 }
 
+
+/* open tree */
+function openTree(evnt){
+	const btn = evnt.target;
+	
+	const navDiv = document.querySelector('.top_navbar');
+	const activeTabBtn= navDiv.querySelector('.navTab.active');
+	const treeTabBtn = navDiv.querySelector('#treeTab');
+	
+	if (activeTabBtn.id != "treeTab"){
+		navBar_openPage(treeTabBtn);
+	}
+}
 /* -------------------- */
 
 /*svg*/
@@ -487,7 +581,7 @@ $(document).ready(function(){
 	//document.addEventListener("click", (evt) => outsideClickNav(evt));
 	const navTabs = document.querySelectorAll('.navTab');
 	for (const tab of navTabs) {
-		tab.addEventListener("click", (evnt) => navBar_openPage(evnt));	
+		tab.addEventListener("click", (evnt) => navBar_clickEvnt(evnt));	
 	}
 	
 	//peopleTab
@@ -498,6 +592,7 @@ $(document).ready(function(){
 	
 	//infoDiv
 	createLeafSVG();
+	addPeopleToList();
 	
 });
 /* ------------------------------------------------ */

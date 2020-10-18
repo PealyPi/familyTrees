@@ -56,7 +56,7 @@
 	
 	<div id="mainDiv">
 		<div class="peachyTree"></div>
-		<div id="svgDiv">
+		<div class="section" id="svgDiv">
 			<svg id="mainSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
 			</svg>
 			<div class="arrowButtonsDiv">
@@ -66,26 +66,33 @@
 			<button class="zoom_button"></button>
 			<div class="vineLine"></div>
 		</div>
-		<div id="infoDiv">
-			<div class="infoDivBackground"></div>
-			<div class="infoMain"></div>
+		<div class="section" id="infoDiv">
+			<div class="infoDivSec">
+				<div class="infoDivBackground"></div>
+				<div class="infoMain"></div>
+			</div>
 			<svg id="leafSVG" viewbox="0 0 160 132" xmlns = "http://www.w3.org/2000/svg">	
 			</svg>
 			
 		</div>
 	</div>
-	<div id="peopleDiv">
+	<div class="section" id="peopleDiv">
 		<button id="peopleDivExit" onclick="closePeopleTab();"><i class="fas fa-times"></i></button>
 		<input type="text" id="peopleSearching" onkeyup="peopleListSearch(this);" placeholder="Search for Person"><button id="peopleSearchIcon" onClick="peopleListSearchExit();"><i class="fas fa-search"></i></button>
 		<ul id="peopleList">
 			<button id="kesbyDropdownBtn" class="ppl_dropdown-btn">Kesby <i class="fa fa-caret-up"></i></button>
 			<div id="kesbyDropdownDiv" class="ppl_dropdown-container dropdownActive">
-				<li id="li_roseHadkiss"><i class="fas fa-chevron-left"></i><span>Rose Hadkiss</span></li>
-				<li id="li_maryBobby"><i class="fas fa-chevron-left"></i><span>Mary Bobby</span></li>
+				<li class="pplChooseLI" id="li_roseHadkiss"><i class="fas fa-chevron-left"></i><span>Rose Hadkiss</span></li>
 			</div>
 			<button id="hadkissDropdownBtn" class="ppl_dropdown-btn">Hadkiss<i class="fa fa-caret-up"></i></button>
 			<div id="hadkissDropdownDiv" class="ppl_dropdown-container dropdownActive">
-				<li id="li_ronHadkiss"><i class="fas fa-chevron-left"></i><span>Ron Hadkiss</span></li>
+				<li class="pplChooseLI" id="li_ronHadkiss"><i class="fas fa-chevron-left"></i><span>Ron Hadkiss</span></li>
+			</div>
+			<button id="pealDropdownBtn" class="ppl_dropdown-btn">Peal <i class="fa fa-caret-up"></i></button>
+			<div id="pealDropdownDiv" class="ppl_dropdown-container dropdownActive">
+			</div>
+			<button id="mckenzieDropdownBtn" class="ppl_dropdown-btn">McKenzie <i class="fa fa-caret-up"></i></button>
+			<div id="mckenzieDropdownDiv" class="ppl_dropdown-container dropdownActive">
 			</div>
 		</ul>
 	</div>
@@ -94,7 +101,10 @@
 	
 	<script src="js/panzoom.js"></script>		
 	<script src="js/generalScripts.js"></script>
-	<script src="media/pathData.js"></script>
+	<script src="js/jquery-ui_effects.js"></script>
+	<script src="data/pathData.js"></script>
+	<script src="data/personInfo.js"></script>
+	<script src="data/relationsData.js"></script>
 	
 </body>
 </html>
