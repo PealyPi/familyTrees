@@ -76,12 +76,17 @@
 	</div>
 	<div id="peopleDiv">
 		<button id="peopleDivExit" onclick="closePeopleTab();"><i class="fas fa-times"></i></button>
-		<input type="text" id="peopleSearching" onkeyup="peopleListSearch()" placeholder="Search for Person">
+		<input type="text" id="peopleSearching" onkeyup="peopleListSearch(this);" placeholder="Search for Person"><button id="peopleSearchIcon" onClick="peopleListSearchExit();"><i class="fas fa-search"></i></button>
 		<ul id="peopleList">
-			<label>Kesby</label>			
-			<li>Rose Hadkiss</li>
-			<label>Hadkiss</label>			
-			<li>Ron Hadkiss</li>
+			<button id="kesbyDropdownBtn" class="ppl_dropdown-btn">Kesby <i class="fa fa-caret-up"></i></button>
+			<div id="kesbyDropdownDiv" class="ppl_dropdown-container dropdownActive">
+				<li id="li_roseHadkiss"><i class="fas fa-chevron-left"></i><span>Rose Hadkiss</span></li>
+				<li id="li_maryBobby"><i class="fas fa-chevron-left"></i><span>Mary Bobby</span></li>
+			</div>
+			<button id="hadkissDropdownBtn" class="ppl_dropdown-btn">Hadkiss<i class="fa fa-caret-up"></i></button>
+			<div id="hadkissDropdownDiv" class="ppl_dropdown-container dropdownActive">
+				<li id="li_ronHadkiss"><i class="fas fa-chevron-left"></i><span>Ron Hadkiss</span></li>
+			</div>
 		</ul>
 	</div>
 

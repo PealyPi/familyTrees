@@ -96,25 +96,115 @@ function closePeopleTab(){
 	pplTab.classList.toggle("active");	
 }
 
+function peopleDropdownDo(event) {
+	var btn = event.target;
+	if (btn.tagName == "I"){
+		btn = btn.parentElement;
+	}
+	const famName = btn.id.replace("DropdownBtn", "");
+	
+	const peopleListUL = document.getElementById("peopleList");
+	const relativeDiv = peopleListUL.querySelector("#" + famName + 'DropdownDiv');
+	relativeDiv.classList.toggle("dropdownActive");	
+	
+	const dropdownCaret_down = "fa-caret-down";
+	const dropdownCaret_up = "fa-caret-up";
+	
+	const btnIcon = btn.querySelector("i");
+	btnIcon.classList.toggle(dropdownCaret_down); 
+	btnIcon.classList.toggle(dropdownCaret_up);
+}
+
 //add list of people
 
 function peopleListSearch() {
-  // Declare variables
-  var input, filter, ul, li, a, i, txtValue;
-  input = document.getElementById('peopleSearching');
-  filter = input.value.toUpperCase();
-  ul = document.getElementById("peopleList");
-  li = ul.getElementsByTagName('li');
-
-  // Loop through all list items, and hide those who don't match the search query
-  for (i = 0; i < li.length; i++) {
-    txtValue = li[i].textContent || li[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = "";
-    } else {
-      li[i].style.display = "none";
-    }
-  }
+	// Declare variables
+	var input, filter, ul, li, a, i, txtValue;
+	input = document.getElementById('peopleSearching');
+	filter = input.value.toUpperCase();
+	ul = document.getElementById("peopleList");
+	li = ul.getElementsByTagName('li');
+  
+	//if first letter, change search icon
+	if (filter.length == 0){
+		toggleSearchIcon('search');
+	} else {
+		toggleSearchIcon('exit');	
+	}
+	// Loop through all list items, and hide those who don't match the search query
+	for (i = 0; i < li.length; i++) {
+		txtValue = li[i].textContent || li[i].innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  li[i].style.display = "";
+		} else {
+		  li[i].style.display = "none";
+		}
+	}
+	
+	//if all li values are display none, hide dropbutton
+	const dropDivs = document.querySelectorAll('.ppl_dropdown-container');
+	for (const dropDiv of dropDivs){
+		const dropFamName = dropDiv.id.replace("DropdownDiv", "");
+		const dropBtn = document.getElementById(dropFamName + "DropdownBtn");
+		
+		const dropLIs = dropDiv.getElementsByTagName("li");
+		var allHidden = true;
+		for (j = 0; j < dropLIs.length; j++) {
+			if (dropLIs[j].style.display == ""){
+				allHidden = false;
+			}
+		}
+		if (allHidden){
+			dropBtn.style.display = "none";
+		} else {
+			dropBtn.style.display = "";
+		}
+	};
+}
+function toggleSearchIcon(type){
+	const exitIcon = "fa-times-circle";
+	const searchIcon = "fa-search";
+	
+	const searchIconDiv = document.getElementById('peopleSearchIcon');
+	const targetIcon = searchIconDiv.querySelector("i");
+	
+	//check old
+	const iconOld = targetIcon.classList[1];
+	switch (type){
+		case 'exit':
+			if (iconOld == searchIcon){
+				targetIcon.classList.toggle(searchIcon);
+				targetIcon.classList.toggle(exitIcon);					
+			}
+			
+		break;
+		case 'search':
+			if (iconOld == exitIcon){
+				targetIcon.classList.toggle(searchIcon);
+				targetIcon.classList.toggle(exitIcon);					
+			}
+		
+		break;
+		
+	}
+}
+function peopleListSearchExit(){
+	const exitIcon = "fa-times-circle";
+	const searchIcon = "fa-search";
+	
+	const searchIconDiv = document.getElementById('peopleSearchIcon');
+	const targetIcon = searchIconDiv.querySelector("i");
+	const searchInput = document.getElementById('peopleSearching');
+	
+	//check current icon is exit
+	const iconType = targetIcon.classList[1];
+	if (iconType == exitIcon){
+		//clear search
+		searchInput.value = "";
+		peopleListSearch();
+	}
+	
+	
 }
 
 /* -------------------- */
@@ -397,7 +487,13 @@ $(document).ready(function(){
 	//document.addEventListener("click", (evt) => outsideClickNav(evt));
 	const navTabs = document.querySelectorAll('.navTab');
 	for (const tab of navTabs) {
-		tab.addEventListener("click", (btn) => navBar_openPage(btn));	
+		tab.addEventListener("click", (evnt) => navBar_openPage(evnt));	
+	}
+	
+	//peopleTab
+	const peopleDropdowns = document.querySelectorAll('.ppl_dropdown-btn');
+	for (const drop of peopleDropdowns) {
+		drop.addEventListener("click", (evnt) => peopleDropdownDo(evnt));	
 	}
 	
 	//infoDiv
