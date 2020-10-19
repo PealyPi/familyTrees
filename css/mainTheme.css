@@ -489,18 +489,47 @@ button,  button:active, button:hover, button:focus{
 	left:0; right: 0;
 	display:none;
 }
-.infoDivBackground{
-	width: 100%;
-	height: 100%;
-	/*opacity: 0.8;*/
-	z-index: var(--woodBackZ); 
-	background-image: url('../media/colouredWood.svg'); 
-	background-repeat: no-repeat;	
-}
 .infoDivSec{
 	width: 900px;
 	height:450px;	
 }
+.infoMain{
+	/*width: calc(900px - 70px);*/
+	height: calc(450px - 100px);
+	padding: 60px 100px;
+	z-index: var(--woodBackZ); 
+	
+	background-image: url('../media/colouredWood.svg'); 
+	background-repeat: no-repeat;	
+}
+
+.infoData {
+	position: relative;
+	cursor: default;
+	margin: 10px 0;
+	font-size: 18px;
+}
+.info_name{
+	font-size: xxx-large;
+	text-align: left;
+}
+.info_dates{
+	font-size: xxx-large;
+	text-align: center;	
+}
+.info_neeName{
+	font-size: x-large;
+	
+}
+.info_about{
+	
+}
+.aboutBold{
+	font-size: large;
+	font-color: blue;
+}
+
+
 .leafSVG{
 	width: 320px; height: 264px;
 	position: absolute;

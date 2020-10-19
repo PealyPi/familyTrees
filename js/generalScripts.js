@@ -197,7 +197,7 @@ function addPeopleToList(){
 	//add click event
 	const peopleChoose = document.querySelectorAll('.pplChooseLI');
 	for (const ppl of peopleChoose) {
-		ppl.addEventListener("click", (evnt) => openTree(evnt));	
+		ppl.addEventListener("click", (evnt) => openPerson(evnt));	
 	}
 }
 
@@ -295,16 +295,47 @@ function peopleListSearchExit(){
 
 
 /* open tree */
-function openTree(evnt){
-	const btn = evnt.target;
+function openPerson(evnt){
+	const btnLI = evnt.target;
+	const btnLIid = btnLI.id;
+	const personTag = btnLIid.replace("li_", "");
+	
+	const liDropParent = btnLI.parentElement();
+	console.log(liDropParent);
+	const famName = liDropParent.id.replace("DropdownDiv", "");
+	
 	
 	const navDiv = document.querySelector('.top_navbar');
 	const activeTabBtn= navDiv.querySelector('.navTab.active');
 	const treeTabBtn = navDiv.querySelector('#treeTab');
 	
-	if (activeTabBtn.id != "treeTab"){
-		navBar_openPage(treeTabBtn);
+	//fill in info in infoDiv (for treeTab or for infoTab)
+	//if treeTab, set node
+	
+	if (activeTabBtn.id == "infoTab"){
+		const infoDiv = document.getElementById("infoDiv");
+		fillPersonInfo(infoDiv);
+		
+	} else { //treeTab
+		const infoDivTree = document.getElementById("infoDivTree");
+		
+		if (activeTabBtn.id != "treeTab"){
+			navBar_openPage(treeTabBtn);
+		}
+		
+		fillPersonInfo(infoDivTree);
+		
 	}
+	
+	function fillPersonInfo(infoDiv){
+		const personInfo = personInfoStorage(famName, personTag);
+		
+	}
+	
+	function setTreeBaseNode(){
+		
+	}
+	
 }
 /* -------------------- */
 
