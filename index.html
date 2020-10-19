@@ -56,7 +56,7 @@
 	
 	<div id="mainDiv">
 		<div class="peachyTree"></div>
-		<div class="section" id="svgDiv">
+		<div class="pageSection" id="svgDiv">
 			<svg id="mainSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
 			</svg>
 			<div class="arrowButtonsDiv">
@@ -65,18 +65,29 @@
 			</div>
 			<button class="zoom_button"></button>
 			<div class="vineLine"></div>
+			
+			<div id="infoDivTree">
+				<div class="infoDivSec">
+					<div class="infoDivBackground"></div>
+					<div class="infoMain"></div>
+				</div>
+				<svg class="leafSVG" id="leafSVGInfo" viewbox="0 0 160 132" xmlns = "http://www.w3.org/2000/svg">	
+				</svg>
+			</div>
 		</div>
-		<div class="section" id="infoDiv">
+		
+		<div class="pageSection" id="infoDiv">
 			<div class="infoDivSec">
 				<div class="infoDivBackground"></div>
 				<div class="infoMain"></div>
 			</div>
-			<svg id="leafSVG" viewbox="0 0 160 132" xmlns = "http://www.w3.org/2000/svg">	
-			</svg>
-			
+			<svg class="leafSVG" id="leafSVGTree" viewbox="0 0 160 132" xmlns = "http://www.w3.org/2000/svg">	
+			</svg>			
+		</div>
+		<div class="pageSection" id="imgsDiv">
 		</div>
 	</div>
-	<div class="section" id="peopleDiv">
+	<div id="peopleDiv">
 		<button id="peopleDivExit" onclick="closePeopleTab();"><i class="fas fa-times"></i></button>
 		<input type="text" id="peopleSearching" onkeyup="peopleListSearch(this);" placeholder="Search for Person"><button id="peopleSearchIcon" onClick="peopleListSearchExit();"><i class="fas fa-search"></i></button>
 		<ul id="peopleList">
@@ -96,12 +107,18 @@
 			</div>
 		</ul>
 	</div>
+	<div class="maskTransitionSection">
+		<div id="transitionMask1" class="transitionMask"></div>
+		<div id="transitionMask2" class="transitionMask"></div>
+		<div id="transitionMask3" class="transitionMask"></div>
+		<div id="transitionMask4" class="transitionMask"></div>
+		<div id="transitionMask5" class="transitionMask"></div>
+	</div>
 
 	<div class="footer"></div>	
 	
 	<script src="js/panzoom.js"></script>		
 	<script src="js/generalScripts.js"></script>
-	<script src="js/jquery-ui_effects.js"></script>
 	<script src="data/pathData.js"></script>
 	<script src="data/personInfo.js"></script>
 	<script src="data/relationsData.js"></script>

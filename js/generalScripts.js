@@ -26,6 +26,7 @@ function navBar_openPage(btn) {
 	const mainDiv = document.getElementById('mainDiv');
 	const svgDiv = document.getElementById('svgDiv');
 	const infoDiv = document.getElementById('infoDiv');
+	const imgsDiv = document.getElementById('imgsDiv');
 	const svg = document.getElementById("mainSVG");
 	const peopleDiv = document.getElementById('peopleDiv');
 	
@@ -59,59 +60,63 @@ function navBar_openPage(btn) {
 		newActiveDiv.classList.add("active");
 		navDiv.classList.add(newTabColor);	
 		
-		switch (oldActiveID){
-			case 'homeTab':						
-			break;
-			case 'treeTab':		
-				const vineLine = svgDiv.querySelector(".vineLine");
-				$(vineLine).fadeOut(1000);
-				$(svgDiv).hide("clip", 1000);
-				$(infoDiv).hide("clip", 1000);
-			break;
-			case 'infoTab':		
-				const infoInner = infoDiv.querySelector(".infoDivSec");
-				const leafSVG = infoDiv.querySelector("#leafSVG");
-				$(infoDiv).hide("clip", 1000);	
-				setTimeout(() => {infoInner.style.display = "none";
-					leafSVG.style.display = "none";}, 1000);
-			break;
-			case 'imgsTab':
-			break;			
+		//hide all when maskTransition
+		const maskTransitionSection = document.querySelector(".maskTransitionSection");
+		const transitionMasks = document.querySelectorAll(".transitionMask");
+		
+		for (const mask of transitionMasks) {
+			mask.classList.toggle("activeTransition");
+		}
+		//hide all	
+		const pageSections = document.querySelectorAll(".pageSection");
+		
+		function hideAllSects(active){
+			var allHideSects = [];		
+			pageSections.forEach(sect => { 
+				const sectID = sect.id;
+				if (sectID != active.id)
+					allHideSects.push(sect);
+			});			
+			
+			for (const sect of allHideSects) {
+				setTimeout(()=> {
+					sect.style.visibility = 'hidden';		
+				}, 1000);	
+				setTimeout(()=> {
+					sect.style.display = 'none';	
+				}, 3000);	
+			};				
+		}
+		
+		function showSect(active){
+			active.style.visibility = 'hidden';
+			active.style.display = 'block';
+			setTimeout(()=> {
+				active.style.visibility = 'visible';					
+			}, 1000);
 		}
 		
 		switch (newActiveID){
-			case 'homeTab':					
+			case 'homeTab':		
+				hideAllSects('');
 			break;
-			case 'treeTab':					
-				const vineLine = svgDiv.querySelector(".vineLine");
-				$(svgDiv).show("clip", 1000);
-				setTimeout(() => {$(vineLine).fadeIn(1000);}, 1000);	
-				
-				setTimeout(() => {
-					$(infoDiv).fadeIn(1000);
-				}, 1500);	
-				
+			case 'treeTab':		
+				hideAllSects(svgDiv);
+				showSect(svgDiv);
 				if (svg.children.length == 0)
-					createSVG();			
-				
+					createSVG();						
 			break;
 			case 'infoTab':	
-				infoDiv.style.display = "block";
-				const infoInner = infoDiv.querySelector(".infoDivSec");
-				const leafSVG = infoDiv.querySelector("#leafSVG");
-				if (oldActiveID != "treeTab"){		
-					$(infoInner).show("clip", 1000);
-					setTimeout(() => {	
-						$(leafSVG).show("fold", 1000);	
-					} , 1000);	
-				}
+				hideAllSects(infoDiv);
+				showSect(infoDiv);
 			break;
 			case 'imgsTab':
+				hideAllSects(imgsDiv);
+				showSect(imgsDiv);
 			break;
 			
 		}
 	}
-	
 	
 	
 }
@@ -498,9 +503,9 @@ function createSVG(){
 	
 }
 
-function createLeafSVG() {
-	const infoDiv = document.getElementById("infoDiv");
-	const leafSVG = document.getElementById("leafSVG");
+function createLeafSVG(type) {
+	const infoDiv = (type == 'tree') ?  document.getElementById("infoDivTree") : document.getElementById("infoDiv");
+	const leafSVG = (type == 'tree') ? document.getElementById("leafSVGTree") : document.getElementById("leafSVGInfo");
 	
 	const leafPaths = getLeafPathData();
 	const fillColour = '#EFE9AE';
@@ -591,7 +596,8 @@ $(document).ready(function(){
 	}
 	
 	//infoDiv
-	createLeafSVG();
+	createLeafSVG('tree');
+	createLeafSVG('info');
 	addPeopleToList();
 	
 });
