@@ -502,6 +502,18 @@ button,  button:active, button:hover, button:focus{
 	background-image: url('../media/colouredWood.svg'); 
 	background-repeat: no-repeat;	
 }
+.infoMain_extended{
+	height: 450px;
+	padding: 60px 100px;
+	z-index: var(--woodBackZ); 
+	position: relative;
+	top: -140px;
+	
+	background-image: url('../media/ivy1.svg'), url('../media/ivy5.svg'), url('../media/colouredWood2.svg'); 
+	background-position: left top, right top, center bottom;
+	background-repeat: no-repeat, no-repeat, no-repeat;		
+	background-size: 300px, 300px, auto;
+}
 
 .infoData {
 	position: relative;
