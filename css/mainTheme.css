@@ -2,6 +2,7 @@
 :root{
 	/*font*/
 	--mainFontFamily: 'Josefin Sans', sans-serif;
+	--mainNameFont: 'Galada', 'Verdana', serif;
 	
 	
 	/*Colours*/
@@ -503,11 +504,11 @@ button,  button:active, button:hover, button:focus{
 	background-repeat: no-repeat;	
 }
 .infoMain_extended{
-	height: 450px;
-	padding: 60px 100px;
+	height: 330px;
+	padding: 180px 100px 50px 100px;
 	z-index: var(--woodBackZ); 
 	position: relative;
-	top: -140px;
+	top: -110px;
 	
 	background-image: url('../media/ivy1.svg'), url('../media/ivy5.svg'), url('../media/colouredWood2.svg'); 
 	background-position: left top, right top, center bottom;
@@ -519,26 +520,36 @@ button,  button:active, button:hover, button:focus{
 	position: relative;
 	cursor: default;
 	margin: 10px 0;
-	font-size: 18px;
+	font-size: 18px;	
+	color:#CFBABA;
+}
+.info_name, .info_dates{
+	font-family: var(--mainNameFont);
+    color: rgb(57,35,35, 0.9);
+    text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	font-weight: bold;
+	line-height: 50px;
+	letter-spacing: 4px;
 }
 .info_name{
-	font-size: xxx-large;
+	font-size: 60px;
 	text-align: left;
 }
 .info_dates{
-	font-size: xxx-large;
+	font-size: 50px;
 	text-align: center;	
 }
-.info_neeName{
-	font-size: x-large;
-	
-}
-.info_about{
-	
-}
 .aboutBold{
-	font-size: large;
-	font-color: blue;
+	font-size: 30px;
+	font-family: var(--mainNameFont);
+    color: rgb(175, 127, 127, 0.8);
+    text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	font-weight: bold;
+	line-height: 50px;
+	letter-spacing: 4px;
+}
+.info_neeName, .info_about{
+	font-size: 24px;
 }
 
 

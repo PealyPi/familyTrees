@@ -27,8 +27,11 @@ function navBar_openPage(btn) {
 	const svgDiv = document.getElementById('svgDiv');
 	const infoDiv = document.getElementById('infoDiv');
 	const imgsDiv = document.getElementById('imgsDiv');
-	const svg = document.getElementById("mainSVG");
 	const peopleDiv = document.getElementById('peopleDiv');
+	
+	const peachTree = document.querySelector('.peachyTree');
+	
+	const svg = document.getElementById("mainSVG");
 	
 	const newActive = btn;
 	const newActiveID = btn.id;	
@@ -80,7 +83,8 @@ function navBar_openPage(btn) {
 			
 			for (const sect of allHideSects) {
 				setTimeout(()=> {
-					sect.style.visibility = 'hidden';		
+					sect.style.visibility = 'hidden';	
+					peachTree.style.opacity = 1;	
 				}, 1000);	
 				setTimeout(()=> {
 					sect.style.display = 'none';	
@@ -92,6 +96,7 @@ function navBar_openPage(btn) {
 			active.style.visibility = 'hidden';
 			active.style.display = 'block';
 			setTimeout(()=> {
+				if ((active == imgsDiv) || (active == infoDiv)){peachTree.style.opacity = 0.4;}
 				active.style.visibility = 'visible';					
 			}, 1000);
 		}
@@ -329,6 +334,30 @@ function openPerson(evnt){
 	
 	function fillPersonInfo(infoDiv){
 		const personInfo = personInfoStorage(famName, personTag);
+		const personRelationsData = nodeDataStorage(famName, personTag);
+		
+		//check which info is available
+		//to see if extended is needed
+		
+		//store count of info,
+		//possibles: nee name, born loc, married: to on at, children, siblings, = 7 total
+		
+		//first wood plank contains nee name, children, siblings
+		//with links to them
+		
+		//second contains born, and married info
+		
+		//a third? for about blurb...
+		
+		//example part 
+		/*
+		<div class="infoData info_neeName">
+			<span class="aboutBold">Née: </span> Person Full Name
+		</div>
+		<div class="infoData info_about">
+			<span class="aboutBold">Born: </span> bornn <br />
+			<span class="aboutBold">Married: </span> married date, loc, ppl <br />
+		</div>*/
 		
 	}
 	

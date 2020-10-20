@@ -2,7 +2,7 @@
 /* ===                 Person Info Storage                  === */
 /* person node data, relations                    				*/
 /* ============================================================ */
-function nodeDataStorage(famName){//collapse lvl 2
+function nodeDataStorage(famName, id=false){//collapse lvl 2
 	
 	var kesby = {}, hadkiss = {}, peal = {}, mckenzie = {};	
 	
@@ -508,18 +508,31 @@ function nodeDataStorage(famName){//collapse lvl 2
 				'childMain': 	'alfredSmithKesby', 
 			};
 	
+	
 	switch (famName){
 		case 'kesby': 
-			return kesby;
+			if (id)
+				return kesby[id];
+			else 
+				return kesby;
 		break;
 		case 'hadkiss': 
-			return hadkiss;
+			if (id)
+				return hadkiss[id];
+			else 
+				return hadkiss;
 		break;
 		case 'peal': 
-			return peal;
+			if (id)
+				return peal[id];
+			else 
+				return peal;
 		break;
 		case 'mckenzie': 
-			return mckenzie;
+			if (id)
+				return mckenzie[id];
+			else 
+				return mckenzie;
 		break;		
 	}	
 }
