@@ -659,7 +659,9 @@ button#infoTreeLinkBTN:hover:after{
 	top: -50px;
 	z-index: var(--woodLeafZ); 
 }
-
+.svg_leafImg{
+	display:none;
+}
 
 /* --- Ppl Tab --- */
 #peopleDiv {

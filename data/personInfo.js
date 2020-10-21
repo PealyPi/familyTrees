@@ -3,7 +3,7 @@
 /* ============================================================ */
 function personInfoStorage(){	
 	//collapse level 3
-	const leafTrs = 'translate(-65 70) scale(1 -1) rotate(20)';
+	const leafTrs = {'x': -30, 'y': 0};
 	const leafWH = [200, 200];
 	const kesby = {	
 		'roseHadkiss': {
@@ -19,20 +19,20 @@ function personInfoStorage(){
 			},	
 				
 			'imgs': [
-				{ 'icon': //'../iconImgs/roseKesby.png', //first in array to go on tree,
-					'https://pealypi.github.io/pealFamily/iconImgs/roseKesby.png'	
+				{ 'icon': '../iconImgs/roseKesby.png', //first in array to go on tree,
+					//'https://pealypi.github.io/pealFamily/iconImgs/roseKesby.png'	
 					}, 
 					
 				//imgs[1]	
 				{'leafImg': //'../pageImgs/roseKesby_image2.jpg', 
 					'https://pealypi.github.io/pealFamily/pageImgs/roseKesby_image2.jpg',
-				'leafTransform': leafTrs,				
+				'leafTransform': {'x': -30, 'y': 0},
 				'leafWH': leafWH	},
 				
 				//imgs[2]
 				{'leafImg': //'../pageImgs/roseKesby_image3.jpg', 
 					'https://pealypi.github.io/pealFamily/pageImgs/roseKesby_image3.jpg',
-				'leafTransform': leafTrs,				
+				'leafTransform': {'x': -20, 'y': 0}, 
 				'leafWH': leafWH},
 				
 				
