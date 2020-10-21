@@ -16,6 +16,7 @@ function nodeDataStorage(){//collapse lvl 2
 		'parentR': 		'johnNevilleKesby',	
 		'siblings': 	['jackKesby'],
 		'spouse': 		'ronaldHadkiss',	
+		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};
 	
 	kesby.jackKesby = {			
@@ -128,6 +129,7 @@ function nodeDataStorage(){//collapse lvl 2
 			'siblings': 	['florencePrimroseBobby', 'margaretEllenBobby', 'charlotteBobby', 'samuelJamesBobby', 'annieFlorenceBobby', 'maryAnnBobby', 'janeClarkBobby', 'jamesHerbertBobby' ],
 			'spouse': 		'adaBerriman',	
 			'childMain': 	'maryBobby', 
+			'children': 	['floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby'],
 		};
 		
 		kesby.florencePrimroseBobby = {	

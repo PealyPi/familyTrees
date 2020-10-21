@@ -328,15 +328,30 @@ function peopleListSearchExit(){
 
 /* open tree */
 var isInfoChanging = false;
-function openPerson(evnt){
-	var btnLI = evnt.target;
-	if ((btnLI.tagName == "I")||(btnLI.tagName == "SPAN")){
-		btnLI = btnLI.parentElement;
-	} 
+function openPerson(evnt, linked = false){
+	var btnLI;
+	if (linked){
+		const dropdown = document.querySelector('.ppl_dropdownContainer');
+		const dropLIs = dropdown.getElementsByTagName('li');
+		const personName = evnt.target.innerText;
+		
+		for (i = 0; i < dropLIs.length; i++) {
+			if (dropLIs[i].innerText == personName) 
+				btnLI = dropLIs[i];			
+		};
+		
+	} else {
+		btnLI = evnt.target;
+		if ((btnLI.tagName == "I")||(btnLI.tagName == "SPAN")){
+			btnLI = btnLI.parentElement;
+		}
+	}
+	
 	if (!isInfoChanging){
 		isInfoChanging = true;
 		const btnLIid = btnLI.id;
 		const personTag = btnLIid.replace("li_", "");
+		console.log('opening; ' + personTag );
 		const liDropParent = btnLI.parentElement;
 		const famName = liDropParent.id.replace("DropdownDiv", "");
 		
@@ -352,9 +367,9 @@ function openPerson(evnt){
 }
 
 function fillPersonInfo(infoDiv, famName, personTag){	
-	const personInfo = PEOPLEINFO[famName][personTag];
-	const famRelationsData = PEOPLERELATIONS[famName];
-	const personRelationsData = famRelationsData[personTag];
+	const famInfo = PEOPLEINFO[famName];
+	const personInfo = famInfo[personTag];
+	const personRelationsData = PEOPLERELATIONS[famName][personTag];
 	
 	const infoDivSec = infoDiv.querySelector(".infoDivSec");
 	const infoDivMain = infoDivSec.querySelector(".infoMain");
@@ -368,17 +383,17 @@ function fillPersonInfo(infoDiv, famName, personTag){
 	
 	if (mainContainerDiv.style.display == "block"){
 		$([mainContainerDiv, infoAboutSect]).fadeOut(1000, function(){
-			clearAndHide();			
+			clearAndFill();			
 		});
 		setTimeout(() => {extendDivAndShow()}, 1200);	
 	} else {
-		clearAndHide();		
+		clearAndFill();		
 		extendDivAndShow();
 	}
 	
 	
 	//clear & hide
-	function clearAndHide(){
+	function clearAndFill(){
 		clearPersonInfo(infoDiv);
 			
 		//create and set name, dates
@@ -391,7 +406,7 @@ function fillPersonInfo(infoDiv, famName, personTag){
 	
 		//info dependent
 		const bornNameDiv = infoDivMain.querySelector(".info_neeName");
-		
+	
 		if (personInfo.hasOwnProperty('bornName')){
 			const nameText = document.createTextNode(personInfo.bornName);
 			bornNameDiv.appendChild(nameText);
@@ -401,6 +416,53 @@ function fillPersonInfo(infoDiv, famName, personTag){
 		} else {
 			bornNameDiv.style.display = "none";			
 		}
+		
+		
+		//lists
+		const infoVariables = { 
+			'siblings': infoDivMain.querySelector(".info_siblings"), 
+			'children': infoDivMain.querySelector(".info_children")
+		};
+		
+		const infoVariablesKeys = Object.keys(infoVariables);
+		infoVariablesKeys.forEach((infoVar)=>{
+			if (personRelationsData.hasOwnProperty(infoVar)){
+				const relativesList = personRelationsData[infoVar];
+				
+				var relativeNamesListStr = ''; var relativeLinesCount = 0;
+				relativesList.forEach((relative)=>{		
+					const relativeName = famInfo[relative].name;
+					
+					const varSpan = document.createElement('span');
+					varSpan.classList.add('personLink');
+					const varText = document.createTextNode(relativeName + ", ");
+					
+					//check current line # characters - new line if at max
+					relativeNamesListStr += (relativeName + ", ");
+					const stringLength = relativeNamesListStr.length;
+					const maxStrLength = (relativeLinesCount == 0) 
+						? 50 : 50;
+					if (relativeNamesListStr.length > maxStrLength){
+						relativeLinesCount += 1;
+						relativeNamesListStr = '';
+						const lineBreak = document.createElement('br');
+						infoVariables[infoVar].appendChild(lineBreak);			
+					} 
+					
+					infoVariables[infoVar].appendChild(varSpan);
+					varSpan.appendChild(varText);
+					
+					//add click function
+					varSpan.addEventListener("click", (evnt) => openPerson(evnt, linked=true));
+				});
+				
+				//const relativeNamesStr = relativeNamesList.join(", ");
+				infoVariables[infoVar].style.display = "block";
+				
+			} else {
+				infoVariables[infoVar].style.display = "none";					
+			}
+		});
 		
 		//add svgLeaf imgs			
 	}
@@ -503,6 +565,29 @@ function createInfoDivs(type){
 		const bornNameTitleText = document.createTextNode('Née: ');
 		bornNameTitle.appendChild(bornNameTitleText);			
 	
+	//siblings
+	const siblingDiv  = document.createElement("div");
+	siblingDiv.classList.add('infoData');
+	siblingDiv.classList.add('info_siblings');
+	containerDiv.appendChild(siblingDiv);
+	
+		const siblingTitle = document.createElement("span");
+		siblingTitle.classList.add('aboutBold');
+		siblingDiv.appendChild(siblingTitle);
+		const siblingTitleText = document.createTextNode('Siblings: ');
+		siblingTitle.appendChild(siblingTitleText);
+		
+	//children
+	const childrenDiv  = document.createElement("div");
+	childrenDiv.classList.add('infoData');
+	childrenDiv.classList.add('info_children');
+	containerDiv.appendChild(childrenDiv);
+	
+		const childrenTitle = document.createElement("span");
+		childrenTitle.classList.add('aboutBold');
+		childrenDiv.appendChild(childrenTitle);
+		const childrenTitleText = document.createTextNode('Children: ');
+		childrenTitle.appendChild(childrenTitleText);	
 	
 	//extra
 	const infoAboutDiv = document.createElement("div");

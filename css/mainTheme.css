@@ -563,10 +563,17 @@ button,  button:active, button:hover, button:focus{
 	letter-spacing: 4px;
 	
 }
-.info_neeName {
+.info_neeName{
 	display: none;
+	font-size: 24px;
 }
-.info_neeName, .info_about{
+.info_siblings, .info_children {
+	display: none;
+	font-size: 22px;
+	width: 110%;
+	line-height: 38px;
+}
+.info_about{
 	font-size: 24px;
 }
 .infoAboutSect{
@@ -580,6 +587,15 @@ button,  button:active, button:hover, button:focus{
 	vertical-align: middle;
 	text-align: left;
 	padding-left: 20px;
+}
+.infoDivSec .personLink{
+	cursor: pointer;
+	padding-right: 8px;	
+	transition: all 0.5s ease;
+}
+.infoDivSec .personLink:hover{
+	letter-spacing: 1.2px;
+	color:#E7DCDC;
 }
 
 .leafSVG{
@@ -696,8 +712,9 @@ ul#peopleList{
 
 ul#peopleList li{
 	cursor: pointer;	
+	overflow: hidden;
 	width: 235px; 
-	margin: 20px;
+	margin: 20px 10px;
 	padding: 10px;
 	
 	-webkit-user-select: none; /* Safari */
@@ -715,16 +732,18 @@ ul#peopleList li span{
 	transition: all 0.7s;
 }
 ul#peopleList button.ppl_dropdownBtn{
-	font-size:24px;
 	margin: 10px;
 	cursor: pointer;
+	
+	font-family: var(--mainFontFamily);
+	font-size:24px;
 	color:white;
 }
 ul#peopleList button.ppl_dropdownBtn i{
 	margin-left: 30px;
 }
 ul#peopleList .ppl_dropdownContainer li i{
-	margin-right: 30px;
+	margin-right: 23px;
 }
 ul#peopleList .dropdownActive{
 	display: block !important;
@@ -734,9 +753,10 @@ ul#peopleList .ppl_dropdownContainer{
 	display:none;
 	max-height: 400px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 ul#peopleList li:hover{
-	width: 240px; 
+	width: 250px; 
     background-color: rgba(255,255,255,0);
 	border-top: 1px solid white;
 	border-bottom: 1px solid white;
@@ -746,7 +766,7 @@ ul#peopleList li:hover{
 	transition: all 0.7s;
 }
 ul#peopleList li:hover span{
-	letter-spacing: 2px;
+	letter-spacing: 1.6px;
 }
 
 /* -----------    ------------- */
