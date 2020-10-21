@@ -1,6 +1,10 @@
 /* ============================================================ */
 /* ===                    Custom Scripts                    === */
 /* ============================================================ */
+/* preload info /relations data */
+var PEOPLEINFO = personInfoStorage();
+var PEOPLERELATIONS = nodeDataStorage();
+
 
 /* ------ loader ------ */
 function loader_onReady(callback) {
@@ -180,23 +184,32 @@ function addPeopleToList(){
 	
 	//guide: <li class="pplChooseLI" id="li_ronHadkiss"><i class="fas fa-chevron-left"></i><span>Ron Hadkiss</span></li>
 	
-	const kesbyData = personInfoStorage('kesby');
-	var kesbyKeys = Object.keys(kesbyData);		
-	kesbyKeys.forEach(function( personTag, i ) {
-		const personName = kesbyData[personTag].name;
+	const famData = PEOPLEINFO;
+	const famKeys = Object.keys(famData);	
+	famKeys.forEach(function( fam, j ) {
+		const famData = PEOPLEINFO[fam];
+		const eachFamKeys = Object.keys(famData);	
+		const famDropDiv = peopleListUL.querySelector("#" + fam + "DropdownDiv");
 		
-		const personLI = new createElement("li", {
-			'id': 'li_' + personTag,		
-			'class': 'pplChooseLI',
-		});	
-		const liIcon = new createElement("i", {
-			'class': 'fas fa-chevron-left',		
+		eachFamKeys.forEach(function( personTag, i ) {
+			const personName = famData[personTag].name;
+			
+			const personLI = document.createElement("li");	
+			personLI.id = 'li_' + personTag;	
+			personLI.classList.add('pplChooseLI');	
+			famDropDiv.appendChild(personLI);
+			
+			
+			const liIcon = document.createElement("i");	
+			liIcon.classList.add('fas');
+			liIcon.classList.add('fa-chevron-left');
+			personLI.appendChild(liIcon);	
+			
+			const liSpan = document.createElement("span");
+			personLI.appendChild(liSpan);
+			const liSpanText = document.createTextNode(personName);
+			liSpan.appendChild(liSpanText);		
 		});
-		const liSpan = new createElement("span");
-		kesbyDiv.appendChild(personLI);
-		personLI.appendChild(liIcon);
-		personLI.appendChild(liSpan);
-		liSpan.innerHTML = personName;
 	});
 	
 	//add click event
@@ -301,56 +314,77 @@ function peopleListSearchExit(){
 
 /* open tree */
 function openPerson(evnt){
-	const btnLI = evnt.target;
+	var btnLI = evnt.target;
+	if ((btnLI.tagName == "I")||(btnLI.tagName == "SPAN")){
+		btnLI = btnLI.parentElement;
+	} 
+	
 	const btnLIid = btnLI.id;
 	const personTag = btnLIid.replace("li_", "");
 	
-	const liDropParent = btnLI.parentElement();
-	console.log(liDropParent);
+	const liDropParent = btnLI.parentElement;
 	const famName = liDropParent.id.replace("DropdownDiv", "");
-	
 	
 	const navDiv = document.querySelector('.top_navbar');
 	const activeTabBtn= navDiv.querySelector('.navTab.active');
 	const treeTabBtn = navDiv.querySelector('#treeTab');
 	
 	//fill in info in infoDiv (for treeTab or for infoTab)
-	//if treeTab, set node
+	fillPersonInfo(infoDiv);
+	fillPersonInfo(infoDivTree);
 	
-	if (activeTabBtn.id == "infoTab"){
-		const infoDiv = document.getElementById("infoDiv");
-		fillPersonInfo(infoDiv);
+	
+	function fillPersonInfo(infoDiv){		
+		const personInfo = PEOPLEINFO[famName][personTag];
+		const famRelationsData = PEOPLERELATIONS[famName];
+		const personRelationsData = famRelationsData[personTag];
 		
-	} else { //treeTab
-		const infoDivTree = document.getElementById("infoDivTree");
+		const infoDivSec = infoDiv.querySelector(".infoDivSec");
+		const infoDivMain = infoDivSec.querySelector(".infoMain");
 		
-		if (activeTabBtn.id != "treeTab"){
-			navBar_openPage(treeTabBtn);
+		//clear
+		clearPersonInfo(infoDiv);
+		
+		//create and set name, dates
+		const nameDiv = infoDivMain.querySelector(".info_name");
+		const nameText = document.createTextNode(personInfo.name);
+		nameDiv.appendChild(nameText);
+		
+		const datesDiv = infoDivMain.querySelector(".info_dates");
+		const datesText = document.createTextNode(personInfo.dates);
+		datesDiv.appendChild(datesText);
+		
+		
+		
+		//info dependent
+		const bornNameDiv = infoDivMain.querySelector(".info_neeName");
+		
+		if (personInfo.hasOwnProperty('bornName')){
+			const nameText = document.createTextNode(personInfo.bornName);
+			bornNameDiv.appendChild(nameText);
+			
+			bornNameDiv.style.display = "block";
+			
+		} else {
+			bornNameDiv.style.display = "none";			
 		}
 		
-		fillPersonInfo(infoDivTree);
 		
-	}
-	
-	function fillPersonInfo(infoDiv){
-		const personInfo = personInfoStorage(famName, personTag);
-		const personRelationsData = nodeDataStorage(famName, personTag);
+		const divExtended = infoDivSec.querySelector(".infoMain_extended");
 		
-		//check which info is available
-		//to see if extended is needed
-		
-		//store count of info,
-		//possibles: nee name, born loc, married: to on at, children, siblings, = 7 total
-		
-		//first wood plank contains nee name, children, siblings
-		//with links to them
-		
-		//second contains born, and married info
-		
-		//a third? for about blurb...
-		
-		//example part 
-		/*
+		if (personInfo.hasOwnProperty('about')){
+			divExtended.style.display = "block";
+			
+			const aboutKeys = Object.keys(personInfo.about);
+			
+			
+			
+		} else {			
+			divExtended.style.display = "none";		
+		}
+/*
+		<div class="infoData info_name">Person Name</div>
+		<div class="infoData info_dates">1900 - 2000</div>
 		<div class="infoData info_neeName">
 			<span class="aboutBold">Née: </span> Person Full Name
 		</div>
@@ -358,6 +392,52 @@ function openPerson(evnt){
 			<span class="aboutBold">Born: </span> bornn <br />
 			<span class="aboutBold">Married: </span> married date, loc, ppl <br />
 		</div>*/
+		/*
+		if (personInfo.hasOwnProperty('about')){
+			const divExtended = new createNewElement("div",{
+				'class': 'infoMain_extended',
+			});
+			infoDivMain.appendChild(divExtended);
+			
+			const infoAboutDiv = new createNewElement("div",{
+				'class': 'infoData info_about',
+			});
+			divExtended.appendChild(infoAboutDiv);
+			
+			const personInfoAbout = personInfo.about;
+			var personInfoAboutKeys = Object.keys(personInfoAbout);
+			//check if keys contain ...
+		}*/
+		
+		
+	}
+	
+	function clearPersonInfo(infoDiv){
+		/*const personInfoSlots = [
+			infoDiv.querySelector(".info_name"),
+			infoDiv.querySelector(".info_dates"),
+			infoDiv.querySelector(".info_neeName"),
+			
+		
+			infoDiv.querySelector(".bornOnVal"),
+			infoDiv.querySelector(".bornAtVal"),
+			
+			infoDiv.querySelector(".marriedToVal"),
+			infoDiv.querySelector(".marriedOnVal"),
+			infoDiv.querySelector(".marriedAtVal"),
+			
+			infoDiv.querySelector(".diedOn"),		
+		]*/
+		const infoDivSec = infoDiv.querySelector(".infoDivSec");
+		const infoDivMain = infoDivSec.querySelector(".infoMain");
+		
+		const infoDataSlots = infoDivSec.querySelector(".infoData");
+		
+		infoDataSlots.forEach((slot) => {
+			
+		});
+		
+		
 		
 	}
 	
@@ -365,6 +445,142 @@ function openPerson(evnt){
 		
 	}
 	
+}
+
+function createInfoDivs(type){	
+	const navDiv = document.querySelector('.top_navbar');
+	const activeTabBtn = navDiv.querySelector('.navTab.active');
+	const treeTabBtn = navDiv.querySelector('#treeTab');
+	
+	const infoDiv = (type == "info") ? document.getElementById("infoDiv") : document.getElementById("infoDivTree");
+	
+	const infoDivSec = infoDiv.querySelector(".infoDivSec");
+	const infoDivMain = infoDivSec.querySelector(".infoMain");	
+	
+	createLeafSVG(type);
+	
+	const divExtended = document.createElement("div");
+	divExtended.classList.add('infoMain_extended');
+	infoDivSec.appendChild(divExtended);
+	
+	
+	//main
+	const nameDiv = document.createElement("div");
+	nameDiv.classList.add('infoData');
+	nameDiv.classList.add('info_name');
+	infoDivMain.appendChild(nameDiv);
+	
+	const datesDiv = document.createElement("div");
+	datesDiv.classList.add('infoData');
+	datesDiv.classList.add('info_dates');
+	infoDivMain.appendChild(datesDiv);
+	
+	const bornNameDiv  = document.createElement("div");
+	bornNameDiv.classList.add('infoData');
+	bornNameDiv.classList.add('info_neeName');
+	infoDivMain.appendChild(bornNameDiv);
+	
+		const bornNameTitle = document.createElement("span");
+		bornNameTitle.classList.add('aboutBold');
+		bornNameDiv.appendChild(bornNameTitle);
+		const bornNameTitleText = document.createTextNode('Née: ');
+		bornNameTitle.appendChild(bornNameTitleText);			
+	
+	
+	//extra
+	const infoAboutDiv = document.createElement("div");
+	infoAboutDiv.classList.add('infoData');
+	infoAboutDiv.classList.add('info_about');
+	divExtended.appendChild(infoAboutDiv);
+	
+	createInfoTable(divExtended);
+	
+	function createInfoTable(divExtended){
+		var aboutTable = document.createElement("table");
+		aboutTable.classList.add('infoAboutTable');
+		infoAboutDiv.appendChild(aboutTable);
+		
+		const aboutRowBorn1 = aboutTable.insertRow(-1);
+		const head_bornCell = document.createElement("th");
+			head_bornCell.setAttribute('rowspan', '2');
+		head_bornCell.setAttribute('class', 'aboutBold');
+		aboutRowBorn1.appendChild(head_bornCell);
+		const head_bornText = document.createTextNode('Born: ');
+		head_bornCell.appendChild(head_bornText);			
+		
+		const about_bornOn = aboutRowBorn1.insertCell(-1);
+		about_bornOn.setAttribute('class', 'aboutSubBold');
+		const head_bornOnText = document.createTextNode('on ');
+		about_bornOn.appendChild(head_bornOnText);			
+		
+			const about_bornOnVal = aboutRowBorn1.insertCell(-1);
+			about_bornOnVal.setAttribute('class', 'infoData bornOnVal');
+		
+		
+		const aboutRowBorn2 = aboutTable.insertRow(-1);
+		const about_bornAt = aboutRowBorn2.insertCell(-1);
+			about_bornAt.setAttribute('class', 'aboutSubBold');
+		const head_bornAtText = document.createTextNode('at ');
+		about_bornAt.appendChild(head_bornAtText);			
+			
+			const about_bornAtVal = aboutRowBorn2.insertCell(-1);
+			about_bornAtVal.setAttribute('class', 'infoData bornAtVal');		
+		
+		
+		const aboutRowMarried1 = aboutTable.insertRow(-1);
+		const head_marriedCell = document.createElement("th");
+		head_marriedCell.setAttribute('rowspan', '3');	
+		head_marriedCell.setAttribute('class', 'aboutBold');		
+		aboutRowMarried1.appendChild(head_marriedCell);
+		const head_marriedText = document.createTextNode('Married: ');
+		head_marriedCell.appendChild(head_marriedText);
+		
+		const about_marriedTo = aboutRowMarried1.insertCell(-1);	
+		about_marriedTo.setAttribute('class', 'aboutSubBold');	
+		const about_marriedToText = document.createTextNode('to ');
+		about_marriedTo.appendChild(about_marriedToText);			
+		
+			const about_marriedToVal = aboutRowMarried1.insertCell(-1);
+			about_marriedToVal.setAttribute('class', 'infoData marriedToVal');
+		
+		
+		const aboutRowMarried2 = aboutTable.insertRow(-1);
+		const about_marriedOn = aboutRowMarried2.insertCell(-1);
+		about_marriedOn.setAttribute('class', 'aboutSubBold');
+		const about_marriedOnText = document.createTextNode('on ');
+		about_marriedOn.appendChild(about_marriedOnText);		
+		
+			const about_marriedOnVal = aboutRowMarried2.insertCell(-1);
+			about_marriedOnVal.setAttribute('class', 'infoData marriedOnVal');
+		
+		
+		const aboutRowMarried3 = aboutTable.insertRow(-1);
+		const about_marriedAt = aboutRowMarried3.insertCell(-1);
+		about_marriedAt.setAttribute('class', 'aboutSubBold');
+		const about_marriedAtText = document.createTextNode('at ');
+		about_marriedAt.appendChild(about_marriedAtText);		
+		
+			const about_marriedAtVal = aboutRowMarried3.insertCell(-1);
+			about_marriedAtVal.setAttribute('class', 'infoData marriedAtVal');
+		
+		
+		
+		const aboutRowDied1 = aboutTable.insertRow(-1);
+		const head_diedCell = document.createElement("th");
+			head_diedCell.rowspan = '3';		
+		head_diedCell.setAttribute('class', 'aboutBold');
+		aboutRowDied1.appendChild(head_diedCell);
+		const head_diedText = document.createTextNode('Died: ');
+		head_diedCell.appendChild(head_diedText);
+		
+		const about_diedOn = aboutRowDied1.insertCell(-1);
+		about_diedOn.setAttribute('class', 'aboutSubBold');
+		const about_diedOnText = document.createTextNode('on ');
+		about_diedOn.appendChild(about_diedOnText);		
+		
+			const about_diedOnVal = aboutRowDied1.insertCell(-1);
+			about_diedOnVal.setAttribute('class', 'infoData diedOnVal');
+	}
 }
 /* -------------------- */
 
@@ -384,7 +600,7 @@ class personNode {
 		const circleFullWidth = circleRadius + circleBorder;
 		
 		
-		const circleGrp = new createElement('g', {
+		const circleGrp = new createNewElement('g', {
 			'id': this.personTag + 'CircleGrp',
 			'class': 'personCircleGrp',
 			'transform': 'translate(' + this.positionXY.x + ' ' + this.positionXY.y + ')',
@@ -397,29 +613,29 @@ class personNode {
 			'stroke-width': circleBorder,
 		}
 		
-		const circle = new createElement('circle', Object.assign({}, circleDefine, {
+		const circle = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'class': 'circle',
 			'fill': '#FFAC81',
 			'stroke': 'none',
 		}));
 		
 		//bevelborder
-		const circleBorderRight = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleBorderRight = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'class': 'circleBorder',
 			'fill': 'none',
 			'stroke': '#FFDFA7',
 		}));
-		const circleBorderTop = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleBorderTop = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'class': 'circleBorder',
 			'fill': 'none',
 			'stroke': '#FFE7AD',
 		}));
-		const circleBorderLeft = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleBorderLeft = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'class': 'circleBorder',
 			'fill': 'none',
 			'stroke': '#FFFFCB', 
 		}));
-		const circleBorderBot = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleBorderBot = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'class': 'circleBorder',
 			'fill': 'none',
 			'stroke': '#FFC997',
@@ -448,7 +664,7 @@ class personNode {
 		circleBorderBot.setAttribute('stroke-dashoffset', offsetLngths[3]);
 		
 		//contour
-		const circleContour = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleContour = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'r': circleRadius,
 			'cx': 0, 'cy': 0,	
 			'stroke-width': circleBorder+2,
@@ -460,7 +676,7 @@ class personNode {
 		circleGrp.prepend(circleContour);
 		
 		//shadow
-		const circleShadow1 = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleShadow1 = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'r': circleRadius,
 			'cx': 1, 'cy': 1,	
 			'stroke-width': circleBorder+2,
@@ -469,7 +685,7 @@ class personNode {
 			'fill': 'none',
 			'stroke': '#000',
 		}));
-		const circleShadow2 = new createElement('circle', Object.assign({}, circleDefine, {
+		const circleShadow2 = new createNewElement('circle', Object.assign({}, circleDefine, {
 			'r': circleRadius,
 			'cx': 2, 'cy': 2,	
 			'stroke-width': circleBorder+2,
@@ -496,10 +712,10 @@ function createSVG(){
 	const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
 	
 	//line
-	const lineGrp = new createElement('g', {
+	const lineGrp = new createNewElement('g', {
 		'class': 'mainLine_GRP',
 	});
-	const mainLine = new createElement('line', {
+	const mainLine = new createNewElement('line', {
 		'class': 'mainLine',
 		'x1': 0, 'y1': svgCenterPt.y, 
 		'x2': pageWidth, 'y2': svgCenterPt.y,
@@ -507,7 +723,7 @@ function createSVG(){
 		'stroke': '#FF928B',
 		'stroke-width': 10,		
 	});
-	const mainLineShadow1 = new createElement('line', {
+	const mainLineShadow1 = new createNewElement('line', {
 		'class': 'mainLineShadow',
 		'x1': 0, 'y1': (svgCenterPt.y+3), 
 		'x2': pageWidth, 'y2': (svgCenterPt.y+3),
@@ -516,7 +732,7 @@ function createSVG(){
 		'stroke-width': 10,	
 		'stroke-opacity': 0.1,
 	});
-	const mainLineShadow2 = new createElement('line', {
+	const mainLineShadow2 = new createNewElement('line', {
 		'class': 'mainLineShadow',
 		'x1': 0, 'y1': (svgCenterPt.y+1.5), 
 		'x2': pageWidth, 'y2': (svgCenterPt.y+1.5),
@@ -534,7 +750,7 @@ function createSVG(){
 	const initialPersonNode = new personNode(svg, 'kesby', 'roseHadkiss').createCircle(svgCenterPt);
 	
 	//text
-	const personNameText = new createElement('text', {
+	const personNameText = new createNewElement('text', {
 		'class': 		'svgTxt',
 		'text-anchor': 	'middle',
 		'font-family': 	"'Josefin Sans', sans-serif",
@@ -547,7 +763,7 @@ function createSVG(){
 	});	
 	svg.appendChild(personNameText);
 	
-	const familyNameText = new createElement('text', {
+	const familyNameText = new createNewElement('text', {
 		'class': 		'svgTxt',
 		'text-anchor': 	'middle',
 		'font-family': 	"'Josefin Sans', sans-serif",
@@ -570,28 +786,28 @@ function createLeafSVG(type) {
 	const leafPaths = getLeafPathData();
 	const fillColour = '#EFE9AE';
 	
-	const defs = new createElement('defs', {
+	const defs = new createNewElement('defs', {
 		'id': 'clipPaths',
 	});
-	const topClip = new createElement('clipPath', {
+	const topClip = new createNewElement('clipPath', {
 		'id': 'topLeaf_clipPath',
 	});
-	const topClipPath = new createElement('path', {
+	const topClipPath = new createNewElement('path', {
 		'd': leafPaths.topLeaf_fill,
 	});
 	leafSVG.appendChild(defs);
 	defs.appendChild(topClip);
 	topClip.appendChild(topClipPath);
 	
-	const bottomLeafGRP = new createElement('g', {
+	const bottomLeafGRP = new createNewElement('g', {
 		'id': 'bottomLeaf_GRP',
 	});
-	const bottomLeaf_fill = new createElement('path', {
+	const bottomLeaf_fill = new createNewElement('path', {
 		'id': 'bottomLeaf_fill', 
 		'style': 'fill:' + fillColour + '; fill-opacity:0.75502;',
 		'd': leafPaths.bottomLeaf_fill,
 	});
-	const bottomLeaf_outer = new createElement('path', {
+	const bottomLeaf_outer = new createNewElement('path', {
 		'id': 'bottomLeaf_outer', 
 		'style': 'fill:' + fillColour + '; fill-opacity:1;',
 		'd': leafPaths.bottomLeaf_outer,
@@ -601,15 +817,15 @@ function createLeafSVG(type) {
 	bottomLeafGRP.appendChild(bottomLeaf_outer);
 	
 	
-	const topLeafGRP = new createElement('g', {
+	const topLeafGRP = new createNewElement('g', {
 		'id': 'topLeaf_GRP',
 	});
-	const topLeaf_fill = new createElement('path', {
+	const topLeaf_fill = new createNewElement('path', {
 		'id': 'topLeaf_fill', 
 		'style': 'fill:' + fillColour + '; fill-opacity:0.75502;',
 		'd': leafPaths.topLeaf_fill,
 	});
-	const topLeaf_outer = new createElement('path', {
+	const topLeaf_outer = new createNewElement('path', {
 		'id': 'topLeaf_outer', 
 		'style': 'fill:' + fillColour + '; fill-opacity:1;',
 		'd': leafPaths.topLeaf_outer,
@@ -620,7 +836,7 @@ function createLeafSVG(type) {
 	
 }
 
-function createElement(type, obj, noNS=false){
+function createNewElement(type, obj, noNS=false){
     var created = !noNS ? document.createElementNS('http://www.w3.org/2000/svg', type) 
 	: document.createElement(type);
 	
@@ -656,8 +872,8 @@ $(document).ready(function(){
 	}
 	
 	//infoDiv
-	createLeafSVG('tree');
-	createLeafSVG('info');
+	createInfoDivs('tree');
+	createInfoDivs('info');
 	addPeopleToList();
 	
 });

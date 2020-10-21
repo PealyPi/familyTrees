@@ -1,21 +1,21 @@
 /* ============================================================ */
 /* ===                 Person Info Storage                  === */
 /* ============================================================ */
-function personInfoStorage(famName, id=false){	
+function personInfoStorage(){	
 	//collapse level 3
 	const leafTrs = 'translate(-65 70) scale(1 -1) rotate(20)';
 	const leafWH = [200, 200];
-	const kesbyInfo = {	
+	const kesby = {	
 		'roseHadkiss': {
 			'name':		'Rose Hadkiss',
 			'bornName':	'Rosemary Kesby',
 			'dates': 	'1925 - 2020',	 
 			'about': { 
-				'bornDate': '22nd September 1925',
-				'diedDate': '28 Mar 2020',
-				'marriedDate':	'26 Mar 1949',
-				'marriedLoc':	'St Peter and Paul Church, Swanscombe',
-				'marriedPpl':	'Ronald Hadkiss',				
+				'bornOn': '22nd September 1925',
+				'diedOn': '28th March 2020',
+				'marriedOn':	'26 Mar 1949',
+				'marriedAt':	'St Peter and Paul Church, Swanscombe',
+				'marriedTo':	'Ronald Hadkiss',				
 			},	
 				
 			'imgs': [
@@ -353,40 +353,32 @@ function personInfoStorage(famName, id=false){
 	}
 	
 	
-	const hadkissInfo = {	
+	const hadkiss = {	
 	};
-	const pealInfo = {	
+	const peal = {	
 	};
-	const mckenzieInfo = {	
+	const mckenzie = {	
 	};
-
 	
+	
+	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};
+
+	/*
 	switch (famName){
 		case 'kesby':
-			if (id)
-				return kesbyInfo[id];
-			else 
-				return kesbyInfo;
+			return kesbyInfo;
 		break;
 		case 'hadkiss':
-			if (id)
-				return hadkissInfo[id];
-			else 
-				return hadkissInfo;
+			return hadkissInfo;
 		break;
 		case 'peal':
-			if (id)
-				return pealInfo[id];
-			else 
-				return pealInfo;
+			return pealInfo;
 		break;
 		case 'mckenzie':
-			if (id)
-				return mckenzieInfo[id];
-			else 
-				return mckenzieInfo;
+			return mckenzieInfo;
 		break;
-	}
+	}*/
+	return allFams;
 }
 
 /* ------------------------------------------------ */

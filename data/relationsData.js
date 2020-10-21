@@ -2,9 +2,9 @@
 /* ===                 Person Info Storage                  === */
 /* person node data, relations                    				*/
 /* ============================================================ */
-function nodeDataStorage(famName, id=false){//collapse lvl 2
+function nodeDataStorage(){//collapse lvl 2
 	
-	var kesby = {}, hadkiss = {}, peal = {}, mckenzie = {};	
+	var kesby = {}, hadkiss = {}, peal = {}, mckenzie = {};
 	
 	//kesby
 	kesby.roseHadkiss = {	
@@ -509,32 +509,23 @@ function nodeDataStorage(famName, id=false){//collapse lvl 2
 			};
 	
 	
+	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};
+	/*
 	switch (famName){
 		case 'kesby': 
-			if (id)
-				return kesby[id];
-			else 
-				return kesby;
+			return allFams.kesby;
 		break;
 		case 'hadkiss': 
-			if (id)
-				return hadkiss[id];
-			else 
-				return hadkiss;
+			return allFams.hadkiss;
 		break;
 		case 'peal': 
-			if (id)
-				return peal[id];
-			else 
-				return peal;
+			return allFams.peal;
 		break;
 		case 'mckenzie': 
-			if (id)
-				return mckenzie[id];
-			else 
-				return mckenzie;
+			return allFams.mckenzie;
 		break;		
-	}	
+	}	*/
+	return allFams;
 }
 
 /* ------------------------------------------------ */
