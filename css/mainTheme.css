@@ -503,6 +503,9 @@ button,  button:active, button:hover, button:focus{
 	background-image: url('../media/colouredWood.svg'); 
 	background-repeat: no-repeat;	
 }
+.mainContainerDiv{
+	display:none;
+}
 .infoMain_extended{
 	height: 335px;
 	padding: 175px 100px 50px 100px;
@@ -566,11 +569,18 @@ button,  button:active, button:hover, button:focus{
 .info_neeName, .info_about{
 	font-size: 24px;
 }
-.infoAboutTable td, .infoAboutTable th {
-	vertical-align: top;
-	text-align: left;
+.infoAboutSect{
+	display:none;
 }
-
+.infoAboutTable th {
+	vertical-align: top;
+	text-align: left;	
+}
+.infoAboutTable td{
+	vertical-align: middle;
+	text-align: left;
+	padding-left: 20px;
+}
 
 .leafSVG{
 	width: 320px; height: 264px;
@@ -682,11 +692,17 @@ ul#peopleList{
 	/*list-style:  square inside url('../media/chevron-left-solid.svg');*/
 	
 }
+
+
 ul#peopleList li{
 	cursor: pointer;	
 	width: 235px; 
 	margin: 20px;
 	padding: 10px;
+	
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none;
 	
 	transition: all 0.7s;
 	transition: width 0.7s;

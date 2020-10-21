@@ -21,9 +21,24 @@ function mask_setVisible(selector, visible) {
 }
 
 /* ------ navbar ------ */
+var isPageTransitioning = false;
 function navBar_clickEvnt(event){
 	const btn = event.target;
-	navBar_openPage(btn);
+	const btnID = btn.id ?? '';	
+	if (!isPageTransitioning){
+		isPageTransitioning = true;
+		navBar_openPage(btn);
+		if (btnID =='pplTab'){
+			setTimeout(()=> {
+				isPageTransitioning = false;	
+			}, 500);	
+			
+		} else {
+			setTimeout(()=> {
+				isPageTransitioning = false;	
+			}, 3000);	
+		}
+	}
 }
 
 function navBar_openPage(btn) {
@@ -157,12 +172,12 @@ function peopleDropdownDo(event) {
 	//check if going up or down
 	if (relativeDiv.classList.contains('dropdownActive')){
 		//open -> close
-		$(relativeDiv).slideUp(function(){
+		$(relativeDiv).slideUp(1000, function(){
 			relativeDiv.classList.toggle("dropdownActive");	
 		});	
 	} else {
 		//close -> open
-		$(relativeDiv).slideDown(function(){
+		$(relativeDiv).slideDown(1000, function(){
 			relativeDiv.classList.toggle("dropdownActive");	
 		});			
 	}
@@ -313,49 +328,68 @@ function peopleListSearchExit(){
 
 
 /* open tree */
+var isInfoChanging = false;
 function openPerson(evnt){
 	var btnLI = evnt.target;
 	if ((btnLI.tagName == "I")||(btnLI.tagName == "SPAN")){
 		btnLI = btnLI.parentElement;
 	} 
-	
-	const btnLIid = btnLI.id;
-	const personTag = btnLIid.replace("li_", "");
-	
-	const liDropParent = btnLI.parentElement;
-	const famName = liDropParent.id.replace("DropdownDiv", "");
-	
-	const navDiv = document.querySelector('.top_navbar');
-	const activeTabBtn= navDiv.querySelector('.navTab.active');
-	const treeTabBtn = navDiv.querySelector('#treeTab');
-	
-	//fill in info in infoDiv (for treeTab or for infoTab)
-	fillPersonInfo(infoDiv);
-	fillPersonInfo(infoDivTree);
-	
-	
-	function fillPersonInfo(infoDiv){		
-		const personInfo = PEOPLEINFO[famName][personTag];
-		const famRelationsData = PEOPLERELATIONS[famName];
-		const personRelationsData = famRelationsData[personTag];
+	if (!isInfoChanging){
+		isInfoChanging = true;
+		const btnLIid = btnLI.id;
+		const personTag = btnLIid.replace("li_", "");
+		const liDropParent = btnLI.parentElement;
+		const famName = liDropParent.id.replace("DropdownDiv", "");
 		
-		const infoDivSec = infoDiv.querySelector(".infoDivSec");
-		const infoDivMain = infoDivSec.querySelector(".infoMain");
+		const infoDiv = document.getElementById("infoDiv");
+		const infoDivTree = document.getElementById("infoDivTree");
 		
-		//clear
+		fillPersonInfo(infoDiv, famName, personTag);
+		fillPersonInfo(infoDivTree, famName, personTag);
+		
+		setTimeout(()=>{isInfoChanging = false;}, 2000);
+		//svg tree create
+	}
+}
+
+function fillPersonInfo(infoDiv, famName, personTag){	
+	const personInfo = PEOPLEINFO[famName][personTag];
+	const famRelationsData = PEOPLERELATIONS[famName];
+	const personRelationsData = famRelationsData[personTag];
+	
+	const infoDivSec = infoDiv.querySelector(".infoDivSec");
+	const infoDivMain = infoDivSec.querySelector(".infoMain");
+	
+	const mainContainerDiv = infoDivSec.querySelector(".mainContainerDiv");
+	const infoAboutSect = infoDivSec.querySelector(".infoAboutSect");
+	const divExtended = infoDivSec.querySelector(".infoMain_extended");
+	
+	const nameDiv = infoDivMain.querySelector(".info_name");
+	const datesDiv = infoDivMain.querySelector(".info_dates");
+	
+	if (mainContainerDiv.style.display == "block"){
+		$([mainContainerDiv, infoAboutSect]).fadeOut(1000, function(){
+			clearAndHide();			
+		});
+		setTimeout(() => {extendDivAndShow()}, 1200);	
+	} else {
+		clearAndHide();		
+		extendDivAndShow();
+	}
+	
+	
+	//clear & hide
+	function clearAndHide(){
 		clearPersonInfo(infoDiv);
-		
+			
 		//create and set name, dates
-		const nameDiv = infoDivMain.querySelector(".info_name");
 		const nameText = document.createTextNode(personInfo.name);
 		nameDiv.appendChild(nameText);
 		
-		const datesDiv = infoDivMain.querySelector(".info_dates");
 		const datesText = document.createTextNode(personInfo.dates);
 		datesDiv.appendChild(datesText);
 		
-		
-		
+	
 		//info dependent
 		const bornNameDiv = infoDivMain.querySelector(".info_neeName");
 		
@@ -369,81 +403,61 @@ function openPerson(evnt){
 			bornNameDiv.style.display = "none";			
 		}
 		
-		
-		const divExtended = infoDivSec.querySelector(".infoMain_extended");
-		
-		if (personInfo.hasOwnProperty('about')){
-			divExtended.style.display = "block";
-			
-			const aboutKeys = Object.keys(personInfo.about);
-			
-			
-			
-		} else {			
-			divExtended.style.display = "none";		
-		}
-/*
-		<div class="infoData info_name">Person Name</div>
-		<div class="infoData info_dates">1900 - 2000</div>
-		<div class="infoData info_neeName">
-			<span class="aboutBold">Née: </span> Person Full Name
-		</div>
-		<div class="infoData info_about">
-			<span class="aboutBold">Born: </span> bornn <br />
-			<span class="aboutBold">Married: </span> married date, loc, ppl <br />
-		</div>*/
-		/*
-		if (personInfo.hasOwnProperty('about')){
-			const divExtended = new createNewElement("div",{
-				'class': 'infoMain_extended',
-			});
-			infoDivMain.appendChild(divExtended);
-			
-			const infoAboutDiv = new createNewElement("div",{
-				'class': 'infoData info_about',
-			});
-			divExtended.appendChild(infoAboutDiv);
-			
-			const personInfoAbout = personInfo.about;
-			var personInfoAboutKeys = Object.keys(personInfoAbout);
-			//check if keys contain ...
-		}*/
-		
-		
+		//add svgLeaf imgs			
 	}
 	
 	function clearPersonInfo(infoDiv){
-		/*const personInfoSlots = [
-			infoDiv.querySelector(".info_name"),
-			infoDiv.querySelector(".info_dates"),
-			infoDiv.querySelector(".info_neeName"),
-			
+		const infoDivSec = infoDiv.querySelector(".infoDivSec");		
+		const infoDataSlots = infoDivSec.querySelectorAll(".infoData");
 		
-			infoDiv.querySelector(".bornOnVal"),
-			infoDiv.querySelector(".bornAtVal"),
-			
-			infoDiv.querySelector(".marriedToVal"),
-			infoDiv.querySelector(".marriedOnVal"),
-			infoDiv.querySelector(".marriedAtVal"),
-			
-			infoDiv.querySelector(".diedOn"),		
-		]*/
-		const infoDivSec = infoDiv.querySelector(".infoDivSec");
-		const infoDivMain = infoDivSec.querySelector(".infoMain");
-		
-		const infoDataSlots = infoDivSec.querySelector(".infoData");
-		
+		//change values
 		infoDataSlots.forEach((slot) => {
-			
-		});
-		
-		
+			const childNode = slot.childNodes[0] ?? {'tagName': ''};
+			//has more than text
+			if (childNode.tagName == 'TABLE'){
+				slot.innerHTML = '';
+				//clear table
+				const dataCells = childNode.querySelectorAll(".infoData");
+				dataCells.forEach((dataCell) => {
+					dataCell.innerHTML = '';
+				});
+				slot.appendChild(childNode);			
+			} else if (childNode.tagName == 'SPAN'){
+				slot.innerHTML = '';	
+				slot.appendChild(childNode);
+			} else {
+				slot.innerHTML = '';				
+			}
+		});		
+		//clear svgleaf imgs		
 		
 	}
 	
-	function setTreeBaseNode(){
-		
+	function extendDivAndShow(){
+		if (personInfo.hasOwnProperty('about')){
+			fillInExtendedTable(personInfo.about);
+			$(divExtended).fadeIn(1000);		
+			$([mainContainerDiv, infoAboutSect]).fadeIn(700);
+			
+		} else {			
+			$(divExtended).fadeOut(500);	
+			setTimeout(()=>{
+				$([mainContainerDiv, infoAboutSect]).fadeIn(700);
+			}, 100);
+		}
 	}
+	
+	function fillInExtendedTable(personAbout){
+		const aboutKeys = Object.keys(personAbout);	
+		aboutKeys.forEach((aboutKey) => {
+			const dataClass = aboutKey + "Val";
+			const relatedDiv = divExtended.querySelector('.' + dataClass);
+			
+			relatedDiv.innerHTML = personAbout[aboutKey];
+		});	
+	}
+	
+	
 	
 }
 
@@ -465,20 +479,24 @@ function createInfoDivs(type){
 	
 	
 	//main
+	const containerDiv = document.createElement("div");
+	containerDiv.classList.add('mainContainerDiv');
+	infoDivMain.appendChild(containerDiv);
+	
 	const nameDiv = document.createElement("div");
 	nameDiv.classList.add('infoData');
 	nameDiv.classList.add('info_name');
-	infoDivMain.appendChild(nameDiv);
+	containerDiv.appendChild(nameDiv);
 	
 	const datesDiv = document.createElement("div");
 	datesDiv.classList.add('infoData');
 	datesDiv.classList.add('info_dates');
-	infoDivMain.appendChild(datesDiv);
+	containerDiv.appendChild(datesDiv);
 	
 	const bornNameDiv  = document.createElement("div");
 	bornNameDiv.classList.add('infoData');
 	bornNameDiv.classList.add('info_neeName');
-	infoDivMain.appendChild(bornNameDiv);
+	containerDiv.appendChild(bornNameDiv);
 	
 		const bornNameTitle = document.createElement("span");
 		bornNameTitle.classList.add('aboutBold');
@@ -489,8 +507,7 @@ function createInfoDivs(type){
 	
 	//extra
 	const infoAboutDiv = document.createElement("div");
-	infoAboutDiv.classList.add('infoData');
-	infoAboutDiv.classList.add('info_about');
+	infoAboutDiv.classList.add('infoAboutSect');
 	divExtended.appendChild(infoAboutDiv);
 	
 	createInfoTable(divExtended);
