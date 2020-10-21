@@ -353,7 +353,7 @@ function openPerson(evnt, linked = false){
 		const dropdown = document.querySelector('.ppl_dropdownContainer');
 		const dropLIs = dropdown.getElementsByTagName('li');
 		const personNameWithComma = evnt.target.innerText;
-		const personName = personNameWithComma.replace(", ", "");
+		const personName = personNameWithComma.replace(",", "");
 		
 		for (i = 0; i < dropLIs.length; i++) {	
 			if (dropLIs[i].innerText == personName) {
@@ -381,8 +381,17 @@ function openPerson(evnt, linked = false){
 		fillPersonInfo(infoDiv, famName, personTag);
 		fillPersonInfo(infoDivTree, famName, personTag);
 		
-		setTimeout(()=>{isInfoChanging = false;}, 2000);
+		//if page != info/tree, go to tree...		
+		const navDiv = document.querySelector('.top_navbar');		
+		const currentActive = navDiv.querySelector('.navTab.active');
+		const treeBtn = navDiv.querySelector('#treeTab');
+		
+		if ( (currentActive.id != "treeTab") || (currentActive.id != "infoTab") ){
+			navBar_openPage(treeBtn);
+		}		
+		
 		//svg tree create
+		setTimeout(()=>{isInfoChanging = false;}, 2000);
 	}
 }
 

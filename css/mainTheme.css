@@ -598,6 +598,60 @@ button,  button:active, button:hover, button:focus{
 	color:#E7DCDC;
 }
 
+
+button#infoTreeLinkBTN{
+	position: absolute;
+	height: 60px;
+	width: 60px;	
+	top: 40px;
+	
+	font-size: 40px;
+	cursor:pointer;	
+	background-color: rgb(0, 0, 0, 0);	
+	
+	background: url('../media/treeIcon.svg') center no-repeat; 
+	background-size: 40px;
+	
+	border: none;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	
+	-webkit-transition: box-shadow 0.2s;	
+	-moz-transition: box-shadow 0.2s;	
+	transition: box-shadow 0.2s;
+}
+button#infoTreeLinkBTN:after{
+	position: absolute;
+	width: 100%; 
+	height: 100%;
+	content: '';	
+	top: 0;	left: 0;	
+	padding: 0;	
+	
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	box-shadow: 0 0 0 2px var(--colourPink);	
+	
+	-webkit-transition: -webkit-transform 0.2s, opacity 0.2s;	
+	-moz-transition: -moz-transform 0.2s, opacity 0.2s;	
+	transition: transform 0.2s, opacity 0.2s;
+}
+button#infoTreeLinkBTN:hover{
+	box-shadow: 0 0 0 6px var(--colourPink);	
+}
+button#infoTreeLinkBTN:hover:after{
+	-webkit-transform: scale(0.85);	
+	-moz-transform: scale(0.85);	
+	-ms-transform: scale(0.85);	
+	transform: scale(0.85);	
+	opacity: 0.5;
+}
+
+
+
+
 .leafSVG{
 	width: 320px; height: 264px;
 	position: absolute;
