@@ -386,7 +386,7 @@ function openPerson(evnt, linked = false){
 		const currentActive = navDiv.querySelector('.navTab.active');
 		const treeBtn = navDiv.querySelector('#treeTab');
 		
-		if ( (currentActive.id != "treeTab") || (currentActive.id != "infoTab") ){
+		if ( (currentActive.id != "treeTab") && (currentActive.id != "infoTab") ){
 			navBar_openPage(treeBtn);
 		}		
 		
