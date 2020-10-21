@@ -195,8 +195,11 @@ function outsidePeopleDiv_clickDetect(event){
 	if (peopleDiv.classList.contains("sliding")){
 		if (clickedElement != peopleDiv){
 			if (clickedElement != pplTab){
-				peopleDiv.classList.toggle("sliding");
-				pplTab.classList.toggle("active");	
+				//check if its a nested element
+				if ($(clickedElement).parents("#peopleDiv").length == 0){
+					peopleDiv.classList.toggle("sliding");
+					pplTab.classList.toggle("active");	
+				}
 			}
 		} 
 	}
