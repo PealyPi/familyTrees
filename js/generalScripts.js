@@ -186,6 +186,22 @@ function peopleDropdownDo(event) {
 	btnIcon.classList.toggle(dropdownCaret_up);
 }
 
+function outsidePeopleDiv_clickDetect(event){
+	const peopleDiv = document.getElementById('peopleDiv');
+	const pplTab = document.getElementById('pplTab');
+	
+	const clickedElement = event.target;
+	
+	if (peopleDiv.classList.contains("sliding")){
+		if (clickedElement != peopleDiv){
+			if (clickedElement != pplTab){
+				peopleDiv.classList.toggle("sliding");
+				pplTab.classList.toggle("active");	
+			}
+		} 
+	}
+}
+
 //add list of people
 function addPeopleToList(){
 	//use infoFile and add completed people
@@ -333,11 +349,13 @@ function openPerson(evnt, linked = false){
 	if (linked){
 		const dropdown = document.querySelector('.ppl_dropdownContainer');
 		const dropLIs = dropdown.getElementsByTagName('li');
-		const personName = evnt.target.innerText;
+		const personNameWithComma = evnt.target.innerText;
+		const personName = personNameWithComma.replace(", ", "");
 		
-		for (i = 0; i < dropLIs.length; i++) {
-			if (dropLIs[i].innerText == personName) 
-				btnLI = dropLIs[i];			
+		for (i = 0; i < dropLIs.length; i++) {	
+			if (dropLIs[i].innerText == personName) {
+				btnLI = dropLIs[i];	
+			}				
 		};
 		
 	} else {
@@ -351,7 +369,6 @@ function openPerson(evnt, linked = false){
 		isInfoChanging = true;
 		const btnLIid = btnLI.id;
 		const personTag = btnLIid.replace("li_", "");
-		console.log('opening; ' + personTag );
 		const liDropParent = btnLI.parentElement;
 		const famName = liDropParent.id.replace("DropdownDiv", "");
 		
@@ -971,6 +988,7 @@ $(document).ready(function(){
 	for (const drop of peopleDropdowns) {
 		drop.addEventListener("click", (evnt) => peopleDropdownDo(evnt));	
 	}
+	document.addEventListener("click", (evnt) => outsidePeopleDiv_clickDetect(evnt));
 	
 	//infoDiv
 	createInfoDivs('tree');
