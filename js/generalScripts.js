@@ -172,12 +172,12 @@ function peopleDropdownDo(event) {
 	//check if going up or down
 	if (relativeDiv.classList.contains('dropdownActive')){
 		//open -> close
-		$(relativeDiv).slideUp(1000, function(){
+		$(relativeDiv).slideUp(700, function(){
 			relativeDiv.classList.toggle("dropdownActive");	
 		});	
 	} else {
 		//close -> open
-		$(relativeDiv).slideDown(1000, function(){
+		$(relativeDiv).slideDown(700, function(){
 			relativeDiv.classList.toggle("dropdownActive");	
 		});			
 	}
@@ -191,11 +191,6 @@ function addPeopleToList(){
 	//use infoFile and add completed people
 	const peopleDiv = document.getElementById("peopleDiv");
 	const peopleListUL = peopleDiv.querySelector("#peopleList");
-	
-	const kesbyDiv = peopleListUL.querySelector("#kesbyDropdownDiv");
-	const hadkissDiv = peopleListUL.querySelector("#hadkissDropdownDiv");
-	const pealDiv = peopleListUL.querySelector("#pealDropdownDiv");
-	const mckenzieDiv = peopleListUL.querySelector("#mckenzieDropdownDiv");
 	
 	//guide: <li class="pplChooseLI" id="li_ronHadkiss"><i class="fas fa-chevron-left"></i><span>Ron Hadkiss</span></li>
 	
@@ -259,7 +254,7 @@ function peopleListSearch() {
 	}
 	
 	//if all li values are display none, hide dropbutton
-	const dropDivs = document.querySelectorAll('.ppl_dropdown-container');
+	const dropDivs = document.querySelectorAll('.ppl_dropdownContainer');
 	for (const dropDiv of dropDivs){
 		const dropFamName = dropDiv.id.replace("DropdownDiv", "");
 		const dropBtn = document.getElementById(dropFamName + "DropdownBtn");
@@ -323,6 +318,10 @@ function peopleListSearchExit(){
 		peopleListSearch();
 	}
 	
+	const dropBtns = document.querySelectorAll(".ppl_dropdownBtn");
+	dropBtns.forEach((dropBtn)=>{
+		dropBtn.style.display = "";
+	});
 	
 }
 
@@ -883,7 +882,7 @@ $(document).ready(function(){
 	}
 	
 	//peopleTab
-	const peopleDropdowns = document.querySelectorAll('.ppl_dropdown-btn');
+	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
 	for (const drop of peopleDropdowns) {
 		drop.addEventListener("click", (evnt) => peopleDropdownDo(evnt));	
 	}

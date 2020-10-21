@@ -623,18 +623,18 @@ button,  button:active, button:hover, button:focus{
 	cursor: pointer;
 }
 /*scroll*/
-#peopleDiv::-webkit-scrollbar {
+#peopleDiv::-webkit-scrollbar, .ppl_dropdownContainer::-webkit-scrollbar {
   width: 10px;
   background: var(--colourGreenDarker_RGB_Transparent); 
 }
-#peopleDiv::-webkit-scrollbar-track {
+#peopleDiv::-webkit-scrollbar-track, .ppl_dropdownContainer::-webkit-scrollbar-track {
   border-radius: 3px;
 }
-#peopleDiv::-webkit-scrollbar-thumb {
+#peopleDiv::-webkit-scrollbar-thumb, .ppl_dropdownContainer::-webkit-scrollbar-thumb {
   background: var(--colourMint); 
   border-radius: 10px;
 }
-#peopleDiv::-webkit-scrollbar-thumb:hover {
+#peopleDiv::-webkit-scrollbar-thumb:hover, .ppl_dropdownContainer::-webkit-scrollbar-thumb:hover {
   background: var(--colourMint); 
 }
 
@@ -714,24 +714,26 @@ ul#peopleList li{
 ul#peopleList li span{
 	transition: all 0.7s;
 }
-ul#peopleList button.ppl_dropdown-btn{
+ul#peopleList button.ppl_dropdownBtn{
 	font-size:24px;
 	margin: 10px;
 	cursor: pointer;
 	color:white;
 }
-ul#peopleList button.ppl_dropdown-btn i{
+ul#peopleList button.ppl_dropdownBtn i{
 	margin-left: 30px;
 }
-ul#peopleList .ppl_dropdown-container li i{
+ul#peopleList .ppl_dropdownContainer li i{
 	margin-right: 30px;
 }
 ul#peopleList .dropdownActive{
 	display: block !important;
 }
 
-ul#peopleList .ppl_dropdown-container{
+ul#peopleList .ppl_dropdownContainer{
 	display:none;
+	max-height: 400px;
+	overflow-y: scroll;
 }
 ul#peopleList li:hover{
 	width: 240px; 
