@@ -34,6 +34,11 @@ function personInfoStorage(){
 				'leafTransform': {'x': -20, 'y': 0}, 
 				'leafWH': leafWH},
 				
+				//imgs[3]
+				{'leafImg': //'../pageImgs/roseKesby_image4.jpg', 
+					'https://pealypi.github.io/pealFamily/pageImgs/roseKesby_image4.jpg',
+				'leafTransform': {'x': -20, 'y': 0}, 
+				'leafWH': leafWH},
 				
 			],
 		},
