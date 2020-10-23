@@ -282,12 +282,20 @@ button,  button:active, button:hover, button:focus{
 }
 
 .top_navbar .navTabDiv{
-	display:none;	
+	display:inline-block;
+	opacity: 0;
 	font-family: var(--mainFontFamily);
 	font-size:14px;
+	cursor: default;
+	
+	width: 0px;	
+	transition: width 0.7s, opacity 0.7s;
 }
 .top_navbar .navTabDiv.active{
 	display:inline-block;
+	opacity: 1;
+	width: 50px;
+	transition: width 0.7s, opacity 0.7s;
 }
 
 .navTabDiv{
