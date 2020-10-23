@@ -1164,8 +1164,7 @@ $(document).ready(function(){
 	document.addEventListener("click", (evnt) => outsidePeopleDiv_clickDetect(evnt));
 	
 	//infoDiv
-	createInfoDivs('tree');
-	createInfoDivs('info');
+	createInfoDivs('tree');	createInfoDivs('info');
 	addPeopleToList();
 	interchangeTreeInfo_Tabs();
 	
