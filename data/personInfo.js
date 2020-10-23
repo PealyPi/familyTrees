@@ -17,8 +17,7 @@ function personInfoStorage(){
 			},	
 				
 			'imgs': [
-				{ 'icon': '../familyTrees/media/images/roseKesby.png', //first in array to go on tree,
-					//'https://pealypi.github.io/pealFamily/iconImgs/roseKesby.png'	
+				{ 'icon': '../familyTrees/media/images/icons/roseKesby.png', 
 					}, 
 					
 				//imgs[1]	

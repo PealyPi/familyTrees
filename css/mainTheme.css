@@ -658,6 +658,7 @@ button#infoTreeLinkBTN:hover:after{
 	right: -50px;
 	top: -50px;
 	z-index: var(--woodLeafZ); 
+	display: none;
 }
 .svg_leafImg{
 	display:none;

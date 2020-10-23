@@ -424,9 +424,12 @@ function fillPersonInfo(infoDiv, famName, personTag){
 	
 	
 	if (mainContainerDiv.style.display == "block"){
+		if (leafSVG.style.display != "none"){
+			$(leafSVG).fadeOut(1000);
+		}
 		$([mainContainerDiv, infoAboutSect]).fadeOut(1000, function(){
 			clearAndFill();			
-		});
+		});	
 		
 		setTimeout(() => {extendDivAndShow()}, 1200);	
 	} else {
@@ -559,6 +562,9 @@ function fillPersonInfo(infoDiv, famName, personTag){
 			setTimeout( () => {
 				startLeafImgSlides(infoDivType, leafImgFades)
 			}, 500);
+			
+			//fade in leaf
+			$(leafSVG).fadeIn(1000);
 		}
 		
 	}	
@@ -589,13 +595,8 @@ function fillPersonInfo(infoDiv, famName, personTag){
 			}
 		});		
 		
-		//clear svgleaf imgs
-		stopLeafImgSlides(infoDivType);
-		var global_leafImgSlideshow = (infoDiv ==  'infoDiv') ? global_leafImgSlideshow_info : global_leafImgSlideshow_tree;	
-		
-		if (global_leafImgSlideshow){
-			stopLeafImgSlides(global_leafImgSlideshow);
-		}	
+		//clear svgleaf imgs	
+		stopLeafImgSlides(infoDivType);				
 		
 		const leafGrp = leafSVG.querySelector("#topLeaf_GRP")
 		const allOldImgs = leafGrp.getElementsByTagName("image");
