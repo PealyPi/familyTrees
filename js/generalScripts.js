@@ -352,10 +352,12 @@ function openPerson(evnt, linked = false){
 	var btnLI;
 	if (linked){
 		const dropdown = document.querySelector('.ppl_dropdownContainer');
-		const dropLIs = dropdown.getElementsByTagName('li');
+		const dropdownDiv = document.getElementById("peopleDiv");
+		const dropLIs = dropdownDiv.getElementsByTagName('li');
 		const personNameWithComma = evnt.target.innerText;
 		const personName = personNameWithComma.replace(",", "");
 		
+		//console.log(personName);
 		for (i = 0; i < dropLIs.length; i++) {	
 			if (dropLIs[i].innerText == personName) {
 				btnLI = dropLIs[i];	
@@ -588,8 +590,10 @@ function fillPersonInfo(infoDiv, famName, personTag){
 				});
 				slot.appendChild(childNode);			
 			} else if (childNode.tagName == 'SPAN'){
-				slot.innerHTML = '';	
-				slot.appendChild(childNode);
+				slot.innerHTML = '';					
+				if (!slot.classList.contains("marriedToVal")){
+					slot.appendChild(childNode);					
+				}
 			} else {
 				slot.innerHTML = '';				
 			}
@@ -626,14 +630,24 @@ function fillPersonInfo(infoDiv, famName, personTag){
 		const aboutKeys = Object.keys(personAbout);	
 		aboutKeys.forEach((aboutKey) => {
 			const dataClass = aboutKey + "Val";
-			const relatedDiv = divExtended.querySelector('.' + dataClass);
+			const relatedDiv = divExtended.querySelector('.' + dataClass);		
 			
-			relatedDiv.innerHTML = personAbout[aboutKey];
+			if (aboutKey == "marriedTo"){				
+				const marriedToSpan = document.createElement('span');
+				marriedToSpan.classList.add('personLink');
+				const marriedToText = document.createTextNode(personAbout[aboutKey]);
+				marriedToSpan.appendChild(marriedToText);
+				relatedDiv.appendChild(marriedToSpan);
+			
+				//add click function
+				marriedToSpan.classList.add('personLink');
+				marriedToSpan.addEventListener("click", (evnt) => openPerson(evnt, linked=true));
+				
+			} else {
+				relatedDiv.innerHTML = personAbout[aboutKey];				
+			}			
 		});	
 	}
-	
-	
-	
 }
 
 function startLeafImgSlides(type, fn){

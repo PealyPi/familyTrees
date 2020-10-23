@@ -511,6 +511,18 @@ function nodeDataStorage(){//collapse lvl 2
 			};
 	
 	
+
+	//hadkiss
+	hadkiss.ronHadkiss = {	
+		'gen': 1,
+		'isRoot':	true,
+		'mainLine':		true,	
+		'familyName': 'hadkiss',
+		'spouse': 		'roseHadkiss',	
+		//'children': 	['lesleyPeal, chrisHadkiss'],
+	};
+	
+	
 	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};
 	/*
 	switch (famName){

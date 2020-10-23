@@ -352,8 +352,19 @@ function personInfoStorage(){
 	}
 	
 	
-	const hadkiss = {	
+	const hadkiss = {
+		'ronHadkiss': {
+			'name':		'Ronald Hadkiss',
+			'dates': 	' - 1995',	 
+			'about': { 
+				'diedOn': '9th January 1995',
+				'marriedOn':	'26 Mar 1949',
+				'marriedAt':	'St Peter and Paul Church, Swanscombe',
+				'marriedTo':	'Rose Hadkiss',				
+			},	
+		},	
 	};
+	
 	const peal = {	
 	};
 	const mckenzie = {	
