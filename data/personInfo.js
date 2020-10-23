@@ -18,25 +18,22 @@ function personInfoStorage(){
 			},	
 				
 			'imgs': [
-				{ 'icon': '../iconImgs/roseKesby.png', //first in array to go on tree,
+				{ 'icon': '../familyTrees/media/images/roseKesby.png', //first in array to go on tree,
 					//'https://pealypi.github.io/pealFamily/iconImgs/roseKesby.png'	
 					}, 
 					
 				//imgs[1]	
-				{'leafImg': //'../pageImgs/roseKesby_image2.jpg', 
-					'https://pealypi.github.io/pealFamily/pageImgs/roseKesby_image2.jpg',
+				{'leafImg': '../familyTrees/media/images/roseKesby_image2.jpg',
 				'leafTransform': {'x': -30, 'y': 0},
 				'leafWH': leafWH	},
 				
 				//imgs[2]
-				{'leafImg': //'../pageImgs/roseKesby_image3.jpg', 
-					'https://pealypi.github.io/pealFamily/pageImgs/roseKesby_image3.jpg',
+				{'leafImg': '../familyTrees/media/images/roseKesby_image3.jpg', 
 				'leafTransform': {'x': -20, 'y': 0}, 
 				'leafWH': leafWH},
 				
 				//imgs[3]
-				{'leafImg': //'../pageImgs/roseKesby_image4.jpg', 
-					'https://pealypi.github.io/pealFamily/pageImgs/roseKesby_image4.jpg',
+				{'leafImg': '../familyTrees/media/images/roseKesby_image4.jpg', 
 				'leafTransform': {'x': -20, 'y': 0}, 
 				'leafWH': leafWH},
 				
