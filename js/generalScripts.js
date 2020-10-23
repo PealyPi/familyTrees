@@ -22,11 +22,17 @@ function mask_setVisible(selector, visible) {
 
 /* ------ navbar ------ */
 var isPageTransitioning = false;
-function navBar_clickEvnt(event){
-	const btn = event.target;
-	const btnID = btn.id ?? '';	
+function navBar_clickEvnt(event, link=false){
+	var btn = event.target;
+	const btnID = btn.id ?? '';		
+	
 	if (!isPageTransitioning){
 		isPageTransitioning = true;
+		
+		if (link){
+			btn = (btnID == 'infoTreeLinkBTN') ? document.getElementById("treeTab") : (btnID == 'treeInfoLinkBTN') ? document.getElementById("infoTab") : btn;
+		}
+		
 		navBar_openPage(btn);
 		if (btnID =='pplTab'){
 			setTimeout(()=> {
@@ -435,8 +441,14 @@ function fillPersonInfo(infoDiv, famName, personTag){
 		
 		setTimeout(() => {extendDivAndShow()}, 1200);	
 	} else {
+		//first fill		
 		clearAndFill();		
 		extendDivAndShow();
+		if (infoDivType == "info"){
+			$(infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
+		} else {
+			$(infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
+		}
 	}
 	
 	
@@ -843,6 +855,17 @@ function createInfoDivs(type){
 			about_diedOnVal.setAttribute('class', 'infoData diedOnVal');
 	}
 }
+
+function interchangeTreeInfo_Tabs(){
+	//add click fn to btn
+	const treeToInfoBTN = document.getElementById("treeInfoLinkBTN");
+	const infoToTreeBTN = document.getElementById("infoTreeLinkBTN");
+	
+	for (const btn of [treeToInfoBTN, infoToTreeBTN]) {
+		btn.addEventListener("click", (evnt) => navBar_clickEvnt(evnt, link=true));	
+	}
+}
+
 /* -------------------- */
 
 /*svg*/
@@ -1144,6 +1167,7 @@ $(document).ready(function(){
 	createInfoDivs('tree');
 	createInfoDivs('info');
 	addPeopleToList();
+	interchangeTreeInfo_Tabs();
 	
 });
 /* ------------------------------------------------ */

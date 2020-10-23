@@ -165,6 +165,7 @@ button,  button:active, button:hover, button:focus{
 .left_navbar{
 	float: left;
 	display:inline-block;	
+	margin-top: -11px;
 }
 .right_navbar{
 	float:right;
@@ -194,6 +195,11 @@ button,  button:active, button:hover, button:focus{
 	-webkit-transition: box-shadow 0.2s;	
 	-moz-transition: box-shadow 0.2s;	
 	transition: box-shadow 0.2s;
+}
+.top_navbar button#treeTab{
+	background: url('../media/treeIcon.svg') center no-repeat; 
+	background-size: 27px;	
+	top: 11px;	
 }
 .top_navbar button:after{
 	position: absolute;
@@ -607,18 +613,17 @@ button,  button:active, button:hover, button:focus{
 }
 
 
-button#infoTreeLinkBTN{
+button#infoTreeLinkBTN, button#treeInfoLinkBTN{
+	display: none;
 	position: absolute;
 	height: 60px;
 	width: 60px;	
-	top: 40px;
+	top: 90px;
 	
-	font-size: 40px;
+	font-size: 36px;
 	cursor:pointer;	
 	background-color: rgb(0, 0, 0, 0);	
-	
-	background: url('../media/treeIcon.svg') center no-repeat; 
-	background-size: 40px;
+	color: white;	
 	
 	border: none;
 	border-radius: 50%;
@@ -629,7 +634,12 @@ button#infoTreeLinkBTN{
 	-moz-transition: box-shadow 0.2s;	
 	transition: box-shadow 0.2s;
 }
-button#infoTreeLinkBTN:after{
+button#infoTreeLinkBTN{
+	background: url('../media/treeIcon.svg') center no-repeat; 
+	background-size: 40px;	
+	top: 40px;
+}
+button#infoTreeLinkBTN:after, button#treeInfoLinkBTN:after{
 	position: absolute;
 	width: 100%; 
 	height: 100%;
@@ -646,10 +656,19 @@ button#infoTreeLinkBTN:after{
 	-moz-transition: -moz-transform 0.2s, opacity 0.2s;	
 	transition: transform 0.2s, opacity 0.2s;
 }
-button#infoTreeLinkBTN:hover{
-	box-shadow: 0 0 0 6px var(--colourPink);	
+button#infoTreeLinkBTN:after{
+	box-shadow: 0 0 0 2px var(--colourPink);
 }
-button#infoTreeLinkBTN:hover:after{
+button#treeInfoLinkBTN:after{
+	box-shadow: 0 0 0 2px var(--colourPeach);
+}
+button#infoTreeLinkBTN:hover{
+	box-shadow: 0 0 0 6px var(--colourPink);
+}
+button#treeInfoLinkBTN:hover{
+	box-shadow: 0 0 0 6px var(--colourPeach);	
+}
+button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	-webkit-transform: scale(0.85);	
 	-moz-transform: scale(0.85);	
 	-ms-transform: scale(0.85);	
