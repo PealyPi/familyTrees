@@ -347,7 +347,7 @@ function peopleListSearchExit(){
 
 /* open tree */
 var isInfoChanging = false;
-var global_leafImgSlideshow;
+var global_leafImgSlideshow_info, global_leafImgSlideshow_tree;
 function openPerson(evnt, linked = false){
 	var btnLI;
 	if (linked){
@@ -389,7 +389,15 @@ function openPerson(evnt, linked = false){
 		
 		if ( (currentActive.id != "treeTab") && (currentActive.id != "infoTab") ){
 			navBar_openPage(treeBtn);
-		}		
+		}	
+
+		//close people div	
+		const pplDiv = document.getElementById("peopleDiv");
+		const pplTab = navDiv.querySelector("#pplTab");
+		if (pplDiv.classList.contains("sliding")){
+			peopleDiv.classList.toggle("sliding");
+			pplTab.classList.toggle("active");	
+		}
 		
 		//svg tree create
 		setTimeout(()=>{isInfoChanging = false;}, 2000);
@@ -411,10 +419,15 @@ function fillPersonInfo(infoDiv, famName, personTag){
 	const nameDiv = infoDivMain.querySelector(".info_name");
 	const datesDiv = infoDivMain.querySelector(".info_dates");
 	
+	const leafSVG = infoDiv.querySelector("svg.leafSVG");	
+	const infoDivType = (infoDiv.id == 'infoDiv') ? 'info' : 'tree';
+	
+	
 	if (mainContainerDiv.style.display == "block"){
 		$([mainContainerDiv, infoAboutSect]).fadeOut(1000, function(){
 			clearAndFill();			
 		});
+		
 		setTimeout(() => {extendDivAndShow()}, 1200);	
 	} else {
 		clearAndFill();		
@@ -502,7 +515,6 @@ function fillPersonInfo(infoDiv, famName, personTag){
 		
 		
 		function addLeafImgs(){
-			const leafSVG = infoDiv.querySelector("svg.leafSVG");
 			const personImgs = personInfo.imgs; //[{icon}, {url, config}]
 			var leafImgArr = [];
 			
@@ -511,7 +523,6 @@ function fillPersonInfo(infoDiv, famName, personTag){
 					leafImgArr.push(img);
 				}
 			});
-			const infoDivType = (infoDiv.id == 'infoDiv') ? 'info' : 'tree';
 			const clipPathURL = 'url(#' + infoDivType +  '_topLeaf_clipPath)';
 			var leafSVGimgArr = [];
 			leafImgArr.forEach((arrLeafImg)=> {
@@ -533,7 +544,7 @@ function fillPersonInfo(infoDiv, famName, personTag){
 			
 			var imgIndex = 0;
 			var leafImgFades = function(){
-				//console.log("Running...");
+				console.log("Running...");
 				if (imgIndex == (leafSVGimgArr.length-1)){ //last img
 					$(leafSVGimgArr[imgIndex]).fadeOut(1000);
 					$(leafSVGimgArr[0]).fadeIn(1000);
@@ -547,11 +558,12 @@ function fillPersonInfo(infoDiv, famName, personTag){
 			}
 			
 			setTimeout( () => {
-				global_leafImgSlideshow = setInterval( leafImgFades, 10000)
+				startLeafImgSlides(infoDivType, leafImgFades)
 			}, 500);
 		}
 		
 	}	
+	
 	
 	
 	function clearPersonInfo(infoDiv){
@@ -577,8 +589,23 @@ function fillPersonInfo(infoDiv, famName, personTag){
 				slot.innerHTML = '';				
 			}
 		});		
-		//clear svgleaf imgs		
 		
+		//clear svgleaf imgs
+		stopLeafImgSlides(infoDivType);
+		var global_leafImgSlideshow = (infoDiv ==  'infoDiv') ? global_leafImgSlideshow_info : global_leafImgSlideshow_tree;	
+		
+		if (global_leafImgSlideshow){
+			stopLeafImgSlides(global_leafImgSlideshow);
+		}	
+		
+		const leafGrp = leafSVG.querySelector("#topLeaf_GRP")
+		const allOldImgs = leafGrp.getElementsByTagName("image");
+		
+		if (allOldImgs.length > 0){
+			for (i=0; i<allOldImgs.length; i++){
+				leafGrp.removeChild(allOldImgs[i]);
+			}
+		}
 	}
 	
 	function extendDivAndShow(){
@@ -607,6 +634,37 @@ function fillPersonInfo(infoDiv, famName, personTag){
 	
 	
 	
+}
+
+function startLeafImgSlides(type, fn){
+	switch (type){
+		case 'info': 
+			if (!global_leafImgSlideshow_info){
+				global_leafImgSlideshow_info = setInterval( fn, 10000);
+			}
+		break;
+		case 'tree':
+			if (!global_leafImgSlideshow_tree){
+				global_leafImgSlideshow_tree = setInterval( fn, 10000);
+			}
+		break;
+	}
+	
+}
+
+function stopLeafImgSlides(type) {
+	switch (type){
+		case 'info': 
+			if (global_leafImgSlideshow_info){
+				clearInterval(global_leafImgSlideshow_info);
+			}
+		break;
+		case 'tree':
+			if (global_leafImgSlideshow_info){
+				clearInterval(global_leafImgSlideshow_tree);
+			}
+		break;
+	}
 }
 
 

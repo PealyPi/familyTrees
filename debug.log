@@ -1,2 +1,5 @@
 [1016/103854.467:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1020/102903.630:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1020/133305.966:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\emily\AppData\Local\Microsoft\Edge\User Data\Crashpad\attachments\5df75a27-8d60-42a3-9c4f-65f2ec47362a: The system cannot find the path specified. (0x3)
+[1020/133311.890:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\emily\AppData\Local\Microsoft\Edge\User Data\Crashpad\attachments\fb9dfe80-0e12-46d4-831f-0bd7661b88a0: The system cannot find the path specified. (0x3)
+[1021/130056.364:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

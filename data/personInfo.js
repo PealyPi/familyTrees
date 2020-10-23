@@ -3,7 +3,6 @@
 /* ============================================================ */
 function personInfoStorage(){	
 	//collapse level 3
-	const leafTrs = {'x': -30, 'y': 0};
 	const leafWH = [200, 200];
 	const kesby = {	
 		'roseHadkiss': {
