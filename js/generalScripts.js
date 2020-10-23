@@ -530,7 +530,7 @@ function fillPersonInfo(infoDiv, famName, personTag){
 					'class': 'svg_leafImg',
 					'href': arrLeafImg.leafImg,
 					'x': arrLeafImg.leafTransform.x,
-					'width': 200,
+					'width': arrLeafImg.leafWidth,
 					'clip-path': clipPathURL,
 				});	
 				leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
@@ -544,7 +544,6 @@ function fillPersonInfo(infoDiv, famName, personTag){
 			
 			var imgIndex = 0;
 			var leafImgFades = function(){
-				console.log("Running...");
 				if (imgIndex == (leafSVGimgArr.length-1)){ //last img
 					$(leafSVGimgArr[imgIndex]).fadeOut(1000);
 					$(leafSVGimgArr[0]).fadeIn(1000);

@@ -3,7 +3,6 @@
 /* ============================================================ */
 function personInfoStorage(){	
 	//collapse level 3
-	const leafWH = [200, 200];
 	const kesby = {	
 		'roseHadkiss': {
 			'name':		'Rose Hadkiss',
@@ -25,17 +24,17 @@ function personInfoStorage(){
 				//imgs[1]	
 				{'leafImg': '../familyTrees/media/images/roseKesby_image2.jpg',
 				'leafTransform': {'x': -30, 'y': 0},
-				'leafWH': leafWH	},
+				'leafWidth': 200	},
 				
 				//imgs[2]
 				{'leafImg': '../familyTrees/media/images/roseKesby_image3.jpg', 
 				'leafTransform': {'x': -20, 'y': 0}, 
-				'leafWH': leafWH},
+				'leafWidth': 200},
 				
 				//imgs[3]
 				{'leafImg': '../familyTrees/media/images/roseKesby_image4.jpg', 
-				'leafTransform': {'x': -20, 'y': 0}, 
-				'leafWH': leafWH},
+				'leafTransform': {'x': 15, 'y': 8}, 
+				'leafWidth': 110},
 				
 			],
 		},
