@@ -1121,6 +1121,40 @@ function createLeafSVG(type) {
 	
 }
 
+function createFamilyIcons(){
+	const svgDiv = document.getElementById("svgDiv");
+	const siblingIcon_button = svgDiv.querySelector(".siblingIcon_button");
+	const childrenIcon_button = svgDiv.querySelector(".childrenIcon_button");
+	createFamilyIconSVG('sibling', siblingIcon_button);
+	createFamilyIconSVG('children', childrenIcon_button);
+}
+
+function createFamilyIconSVG(type, container){
+	const famPathData = getFamilyIconPathData(); 
+	var selectPathData, viewbox, typeClass;
+	switch (type){
+		case 'sibling': 
+			selectPathData = famPathData.sibling;
+			viewbox = '0 0 68 78.6';
+			typeClass="siblingSVGIcon";
+		break;
+		case 'children':
+			selectPathData = famPathData.children;
+			viewbox = '0 0 45 66';
+			typeClass="childrenSVGIcon";
+		break;
+	}
+	const iconSVG = new createNewElement("svg", {
+		'class': typeClass,
+		'viewbox': viewbox
+	});
+	const iconPath = new createNewElement("path", {
+		'd': selectPathData,
+	});
+	container.appendChild(iconSVG);
+	iconSVG.appendChild(iconPath);
+}
+
 function createNewElement(type, obj, noNS=false){
     var created = !noNS ? document.createElementNS('http://www.w3.org/2000/svg', type) 
 	: document.createElement(type);
@@ -1134,6 +1168,7 @@ function createNewElement(type, obj, noNS=false){
 	
     return created;
 }
+
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -1156,6 +1191,9 @@ $(document).ready(function(){
 		tab.addEventListener("click", (evnt) => navBar_clickEvnt(evnt));	
 	}
 	
+	//tree
+	createFamilyIcons();
+
 	//peopleTab
 	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
 	for (const drop of peopleDropdowns) {
@@ -1167,6 +1205,8 @@ $(document).ready(function(){
 	createInfoDivs('tree');	createInfoDivs('info');
 	addPeopleToList();
 	interchangeTreeInfo_Tabs();
+	
+	
 	
 });
 /* ------------------------------------------------ */

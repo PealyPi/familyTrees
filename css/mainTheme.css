@@ -443,6 +443,7 @@ button,  button:active, button:hover, button:focus{
 	margin: auto;
 	position: relative;
 	bottom: 100px;
+	text-align: center;
 }
 .leftArrow_button, .rightArrow_button, .zoom_button{
 	cursor: pointer;
@@ -474,6 +475,37 @@ button,  button:active, button:hover, button:focus{
 	left:0; top:0;
 }
 
+
+.famIcon{
+	position: relative;
+	top: -10px;
+	width: 100px; height: 100px;
+	cursor: pointer;
+	display: inline-block;
+	margin: auto 20px;
+	line-height: 50px;
+}
+.siblingIcon_button{	
+}
+.childrenIcon_button{	
+}
+.childrenSVGIcon{
+	width: 45px;
+	height: 66px;
+	transform: translate(0px, -6px);
+	fill: #fff;
+}
+.childrenSVGIcon:hover{
+	fill:  #EFE9AE;
+}
+.siblingSVGIcon{
+	width: 68px;
+	height: 79px;
+	fill: #fff;
+}
+.siblingSVGIcon:hover{
+	fill:  #EFE9AE;	
+}
 
 .vineLine{
 	width: 100%;
