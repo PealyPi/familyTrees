@@ -1125,8 +1125,14 @@ function createFamilyIcons(){
 	const svgDiv = document.getElementById("svgDiv");
 	const siblingIcon_button = svgDiv.querySelector(".siblingIcon_button");
 	const childrenIcon_button = svgDiv.querySelector(".childrenIcon_button");
-	createFamilyIconSVG('sibling', siblingIcon_button);
-	createFamilyIconSVG('children', childrenIcon_button);
+	
+	const childrenIconFill = svgDiv.querySelector(".childrenIconFill");
+	const siblingIconFill = svgDiv.querySelector(".siblingIconFill");
+	
+	
+	
+	//createFamilyIconSVG('sibling', siblingIcon_button);
+	//createFamilyIconSVG('children', childrenIcon_button);
 }
 
 function createFamilyIconSVG(type, container){
@@ -1207,7 +1213,7 @@ $(document).ready(function(){
 
 	
 	//tree
-	//createFamilyIcons();
+	createFamilyIcons();
 
 	//peopleTab
 	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
