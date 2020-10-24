@@ -1135,24 +1135,34 @@ function createFamilyIconSVG(type, container){
 	switch (type){
 		case 'sibling': 
 			selectPathData = famPathData.sibling;
-			viewbox = '0 0 68 78.6';
+			outlinePathData = famPathData.siblingOutline;
+			viewbox = '0 -1.8 71 82';
 			typeClass="siblingSVGIcon";
 		break;
 		case 'children':
 			selectPathData = famPathData.children;
-			viewbox = '0 0 45 66';
+			outlinePathData = famPathData.childrenOutline;
+			viewbox = '0 0 48 70';
 			typeClass="childrenSVGIcon";
 		break;
 	}
 	const iconSVG = new createNewElement("svg", {
 		'class': typeClass,
 		'viewbox': viewbox
+	});	
+	container.appendChild(iconSVG);
+	
+	const iconOutlinePath = new createNewElement("path", {
+		'd': outlinePathData,
+		'class': 'iconOutlinePath',
 	});
+	iconSVG.appendChild(iconOutlinePath);
+	
 	const iconPath = new createNewElement("path", {
 		'd': selectPathData,
 	});
-	container.appendChild(iconSVG);
 	iconSVG.appendChild(iconPath);
+	
 }
 
 function createNewElement(type, obj, noNS=false){
@@ -1190,6 +1200,11 @@ $(document).ready(function(){
 	for (const tab of navTabs) {
 		tab.addEventListener("click", (evnt) => navBar_clickEvnt(evnt));	
 	}
+	//icon error case
+    /*$(".backup_picture").on("error", function(){
+        $(this).attr('src', './images/nopicture.png');
+    });*/
+
 	
 	//tree
 	createFamilyIcons();

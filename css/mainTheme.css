@@ -476,7 +476,7 @@ button,  button:active, button:hover, button:focus{
 }
 
 
-.famIcon{
+.famIcon {
 	position: relative;
 	top: -10px;
 	width: 100px; height: 100px;
@@ -484,27 +484,29 @@ button,  button:active, button:hover, button:focus{
 	display: inline-block;
 	margin: auto 20px;
 	line-height: 50px;
+	
+	fill: rgb(255, 255, 255, 0.5);
+	transition: fill 0.7s, scale 0.7s;
 }
 .siblingIcon_button{	
 }
 .childrenIcon_button{	
 }
 .childrenSVGIcon{
-	width: 45px;
-	height: 66px;
+	width: 48px;
+	height: 70px;
 	transform: translate(0px, -6px);
-	fill: #fff;
-}
-.childrenSVGIcon:hover{
-	fill:  #EFE9AE;
 }
 .siblingSVGIcon{
-	width: 68px;
-	height: 79px;
-	fill: #fff;
+	width: 71px;
+	height: 82px;
 }
-.siblingSVGIcon:hover{
-	fill:  #EFE9AE;	
+.siblingSVGIcon:hover, .childrenSVGIcon:hover{
+	fill:  #fff;		
+	transform: scale(1.2)
+}
+.iconOutlinePath{
+	fill:  var(--colourPeach);
 }
 
 .vineLine{
