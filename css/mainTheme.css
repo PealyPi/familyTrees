@@ -527,8 +527,8 @@ button,  button:active, button:hover, button:focus{
 	background-color: rgb(255, 255, 255, 0.6);
 }
 .childrenIconOutline{	
-	mask: url('../media/childrenIcon_outline.svg') no-repeat center / contain, url(https://pealypi.github.io/familyTrees/media/childrenIcon_outline.svg) no-repeat center/contain;
-	-webkit-mask: url('../media/childrenIcon_outline.svg') no-repeat center / contain, url(https://pealypi.github.io/familyTrees/media/childrenIcon_outline.svg) no-repeat center/contain;
+	mask: url('../media/childrenIcon_outline.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/childrenIcon_outline.svg) no-repeat center/contain*/;
+	-webkit-mask: url('../media/childrenIcon_outline.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/childrenIcon_outline.svg) no-repeat center/contain*/;
 	background-color: rgb(255, 255, 255, 0); 
 	/*transform: translateX(-1px);	*/
 }
