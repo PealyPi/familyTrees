@@ -1129,6 +1129,15 @@ function createFamilyIcons(){
 	const childrenIconFill = svgDiv.querySelector(".childrenIconFill");
 	const siblingIconFill = svgDiv.querySelector(".siblingIconFill");
 	
+	//icon error case
+    /*$(".backup_picture").on("error", function(){
+        $(this).attr('src', './images/nopicture.png');
+    });*/
+	$(childrenIconFill)
+		.on('load', function() { console.log("image loaded correctly"); })
+		.on('error', function() { console.log("error loading image"); })
+		//.attr("src", $(originalImage).attr("src"))
+	;
 	
 	
 	//createFamilyIconSVG('sibling', siblingIcon_button);
