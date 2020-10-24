@@ -1128,17 +1128,59 @@ function createFamilyIcons(){
 	
 	const childrenIconFill = svgDiv.querySelector(".childrenIconFill");
 	const siblingIconFill = svgDiv.querySelector(".siblingIconFill");
+	const childrenIconOutline = svgDiv.querySelector(".childrenIconOutline");
+	const siblingIconOutline = svgDiv.querySelector(".siblingIconOutline");
 	
 	//icon error case
     /*$(".backup_picture").on("error", function(){
         $(this).attr('src', './images/nopicture.png');
     });*/
-	$(childrenIconFill)
-		.on('load', function() { console.log("image loaded correctly"); })
-		.on('error', function() { console.log("error loading image"); })
-		//.attr("src", $(originalImage).attr("src"))
+	//adding svg img as mask if loaded
+	/*$('<img/>').attr('src', 'media/siblingsIcon_all.svg')
+		.on('load', function() {
+			/*$(siblingIconFill).css('mask', ("url('" + $(this).attr('src') + "') no-repeat center / contain") );
+			$(siblingIconFill).css('-webkit-mask', ("url('" + $(this).attr('src') + "') no-repeat center / contain") );
+			$(siblingIconFill).attr('style', "background: url('" + $(this).attr('src') + "#siblingsIcon_path') no-repeat center / contain");
+			$(siblingIconOutline).attr('style', "background: url('" + $(this).attr('src') + "#outline') no-repeat center / contain");
+			$(this).remove(); // prevent memory leaks as @benweet suggested
+		});*/
+	/*
+	$('<img/>').attr('src', 'media/siblingsIcon_outline.svg')
+		.on('load', function() {
+			$(this).remove(); 
+			$(siblingIconOutline).css('mask', "url('media/siblingsIcon_outline.svg') no-repeat center / contain");
+		})
+		.on('error', function() { 
+			console.log("error loading image"); 
+			$(childrenIconOutline).css('background-image', "url('../media/siblingsIcon_outline.svg') no-repeat center / contain");
+		})
 	;
-	
+	$('<img/>').attr('src', 'media/childrenIcon_fill.svg')
+		.on('load', function() {
+			$(this).remove(); 
+			$(childrenIconFill).css('mask', "url('media/childrenIcon_fill.svg') no-repeat center / contain");
+		})
+		.on('error', function() { 
+			console.log("error loading image"); 
+			$(childrenIconOutline).css('background-image', "url('../media/childrenIcon_fill.svg') no-repeat center / contain");
+		})
+	;
+	$('<img/>').attr('src', 'media/childrenIcon_outline.svg')
+		.on('load', function() {
+			$(this).remove(); 
+			$(childrenIconOutline).css('mask', "url('media/childrenIcon_outline.svg') no-repeat center / contain");
+		})
+		.on('error', function() { 
+			console.log("error loading image"); 
+			$(childrenIconOutline).css('background-image', "url('media/childrenIcon_outline.svg') no-repeat center / contain");
+		})
+	;
+	$('<img/>').attr('src', "media/vineLine.svg")
+		.on('error', function() { 
+			//console.log("error loading image"); 
+		})
+	;*/
+
 	
 	//createFamilyIconSVG('sibling', siblingIcon_button);
 	//createFamilyIconSVG('children', childrenIcon_button);

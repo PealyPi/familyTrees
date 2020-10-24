@@ -510,27 +510,30 @@ button,  button:active, button:hover, button:focus{
 	top: 5px; left: 5px;
 	transition: all 0.8s;
 }
-.siblingIconFill{
-	mask: url('../media/siblingsIcon_fill.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/siblingsIcon_fill.svg) no-repeat center/contain*/;
-	-webkit-mask: url('../media/siblingsIcon_fill.svg') no-repeat center / contain, url(https://pealypi.github.io/familyTrees/media/siblingsIcon_fill.svg) no-repeat center/contain;
-	background-color: rgb(255, 255, 255, 0.6); 
+.siblingIconFill{	
+	mask: url(../media/siblingsIcon_all#siblingsIcon_path) no-repeat center / contain;
+	-webkit-mask: url(siblingsIcon_all#siblingsIcon_path) no-repeat center / contain;
+	
+	background-color: rgb(255, 255, 255, 0.6);
 }
 .siblingIconOutline{
-	mask: url('../media/siblingsIcon_outline.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/siblingsIcon_outline.svg) no-repeat center/contain*/;
-	-webkit-mask: url('../media/siblingsIcon_outline.svg') no-repeat center / contain, url(https://pealypi.github.io/familyTrees/media/siblingsIcon_outline.svg) no-repeat center/contain;
+	mask: url(../media/siblingsIcon_all#outline) no-repeat center / contain;
+	-webkit-mask: url(siblingsIcon_all#outline) no-repeat center / contain;
+	
 	background-color: rgb(255, 255, 255, 0); 
 }
 
 .childrenIconFill{	
-	mask: url('../media/childrenIcon_fill.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/childrenIcon_fill.svg) no-repeat center/contain*/;
-	-webkit-mask: url('../media/childrenIcon_fill.svg') no-repeat center / contain, url(https://pealypi.github.io/familyTrees/media/childrenIcon_fill.svg) no-repeat center/contain;
+	mask: url(../media/childrenIcon_all#childrenIcon_path) no-repeat center / contain;
+	-webkit-mask: url(childrenIcon_all#childrenIcon_path) no-repeat center / contain;
+	
 	background-color: rgb(255, 255, 255, 0.6);
 }
 .childrenIconOutline{	
-	mask: url('../media/childrenIcon_outline.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/childrenIcon_outline.svg) no-repeat center/contain*/;
-	-webkit-mask: url('../media/childrenIcon_outline.svg') no-repeat center / contain/*, url(https://pealypi.github.io/familyTrees/media/childrenIcon_outline.svg) no-repeat center/contain*/;
+	mask: url(../media/childrenIcon_all#outline) no-repeat center / contain;
+	-webkit-mask: url(childrenIcon_all#outline) no-repeat center / contain;
+	
 	background-color: rgb(255, 255, 255, 0); 
-	/*transform: translateX(-1px);	*/
 }
 .siblingIcon_button:hover .siblingIconFill, .childrenIcon_button:hover .childrenIconFill{
     background-color: var(--colourDarkPurple);
