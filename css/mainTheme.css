@@ -91,7 +91,6 @@ body{
 }
 button,  button:active, button:hover, button:focus{
 	border:none;
-	/*background: none;	*/
 	outline: none;
 }
 
@@ -505,6 +504,13 @@ button,  button:active, button:hover, button:focus{
 	top: 2px;
 	transition: all 0.7s;
 }	
+
+.siblingIcon_button:after, .childrenIcon_button:after{
+	border: 1px solid white;
+	border-radius: 50%;
+	background-color: white;
+	width: 10px; height: 10px;
+}
 .siblingIcon_button{
 	background: url(../media/siblingsIcon.svg) no-repeat center;
 	opacity: 0.6;
@@ -518,6 +524,33 @@ button,  button:active, button:hover, button:focus{
 	opacity: 1;
 	transform: scale(1.1);
 }
+
+.famIconPulse{
+	position: absolute;
+	top: 38%; left: 38%;
+	border-radius: 50%;
+	background-color: transparent;
+	width: 25%; height: 25%;
+}
+.siblingIcon_button:hover .famIconPulse, .childrenIcon_button:hover .famIconPulse{
+	animation: pulseIcon 2s infinite;
+}
+@keyframes pulseIcon{
+	0% {
+		-moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0.4);
+		box-shadow: 0 0 0 0 rgba(255,255,255, 0.4);
+	}
+	70% {
+		-moz-box-shadow: 0 0 0 50px rgba(255,255,255, 0);
+		box-shadow: 0 0 0 50px rgba(255,255,255, 0);
+	}
+	100% {
+		-moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+		box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+	}
+}
+
+
 .vineLine{
 	width: 100%;
 	height: 107.4px;
