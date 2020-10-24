@@ -439,6 +439,27 @@ button,  button:active, button:hover, button:focus{
 .svgTxt{
 	cursor: default;
 }
+
+
+.zoom_button{
+	cursor: pointer;
+	height: 56px;
+	width: 48px;
+	background:none;
+	
+	font-size: 48px;
+	color: white;
+	opacity: 0.6;
+	transition: all 0.7s;	
+}
+.zoom_button button:hover{
+	opacity: 1;
+}
+.leftArrow_button:hover .iconPulse{
+	animation: pulseIconSmaller 2s infinite;
+}
+
+
 .arrowButtonsDiv{
 	width: 50%;
 	margin: auto;
@@ -446,18 +467,7 @@ button,  button:active, button:hover, button:focus{
 	bottom: 100px;
 	text-align: center;
 }
- .zoom_button{
-	cursor: pointer;
-	height: 56px;
-	width: 48px;
-	
-	font-size: 48px;
-	
-	border:none;
-	background: none;
-	color: white;
-}
-.leftArrow_button, .rightArrow_button{
+.arrowBtn{
 	cursor: pointer;
 	height: 56px;
 	width: 48px;
@@ -465,17 +475,20 @@ button,  button:active, button:hover, button:focus{
 	top: 10px;
 	
 	font-size: 48px;
-	
-	border:none;
-	background: none;
+	background:none;
 	color: white;
+	opacity: 0.6;
+	transition: all 0.7s;	
 }
-.leftArrow_button button:hover, .leftArrow_button button:active, .leftArrow_button button:focus, 
-.rightArrow_button button:hover, .rightArrow_button button:active, .rightArrow_button button:focus, 
-.zoom_button:hover, .zoom_button:focus{
-	border: none;
-	outline: none;
-	color: white;
+.leftArrow_button .iconPulse, .rightArrow_button .iconPulse{
+	width: 5%; height: 5%;
+	top: 46%; left: 48%;
+}
+.leftArrow_button button:hover, .rightArrow_button button:hover{
+	opacity: 1;
+}
+.leftArrow_button:hover .iconPulse, .rightArrow_button:hover .iconPulse{
+	animation: pulseIconSmaller 2s infinite;
 }
 .leftArrow_button{	
 	display:inline-block;	
@@ -485,56 +498,15 @@ button,  button:active, button:hover, button:focus{
 	display:inline-block;
 	float: right;
 }
-.zoom_button {
-	left:0; top:0;
-}
 
-.famIcon {
-	position: relative;
-	top: -10px;
-	width: 70px; height: 70px;
-	cursor: pointer;
-	display: inline-block;
-	margin: auto 20px;
-	
-	/*transition: fill 0.7s ease-in-out, all 1.5s ease-in-out;*/
-}
-.siblingIcon_button, .childrenIcon_button{
-	position: relative;
-	top: 2px;
-	transition: all 0.7s;
-}	
-
-.siblingIcon_button:after, .childrenIcon_button:after{
-	border: 1px solid white;
-	border-radius: 50%;
-	background-color: white;
-	width: 10px; height: 10px;
-}
-.siblingIcon_button{
-	background: url(../media/siblingsIcon.svg) no-repeat center;
-	opacity: 0.6;
-}
-.childrenIcon_button{
-	background: url(../media/childrenIcon.svg) no-repeat center;	
-	opacity: 0.6;
-}
-
-.siblingIcon_button:hover, .childrenIcon_button:hover{
-	opacity: 1;
-	transform: scale(1.1);
-}
-
-.famIconPulse{
+.iconPulse{
 	position: absolute;
 	top: 38%; left: 38%;
 	border-radius: 50%;
 	background-color: transparent;
 	width: 25%; height: 25%;
 }
-.siblingIcon_button:hover .famIconPulse, .childrenIcon_button:hover .famIconPulse{
-	animation: pulseIcon 2s infinite;
-}
+
 @keyframes pulseIcon{
 	0% {
 		-moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0.4);
@@ -549,7 +521,53 @@ button,  button:active, button:hover, button:focus{
 		box-shadow: 0 0 0 0 rgba(255,255,255, 0);
 	}
 }
+@keyframes pulseIconSmaller{
+	0% {
+		-moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0.4);
+		box-shadow: 0 0 0 0 rgba(255,255,255, 0.4);
+	}
+	70% {
+		-moz-box-shadow: 0 0 0 35px rgba(255,255,255, 0);
+		box-shadow: 0 0 0 35px rgba(255,255,255, 0);
+	}
+	100% {
+		-moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+		box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+	}
+}
 
+.famIcon {
+	position: relative;
+	top: -10px;
+	width: 70px; height: 70px;
+	cursor: pointer;
+	display: inline-block;
+	margin: auto 20px;
+	transition: all 0.7s;
+}
+.siblingIcon_button:after, .childrenIcon_button:after{
+	border: 1px solid white;
+	border-radius: 50%;
+	background-color: white;
+	width: 10px; height: 10px;
+}
+.siblingIcon_button{
+	background: url(../media/siblingsIcon.png);
+	background: url(../media/siblingsIcon.svg) no-repeat center;
+	opacity: 0.6;
+}
+.childrenIcon_button{
+	background: url(../media/childrenIcon.png);
+	background: url(../media/childrenIcon.svg) no-repeat center;	
+	opacity: 0.6;
+}
+.siblingIcon_button:hover, .childrenIcon_button:hover{
+	opacity: 1;
+	transform: scale(1.1);
+}
+.siblingIcon_button:hover .iconPulse, .childrenIcon_button:hover .iconPulse{
+	animation: pulseIcon 2s infinite;
+}
 
 .vineLine{
 	width: 100%;
