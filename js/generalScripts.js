@@ -1207,7 +1207,7 @@ $(document).ready(function(){
 
 	
 	//tree
-	createFamilyIcons();
+	//createFamilyIcons();
 
 	//peopleTab
 	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
