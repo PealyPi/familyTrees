@@ -91,7 +91,7 @@ body{
 }
 button,  button:active, button:hover, button:focus{
 	border:none;
-	background: none;	
+	/*background: none;	*/
 	outline: none;
 }
 
@@ -503,46 +503,21 @@ button,  button:active, button:hover, button:focus{
 .siblingIcon_button, .childrenIcon_button{
 	position: relative;
 	top: 2px;
+	transition: all 0.7s;
 }	
-.famIconFill, .famIconOutline {
-	width: 60px; height: 60px;
-	position: absolute;
-	top: 5px; left: 5px;
-	transition: all 0.8s;
+.siblingIcon_button{
+	background: url(../media/siblingsIcon.svg) no-repeat center;
+	opacity: 0.6;
 }
-.siblingIconFill{	
-	mask: url(../media/siblingsIcon_all#fill) no-repeat center / contain;
-	-webkit-mask: url(../media/siblingsIcon_all#fill) no-repeat center / contain;
-	
-	background-color: rgb(255, 255, 255, 0.6);
-}
-.siblingIconOutline{
-	mask: url(../media/siblingsIcon_all#outline) no-repeat center / contain;
-	-webkit-mask: url(../media/siblingsIcon_all#outline) no-repeat center / contain;
-	
-	background-color: rgb(255, 255, 255, 0); 
+.childrenIcon_button{
+	background: url(../media/childrenIcon.svg) no-repeat center;	
+	opacity: 0.6;
 }
 
-.childrenIconFill{	
-	mask: url(../media/childrenIcon_all#fill) no-repeat center / contain;
-	-webkit-mask: url(../media/childrenIcon_all#fill) no-repeat center / contain;
-	
-	background-color: rgb(255, 255, 255, 0.6);
+.siblingIcon_button:hover, .childrenIcon_button:hover{
+	opacity: 1;
+	transform: scale(1.1);
 }
-.childrenIconOutline{	
-	mask: url(../media/childrenIcon_all#outline) no-repeat center / contain;
-	-webkit-mask: url(../media/childrenIcon_all#outline) no-repeat center / contain;
-	
-	background-color: rgb(255, 255, 255, 0); 
-}
-.siblingIcon_button:hover .siblingIconFill, .childrenIcon_button:hover .childrenIconFill{
-    background-color: var(--colourDarkPurple);
-}
-.siblingIcon_button:hover .siblingIconOutline, .childrenIcon_button:hover .childrenIconOutline {
-    background-color: var(--colourOrange);
-
-}
-
 .vineLine{
 	width: 100%;
 	height: 107.4px;
