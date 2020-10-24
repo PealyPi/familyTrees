@@ -1131,96 +1131,20 @@ function createFamilyIcons(){
 	const childrenIconOutline = svgDiv.querySelector(".childrenIconOutline");
 	const siblingIconOutline = svgDiv.querySelector(".siblingIconOutline");
 	
-	//icon error case
-    /*$(".backup_picture").on("error", function(){
-        $(this).attr('src', './images/nopicture.png');
-    });*/
-	//adding svg img as mask if loaded
-	/*$('<img/>').attr('src', 'media/siblingsIcon_all.svg')
-		.on('load', function() {
-			/*$(siblingIconFill).css('mask', ("url('" + $(this).attr('src') + "') no-repeat center / contain") );
-			$(siblingIconFill).css('-webkit-mask', ("url('" + $(this).attr('src') + "') no-repeat center / contain") );
-			$(siblingIconFill).attr('style', "background: url('" + $(this).attr('src') + "#siblingsIcon_path') no-repeat center / contain");
-			$(siblingIconOutline).attr('style', "background: url('" + $(this).attr('src') + "#outline') no-repeat center / contain");
-			$(this).remove(); // prevent memory leaks as @benweet suggested
-		});*/
-	/*
-	$('<img/>').attr('src', 'media/siblingsIcon_outline.svg')
-		.on('load', function() {
-			$(this).remove(); 
-			$(siblingIconOutline).css('mask', "url('media/siblingsIcon_outline.svg') no-repeat center / contain");
-		})
-		.on('error', function() { 
-			console.log("error loading image"); 
-			$(childrenIconOutline).css('background-image', "url('../media/siblingsIcon_outline.svg') no-repeat center / contain");
-		})
-	;
-	$('<img/>').attr('src', 'media/childrenIcon_fill.svg')
-		.on('load', function() {
-			$(this).remove(); 
-			$(childrenIconFill).css('mask', "url('media/childrenIcon_fill.svg') no-repeat center / contain");
-		})
-		.on('error', function() { 
-			console.log("error loading image"); 
-			$(childrenIconOutline).css('background-image', "url('../media/childrenIcon_fill.svg') no-repeat center / contain");
-		})
-	;
-	$('<img/>').attr('src', 'media/childrenIcon_outline.svg')
-		.on('load', function() {
-			$(this).remove(); 
-			$(childrenIconOutline).css('mask', "url('media/childrenIcon_outline.svg') no-repeat center / contain");
-		})
-		.on('error', function() { 
-			console.log("error loading image"); 
-			$(childrenIconOutline).css('background-image', "url('media/childrenIcon_outline.svg') no-repeat center / contain");
-		})
-	;
-	$('<img/>').attr('src', "media/vineLine.svg")
-		.on('error', function() { 
-			//console.log("error loading image"); 
-		})
-	;*/
-
-	
-	//createFamilyIconSVG('sibling', siblingIcon_button);
-	//createFamilyIconSVG('children', childrenIcon_button);
-}
-
-function createFamilyIconSVG(type, container){
-	const famPathData = getFamilyIconPathData(); 
-	var selectPathData, viewbox, typeClass;
-	switch (type){
-		case 'sibling': 
-			selectPathData = famPathData.sibling;
-			outlinePathData = famPathData.siblingOutline;
-			viewbox = '0 -1.8 71 82';
-			typeClass="siblingSVGIcon";
-		break;
-		case 'children':
-			selectPathData = famPathData.children;
-			outlinePathData = famPathData.childrenOutline;
-			viewbox = '0 0 48 70';
-			typeClass="childrenSVGIcon";
-		break;
-	}
-	const iconSVG = new createNewElement("svg", {
-		'class': typeClass,
-		'viewbox': viewbox
-	});	
-	container.appendChild(iconSVG);
-	
-	const iconOutlinePath = new createNewElement("path", {
-		'd': outlinePathData,
-		'class': 'iconOutlinePath',
-	});
-	iconSVG.appendChild(iconOutlinePath);
-	
-	const iconPath = new createNewElement("path", {
-		'd': selectPathData,
-	});
-	iconSVG.appendChild(iconPath);
+	//add click event
+	drop.addEventListener("click", (evnt) => treeChangeView(evnt));	
 	
 }
+
+function treeChangeView(event){
+	//changing to sibling/child/ normal view
+	
+}
+
+function treeChangeViewDo(btn){
+	
+}
+
 
 function createNewElement(type, obj, noNS=false){
     var created = !noNS ? document.createElementNS('http://www.w3.org/2000/svg', type) 
