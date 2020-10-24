@@ -1047,19 +1047,13 @@ function createSVG(){
 	});	
 	svg.appendChild(personNameText);
 	
-	const familyNameText = new createNewElement('text', {
-		'class': 		'svgTxt',
-		'text-anchor': 	'middle',
-		'font-family': 	"'Josefin Sans', sans-serif",
-		'font-size': 	'38px',
-		'fill':	'white',
-		'x': 	150,	
-		'y': 	70,	
-		
-		'textContent': 	'Kesby',			
-	});	
-	svg.appendChild(familyNameText);
+	setFamilyText(svgDiv);
+}
+
+function setFamilyText(svgDiv){
 	
+	const familyTextSpan = svgDiv.querySelector(".tree_familyText");
+	familyTextSpan.innerHTML = 'Kesby';
 	
 }
 
@@ -1121,32 +1115,98 @@ function createLeafSVG(type) {
 	
 }
 
-function createFamilyIcons(){
+function linkingTreeIcons(){
+	//add click events
 	const svgDiv = document.getElementById("svgDiv");
-	const siblingIcon_button = svgDiv.querySelector(".siblingIcon_button");
-	const childrenIcon_button = svgDiv.querySelector(".childrenIcon_button");
+	const famIcon_button = svgDiv.querySelectorAll(".famIcon");
+	const arrowBtn_button = svgDiv.querySelectorAll(".arrowBtn");	
+	const zoomBtn_button = svgDiv.querySelectorAll(".zoomBtn");
 	
-	//add click event
-	siblingIcon_button.addEventListener("click", (evnt) => treeChangeView(evnt));	
-	childrenIcon_button.addEventListener("click", (evnt) => treeChangeView(evnt));	
-	
-}
-
-function treeChangeView(event){
-	//changing to sibling/child/ normal view
-	var btn = event.target;
-	if (btn.tagName == "DIV"){
-		btn = btn.parentElement;
+	for (const btn of famIcon_button){
+		btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'famView'));
+	}		
+	for (const btn of arrowBtn_button){
+		btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'arrows'));
+	}
+	for (const btn of zoomBtn_button){	
+		btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'zoom'));	
 	}
 	
-	treeChangeViewDo(btn);
 }
 
-function treeChangeViewDo(btn){
-	const clickedType = (btn.classList.contains("siblingIcon_button")) ? 'sibling' 
-		: (btn.classList.contains("childrenIcon_button")) ? 'children' : 'tree';
+function treeChangeView(event, type){
+	//changing to sibling/child/ normal view
+	var btn = event.target;
+	if ((btn.tagName == "DIV")|| (btn.tagName == "I")){
+		btn = $(btn).parents("button")[0];
+	}
 	
-	console.log(clickedType);
+	switch (type){
+		case 'famView':
+			const whichFamType = (btn.classList.contains("siblingIcon_button")) ? 'sibling' 
+				: (btn.classList.contains("childrenIcon_button")) ? 'children' : 'tree';
+			treeChange_famView(btn, whichFamType);
+		break;
+		case 'arrows':
+			const whichArrow = (btn.classList.contains("leftArrow_button")) ? 'left' : 'right';
+			treeChange_focus(btn, whichArrow);
+		break;
+		case 'zoom':
+			const whichZoom = (btn.classList.contains("zoomMinus")) ? 'minus' : 'plus';
+			treeChange_zoom(btn, whichZoom);
+		break;
+	}
+	
+}
+
+function treeChange_famView(btn, which){	
+	const svgDiv = document.getElementById("svgDiv");
+	console.log(which);
+} 
+
+function treeChange_focus(btn, which){
+	const svgDiv = document.getElementById("svgDiv");
+	console.log(which);
+	
+}
+
+function treeChange_zoom(thisZoomBtn, which){
+	const svgDiv = document.getElementById("svgDiv");	
+	const bothZoomBtns = svgDiv.querySelectorAll(".zoomBtn");
+	const otherZoomBtn = (which == "minus") ? svgDiv.querySelector(".zoomPlus") : svgDiv.querySelector(".zoomMinus");
+	
+	thisZoomBtn.classList.toggle("btnPulse");
+	setTimeout(() => {
+		$(thisZoomBtn).slideToggle(400, 'swing', function(){
+			$(otherZoomBtn).slideToggle(500, 'swing', function(){
+				otherZoomBtn.classList.toggle("btnPulse");
+			}, 1000);
+		}, 1000);
+	}, 10);
+	
+	/*
+	for (const btn of bothZoomBtns){
+		btn.classList.toggle("jumpOutRight");
+		btn.classList.toggle("jumpInRight");
+		
+	}
+	thisZoomBtn.classList.remove("btnPulse");
+	
+	thisZoomBtn.classList.add("jumpOutRight");
+	setTimeout(()=>{
+		thisZoomBtn.style.display = "none";
+		thisZoomBtn.style.opacity = "0";
+		thisZoomBtn.classList.remove("jumpOutRight");
+		
+		otherZoomBtn.style.display = "";
+		otherZoomBtn.classList.add("jumpInRight");
+		setTimeout(()=>{
+			otherZoomBtn.style.opacity = "1";
+			otherZoomBtn.classList.remove("jumpInRight");
+			otherZoomBtn.classList.add("btnPulse");
+		}, 1000);
+	}, 2000);*/
+	
 }
 
 
@@ -1192,7 +1252,7 @@ $(document).ready(function(){
 
 	
 	//tree
-	createFamilyIcons();
+	linkingTreeIcons();
 
 	//peopleTab
 	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
