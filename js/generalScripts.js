@@ -1126,23 +1126,27 @@ function createFamilyIcons(){
 	const siblingIcon_button = svgDiv.querySelector(".siblingIcon_button");
 	const childrenIcon_button = svgDiv.querySelector(".childrenIcon_button");
 	
-	const childrenIconFill = svgDiv.querySelector(".childrenIconFill");
-	const siblingIconFill = svgDiv.querySelector(".siblingIconFill");
-	const childrenIconOutline = svgDiv.querySelector(".childrenIconOutline");
-	const siblingIconOutline = svgDiv.querySelector(".siblingIconOutline");
-	
 	//add click event
-	drop.addEventListener("click", (evnt) => treeChangeView(evnt));	
+	siblingIcon_button.addEventListener("click", (evnt) => treeChangeView(evnt));	
+	childrenIcon_button.addEventListener("click", (evnt) => treeChangeView(evnt));	
 	
 }
 
 function treeChangeView(event){
 	//changing to sibling/child/ normal view
+	var btn = event.target;
+	if (btn.tagName == "DIV"){
+		btn = btn.parentElement;
+	}
 	
+	treeChangeViewDo(btn);
 }
 
 function treeChangeViewDo(btn){
+	const clickedType = (btn.classList.contains("siblingIcon_button")) ? 'sibling' 
+		: (btn.classList.contains("childrenIcon_button")) ? 'children' : 'tree';
 	
+	console.log(clickedType);
 }
 
 
