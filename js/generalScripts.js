@@ -920,8 +920,8 @@ class node {
 		const svgWidth = svgVB.width;
 		const svgHeight = svgVB.height;
 		
-		const midLine = (svgHeight/2)-50;
-		const spouseLine = (svgHeight/2)+200;
+		const midLine = (svgHeight/2)-70;
+		const spouseLine = midLine+200;
 		
 		const childX = 115;
 		const parentX = svgWidth - childX;
@@ -1055,26 +1055,22 @@ class node {
 				nodeList.nodeEs = this.spouseNode;
 			break;
 			
-			/*
+			// spouses - create line 
 			case 'focusS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
 			case 'focusChildS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
 			case 'focusGchildS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
 			case 'focusParentS':
+				this.createSpouseLine();
 			break;				
 			
 			case 'focusGparentS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;*/
-			
+			break;
 		}
 		return this;
 		
@@ -1126,14 +1122,18 @@ class node {
 	
 	createInitialNode(personTag, personInfo, startXY){
 		const nodeScale = (this.tagType == 'focus') ? 2 : 1; 
-		const nodeOpacity = (nodeRelations.indexOf(this.tagType) % 2 == 1) ? (this.tagType == "focusParentS") ? 0.6 : 0 : 1;
+		const isSpouse = (nodeRelations.indexOf(this.tagType) % 2 == 1);
+		const nodeOpacity = (isSpouse) ? (this.tagType == "focusParentS") ? 0.6 : 0 : 1;
 		
 		const nodeGrpContainer = new createNewElement('g', {
 			'id': this.whichNode + '_GrpContainer',
 			'class': 'nodeGrpContainer',
 			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px); opacity: '+ nodeOpacity,
 		});
-		this.svg.appendChild(nodeGrpContainer);
+		if (isSpouse)
+			this.svg.prepend(nodeGrpContainer);
+		else
+			this.svg.appendChild(nodeGrpContainer);
 		
 		const nodeGrp = new createNewElement('g', {
 			'id': this.whichNode + '_Grp',
@@ -1196,6 +1196,13 @@ class node {
 		
 		return nodeGrpContainer;
 		
+	}
+	
+	createSpouseLine(){
+		const nodePos = this.getNodeTypePosition(this.tagType);
+		const lineGrp = treeSVGline(this.nodeGrpContainer, {'x': -150, 'y': -200}, {'x': 0, 'y': 0}, 'spouseLine');
+		
+		this.spouseLineGrp = lineGrp;
 	}
 	
 	nodeShift(direction, first = false){
@@ -1409,6 +1416,7 @@ class node {
 		}
 		return this;
 	}
+
 }
 
 
@@ -1539,44 +1547,9 @@ function createSVG(){
 	const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
 	
 	//line
-	const lineDefine = {
-		'x1': 0, 'x2': pageWidth,
-		'fill': 'none',
-		'stroke-width': 8,	
-	}
-	const shadowLineDefine = Object.assign({}, lineDefine, {
-		'class': 'mainLineShadow',
-		'stroke': '#000',
-		'stroke-opacity': 0.1,
-	});
+	const lineGrp = treeSVGline(svg, {'x': - 10, 'y': (svgCenterPt.y)}, {'x': (pageWidth + 10), 'y': (svgCenterPt.y)}, 'mainLine');
 	
-	const lineGrp = new createNewElement('g', {
-		'class': 'mainLine_GRP',
-	});
-	const mainLine = new createNewElement('line', 
-		Object.assign({}, lineDefine, {
-			'class': 'mainLine',
-			'y1': svgCenterPt.y, 'y2': svgCenterPt.y,
-			'stroke': '#FF928B'		
-	}));
-	const mainLineShadow1 = new createNewElement('line', 
-		Object.assign({}, shadowLineDefine, {
-			'y1': (svgCenterPt.y+3), 'y2': (svgCenterPt.y+3),
-	}));
-	const mainLineShadow2 = new createNewElement('line',  
-		Object.assign({}, shadowLineDefine, {
-			'y1': (svgCenterPt.y+1.5), 'y2': (svgCenterPt.y+1.5),
-	}));
-	
-	svg.appendChild(lineGrp);
-	lineGrp.appendChild(mainLine);
-	lineGrp.prepend(mainLineShadow1);
-	lineGrp.prepend(mainLineShadow2);
-	
-	
-	
-	
-	lineGrp.setAttribute("transform", "translate(0 -50)");	
+	lineGrp.setAttribute("transform", "translate(0 -70)");	
 	setFamilyText(svgDiv,'family');	
 	
 	//hide btns - no focus
@@ -1588,6 +1561,57 @@ function createSVG(){
 		div.style.display = 'none';
 	}
 	
+}
+
+function treeSVGline(svg, startXY, endXY, type){
+	
+	var transXdir, transYdir, strokeWdth, className;
+	switch (type){
+		default:
+			transXdir = 1;	transYdir = 1;
+			strokeWdth = 8; className = 'mainLine';
+		break;
+		case 'spouseLine':
+			transXdir = -1;	transYdir = 1;
+			strokeWdth = 6; className = 'spouseLine';
+		break;				
+	}
+	
+	const lineDefine = {
+		'x1': startXY.x, 'x2': endXY.x,
+		'y1': startXY.y, 'y2': endXY.y,
+		'fill': 'none',
+		'stroke-width': strokeWdth,	
+	}
+	const shadowLineDefine = Object.assign({}, lineDefine, {
+		'class': 'lineShadow',
+		'stroke': '#000',
+		'stroke-opacity': 0.1,
+	});
+	
+	const lineGrp = new createNewElement('g', {
+		'class': className + '_GRP',
+	});
+	const mainLine = new createNewElement('line', 
+		Object.assign({}, lineDefine, {
+			'class': className,
+			'stroke': '#FF928B'	
+	}));
+	const mainLineShadow1 = new createNewElement('line', shadowLineDefine);
+	const mainLineShadow2 = new createNewElement('line', shadowLineDefine);
+	
+	svg.prepend(lineGrp);
+	lineGrp.appendChild(mainLine);
+	lineGrp.prepend(mainLineShadow1);
+	lineGrp.prepend(mainLineShadow2);
+	
+	mainLineShadow1.setAttribute('transform', 
+		'translate(' + (transXdir * 1.5) + ', ' +  (transYdir * 1.5) + ')');
+	mainLineShadow2.setAttribute('transform',
+		'translate(' + (transXdir * 3) + ', ' +  (transYdir * 3) + ')');
+	
+	
+	return lineGrp;
 }
 
 function setFamilyText(svgDiv, famName){	
