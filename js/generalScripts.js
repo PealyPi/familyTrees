@@ -1138,9 +1138,13 @@ class node {
 		//nodeRelations[]
 		
 		this.oldPosition = this.getNodeTypePosition(this.tagType);
+		console.log(nodeRelations);
+		console.log(nodeRelations[6]);
+		console.log(this.tagType);
+		const oldTagType = this.tagType;
 		
-		const oldRelationsIndex = nodeRelations.indexOf(this.tagName);
-		const newRelationsIndex = (direction == 'left') ? (oldRelationsIndex + 2) :
+		const oldRelationsIndex = nodeRelations.indexOf(oldTagType);
+		var newRelationsIndex = (direction == 'left') ? (oldRelationsIndex + 2) :
 			(direction == 'right') ? (oldRelationsIndex - 2) : '';	
 		
 		if (newRelationsIndex < 0){
@@ -1153,7 +1157,7 @@ class node {
 		
 		console.log(nodeRelations[newRelationsIndex]);	
 		this.newPosition = this.getNodeTypePosition(nodeRelations[newRelationsIndex]);
-		this.tagType = nodeRelations[newRelationsIndex];	
+		//this.tagType = nodeRelations[newRelationsIndex];	
 		
 		
 		/*
