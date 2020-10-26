@@ -480,10 +480,14 @@ button,  button:active, button:hover, button:focus{
 .tree_familyText{
 	font-size: 38px;
 }
-.svg_topLeftBtns{
+.svg_topLeftArea{
 	position: absolute;
 	top: 40px; left: 100px;
 	height: 100px; width: 100px;
+	
+}
+.svg_topLeftBtns{
+	display: none;
 }
 .zoomBtn{
 	display:block;
@@ -792,6 +796,12 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 }
 
 
+.nodeCircleGrp{
+	cursor: pointer;
+	
+}
+
+
 
 
 .leafSVG{
@@ -807,6 +817,9 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 }
 
 /* --- Ppl Tab --- */
+#peopleDiv button{	
+	background: none;
+}
 #peopleDiv {
 	position: fixed;
 	height: 80%;

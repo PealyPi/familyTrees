@@ -12,10 +12,11 @@ function nodeDataStorage(){//collapse lvl 2
 		'isRoot':	true,
 		'mainLine':		true,	
 		'familyName': 'kesby',
-		'parentL': 		'maryBobby',
-		'parentR': 		'johnNevilleKesby',	
+		'parentMain': 	'johnNevilleKesby',
+		'parentSpouse': 'maryBobby',	
 		'siblings': 	['jackKesby'],
-		'spouse': 		'ronaldHadkiss',	
+		//'spouse': 		'ronaldHadkiss',	
+		//'childMain': 	['lesleyPeal'],
 		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};
 	
@@ -32,11 +33,12 @@ function nodeDataStorage(){//collapse lvl 2
 		'gen': 2,
 		'mainLine':		true,		
 		'familyName': 'bobby',
-		'parentL': 		'adaBerriman',
-		'parentR': 		'sidneyCharlesBobby',	
+		'parentMain': 		'sidneyCharlesBobby',	
+		'parentSpouse': 	'adaBerriman',
 		'siblings': 	['floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby'],
 		'spouse': 		'johnNevilleKesby',	
 		'childMain': 	'roseHadkiss', 
+		'children': 	['roseHadkiss', 'jackKesby'], 
 	};
 	
 	kesby.floBobby = {		
@@ -81,8 +83,8 @@ function nodeDataStorage(){//collapse lvl 2
 			'gen': 3,
 			'mainLine':		true,		
 			'familyName': 'berriman',
-			'parentL': 		'johnBerriman',
-			'parentR': 		'mariaBerriman',	
+			'parentMain': 	'johnBerriman',
+			'parentSpouse': 'mariaBerriman',	
 			'spouse': 		'sidneyCharlesBobby',	
 			'childMain': 	'maryBobby', 
 		};
@@ -513,7 +515,7 @@ function nodeDataStorage(){//collapse lvl 2
 	
 
 	//hadkiss
-	hadkiss.ronHadkiss = {	
+	hadkiss.ronaldHadkiss = {	
 		'gen': 1,
 		'isRoot':	true,
 		'mainLine':		true,	

@@ -353,7 +353,7 @@ function personInfoStorage(){
 	
 	
 	const hadkiss = {
-		'ronHadkiss': {
+		'ronaldHadkiss': {
 			'name':		'Ronald Hadkiss',
 			'dates': 	' - 1995',	 
 			'about': { 

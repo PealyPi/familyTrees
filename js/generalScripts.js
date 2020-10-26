@@ -408,6 +408,9 @@ function openPerson(evnt, linked = false){
 		}
 		
 		//svg tree create
+		treeChange_focusPerson(personTag, famName);
+		
+		
 		setTimeout(()=>{isInfoChanging = false;}, 2000);
 	}
 }
@@ -869,36 +872,346 @@ function interchangeTreeInfo_Tabs(){
 /* -------------------- */
 
 /*svg*/
-class personNode {
-	constructor(svg, family, personTag){
+var nodeRelations = [
+	'focusGchild', 'focusGchildS', 'focusChild', 'focusChildS', 
+	'focus', 'focusS', 
+	'focusParent', 'focusParentS', 'focusGparent', 'focusGparentS'];
+	
+var nodeList = {
+	'nodeA': '', 'nodeAs': '', 
+	'nodeB': '', 'nodeBs': '', 
+	'nodeC': '', 'nodeCs': '', 
+	'nodeD': '', 'nodeDs': '', 
+	'nodeE': '', 'nodeEs': ''	};
+	
+var nodeLetterOrder = ['nodeA', 'nodeAs', 'nodeB', 'nodeBs', 'nodeC', 'nodeCs', 'nodeD', 'nodeDs', 'nodeE', 'nodeEs'];
+	
+const rootPeople = {
+	'kesby': 'roseHadkiss',
+	'hadkiss': 'ronHadkiss'
+}
+
+class node {
+	constructor(svg, tagType){
 		this.svg = svg;
-		this.personTag = personTag;
-		this.family = family;
+		this.tagType = tagType;			
+	}
+	/* focus:
+	this.personTag = personTag;
+	this.famName = famName;
+	this.whichNode = 'nodeC';	
+	
+	this.spouseTag = personData.spouse ?? 'none';
+	this.childTag = personData.childMain ?? 'none';
+	this.parentTag = personData.parentMain ?? 'none';
+	this.parentSTag = personData.parentSpouse ?? 'none';
+	*/
+	
+	getNodeTypePosition(tagType){		
+		const svgVB = this.svg.viewBox.baseVal;
+		const svgWidth = svgVB.width;
+		const svgHeight = svgVB.height;
+		
+		const midLine = (svgHeight/2)-50;
+		const spouseLine = (3*svgHeight/2)-50;
+		
+		const childX = 115;
+		const parentX = svgWidth - childX;
+		const offScreenX = 130;
+		
+		switch (tagType){
+			case 'focusGchild': 
+				return {'x': (-offScreenX), 'y': midLine};
+			break;				
+			case 'focusGchildS': 
+				return {'x': (-offScreenX), 'y': spouseLine};
+			break;			
+			case 'focusChild': 
+				return {'x': childX, 'y': midLine};
+			break;				
+			case 'focusChildS': 
+				return {'x': childX, 'y': spouseLine};
+			break;						
+			case 'focus': 
+				return {'x': svgWidth/2, 'y': midLine};
+			break;			
+			case 'focusS': 
+				return {'x': svgWidth/2, 'y': spouseLine};
+			break;			
+			case 'focusParent': 
+				return {'x': parentX, 'y': midLine};
+			break;				
+			case 'focusParentS': 
+				return {'x': parentX, 'y': spouseLine};
+			break;				
+			case 'focusGparent': 
+				return {'x': (svgWidth+offScreenX), 'y': midLine};
+			break;				
+			case 'focusGparentS': 
+				return {'x': (svgWidth+offScreenX), 'y': spouseLine};
+			break;				
+		}
+		
 	}
 	
-	createCircle(positionXY){
-		this.positionXY = positionXY;
+	initialise(personTag, famName){		
+		if (personTag != 'none'){			
+			const personData = PEOPLERELATIONS[famName][personTag];
+			const personInfo = PEOPLEINFO[famName][personTag];
 		
-		const circleRadius = 100;
+			this.personTag = personTag;
+			this.famName = famName;
+			
+			switch (this.tagType){
+				case 'focus':
+					this.whichNode = 'nodeC';					
+			
+					this.spouseTag = personData.spouse ?? 'none';
+					this.childTag = personData.childMain ?? 'none';
+					this.parentTag = personData.parentMain ?? 'none';
+					this.parentSTag = personData.parentSpouse ?? 'none';
+					
+					const rootPeopleVals = Object.values(rootPeople);
+					if (rootPeopleVals.includes(personTag)){	
+						for (const fam in rootPeople) {
+							if (rootPeople[fam] == personTag){
+								this.otherFam = (fam == 'kesby') ? 'hadkiss'
+									: (fam == 'hadkiss') ? 'kesby'
+									: (fam == 'peal') ? 'mckenzie'
+									: (fam == 'mckenzie') ? 'peal' : '';
+							}
+						}				
+						this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, this.otherFam);
+						
+					} else {
+						this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, famName);
+						
+					}
+					this.childNode = new node(this.svg, 'focusChild').initialise(this.childTag, famName);
+					this.parentNode = new node(this.svg, 'focusParent').initialise(this.parentTag, famName);	
+					
+					nodeList.nodeC = this.node;
+					nodeList.nodeCs = this.spouseNode;
+					nodeList.nodeD = this.parentNode;
+					nodeList.nodeB = this.childNode;
+				break;
+				
+				case 'focusParent':
+					this.whichNode = 'nodeD';
+					
+					this.spouseTag = personData.spouse ?? 'none';
+					this.parentTag = personData.parentMain ?? 'none';
+					
+					this.spouseNode = new node(this.svg, 'focusParentS').initialise(this.spouseTag, famName);
+					this.parentNode = new node(this.svg, 'focusGparent').initialise(this.parentTag, famName);	
+					
+					nodeList.nodeDs = this.spouseNode;
+					nodeList.nodeE = this.parentNode;
+				break;
+				
+				case 'focusChild':
+					this.whichNode = 'nodeB';
+					
+					this.spouseTag = personData.spouse ?? 'none';
+					this.childTag = personData.childMain ?? 'none';
+					
+					this.spouseNode = new node(this.svg, 'focusChildS').initialise(this.spouseTag, famName);
+					this.childNode = new node(this.svg, 'focusGchild').initialise(this.childTag, famName);	
+					
+					nodeList.nodeBs = this.spouseNode;
+					nodeList.nodeA = this.childNode;
+				break;
+				
+				case 'focusGchild':
+					this.whichNode = 'nodeA';
+					
+					this.spouseTag = personData.spouse ?? 'none';
+					
+					this.spouseNode = new node(this.svg, 'focusGchildS').initialise(this.spouseTag, famName);
+					nodeList.nodeAs = this.spouseNode;
+				break;
+				
+				case 'focusGparent':
+					this.whichNode = 'nodeE';
+					
+					this.spouseTag = personData.spouse ?? 'none';
+					
+					this.spouseNode = new node(this.svg, 'focusGparentS').initialise(this.spouseTag, famName);
+					nodeList.nodeEs = this.spouseNode;
+				break;
+				
+				
+				case 'focusS':
+					this.whichNode = 'nodeCs';
+				break;
+				
+				case 'focusChildS':
+					this.whichNode = 'nodeBs';
+				break;
+				
+				case 'focusGchildS':
+					this.whichNode = 'nodeAs';
+				break;
+				
+				case 'focusParentS':
+					this.whichNode = 'nodeDs';
+				break;				
+				
+				case 'focusGparentS':
+					this.whichNode = 'nodeEs';
+				break;
+				
+			}
+			
+			this.node = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
+			
+			return this;
+		}
+		
+	}
+	
+	createInitialNode(personTag, personInfo, startXY){
+		
+		const nodeGrp = new createNewElement('g', {
+			'id': this.whichNode + '_Grp',
+			'class': 'nodeGrp',
+			'transform': 'translate(' + startXY.x + ' ' + startXY.y + ')',
+		});
+		this.nodeGrp = nodeGrp;
+		this.svg.appendChild(nodeGrp);
+		
+		const circleGrp = new nodeCircle(nodeGrp).createCircle(this.whichNode);
+		
+		var configs = (this.tagType == 'focus') ? {
+			'fontSz': '36px',
+			'dateFontSz': '24px',
+			'textY': 150,
+			'datesY': 110
+		} : {
+			'fontSz': '24px',
+			'dateFontSz': '20px',
+			'textY': 130,
+			'datesY': 100
+		};
+		
+		//text
+		const personDatesText = new createNewElement('text', {
+			'class': 		'svgTxt',
+			'text-anchor': 	'middle',
+			'font-family': 	"'Josefin Sans', sans-serif",
+			'font-size': 	configs.dateFontSz,
+			'fill':	'white',
+			'x': 	0,	
+			'y': 	configs.datesY,	
+			
+			'textContent': 	personInfo.dates,			
+		});	
+		nodeGrp.appendChild(personDatesText);
+		
+		const personNameText = new createNewElement('text', {
+			'class': 		'svgTxt',
+			'text-anchor': 	'middle',
+			'font-family': 	"'Josefin Sans', sans-serif",
+			'font-size': 	configs.fontSz,
+			'fill':	'white',
+			'x': 	0,	
+			'y': 	configs.textY,	
+			
+			'textContent': 	personInfo.name,			
+		});	
+		nodeGrp.appendChild(personNameText);
+		
+		//image
+		
+		//add click event for non-focus
+		if (this.tagType != 'focus'){
+			circleGrp.addEventListener("click", (evnt) => treeChangeView(evnt, 'treeNode'));
+		}
+	}
+	
+	nodeShift(direction){
+		
+		//direction right => nodes moving left
+		//direction right => relations index -ve
+		
+		//change tagType
+		//nodeRelations[]
+		
+		this.oldPosition = this.getNodeTypePosition(this.tagType);
+		
+		const oldRelationsIndex = nodeRelations.indexOf(this.tagName);
+		const newRelationsIndex = (direction == 'left') ? (oldRelationsIndex + 2) :
+			(direction == 'right') ? (oldRelationsIndex - 2) : '';	
+		
+		if (newRelationsIndex < 0){
+			newRelationsIndex = 10 + newRelationsIndex;
+		} else if (newRelationsIndex > 9){
+			newRelationsIndex = newRelationsIndex % 10;
+		}
+		console.log(oldRelationsIndex);
+		console.log(newRelationsIndex);
+		
+		console.log(nodeRelations[newRelationsIndex]);	
+		this.newPosition = this.getNodeTypePosition(nodeRelations[newRelationsIndex]);
+		this.tagType = nodeRelations[newRelationsIndex];	
+		
+		
+		/*
+		switch (this.tagType){
+			case 'focusGchild': 
+				
+			break;				
+			case 'focusGchildS': 
+			break;			
+			case 'focusChild': 
+			break;				
+			case 'focusChildS': 
+			break;						
+			case 'focus': 
+			break;			
+			case 'focusS': 
+			break;			
+			case 'focusParent': 
+			break;				
+			case 'focusParentS': 
+			break;				
+			case 'focusGparent': 
+			break;				
+			case 'focusGparentS': 
+			break;				
+		}*/
+	}
+	
+}
+
+
+class nodeCircle {
+	constructor(container){
+		this.container = container;
+	}
+	
+	createCircle(whichNode){
+		//this.positionXY = positionXY;
+		
+		const circleRadius = 80;
 		const circleBorder = 6;
 		const circleFullWidth = circleRadius + circleBorder;
 		
 		
 		const circleGrp = new createNewElement('g', {
-			'id': this.personTag + 'CircleGrp',
-			'class': 'personCircleGrp',
-			'transform': 'translate(' + this.positionXY.x + ' ' + this.positionXY.y + ')',
+			'id': whichNode + '_circleGrp',
+			'class': 'nodeCircleGrp',
 		});
+		this.container.appendChild(circleGrp);
 		
 		const circleDefine = {
 			'r': circleRadius,
-			//'cx': circleFullWidth, 'cy': circleFullWidth,	
 			'cx': 0, 'cy': 0,	
 			'stroke-width': circleBorder,
 		}
 		
 		const circle = new createNewElement('circle', Object.assign({}, circleDefine, {
-			'class': 'circle',
+			'class': 'nodeCircle',
 			'fill': '#FFAC81',
 			'stroke': 'none',
 		}));
@@ -924,7 +1237,6 @@ class personNode {
 			'fill': 'none',
 			'stroke': '#FFC997',
 		}));
-		this.svg.appendChild(circleGrp);
 		circleGrp.appendChild(circle);
 		circleGrp.appendChild(circleBorderRight);
 		circleGrp.appendChild(circleBorderTop);
@@ -980,8 +1292,12 @@ class personNode {
 		}));
 		circleGrp.prepend(circleShadow1);
 		circleGrp.prepend(circleShadow2);
+		
+		return circleGrp;
 	}
 }
+
+
 
 function createSVG(){
 	const svgDiv = document.getElementById("svgDiv");
@@ -996,65 +1312,60 @@ function createSVG(){
 	const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
 	
 	//line
+	const lineDefine = {
+		'x1': 0, 'x2': pageWidth,
+		'fill': 'none',
+		'stroke-width': 8,	
+	}
+	const shadowLineDefine = Object.assign({}, lineDefine, {
+		'class': 'mainLineShadow',
+		'stroke': '#000',
+		'stroke-opacity': 0.1,
+	});
+	
 	const lineGrp = new createNewElement('g', {
 		'class': 'mainLine_GRP',
 	});
-	const mainLine = new createNewElement('line', {
-		'class': 'mainLine',
-		'x1': 0, 'y1': svgCenterPt.y, 
-		'x2': pageWidth, 'y2': svgCenterPt.y,
-		'fill': 'none',
-		'stroke': '#FF928B',
-		'stroke-width': 10,		
-	});
-	const mainLineShadow1 = new createNewElement('line', {
-		'class': 'mainLineShadow',
-		'x1': 0, 'y1': (svgCenterPt.y+3), 
-		'x2': pageWidth, 'y2': (svgCenterPt.y+3),
-		'fill': 'none',
-		'stroke': '#000',
-		'stroke-width': 10,	
-		'stroke-opacity': 0.1,
-	});
-	const mainLineShadow2 = new createNewElement('line', {
-		'class': 'mainLineShadow',
-		'x1': 0, 'y1': (svgCenterPt.y+1.5), 
-		'x2': pageWidth, 'y2': (svgCenterPt.y+1.5),
-		'fill': 'none',
-		'stroke': '#000',
-		'stroke-width': 10,	
-		'stroke-opacity': 0.1,
-	});
+	const mainLine = new createNewElement('line', 
+		Object.assign({}, lineDefine, {
+			'class': 'mainLine',
+			'y1': svgCenterPt.y, 'y2': svgCenterPt.y,
+			'stroke': '#FF928B'		
+	}));
+	const mainLineShadow1 = new createNewElement('line', 
+		Object.assign({}, shadowLineDefine, {
+			'y1': (svgCenterPt.y+3), 'y2': (svgCenterPt.y+3),
+	}));
+	const mainLineShadow2 = new createNewElement('line',  
+		Object.assign({}, shadowLineDefine, {
+			'y1': (svgCenterPt.y+1.5), 'y2': (svgCenterPt.y+1.5),
+	}));
+	
 	svg.appendChild(lineGrp);
 	lineGrp.appendChild(mainLine);
 	lineGrp.prepend(mainLineShadow1);
 	lineGrp.prepend(mainLineShadow2);
 	
 	
-	const initialPersonNode = new personNode(svg, 'kesby', 'roseHadkiss').createCircle(svgCenterPt);
 	
-	//text
-	const personNameText = new createNewElement('text', {
-		'class': 		'svgTxt',
-		'text-anchor': 	'middle',
-		'font-family': 	"'Josefin Sans', sans-serif",
-		'font-size': 	'36px',
-		'fill':	'white',
-		'x': 	svgCenterPt.x,	
-		'y': 	(svgCenterPt.y + 150),	
-		
-		'textContent': 	'Person Name',			
-	});	
-	svg.appendChild(personNameText);
 	
-	setFamilyText(svgDiv);
+	lineGrp.setAttribute("transform", "translate(0 -50)");	
+	setFamilyText(svgDiv,'family');	
+	
+	//hide btns - no focus
+	var btnDivs = [];
+	//btnDivs.push( svgDiv.querySelector(".svg_topLeftArea") );
+	btnDivs.push( svgDiv.querySelector(".arrowButtonsDiv") );
+	
+	for (const div of btnDivs) {
+		div.style.display = 'none';
+	}
+	
 }
 
-function setFamilyText(svgDiv){
-	
+function setFamilyText(svgDiv, famName){	
 	const familyTextSpan = svgDiv.querySelector(".tree_familyText");
-	familyTextSpan.innerHTML = 'Kesby';
-	
+	familyTextSpan.innerHTML = famName.charAt(0).toUpperCase() + famName.slice(1);	
 }
 
 function createLeafSVG(type) {
@@ -1137,7 +1448,7 @@ function linkingTreeIcons(){
 function treeChangeView(event, type){
 	//changing to sibling/child/ normal view
 	var btn = event.target;
-	if ((btn.tagName == "DIV")|| (btn.tagName == "I")){
+	if ((btn.tagName == "DIV") || (btn.tagName == "I")){
 		btn = $(btn).parents("button")[0];
 	}
 	
@@ -1149,11 +1460,20 @@ function treeChangeView(event, type){
 		break;
 		case 'arrows':
 			const whichArrow = (btn.classList.contains("leftArrow_button")) ? 'left' : 'right';
-			treeChange_focus(btn, whichArrow);
+			treeChange_focusArrows(btn, whichArrow);
 		break;
 		case 'zoom':
 			const whichZoom = (btn.classList.contains("zoomMinus")) ? 'minus' : 'plus';
 			treeChange_zoom(btn, whichZoom);
+		break;
+		case 'treeNode':
+			if (btn.tagName == "circle") {
+				btn = btn.parentElement;
+			}
+			const nodeLetter = btn.id.replace("_circleGrp", "");
+			
+			const nodeObj = nodeList[nodeLetter];
+			treeChange_shift(nodeObj);
 		break;
 	}
 	
@@ -1161,51 +1481,93 @@ function treeChangeView(event, type){
 
 function treeChange_famView(btn, which){	
 	const svgDiv = document.getElementById("svgDiv");
+	
 	console.log(which);
+	
+	
 } 
 
-function treeChange_focus(btn, which){
-	const svgDiv = document.getElementById("svgDiv");
-	console.log(which);
+function treeChange_shift(nodeObj){
+	//shift, like with arrows
+	//nodesShiftLeft(newFocus);
+	
+	//direction right => nodes moving left
+	const direction = ( (nodeObj.tagType == 'focusParent') || (nodeObj.tagType == 'focusParentS') ) ? 'right' : (nodeObj.tagType == 'focusChild') ? 'left' : '';
+	nodeObj.nodeShift(direction);
 	
 }
 
+function treeChange_focusPerson(personTag, famName){
+	//from person click
+	const personData = PEOPLERELATIONS[famName][personTag];
+	setFamilyText(svgDiv, famName);
+	
+	//if first click, initialise
+	if (!svgDiv.querySelector(".nodeCircleGrp")){
+		initialiseNodes(svgDiv, personTag, famName);
+	} else {
+		//if new person not currently in nodes, 
+		//exitNodes, recreate with new focus;		
+	}	
+}
+
+function treeChange_focusArrows(btn, arrow){
+	const svgDiv = document.getElementById("svgDiv");
+	//from arrows	
+	//check nodeList - look for focus
+	//then nodeObj.nodeShift;
+}
+
+function initialiseNodes(svgDiv, personTag, famName) {
+	//show btns
+	var btnDivs = [];
+	//btnDivs.push( svgDiv.querySelector(".svg_topLeftArea") );
+	btnDivs.push( svgDiv.querySelector(".arrowButtonsDiv") );
+	
+	for (const div of btnDivs) {
+		div.style.display = '';
+	}
+	
+	const svg = svgDiv.querySelector("svg");
+	
+	//create all nodes	
+	nodeList.nodeC = new node(svg, 'focus').initialise(personTag, famName);	
+	
+}
+
+
 function treeChange_zoom(thisZoomBtn, which){
 	const svgDiv = document.getElementById("svgDiv");	
-	const bothZoomBtns = svgDiv.querySelectorAll(".zoomBtn");
 	const otherZoomBtn = (which == "minus") ? svgDiv.querySelector(".zoomPlus") : svgDiv.querySelector(".zoomMinus");
 	
-	thisZoomBtn.classList.toggle("btnPulse");
-	setTimeout(() => {
-		$(thisZoomBtn).slideToggle(400, 'swing', function(){
-			$(otherZoomBtn).slideToggle(500, 'swing', function(){
-				otherZoomBtn.classList.toggle("btnPulse");
-			}, 1000);
-		}, 1000);
-	}, 10);
+	toggleZoomIcon();
+	//do zoom
+	switch (which){
+		case 'minus': 
+			treeZoomOut();
+		break;
+		case 'plus':
+			treeZoomIn();
+		break;
+	}
 	
-	/*
-	for (const btn of bothZoomBtns){
-		btn.classList.toggle("jumpOutRight");
-		btn.classList.toggle("jumpInRight");
+	function toggleZoomIcon(){
+		thisZoomBtn.classList.toggle("btnPulse");
+		setTimeout(() => {
+			$(thisZoomBtn).slideToggle(400, 'swing', function(){
+				$(otherZoomBtn).slideToggle(500, 'swing', function(){
+					otherZoomBtn.classList.toggle("btnPulse");
+				}, 1000);
+			}, 1000);
+		}, 10);		
+	}
+	
+	function treeZoomOut(){
 		
 	}
-	thisZoomBtn.classList.remove("btnPulse");
-	
-	thisZoomBtn.classList.add("jumpOutRight");
-	setTimeout(()=>{
-		thisZoomBtn.style.display = "none";
-		thisZoomBtn.style.opacity = "0";
-		thisZoomBtn.classList.remove("jumpOutRight");
+	function treeZoomIn(){
 		
-		otherZoomBtn.style.display = "";
-		otherZoomBtn.classList.add("jumpInRight");
-		setTimeout(()=>{
-			otherZoomBtn.style.opacity = "1";
-			otherZoomBtn.classList.remove("jumpInRight");
-			otherZoomBtn.classList.add("btnPulse");
-		}, 1000);
-	}, 2000);*/
+	}
 	
 }
 
