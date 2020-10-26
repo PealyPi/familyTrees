@@ -1072,22 +1072,19 @@ class node {
 	
 	createInitialNode(personTag, personInfo, startXY){
 		
+		const nodeScale = (this.tagType == 'focus') ? 1.5 : 1; 
 		const nodeGrp = new createNewElement('g', {
 			'id': this.whichNode + '_Grp',
 			'class': 'nodeGrp',
-			'transform': 'translate(' + startXY.x + ' ' + startXY.y + ')',
+			'transform-origin': "50% 42%",
+			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px) scale(' + nodeScale + ')',
 		});
 		this.nodeGrp = nodeGrp;
 		this.svg.appendChild(nodeGrp);
 		
-		const circleGrp = new nodeCircle(nodeGrp).createCircle(this.whichNode);
+		const circleGrp = new nodeCircle(nodeGrp).createCircle(this.whichNode);		
 		
-		var configs = (this.tagType == 'focus') ? {
-			'fontSz': '36px',
-			'dateFontSz': '24px',
-			'textY': 150,
-			'datesY': 110
-		} : {
+		var configs = {
 			'fontSz': '24px',
 			'dateFontSz': '20px',
 			'textY': 130,
@@ -1096,7 +1093,7 @@ class node {
 		
 		//text
 		const personDatesText = new createNewElement('text', {
-			'class': 		'svgTxt',
+			'class': 		'svgDatesTxt',
 			'text-anchor': 	'middle',
 			'font-family': 	"'Josefin Sans', sans-serif",
 			'font-size': 	configs.dateFontSz,
@@ -1109,7 +1106,7 @@ class node {
 		nodeGrp.appendChild(personDatesText);
 		
 		const personNameText = new createNewElement('text', {
-			'class': 		'svgTxt',
+			'class': 		'svgNameTxt',
 			'text-anchor': 	'middle',
 			'font-family': 	"'Josefin Sans', sans-serif",
 			'font-size': 	configs.fontSz,
@@ -1138,11 +1135,10 @@ class node {
 		//nodeRelations[]
 		
 		this.oldPosition = this.getNodeTypePosition(this.tagType);
-		console.log(nodeRelations);
-		console.log(nodeRelations[6]);
-		console.log(this.tagType);
-		const oldTagType = this.tagType;
 		
+		const oldTagType = this.tagType;		
+		this.oldTag = oldTagType;
+
 		const oldRelationsIndex = nodeRelations.indexOf(oldTagType);
 		var newRelationsIndex = (direction == 'left') ? (oldRelationsIndex + 2) :
 			(direction == 'right') ? (oldRelationsIndex - 2) : '';	
@@ -1152,13 +1148,17 @@ class node {
 		} else if (newRelationsIndex > 9){
 			newRelationsIndex = newRelationsIndex % 10;
 		}
-		console.log(oldRelationsIndex);
-		console.log(newRelationsIndex);
+		//console.log(oldRelationsIndex);
+		//console.log(newRelationsIndex);		
+		//console.log(nodeRelations[newRelationsIndex]);	
 		
-		console.log(nodeRelations[newRelationsIndex]);	
 		this.newPosition = this.getNodeTypePosition(nodeRelations[newRelationsIndex]);
-		//this.tagType = nodeRelations[newRelationsIndex];	
+		this.tagType = nodeRelations[newRelationsIndex];	
 		
+		//console.log(this.oldPosition);	
+		//console.log(this.newPosition);	
+		
+		this.animateMove();
 		
 		/*
 		switch (this.tagType){
@@ -1184,6 +1184,18 @@ class node {
 			case 'focusGparentS': 
 			break;				
 		}*/
+	}
+	
+	animateMove () {		
+		const scaleUp = (this.tagType =='focus') ? 1.5 : 1;
+		Velocity(this.nodeGrp, { 
+			translateX: [this.newPosition.x , + this.oldPosition.x], 
+			translateY: [this.newPosition.y , + this.oldPosition.y], 
+			scale: scaleUp
+		}, { duration: 1000});
+		
+		
+		
 	}
 	
 }
@@ -1497,6 +1509,7 @@ function treeChange_shift(nodeObj){
 	
 	//direction right => nodes moving left
 	const direction = ( (nodeObj.tagType == 'focusParent') || (nodeObj.tagType == 'focusParentS') ) ? 'right' : (nodeObj.tagType == 'focusChild') ? 'left' : '';
+	
 	nodeObj.nodeShift(direction);
 	
 }
@@ -1597,7 +1610,11 @@ function shuffle(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-	
+
+function FAiconFail(){
+	//if script get font awesome fails, replace with png?
+	console.log("Replace Icons...");
+}
 
 /* ------ Run on Page Load -------- */
 $(document).ready(function(){	
