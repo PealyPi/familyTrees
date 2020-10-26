@@ -875,7 +875,7 @@ function interchangeTreeInfo_Tabs(){
 var nodeRelations = [
 	'focusGchild', 'focusGchildS', 'focusChild', 'focusChildS', 
 	'focus', 'focusS', 
-	'focusParent', 'focusParentS', 'focusGparent', 'focusGparentS'];
+	'focusParent', 'focusParentS', 'focusGparent', 'focusGparentS'	];
 	
 var nodeList = {
 	'nodeA': '', 'nodeAs': '', 
@@ -894,7 +894,8 @@ const rootPeople = {
 class node {
 	constructor(svg, tagType){
 		this.svg = svg;
-		this.tagType = tagType;			
+		this.tagType = tagType;	
+		this.getWhichNode();
 	}
 	/* focus:
 	this.personTag = personTag;
@@ -955,123 +956,169 @@ class node {
 	}
 	
 	initialise(personTag, famName){		
-		if (personTag != 'none'){			
-			const personData = PEOPLERELATIONS[famName][personTag];
-			const personInfo = PEOPLEINFO[famName][personTag];
+		const personData = PEOPLERELATIONS[famName][personTag] ?? {};
+		const personInfo = PEOPLEINFO[famName][personTag] ?? {};
+	
+		this.personTag = personTag;
+		this.famName = famName;
 		
-			this.personTag = personTag;
-			this.famName = famName;
+		this.node = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
+		
+		switch (this.tagType){
+			case 'focus':
+				this.whichNode = 'nodeC';					
+		
+				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';
+				
+				const rootPeopleVals = Object.values(rootPeople);
+				if (rootPeopleVals.includes(personTag)){	
+					for (const fam in rootPeople) {
+						if (rootPeople[fam] == personTag){
+							this.otherFam = (fam == 'kesby') ? 'hadkiss'
+								: (fam == 'hadkiss') ? 'kesby'
+								: (fam == 'peal') ? 'mckenzie'
+								: (fam == 'mckenzie') ? 'peal' : '';
+						}
+					}				
+					this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, this.otherFam);
+					
+				} else {
+					this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, famName);
+					
+				}
+				this.childNode = new node(this.svg, 'focusChild').initialise(this.childTag, famName);
+				
+				this.parentNode = new node(this.svg, 'focusParent').initialise(this.parentTag, famName);	
+				
+				nodeList.nodeC = this.node;
+				nodeList.nodeCs = this.spouseNode;
+				nodeList.nodeD = this.parentNode;
+				nodeList.nodeB = this.childNode;
+			break;
 			
-			switch (this.tagType){
-				case 'focus':
-					this.whichNode = 'nodeC';					
+			case 'focusParent':
+				this.whichNode = 'nodeD';
+				
+				this.spouseTag = personData.spouse ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+				
+				this.spouseNode = new node(this.svg, 'focusParentS').initialise(this.spouseTag, famName);
+				this.parentNode = new node(this.svg, 'focusGparent').initialise(this.parentTag, famName);	
+				
+				nodeList.nodeDs = this.spouseNode;
+				nodeList.nodeE = this.parentNode;
+			break;
 			
-					this.spouseTag = personData.spouse ?? 'none';
-					this.childTag = personData.childMain ?? 'none';
-					this.parentTag = personData.parentMain ?? 'none';
-					this.parentSTag = personData.parentSpouse ?? 'none';
-					
-					const rootPeopleVals = Object.values(rootPeople);
-					if (rootPeopleVals.includes(personTag)){	
-						for (const fam in rootPeople) {
-							if (rootPeople[fam] == personTag){
-								this.otherFam = (fam == 'kesby') ? 'hadkiss'
-									: (fam == 'hadkiss') ? 'kesby'
-									: (fam == 'peal') ? 'mckenzie'
-									: (fam == 'mckenzie') ? 'peal' : '';
-							}
-						}				
-						this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, this.otherFam);
-						
-					} else {
-						this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, famName);
-						
-					}
-					this.childNode = new node(this.svg, 'focusChild').initialise(this.childTag, famName);
-					this.parentNode = new node(this.svg, 'focusParent').initialise(this.parentTag, famName);	
-					
-					nodeList.nodeC = this.node;
-					nodeList.nodeCs = this.spouseNode;
-					nodeList.nodeD = this.parentNode;
-					nodeList.nodeB = this.childNode;
-				break;
+			case 'focusChild':
+				this.whichNode = 'nodeB';
 				
-				case 'focusParent':
-					this.whichNode = 'nodeD';
-					
-					this.spouseTag = personData.spouse ?? 'none';
-					this.parentTag = personData.parentMain ?? 'none';
-					
-					this.spouseNode = new node(this.svg, 'focusParentS').initialise(this.spouseTag, famName);
-					this.parentNode = new node(this.svg, 'focusGparent').initialise(this.parentTag, famName);	
-					
-					nodeList.nodeDs = this.spouseNode;
-					nodeList.nodeE = this.parentNode;
-				break;
+				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
 				
-				case 'focusChild':
-					this.whichNode = 'nodeB';
-					
-					this.spouseTag = personData.spouse ?? 'none';
-					this.childTag = personData.childMain ?? 'none';
-					
-					this.spouseNode = new node(this.svg, 'focusChildS').initialise(this.spouseTag, famName);
-					this.childNode = new node(this.svg, 'focusGchild').initialise(this.childTag, famName);	
-					
-					nodeList.nodeBs = this.spouseNode;
-					nodeList.nodeA = this.childNode;
-				break;
+				this.spouseNode = new node(this.svg, 'focusChildS').initialise(this.spouseTag, famName);
+				this.childNode = new node(this.svg, 'focusGchild').initialise(this.childTag, famName);	
 				
-				case 'focusGchild':
-					this.whichNode = 'nodeA';
-					
-					this.spouseTag = personData.spouse ?? 'none';
-					
-					this.spouseNode = new node(this.svg, 'focusGchildS').initialise(this.spouseTag, famName);
-					nodeList.nodeAs = this.spouseNode;
-				break;
-				
-				case 'focusGparent':
-					this.whichNode = 'nodeE';
-					
-					this.spouseTag = personData.spouse ?? 'none';
-					
-					this.spouseNode = new node(this.svg, 'focusGparentS').initialise(this.spouseTag, famName);
-					nodeList.nodeEs = this.spouseNode;
-				break;
-				
-				
-				case 'focusS':
-					this.whichNode = 'nodeCs';
-				break;
-				
-				case 'focusChildS':
-					this.whichNode = 'nodeBs';
-				break;
-				
-				case 'focusGchildS':
-					this.whichNode = 'nodeAs';
-				break;
-				
-				case 'focusParentS':
-					this.whichNode = 'nodeDs';
-				break;				
-				
-				case 'focusGparentS':
-					this.whichNode = 'nodeEs';
-				break;
-				
-			}
+				nodeList.nodeBs = this.spouseNode;
+				nodeList.nodeA = this.childNode;
+			break;
 			
-			this.node = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
+			case 'focusGchild':
+				this.whichNode = 'nodeA';	
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+				
+				this.spouseTag = personData.spouse ?? 'none';				
+				this.spouseNode = new node(this.svg, 'focusGchildS').initialise(this.spouseTag, famName);
+				nodeList.nodeAs = this.spouseNode;
+				
+			break;
 			
-			return this;
+			case 'focusGparent':
+				this.whichNode = 'nodeE';
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+				
+				this.spouseTag = personData.spouse ?? 'none';					
+				this.spouseNode = new node(this.svg, 'focusGparentS').initialise(this.spouseTag, famName);
+				nodeList.nodeEs = this.spouseNode;
+			break;
+			
+			
+			case 'focusS':
+				this.whichNode = 'nodeCs';
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+			case 'focusChildS':
+				this.whichNode = 'nodeBs';
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+			case 'focusGchildS':
+				this.whichNode = 'nodeAs';
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+			case 'focusParentS':
+				this.whichNode = 'nodeDs';
+			break;				
+			
+			case 'focusGparentS':
+				this.whichNode = 'nodeEs';
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
 		}
+		return this;
 		
 	}
 	
+	getWhichNode(){		
+		switch (this.tagType){
+			case 'focus':
+				this.whichNode = 'nodeC';	
+			break;
+			
+			case 'focusParent':
+				this.whichNode = 'nodeD';
+			break;
+			
+			case 'focusChild':
+				this.whichNode = 'nodeB';
+			break;
+			
+			case 'focusGchild':
+				this.whichNode = 'nodeA';					
+			break;
+			
+			case 'focusGparent':
+				this.whichNode = 'nodeE';
+			break;			
+			
+			case 'focusS':
+				this.whichNode = 'nodeCs';
+			break;
+			
+			case 'focusChildS':
+				this.whichNode = 'nodeBs';
+			break;
+			
+			case 'focusGchildS':
+				this.whichNode = 'nodeAs';
+			break;
+			
+			case 'focusParentS':
+				this.whichNode = 'nodeDs';
+			break;				
+			
+			case 'focusGparentS':
+				this.whichNode = 'nodeEs';
+			break;			
+		}
+	}
+	
 	createInitialNode(personTag, personInfo, startXY){
-		
 		const nodeScale = (this.tagType == 'focus') ? 1.5 : 1; 
 		const nodeGrpContainer = new createNewElement('g', {
 			'id': this.whichNode + '_GrpContainer',
@@ -1098,53 +1145,54 @@ class node {
 			'datesY': 100
 		};
 		
-		//text
-		const personDatesText = new createNewElement('text', {
-			'class': 		'svgDatesTxt',
-			'text-anchor': 	'middle',
-			'font-family': 	"'Josefin Sans', sans-serif",
-			'font-size': 	configs.dateFontSz,
-			'fill':	'white',
-			'x': 	0,	
-			'y': 	configs.datesY,	
+		if (personTag =="none"){
+			nodeGrp.setAttribute("visibility", "hidden");
 			
-			'textContent': 	personInfo.dates,			
-		});	
-		nodeGrp.appendChild(personDatesText);
-		
-		const personNameText = new createNewElement('text', {
-			'class': 		'svgNameTxt',
-			'text-anchor': 	'middle',
-			'font-family': 	"'Josefin Sans', sans-serif",
-			'font-size': 	configs.fontSz,
-			'fill':	'white',
-			'x': 	0,	
-			'y': 	configs.textY,	
+		} else {
+			//text
+			const personDatesText = new createNewElement('text', {
+				'class': 		'svgDatesTxt',
+				'text-anchor': 	'middle',
+				'font-family': 	"'Josefin Sans', sans-serif",
+				'font-size': 	configs.dateFontSz,
+				'fill':	'white',
+				'x': 	0,	
+				'y': 	configs.datesY,	
+				
+				'textContent': 	personInfo.dates,			
+			});	
+			nodeGrp.appendChild(personDatesText);
 			
-			'textContent': 	personInfo.name,			
-		});	
-		nodeGrp.appendChild(personNameText);
+			const personNameText = new createNewElement('text', {
+				'class': 		'svgNameTxt',
+				'text-anchor': 	'middle',
+				'font-family': 	"'Josefin Sans', sans-serif",
+				'font-size': 	configs.fontSz,
+				'fill':	'white',
+				'x': 	0,	
+				'y': 	configs.textY,	
+				
+				'textContent': 	personInfo.name,			
+			});	
+			nodeGrp.appendChild(personNameText);
+			
+			//image
+			
+			//add click event for non-focus
+			if (this.tagType != 'focus'){
+				circleGrp.addEventListener("click", (evnt) => treeChangeView(evnt, 'treeNode'));
+			}
+		}	
 		
-		//image
-		
-		//add click event for non-focus
-		if (this.tagType != 'focus'){
-			circleGrp.addEventListener("click", (evnt) => treeChangeView(evnt, 'treeNode'));
-		}
 	}
 	
-	nodeShift(direction){
-		
+	nodeShift(direction, first = false){
 		//direction right => nodes moving left
-		//direction right => relations index -ve
-		
-		//change tagType
-		//nodeRelations[]
-		
+		//direction right => relations index -ve	
 		this.oldPosition = this.getNodeTypePosition(this.tagType);
 		
 		const oldTagType = this.tagType;		
-		this.oldTag = oldTagType;
+		this.oldTag = oldTagType;	
 
 		const oldRelationsIndex = nodeRelations.indexOf(oldTagType);
 		var newRelationsIndex = (direction == 'left') ? (oldRelationsIndex + 2) :
@@ -1155,42 +1203,41 @@ class node {
 		} else if (newRelationsIndex > 9){
 			newRelationsIndex = newRelationsIndex % 10;
 		}
-		//console.log(oldRelationsIndex);
-		//console.log(newRelationsIndex);		
-		//console.log(nodeRelations[newRelationsIndex]);	
 		
 		this.newPosition = this.getNodeTypePosition(nodeRelations[newRelationsIndex]);
-		this.tagType = nodeRelations[newRelationsIndex];	
-		
-		//console.log(this.oldPosition);	
-		//console.log(this.newPosition);	
+		this.tagType = nodeRelations[newRelationsIndex];			
+		this.newTag = this.tagType;
 		
 		this.animateMove();
 		
-		/*
-		switch (this.tagType){
-			case 'focusGchild': 
+		switch (first){
+			case 'focusChild': //=> direction left
+				//set visibility of gChild
+				for (const nodeLetter in nodeList) {
+					if (nodeLetter != this.whichNode){
+						nodeList[nodeLetter].nodeShift(direction);
+					}
+				}				
+			break;		
+			case 'focusParent': //=> direction right
+				//set visibility of gParent
+				const thisLetter = this.whichNode;
+				const thisLetterIndex = nodeLetterOrder.indexOf(thisLetter);
+				const thisParentLetter = nodeLetterOrder[(thisLetterIndex + 2) % 10];
+				const getThisParent = nodeList[thisParentLetter];
 				
-			break;				
-			case 'focusGchildS': 
-			break;			
-			case 'focusChild': 
-			break;				
-			case 'focusChildS': 
-			break;						
-			case 'focus': 
-			break;			
-			case 'focusS': 
-			break;			
-			case 'focusParent': 
+				getThisParent.nodeGrpContainer.setAttribute("visibility", "visible");
+				
+				for (const nodeLetter in nodeList) {
+					if (nodeLetter != this.whichNode){
+						nodeList[nodeLetter].nodeShift(direction);
+					}
+				}
 			break;				
 			case 'focusParentS': 
-			break;				
-			case 'focusGparent': 
-			break;				
-			case 'focusGparentS': 
-			break;				
-		}*/
+				//special - changing main line
+			break;	
+		}
 	}
 	
 	animateMove () {		
@@ -1198,11 +1245,11 @@ class node {
 		Velocity(this.nodeGrpContainer, { 
 			translateX: [this.newPosition.x , + this.oldPosition.x], 
 			translateY: [this.newPosition.y , + this.oldPosition.y], 
-		}, { duration: 1000});
+		}, { duration: 1000, queue: false,});
 		
 		Velocity(this.nodeGrp, { 
 			scale: scaleUp
-		}, { duration: 1000});
+		}, { duration: 1000, queue: false,});
 		
 		
 		
@@ -1518,9 +1565,10 @@ function treeChange_shift(nodeObj){
 	//nodesShiftLeft(newFocus);
 	
 	//direction right => nodes moving left
+	console.log(nodeObj);
 	const direction = ( (nodeObj.tagType == 'focusParent') || (nodeObj.tagType == 'focusParentS') ) ? 'right' : (nodeObj.tagType == 'focusChild') ? 'left' : '';
 	
-	nodeObj.nodeShift(direction);
+	nodeObj.nodeShift(direction, nodeObj.tagType);
 	
 }
 
@@ -1532,6 +1580,7 @@ function treeChange_focusPerson(personTag, famName){
 	//if first click, initialise
 	if (!svgDiv.querySelector(".nodeCircleGrp")){
 		initialiseNodes(svgDiv, personTag, famName);
+		console.log(nodeList);
 	} else {
 		//if new person not currently in nodes, 
 		//exitNodes, recreate with new focus;		
