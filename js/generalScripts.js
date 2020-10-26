@@ -885,6 +885,23 @@ var nodeList = {
 	'nodeE': '', 'nodeEs': ''	};
 	
 var nodeLetterOrder = ['nodeA', 'nodeAs', 'nodeB', 'nodeBs', 'nodeC', 'nodeCs', 'nodeD', 'nodeDs', 'nodeE', 'nodeEs'];
+
+var nodeLetterTags = {
+	'focusGchild': 'nodeA',  'focusGchildS' : 'nodeAs', 
+	'focusChild': 'nodeB', 	 'focusChildS' : 'nodeBs', 
+	'focus': 'nodeC', 		 'focusS' : 'nodeCs', 
+	'focusParent': 'nodeD',  'focusParentS' : 'nodeDs', 
+	'focusGparent': 'nodeE', 'focusGparentS' : 'nodeEs'
+};
+function reInitialiseNodeLetterTags(){
+	nodeLetterTags = {
+		'focusGchild': 'nodeA',  'focusGchildS' : 'nodeAs', 
+		'focusChild': 'nodeB', 	 'focusChildS' : 'nodeBs', 
+		'focus': 'nodeC', 		 'focusS' : 'nodeCs', 
+		'focusParent': 'nodeD',  'focusParentS' : 'nodeDs', 
+		'focusGparent': 'nodeE', 'focusGparentS' : 'nodeEs'
+	};
+}
 	
 const rootPeople = {
 	'kesby': 'roseHadkiss',
@@ -962,12 +979,10 @@ class node {
 		this.personTag = personTag;
 		this.famName = famName;
 		
-		this.node = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
+		this.nodeGrpContainer = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
 		
 		switch (this.tagType){
-			case 'focus':
-				this.whichNode = 'nodeC';					
-		
+			case 'focus':		
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
@@ -999,11 +1014,11 @@ class node {
 				nodeList.nodeB = this.childNode;
 			break;
 			
-			case 'focusParent':
-				this.whichNode = 'nodeD';
-				
+			case 'focusParent':				
 				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';
 				
 				this.spouseNode = new node(this.svg, 'focusParentS').initialise(this.spouseTag, famName);
 				this.parentNode = new node(this.svg, 'focusGparent').initialise(this.parentTag, famName);	
@@ -1012,11 +1027,11 @@ class node {
 				nodeList.nodeE = this.parentNode;
 			break;
 			
-			case 'focusChild':
-				this.whichNode = 'nodeB';
-				
+			case 'focusChild':				
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';
 				
 				this.spouseNode = new node(this.svg, 'focusChildS').initialise(this.spouseTag, famName);
 				this.childNode = new node(this.svg, 'focusGchild').initialise(this.childTag, famName);	
@@ -1026,46 +1041,47 @@ class node {
 			break;
 			
 			case 'focusGchild':
-				this.whichNode = 'nodeA';	
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 				
-				this.spouseTag = personData.spouse ?? 'none';				
+				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';
+				
 				this.spouseNode = new node(this.svg, 'focusGchildS').initialise(this.spouseTag, famName);
 				nodeList.nodeAs = this.spouseNode;
 				
 			break;
 			
 			case 'focusGparent':
-				this.whichNode = 'nodeE';
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 				
-				this.spouseTag = personData.spouse ?? 'none';					
+				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';
+				
 				this.spouseNode = new node(this.svg, 'focusGparentS').initialise(this.spouseTag, famName);
 				nodeList.nodeEs = this.spouseNode;
 			break;
 			
 			
 			case 'focusS':
-				this.whichNode = 'nodeCs';
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
 			case 'focusChildS':
-				this.whichNode = 'nodeBs';
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
 			case 'focusGchildS':
-				this.whichNode = 'nodeAs';
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
 			case 'focusParentS':
-				this.whichNode = 'nodeDs';
 			break;				
 			
 			case 'focusGparentS':
-				this.whichNode = 'nodeEs';
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
 			
@@ -1126,7 +1142,6 @@ class node {
 			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px)',
 		});
 		this.svg.appendChild(nodeGrpContainer);
-		this.nodeGrpContainer = nodeGrpContainer;
 		
 		const nodeGrp = new createNewElement('g', {
 			'id': this.whichNode + '_Grp',
@@ -1145,44 +1160,49 @@ class node {
 			'datesY': 100
 		};
 		
+		//text
+		const personDatesText = new createNewElement('text', {
+			'class': 		'svgDatesTxt',
+			'text-anchor': 	'middle',
+			'font-family': 	"'Josefin Sans', sans-serif",
+			'font-size': 	configs.dateFontSz,
+			'fill':	'white',
+			'x': 	0,	
+			'y': 	configs.datesY,	
+			
+			'textContent': 	(personInfo.dates ?? ''),			
+		});	
+		nodeGrp.appendChild(personDatesText);
+		
+		const personNameText = new createNewElement('text', {
+			'class': 		'svgNameTxt',
+			'text-anchor': 	'middle',
+			'font-family': 	"'Josefin Sans', sans-serif",
+			'font-size': 	configs.fontSz,
+			'fill':	'white',
+			'x': 	0,	
+			'y': 	configs.textY,	
+			
+			'textContent': 	(personInfo.name ?? ''),			
+		});	
+		nodeGrp.appendChild(personNameText);
+		
+		this.personDatesText = personDatesText;
+		this.personNameText = personNameText;
+		
+		//image
+		
+		
 		if (personTag =="none"){
 			nodeGrp.setAttribute("visibility", "hidden");
 			
 		} else {
-			//text
-			const personDatesText = new createNewElement('text', {
-				'class': 		'svgDatesTxt',
-				'text-anchor': 	'middle',
-				'font-family': 	"'Josefin Sans', sans-serif",
-				'font-size': 	configs.dateFontSz,
-				'fill':	'white',
-				'x': 	0,	
-				'y': 	configs.datesY,	
-				
-				'textContent': 	personInfo.dates,			
-			});	
-			nodeGrp.appendChild(personDatesText);
-			
-			const personNameText = new createNewElement('text', {
-				'class': 		'svgNameTxt',
-				'text-anchor': 	'middle',
-				'font-family': 	"'Josefin Sans', sans-serif",
-				'font-size': 	configs.fontSz,
-				'fill':	'white',
-				'x': 	0,	
-				'y': 	configs.textY,	
-				
-				'textContent': 	personInfo.name,			
-			});	
-			nodeGrp.appendChild(personNameText);
-			
-			//image
-			
-			//add click event for non-focus
-			if (this.tagType != 'focus'){
-				circleGrp.addEventListener("click", (evnt) => treeChangeView(evnt, 'treeNode'));
-			}
-		}	
+			nodeGrp.setAttribute("visibility", "");
+		}
+		//add click event for non-focus
+		circleGrp.addEventListener("click", (evnt) => treeChangeView(evnt, 'treeNode'));
+		
+		return nodeGrpContainer;
 		
 	}
 	
@@ -1190,7 +1210,6 @@ class node {
 		//direction right => nodes moving left
 		//direction right => relations index -ve	
 		this.oldPosition = this.getNodeTypePosition(this.tagType);
-		
 		const oldTagType = this.tagType;		
 		this.oldTag = oldTagType;	
 
@@ -1206,33 +1225,84 @@ class node {
 		
 		this.newPosition = this.getNodeTypePosition(nodeRelations[newRelationsIndex]);
 		this.tagType = nodeRelations[newRelationsIndex];			
-		this.newTag = this.tagType;
+		this.newTag = this.tagType;		
+		
+		//change global nodestore
+		nodeLetterTags[this.tagType] = this.whichNode;
 		
 		this.animateMove();
 		
 		switch (first){
 			case 'focusChild': //=> direction left
-				//set visibility of gChild
+				//set visibility 
+				const getGchildLetter = nodeLetterTags['focusGchild'];
+				nodeList[getGchildLetter].nodeGrpContainer.setAttribute("visibility", "visible");			
+				
+				//set new gparent info
+				//if famName change... other
+				const getOldGparentLetter = nodeLetterTags['focusGparent'];
+				const getOldGparentSLetter = nodeLetterTags['focusGparentS'];
+				const oldgParentNode = nodeList[getOldGparentLetter];
+				const oldgParentSNode = nodeList[getOldGparentSLetter];
+				
+				const getOldParentLetter = nodeLetterTags['focusParent'];
+				
 				for (const nodeLetter in nodeList) {
-					if (nodeLetter != this.whichNode){
-						nodeList[nodeLetter].nodeShift(direction);
-					}
-				}				
+					if (nodeLetter != this.whichNode)
+						nodeList[nodeLetter].nodeShift(direction);					
+				}
+				
+				const newGchildData = PEOPLERELATIONS[this.famName][this.childTag] ?? {};
+				const newGchildName = newGchildData.childMain ?? 'none';
+				
+				const newGchildSData = PEOPLERELATIONS[this.famName][newGchildName] ?? {};
+				const newGchildSName = newGchildSData.spouse ?? 'none';
+				
+				//console.log(newGchildName + ", " + newGchildSName);
+				const newGchildTag = 'focusGchild';
+				const newGchildSTag = 'focusGchildS';			
+				
+				oldgParentNode.nodeSetPerson(newGchildName, this.famName, newGchildTag);
+				oldgParentSNode.nodeSetPerson(newGchildSName, this.famName, newGchildSTag);
+				
+				setTimeout(()=> {nodeList[getOldParentLetter].nodeGrpContainer.setAttribute("visibility", "hidden");}, 1000);
+				
 			break;		
 			case 'focusParent': //=> direction right
-				//set visibility of gParent
-				const thisLetter = this.whichNode;
-				const thisLetterIndex = nodeLetterOrder.indexOf(thisLetter);
-				const thisParentLetter = nodeLetterOrder[(thisLetterIndex + 2) % 10];
-				const getThisParent = nodeList[thisParentLetter];
+				//set visibility of gParent and gChildren
+				const getGparentLetter = nodeLetterTags['focusGparent'];
+				nodeList[getGparentLetter].nodeGrpContainer.setAttribute("visibility", "visible");
 				
-				getThisParent.nodeGrpContainer.setAttribute("visibility", "visible");
+				
+				//set new gparent info
+				//if famName change... other				
+				const getOldGchildLetter = nodeLetterTags['focusGchild'];
+				const getOldGchildSLetter = nodeLetterTags['focusGchildS'];
+				const oldgChildNode = nodeList[getOldGchildLetter];
+				const oldgChildSNode = nodeList[getOldGchildSLetter];
+				
+				const getOldChildLetter = nodeLetterTags['focusChild'];
 				
 				for (const nodeLetter in nodeList) {
-					if (nodeLetter != this.whichNode){
-						nodeList[nodeLetter].nodeShift(direction);
-					}
+					if (nodeLetter != this.whichNode)
+						nodeList[nodeLetter].nodeShift(direction);					
 				}
+				
+				const newGparentData = PEOPLERELATIONS[this.famName][this.parentTag] ?? {};
+				const newGparentName = newGparentData.parentMain ?? 'none';
+				const newGparentSName = newGparentData.parentSpouse ?? 'none';
+				
+				const newGparentTag = 'focusGparent';
+				const newGparentSTag = 'focusGparentS';				
+				
+				oldgChildNode.nodeSetPerson(newGparentName, this.famName, newGparentTag);
+				oldgChildSNode.nodeSetPerson(newGparentSName, this.famName, newGparentSTag);
+				
+				setTimeout(()=> {nodeList[getOldChildLetter].nodeGrpContainer.setAttribute("visibility", "hidden");}, 1000);
+				
+				
+				
+				
 			break;				
 			case 'focusParentS': 
 				//special - changing main line
@@ -1249,12 +1319,88 @@ class node {
 		
 		Velocity(this.nodeGrp, { 
 			scale: scaleUp
-		}, { duration: 1000, queue: false,});
-		
-		
-		
+		}, { duration: 1000, queue: false,});		
 	}
 	
+	nodeSetPerson(newName, newFam, newTag){
+		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
+		const personInfo = PEOPLEINFO[newFam][newName] ?? {};	
+		
+		this.personTag = newName;
+		this.famName = newFam;
+		this.tagType = newTag;			
+		
+		this.spouseTag = personData.spouse ?? 'none';
+		this.childTag = personData.childMain ?? 'none';
+		this.parentTag = personData.parentMain ?? 'none';
+		this.parentSTag = personData.parentSpouse ?? 'none';		
+		
+		if (this.personTag == 'none'){
+			this.nodeGrp.setAttribute("visibility", "hidden");
+		} else {
+			this.nodeGrp.setAttribute("visibility", "");			
+		}
+		
+		//change node data
+		const newNameText  = personInfo.name ?? '';
+		const newDatesText  = personInfo.dates ?? '';
+		this.personNameText.textContent = newNameText;
+		this.personDatesText.textContent = newDatesText;
+		
+		switch (this.tagType){
+			case 'focus':		
+				this.nodeGrpContainer.setAttribute("visibility", "");
+				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';
+			break;
+			
+			case 'focusParent':				
+				this.nodeGrpContainer.setAttribute("visibility", "");
+				this.spouseTag = personData.spouse ?? 'none';
+				this.parentTag = personData.parentMain ?? 'none';
+			break;
+			
+			case 'focusChild':				
+				this.nodeGrpContainer.setAttribute("visibility", "");
+				this.spouseTag = personData.spouse ?? 'none';
+				this.childTag = personData.childMain ?? 'none';
+			break;
+			
+			case 'focusGchild':
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+				this.spouseTag = personData.spouse ?? 'none';					
+			break;
+			
+			case 'focusGparent':
+				this.nodeGrpContainer.setAttribute("visibility", "hidden"); 
+				this.spouseTag = personData.spouse ?? 'none';				
+			break;			
+			
+			case 'focusS':
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+			case 'focusChildS':
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+			case 'focusGchildS':
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+			case 'focusParentS':
+				this.nodeGrpContainer.setAttribute("visibility", "");
+			break;				
+			
+			case 'focusGparentS':
+				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+			break;
+			
+		}
+		return this;
+	}
 }
 
 
@@ -1546,7 +1692,11 @@ function treeChangeView(event, type){
 			const nodeLetter = btn.id.replace("_circleGrp", "");
 			
 			const nodeObj = nodeList[nodeLetter];
-			treeChange_shift(nodeObj);
+			if (nodeObj.tagType != 'focus'){
+				treeChange_shift(nodeObj);
+			} else {
+				console.log("Focus clicked");
+			}
 		break;
 	}
 	
@@ -1565,11 +1715,10 @@ function treeChange_shift(nodeObj){
 	//nodesShiftLeft(newFocus);
 	
 	//direction right => nodes moving left
-	console.log(nodeObj);
 	const direction = ( (nodeObj.tagType == 'focusParent') || (nodeObj.tagType == 'focusParentS') ) ? 'right' : (nodeObj.tagType == 'focusChild') ? 'left' : '';
 	
 	nodeObj.nodeShift(direction, nodeObj.tagType);
-	
+	//console.log(nodeLetterTags);
 }
 
 function treeChange_focusPerson(personTag, famName){
@@ -1580,7 +1729,6 @@ function treeChange_focusPerson(personTag, famName){
 	//if first click, initialise
 	if (!svgDiv.querySelector(".nodeCircleGrp")){
 		initialiseNodes(svgDiv, personTag, famName);
-		console.log(nodeList);
 	} else {
 		//if new person not currently in nodes, 
 		//exitNodes, recreate with new focus;		
