@@ -1057,12 +1057,15 @@ class node {
 			
 			// spouses - create line 
 			case 'focusS':
+				this.createSpouseLine();
 			break;
 			
 			case 'focusChildS':
+				this.createSpouseLine();
 			break;
 			
 			case 'focusGchildS':
+				this.createSpouseLine();
 			break;
 			
 			case 'focusParentS':
@@ -1070,6 +1073,7 @@ class node {
 			break;				
 			
 			case 'focusGparentS':
+				this.createSpouseLine();
 			break;
 		}
 		return this;
@@ -1198,11 +1202,38 @@ class node {
 		
 	}
 	
-	createSpouseLine(){
-		const nodePos = this.getNodeTypePosition(this.tagType);
-		const lineGrp = treeSVGline(this.nodeGrpContainer, {'x': -150, 'y': -200}, {'x': 0, 'y': 0}, 'spouseLine');
+	createSpouseLine(){		
+		const linePathD = 'm 0 0 h -120 v -200';
+		const lineDefine = {
+			'fill': 'none',
+			'stroke-width': 6,	
+			'd': linePathD
+		}
+		const shadowLineDefine = Object.assign({}, lineDefine, {
+			'class': 'lineShadow',
+			'stroke': '#000',
+			'stroke-opacity': 0.1,
+		});
 		
-		this.spouseLineGrp = lineGrp;
+		const lineGrp = new createNewElement('g', {
+			'class': 'spouseLine_GRP',
+		});
+		const mainLine = new createNewElement('path', 
+			Object.assign({}, lineDefine, {
+				'class': 'spouseLine',
+				'stroke': '#FF928B'	
+		}));
+		const mainLineShadow1 = new createNewElement('line', shadowLineDefine);
+		const mainLineShadow2 = new createNewElement('line', shadowLineDefine);
+		
+		this.nodeGrpContainer.prepend(lineGrp);
+		lineGrp.appendChild(mainLine);
+		lineGrp.prepend(mainLineShadow1);
+		lineGrp.prepend(mainLineShadow2);
+		
+		mainLineShadow1.setAttribute('transform', 'translate(-1.5, 1.5)');
+		mainLineShadow2.setAttribute('transform', 'translate(-3, 3)');
+		
 	}
 	
 	nodeShift(direction, first = false){
@@ -1547,7 +1578,7 @@ function createSVG(){
 	const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
 	
 	//line
-	const lineGrp = treeSVGline(svg, {'x': - 10, 'y': (svgCenterPt.y)}, {'x': (pageWidth + 10), 'y': (svgCenterPt.y)}, 'mainLine');
+	const lineGrp = treeSVGline(svg, {'x': - 10, 'y': (svgCenterPt.y)}, {'x': (pageWidth + 10), 'y': (svgCenterPt.y)});
 	
 	lineGrp.setAttribute("transform", "translate(0 -70)");	
 	setFamilyText(svgDiv,'family');	
@@ -1563,20 +1594,10 @@ function createSVG(){
 	
 }
 
-function treeSVGline(svg, startXY, endXY, type){
+function treeSVGline(svg, startXY, endXY){
 	
-	var transXdir, transYdir, strokeWdth, className;
-	switch (type){
-		default:
-			transXdir = 1;	transYdir = 1;
-			strokeWdth = 8; className = 'mainLine';
-		break;
-		case 'spouseLine':
-			transXdir = -1;	transYdir = 1;
-			strokeWdth = 6; className = 'spouseLine';
-		break;				
-	}
-	
+	var strokeWdth = 8, className = 'mainLine', 
+		transXdir = 1, transYdir = 1 ;
 	const lineDefine = {
 		'x1': startXY.x, 'x2': endXY.x,
 		'y1': startXY.y, 'y2': endXY.y,
@@ -1730,11 +1751,11 @@ function treeChangeView(event, type){
 				if (nodeObj.tagType != 'focus'){
 					treeChange_shift(nodeObj);
 				} else {
-					console.log("Focus clicked");
+					//console.log("Focus clicked");
 				}
 			break;
 		}
-		setTimeout(()=> {changingTreeView = false;}, 3000);
+		setTimeout(()=> {changingTreeView = false;}, 2000);
 	}
 }
 
