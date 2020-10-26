@@ -914,16 +914,6 @@ class node {
 		this.tagType = tagType;	
 		this.getWhichNode();
 	}
-	/* focus:
-	this.personTag = personTag;
-	this.famName = famName;
-	this.whichNode = 'nodeC';	
-	
-	this.spouseTag = personData.spouse ?? 'none';
-	this.childTag = personData.childMain ?? 'none';
-	this.parentTag = personData.parentMain ?? 'none';
-	this.parentSTag = personData.parentSpouse ?? 'none';
-	*/
 	
 	getNodeTypePosition(tagType){		
 		const svgVB = this.svg.viewBox.baseVal;
@@ -931,7 +921,7 @@ class node {
 		const svgHeight = svgVB.height;
 		
 		const midLine = (svgHeight/2)-50;
-		const spouseLine = (3*svgHeight/2)-50;
+		const spouseLine = (svgHeight/2)+200;
 		
 		const childX = 115;
 		const parentX = svgWidth - childX;
@@ -1041,7 +1031,7 @@ class node {
 			break;
 			
 			case 'focusGchild':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+				this.nodeGrpContainer.style.opacity = 0;
 				
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
@@ -1054,7 +1044,7 @@ class node {
 			break;
 			
 			case 'focusGparent':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+				this.nodeGrpContainer.style.opacity = 0;
 				
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
@@ -1065,7 +1055,7 @@ class node {
 				nodeList.nodeEs = this.spouseNode;
 			break;
 			
-			
+			/*
 			case 'focusS':
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
@@ -1083,7 +1073,7 @@ class node {
 			
 			case 'focusGparentS':
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;
+			break;*/
 			
 		}
 		return this;
@@ -1136,10 +1126,12 @@ class node {
 	
 	createInitialNode(personTag, personInfo, startXY){
 		const nodeScale = (this.tagType == 'focus') ? 2 : 1; 
+		const nodeOpacity = (nodeRelations.indexOf(this.tagType) % 2 == 1) ? (this.tagType == "focusParentS") ? 0.6 : 0 : 1;
+		
 		const nodeGrpContainer = new createNewElement('g', {
 			'id': this.whichNode + '_GrpContainer',
 			'class': 'nodeGrpContainer',
-			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px)',
+			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px); opacity: '+ nodeOpacity,
 		});
 		this.svg.appendChild(nodeGrpContainer);
 		
@@ -1236,7 +1228,7 @@ class node {
 			case 'focusChild': //=> direction left
 				//set visibility 
 				const getGchildLetter = nodeLetterTags['focusGchild'];
-				nodeList[getGchildLetter].nodeGrpContainer.setAttribute("visibility", "visible");			
+				nodeList[getGchildLetter].nodeGrpContainer.style.opacity = 1;
 				
 				//set new gparent info
 				//if famName change... other
@@ -1265,13 +1257,15 @@ class node {
 				oldgParentNode.nodeSetPerson(newGchildName, this.famName, newGchildTag);
 				oldgParentSNode.nodeSetPerson(newGchildSName, this.famName, newGchildSTag);
 				
-				setTimeout(()=> {nodeList[getOldParentLetter].nodeGrpContainer.setAttribute("visibility", "hidden");}, 1000);
+				setTimeout(()=> {
+					nodeList[getOldParentLetter].nodeGrpContainer.style.opacity = 0;
+				}, 1000);
 				
 			break;		
 			case 'focusParent': //=> direction right
 				//set visibility of gParent and gChildren
 				const getGparentLetter = nodeLetterTags['focusGparent'];
-				nodeList[getGparentLetter].nodeGrpContainer.setAttribute("visibility", "visible");
+				nodeList[getGparentLetter].nodeGrpContainer.style.opacity = 1;
 				
 				
 				//set new gparent info
@@ -1298,7 +1292,9 @@ class node {
 				oldgChildNode.nodeSetPerson(newGparentName, this.famName, newGparentTag);
 				oldgChildSNode.nodeSetPerson(newGparentSName, this.famName, newGparentSTag);
 				
-				setTimeout(()=> {nodeList[getOldChildLetter].nodeGrpContainer.setAttribute("visibility", "hidden");}, 1000);
+				setTimeout(()=> {
+					nodeList[getOldChildLetter].nodeGrpContainer.style.opacity = 0;
+				}, 1000);
 				
 				
 				
@@ -1311,7 +1307,7 @@ class node {
 	}
 	
 	animateMove () {		
-		const scaleUp = (this.tagType =='focus') ? 1.5 : 1;
+		const scaleUp = (this.tagType =='focus') ? 2 : 1;
 		Velocity(this.nodeGrpContainer, { 
 			translateX: [this.newPosition.x , + this.oldPosition.x], 
 			translateY: [this.newPosition.y , + this.oldPosition.y], 
@@ -1319,7 +1315,18 @@ class node {
 		
 		Velocity(this.nodeGrp, { 
 			scale: scaleUp
-		}, { duration: 1000, queue: false,});		
+		}, { duration: 1000, queue: false,});
+		
+		if (this.oldTag == "focusParentS"){
+			Velocity(this.nodeGrpContainer, {
+				opacity: 0, 
+			}, { duration: 1000, queue: false,});
+			
+		} else if (this.tagType == "focusParentS"){
+			Velocity(this.nodeGrpContainer, {
+				opacity: 0.6, 
+			}, { duration: 1000, queue: false,});
+		}
 	}
 	
 	nodeSetPerson(newName, newFam, newTag){
@@ -1349,7 +1356,8 @@ class node {
 		
 		switch (this.tagType){
 			case 'focus':		
-				this.nodeGrpContainer.setAttribute("visibility", "");
+				//this.nodeGrpContainer.setAttribute("visibility", "");				
+		
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
@@ -1357,27 +1365,27 @@ class node {
 			break;
 			
 			case 'focusParent':				
-				this.nodeGrpContainer.setAttribute("visibility", "");
+				//this.nodeGrpContainer.setAttribute("visibility", "");
 				this.spouseTag = personData.spouse ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
 			break;
 			
 			case 'focusChild':				
-				this.nodeGrpContainer.setAttribute("visibility", "");
+				//this.nodeGrpContainer.setAttribute("visibility", "");
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
 			break;
 			
 			case 'focusGchild':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
+				//this.nodeGrpContainer.setAttribute("visibility", "hidden");
 				this.spouseTag = personData.spouse ?? 'none';					
 			break;
 			
 			case 'focusGparent':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden"); 
+				//this.nodeGrpContainer.setAttribute("visibility", "hidden"); 
 				this.spouseTag = personData.spouse ?? 'none';				
 			break;	
-			
+			/*
 			case 'focusS':
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
 			break;
@@ -1396,7 +1404,7 @@ class node {
 			
 			case 'focusGparentS':
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;
+			break;*/
 			
 		}
 		return this;
