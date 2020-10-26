@@ -1135,7 +1135,7 @@ class node {
 	}
 	
 	createInitialNode(personTag, personInfo, startXY){
-		const nodeScale = (this.tagType == 'focus') ? 1.5 : 1; 
+		const nodeScale = (this.tagType == 'focus') ? 2 : 1; 
 		const nodeGrpContainer = new createNewElement('g', {
 			'id': this.whichNode + '_GrpContainer',
 			'class': 'nodeGrpContainer',
@@ -1154,10 +1154,10 @@ class node {
 		const circleGrp = new nodeCircle(nodeGrp).createCircle(this.whichNode);		
 		
 		var configs = {
-			'fontSz': '24px',
-			'dateFontSz': '20px',
-			'textY': 130,
-			'datesY': 100
+			'fontSz': '20px',
+			'dateFontSz': '16px',
+			'textY': 95,
+			'datesY': 70
 		};
 		
 		//text
@@ -1376,7 +1376,7 @@ class node {
 			case 'focusGparent':
 				this.nodeGrpContainer.setAttribute("visibility", "hidden"); 
 				this.spouseTag = personData.spouse ?? 'none';				
-			break;			
+			break;	
 			
 			case 'focusS':
 				this.nodeGrpContainer.setAttribute("visibility", "hidden");
@@ -1412,8 +1412,8 @@ class nodeCircle {
 	createCircle(whichNode){
 		//this.positionXY = positionXY;
 		
-		const circleRadius = 80;
-		const circleBorder = 6;
+		const circleRadius = 50;
+		const circleBorder = 4;
 		const circleFullWidth = circleRadius + circleBorder;
 		
 		
@@ -1664,42 +1664,46 @@ function linkingTreeIcons(){
 	
 }
 
+var changingTreeView = false;
 function treeChangeView(event, type){
 	//changing to sibling/child/ normal view
-	var btn = event.target;
-	if ((btn.tagName == "DIV") || (btn.tagName == "I")){
-		btn = $(btn).parents("button")[0];
+	if (!changingTreeView){
+		changingTreeView = true;
+		var btn = event.target;
+		if ((btn.tagName == "DIV") || (btn.tagName == "I")){
+			btn = $(btn).parents("button")[0];
+		}
+		
+		switch (type){
+			case 'famView':
+				const whichFamType = (btn.classList.contains("siblingIcon_button")) ? 'sibling' 
+					: (btn.classList.contains("childrenIcon_button")) ? 'children' : 'tree';
+				treeChange_famView(btn, whichFamType);
+			break;
+			case 'arrows':
+				const whichArrow = (btn.classList.contains("leftArrow_button")) ? 'left' : 'right';
+				treeChange_focusArrows(btn, whichArrow);
+			break;
+			case 'zoom':
+				const whichZoom = (btn.classList.contains("zoomMinus")) ? 'minus' : 'plus';
+				treeChange_zoom(btn, whichZoom);
+			break;
+			case 'treeNode':
+				if (btn.tagName == "circle") {
+					btn = btn.parentElement;
+				}
+				const nodeLetter = btn.id.replace("_circleGrp", "");
+				
+				const nodeObj = nodeList[nodeLetter];
+				if (nodeObj.tagType != 'focus'){
+					treeChange_shift(nodeObj);
+				} else {
+					console.log("Focus clicked");
+				}
+			break;
+		}
+		setTimeout(()=> {changingTreeView = false;}, 3000);
 	}
-	
-	switch (type){
-		case 'famView':
-			const whichFamType = (btn.classList.contains("siblingIcon_button")) ? 'sibling' 
-				: (btn.classList.contains("childrenIcon_button")) ? 'children' : 'tree';
-			treeChange_famView(btn, whichFamType);
-		break;
-		case 'arrows':
-			const whichArrow = (btn.classList.contains("leftArrow_button")) ? 'left' : 'right';
-			treeChange_focusArrows(btn, whichArrow);
-		break;
-		case 'zoom':
-			const whichZoom = (btn.classList.contains("zoomMinus")) ? 'minus' : 'plus';
-			treeChange_zoom(btn, whichZoom);
-		break;
-		case 'treeNode':
-			if (btn.tagName == "circle") {
-				btn = btn.parentElement;
-			}
-			const nodeLetter = btn.id.replace("_circleGrp", "");
-			
-			const nodeObj = nodeList[nodeLetter];
-			if (nodeObj.tagType != 'focus'){
-				treeChange_shift(nodeObj);
-			} else {
-				console.log("Focus clicked");
-			}
-		break;
-	}
-	
 }
 
 function treeChange_famView(btn, which){	
