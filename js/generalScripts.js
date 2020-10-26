@@ -1073,14 +1073,21 @@ class node {
 	createInitialNode(personTag, personInfo, startXY){
 		
 		const nodeScale = (this.tagType == 'focus') ? 1.5 : 1; 
+		const nodeGrpContainer = new createNewElement('g', {
+			'id': this.whichNode + '_GrpContainer',
+			'class': 'nodeGrpContainer',
+			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px)',
+		});
+		this.svg.appendChild(nodeGrpContainer);
+		this.nodeGrpContainer = nodeGrpContainer;
+		
 		const nodeGrp = new createNewElement('g', {
 			'id': this.whichNode + '_Grp',
 			'class': 'nodeGrp',
-			'transform-origin': "50% 42%",
-			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px) scale(' + nodeScale + ')',
+			'style': 'transform: scale(' + nodeScale + ')',
 		});
+		nodeGrpContainer.appendChild(nodeGrp);
 		this.nodeGrp = nodeGrp;
-		this.svg.appendChild(nodeGrp);
 		
 		const circleGrp = new nodeCircle(nodeGrp).createCircle(this.whichNode);		
 		
@@ -1188,9 +1195,12 @@ class node {
 	
 	animateMove () {		
 		const scaleUp = (this.tagType =='focus') ? 1.5 : 1;
-		Velocity(this.nodeGrp, { 
+		Velocity(this.nodeGrpContainer, { 
 			translateX: [this.newPosition.x , + this.oldPosition.x], 
 			translateY: [this.newPosition.y , + this.oldPosition.y], 
+		}, { duration: 1000});
+		
+		Velocity(this.nodeGrp, { 
 			scale: scaleUp
 		}, { duration: 1000});
 		
