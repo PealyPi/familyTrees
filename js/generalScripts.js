@@ -1340,6 +1340,7 @@ class node {
 			break;				
 			case 'focusParentS': 
 				//special - changing main line
+				console.log("Second Line Selected");
 			break;	
 		}
 	}
@@ -1717,7 +1718,9 @@ function linkingTreeIcons(){
 	
 }
 
+
 var changingTreeView = false;
+
 function treeChangeView(event, type){
 	//changing to sibling/child/ normal view
 	if (!changingTreeView){
@@ -1793,10 +1796,11 @@ function treeChange_focusPerson(personTag, famName){
 }
 
 function treeChange_focusArrows(btn, arrow){
-	const svgDiv = document.getElementById("svgDiv");
 	//from arrows	
-	//check nodeList - look for focus
-	//then nodeObj.nodeShift;
+	const shiftTag = (arrow == 'left') ? 'focusChild' : 'focusParent';
+	const shiftObjLetter = nodeLetterTags[shiftTag];
+	const nodeObj = nodeList[shiftObjLetter];
+	nodeObj.nodeShift(arrow, shiftTag);
 }
 
 function initialiseNodes(svgDiv, personTag, famName) {
