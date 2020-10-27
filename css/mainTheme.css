@@ -793,7 +793,26 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	
 }
 
-.nodeGrp{
+.popInBottom_slower {
+	-webkit-animation-name: popInBottom;
+	animation-name: popInBottom;
+	-webkit-animation-duration: 10s;
+	animation-duration: 10s; 
+ }
+.spouseLineDraw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 3s linear forwards;
+  /*animation-iteration-count: infinite;*/
+}
+
+@keyframes dash {
+	from {
+		stroke-dashoffset: 350;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
 }
 
 

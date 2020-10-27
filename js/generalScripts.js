@@ -180,7 +180,12 @@ function navBar_openPage(btn) {
 			case 'treeTab':		
 				hideAllSects(svgDiv);
 				showSect(svgDiv);
-				treeChange_focusPerson(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);					
+				if (NODEdetails.currentFocus!= '')
+					treeChange_focusPerson(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);	
+				else {
+					//console.log("No focus");
+					//svg.querySelector(".mainLine_GRP").style.opacity = 0;					
+				}
 			break;
 			case 'infoTab':	
 				hideAllSects(infoDiv);
@@ -1095,13 +1100,19 @@ class node {
 				NODEdetails.updateNodeList('nodeEs', this.spouseNode);
 			break;
 			
-			// spouses 
+			/* // spouses
 			case 'focusS':	case 'focusChildS':	 case 'focusGchildS':			
 			case 'focusParentS':  case 'focusGparentS':
 				//console.log(this._isSpouse);
+			break;*/
+			case 'focusParentS':
+				for (const line of this.spouseLineGrp.children ){
+					Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 1100, queue: false });
+				}
 			break;
+			
 			default:
-				console.log("Tag doesn't match any...");
+				//console.log("Tag doesn't match any...");
 		}
 		return this;
 		
@@ -1243,6 +1254,8 @@ class node {
 		const lineDefine = {
 			'fill': 'none',
 			'stroke-width': 6,	
+			'stroke-dasharray': 500,
+			'stroke-dashoffset': 500,			
 			'd': linePathD
 		}
 		const shadowLineDefine = Object.assign({}, lineDefine, {
@@ -1259,14 +1272,15 @@ class node {
 				'class': 'spouseLine',
 				'stroke': '#FF928B'	
 		}));
-		const mainLineShadow1 = new createNewElement('line', shadowLineDefine);
-		const mainLineShadow2 = new createNewElement('line', shadowLineDefine);
+		const mainLineShadow1 = new createNewElement('path', shadowLineDefine);
+		const mainLineShadow2 = new createNewElement('path', shadowLineDefine);
 		
 		this.nodeGrpContainer.prepend(lineGrp);
 		lineGrp.appendChild(mainLine);
 		lineGrp.prepend(mainLineShadow1);
 		lineGrp.prepend(mainLineShadow2);
 		
+		//console.log(mainLine.getTotalLength()); //=320
 		mainLineShadow1.setAttribute('transform', 'translate(-1.5, 1.5)');
 		mainLineShadow2.setAttribute('transform', 'translate(-3, 3)');
 		
@@ -1418,9 +1432,13 @@ class node {
 			this.nodeGrp.classList.add("vivify");
 			this.nodeGrp.classList.add("hitLeft");
 			
-			Velocity(this.nodeGrpContainer, { opacity: 0 }, { duration: 1100, queue: false,});
-			Velocity(this.spouseLineGrp, { opacity: 0 }, { duration: 1100, queue: false,});
+			Velocity(this.nodeGrpContainer, { opacity: 0 }, { duration: 1100, queue: false });
+			Velocity(this.spouseLineGrp, { opacity: 0 }, { duration: 1100, queue: false });
 			
+			for (const line of this.spouseLineGrp.children ){
+				console.log("Here");
+				Velocity(line, 'reverse', { duration: 2000, queue: false })
+			}
 			setTimeout(()=> {
 				this.nodeGrp.classList.remove("vivify");
 				this.nodeGrp.classList.remove("hitLeft");
@@ -1429,8 +1447,14 @@ class node {
 		} else if (this.tagType == "focusParentS"){ // appear
 			this.nodeGrp.classList.add("vivify");
 			this.nodeGrp.classList.add("hitLeft");
-			Velocity(this.nodeGrpContainer, { opacity: 0.6 }, { duration: 1100, queue: false,});
-			Velocity(this.spouseLineGrp, { opacity: 1 }, { duration: 1100, queue: false,});
+			Velocity(this.nodeGrpContainer, { opacity: 0.6 }, { duration: 1100, queue: false });
+			Velocity(this.spouseLineGrp, { opacity: 1 }, { duration: 1100, queue: false });
+			
+			for (const line of this.spouseLineGrp.children ){
+				setTimeout(()=> {
+					Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false})
+				}, 100);
+			}
 			
 			setTimeout(()=> {
 				this.nodeGrp.classList.remove("vivify");
@@ -1439,8 +1463,8 @@ class node {
 		}
 	}
 	
-	animateReAlign() {
-		
+	animateNewMainLine(){
+
 	}
 	
 	
@@ -1657,6 +1681,8 @@ function createSVG(){
 	lineGrp.setAttribute("transform", "translate(0 -70)");	
 	setFamilyText(svgDiv,'family');	
 	
+	svg.style.opacity = 0; 
+	
 	//hide btns - no focus
 	var btnDivs = [];
 	//btnDivs.push( svgDiv.querySelector(".svg_topLeftArea") );
@@ -1855,9 +1881,15 @@ function treeChange_focusPerson(personTag, famName){
 	const personData = PEOPLERELATIONS[famName][personTag];
 	setFamilyText(svgDiv, famName);
 	NODEdetails.updateFocus({'personTag': personTag, 'famName':famName});
+	
 
 	//if first click, initialise
 	if (!svgDiv.querySelector(".nodeCircleGrp")){
+		//if ();
+	//const navDiv = document.querySelector('.top_navbar');
+	//const oldActive = navDiv.querySelector('.navTab.active');
+		//animate in
+		
 		initialiseNodes(svgDiv, personTag, famName);
 	} else {
 		//if new person not currently in nodes, 
@@ -1882,7 +1914,7 @@ function initialiseNodes(svgDiv, personTag, famName) {
 	
 	for (const div of btnDivs) {
 		div.style.display = '';
-	}
+	}	
 	
 	const svg = svgDiv.querySelector("svg");
 	
@@ -1890,6 +1922,17 @@ function initialiseNodes(svgDiv, personTag, famName) {
 	NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
 	NODEdetails.nodeList.nodeC = new node(svg, 'focus').initialise(personTag, famName);	
 	
+	svg.classList.add("vivify");
+	svg.classList.add("duration-1500");
+	svg.classList.add("popInBottom");
+	setTimeout(()=>{
+		svg.style.opacity = 1;
+	}, 800);
+	setTimeout(()=>{
+		svg.classList.remove("vivify");
+		svg.classList.remove("duration-1500");
+		svg.classList.remove("popInBottom");
+	}, 1500);
 }
 
 /*function treeChange_zoom(thisZoomBtn, which){
@@ -1927,6 +1970,7 @@ function initialiseNodes(svgDiv, personTag, famName) {
 	
 }
 */
+
 
 
 function createNewElement(type, obj, noNS=false){
