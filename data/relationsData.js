@@ -23,6 +23,8 @@ function nodeDataStorage(){//collapse lvl 2
 	kesby.jackKesby = {			
 		'mainLine':		false,	
 		'familyName': 'kesby',
+		'parentSpouse':	'johnNevilleKesby',
+		'parentMain': 	'maryBobby',
 		'spouse': 	'juneKesby',	
 		'siblingMain': 'roseHadkiss',
 	};

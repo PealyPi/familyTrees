@@ -47,6 +47,33 @@ class nodeLetterTag_info {
 		this.currentFocus = newFocus;
 		//console.log("newFocus: " + newFocus.personTag + ", " +  newFocus.famName);
 	}
+	
+	getNodeObj(nodeTag){
+		const nodeLetter = this.nodeLetterTags[nodeTag];
+		return this.nodeList[nodeLetter];		
+	}
+	
+	isPersonAdjacent(personTag){
+		//get current parent/child
+		const currentParentLetter = this.nodeLetterTags.focusParent;
+		const currentParentSLetter = this.nodeLetterTags.focusParentS;
+		const currentChildLetter = this.nodeLetterTags.focusChild;
+		
+		const currentParentObj = this.nodeList[currentParentLetter];
+		const currentParentSObj = this.nodeList[currentParentSLetter];
+		const currentChildObj = this.nodeList[currentChildLetter];
+		
+		if (personTag == currentParentObj.personTag){
+			return 'parent';
+		} else if (personTag == currentChildObj.personTag){
+			return 'child';
+			
+		} else if (personTag == currentParentSObj.personTag){	
+			return 'parentS';
+		} else {
+			return 'none';
+		}
+	}
 }
 
 var NODEdetails = new nodeLetterTag_info();
@@ -1296,8 +1323,7 @@ class node {
 	}
 	
 	nodeShift(direction, first = false){
-		//direction right => nodes moving left
-		//direction right => relations index -ve	
+		//direction right => nodes moving left => relations index -ve	
 		this.oldPosition = this.getNodeTypePosition(this.tagType);
 		const oldTagType = this.tagType;		
 		this.oldTag = oldTagType;	
@@ -1471,12 +1497,7 @@ class node {
 			}, 1500);
 		}
 	}
-	
-	animateNewMainLine(){
-
-	}
-	
-	
+		
 	nodeSetPerson(newName, newFam, newTag){
 		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
 		const personInfo = PEOPLEINFO[newFam][newName] ?? {};	
@@ -1863,7 +1884,7 @@ class treeSVG {
 			this.svgElem.classList.remove("vivify");
 			this.svgElem.classList.remove("duration-1500");
 			this.svgElem.classList.remove("popInBottom");
-		}, 1500);
+		}, 1000);
 	}
 	
 	animateSVGleave(){
@@ -1879,6 +1900,7 @@ class treeSVG {
 			this.svgElem.classList.remove("popOutBottom");
 		}, 1500);
 	}
+
 }
 
 const tree = new treeSVG();
@@ -2009,9 +2031,26 @@ function treeChange_focusPerson(personTag, famName){
 	if (!svgDiv.querySelector(".nodeCircleGrp")){		
 		tree.initialiseNodes(personTag, famName);
 	} else {
-		//if new person not currently in nodes, 
-		//exitNodes, recreate with new focus;			
-		tree.reInitialiseNodes(personTag, famName);	
+		const isPersonAdjacent = NODEdetails.isPersonAdjacent(personTag);
+		
+		switch (isPersonAdjacent){
+			case 'parent':
+				const parentNodeObj = NODEdetails.getNodeObj('focusParent');
+				parentNodeObj.nodeShift('right', parentNodeObj.tagType);
+			break;
+			case 'child':
+				const childNodeObj = NODEdetails.getNodeObj('focusChild');
+				childNodeObj.nodeShift('left', childNodeObj.tagType);
+			break;
+			case'parentS':
+				const parentSnodeObj = NODEdetails.getNodeObj('focusParentS');
+				//parentSnodeObj.nodeShift(direction, parentSnodeObj.tagType);
+			break;
+			default: 
+				tree.reInitialiseNodes(personTag, famName);	
+			break;
+		}
+		// if node != parent or child
 	}	
 }
 
