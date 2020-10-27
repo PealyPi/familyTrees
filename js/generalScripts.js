@@ -1222,14 +1222,12 @@ class node {
 		
 		if (personTag =="none"){
 			nodeGrp.setAttribute("visibility", "hidden");
-			if (this._isSpouse) {				
-				this.spouseLineGrp.setAttribute("visibility", "hidden");
-			}
+			if (this._isSpouse) this.spouseLineGrp.style.opaicty = 0;
+	
 		} else {
 			nodeGrp.setAttribute("visibility", "");
-			if (this._isSpouse) {
-				this.spouseLineGrp.setAttribute("visibility", "");
-			}
+			if (this._isSpouse) this.spouseLineGrp.style.opaicty = 0;
+			
 		}
 		//add click event for non-focus
 		circleGrp.addEventListener("click", (evnt) => treeChangeView(evnt, 'treeNode'));
@@ -1415,19 +1413,29 @@ class node {
 			scale: scaleUp
 		}, { duration: 1000, queue: false,});
 		
-		if (this.oldTag == "focusParentS"){
-			this.nodeGrpContainer.classList.add("rollOutLeft");
-			Velocity(this.nodeGrpContainer, {
-				opacity: 0, 
-			}, { duration: 1000, queue: false,});
-			setTimeout(()=> {this.nodeGrpContainer.classList.remove("rollOutLeft");}, 1500);
+		
+		if (this.oldTag == "focusParentS"){ // disappear
+			this.nodeGrp.classList.add("vivify");
+			this.nodeGrp.classList.add("hitLeft");
 			
-		} else if (this.tagType == "focusParentS"){
-			this.nodeGrpContainer.classList.add("rollInLeft");
-			Velocity(this.nodeGrpContainer, {
-				opacity: 0.6, 
-			}, { duration: 1000, queue: false,});
-			setTimeout(()=> {this.nodeGrpContainer.classList.remove("rollInLeft");}, 1500);
+			Velocity(this.nodeGrpContainer, { opacity: 0 }, { duration: 1100, queue: false,});
+			Velocity(this.spouseLineGrp, { opacity: 0 }, { duration: 1100, queue: false,});
+			
+			setTimeout(()=> {
+				this.nodeGrp.classList.remove("vivify");
+				this.nodeGrp.classList.remove("hitLeft");
+			}, 1500);
+			
+		} else if (this.tagType == "focusParentS"){ // appear
+			this.nodeGrp.classList.add("vivify");
+			this.nodeGrp.classList.add("hitLeft");
+			Velocity(this.nodeGrpContainer, { opacity: 0.6 }, { duration: 1100, queue: false,});
+			Velocity(this.spouseLineGrp, { opacity: 1 }, { duration: 1100, queue: false,});
+			
+			setTimeout(()=> {
+				this.nodeGrp.classList.remove("vivify");
+				this.nodeGrp.classList.remove("hitLeft");
+			}, 1500);
 		}
 	}
 	
@@ -1526,9 +1534,7 @@ class nodeCircle {
 		this.container = container;
 	}
 	
-	createCircle(whichNode){
-		//this.positionXY = positionXY;
-		
+	createCircle(whichNode){		
 		const circleRadius = 50;
 		const circleBorder = 4;
 		const circleFullWidth = circleRadius + circleBorder;
