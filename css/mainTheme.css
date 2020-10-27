@@ -614,7 +614,9 @@ button,  button:active, button:hover, button:focus{
 	height:450px;	
 }
 .infoMain{
-	/*width: calc(900px - 70px);*/
+	width: 75%;
+	position: relative;
+	margin: auto;
 	height: calc(450px - 100px);
 	padding: 60px 100px;
 	z-index: var(--woodBackZ); 
@@ -626,10 +628,12 @@ button,  button:active, button:hover, button:focus{
 	display:none;
 }
 .infoMain_extended{
+	width: 75%;
+	position: relative;
+	margin: auto;
 	height: 335px;
 	padding: 175px 100px 50px 100px;
 	z-index: var(--woodBackZ); 
-	position: relative;
 	top: -110px;
 	display:none;
 	
@@ -723,7 +727,9 @@ button#infoTreeLinkBTN, button#treeInfoLinkBTN{
 	position: absolute;
 	height: 60px;
 	width: 60px;	
-	top: 90px;
+	top: 90px;	
+	
+	z-index: calc(var(--woodBackZ) + 10); 
 	
 	font-size: 36px;
 	cursor:pointer;	

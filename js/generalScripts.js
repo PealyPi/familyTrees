@@ -5,6 +5,52 @@
 var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = nodeDataStorage();
 
+class nodeLetterTag_info {
+	constructor(){
+		this.nodeLetterOrder =  ['nodeA', 'nodeAs', 'nodeB', 'nodeBs', 'nodeC', 'nodeCs', 'nodeD', 'nodeDs', 'nodeE', 'nodeEs'];
+		
+		this.nodeRelations = [
+			'focusGchild', 'focusGchildS', 'focusChild', 'focusChildS', 
+			'focus', 'focusS', 
+			'focusParent', 'focusParentS', 'focusGparent', 'focusGparentS'	];
+		
+		this.nodeList = {
+			'nodeA': '', 'nodeAs': '', 
+			'nodeB': '', 'nodeBs': '', 
+			'nodeC': '', 'nodeCs': '', 
+			'nodeD': '', 'nodeDs': '', 
+			'nodeE': '', 'nodeEs': ''	};
+		this.currentFocus = '';
+		this.initialiseNodeLetters();
+		return this;
+	}
+	
+	initialiseNodeLetters(){
+		this.nodeLetterTags = {
+			'focusGchild': 'nodeA',  'focusGchildS' : 'nodeAs', 
+			'focusChild': 'nodeB', 	 'focusChildS' : 'nodeBs', 
+			'focus': 'nodeC', 		 'focusS' : 'nodeCs', 
+			'focusParent': 'nodeD',  'focusParentS' : 'nodeDs', 
+			'focusGparent': 'nodeE', 'focusGparentS' : 'nodeEs'
+		};		
+	}
+	
+	updateNodeLetters(tag, letter){
+		this.nodeLetterTags[tag] = letter;
+	}
+	
+	updateNodeList(letter, obj){
+		this.nodeList[letter] = obj;
+	}
+	
+	updateFocus(newFocus){
+		this.currentFocus = newFocus;
+		//console.log("newFocus: " + newFocus.personTag + ", " +  newFocus.famName);
+	}
+}
+
+var NODEdetails = new nodeLetterTag_info();
+
 
 /* ------ loader ------ */
 function loader_onReady(callback) {
@@ -22,6 +68,7 @@ function mask_setVisible(selector, visible) {
 
 /* ------ navbar ------ */
 var isPageTransitioning = false;
+
 function navBar_clickEvnt(event, link=false){
 	var btn = event.target;
 	const btnID = btn.id ?? '';		
@@ -133,8 +180,7 @@ function navBar_openPage(btn) {
 			case 'treeTab':		
 				hideAllSects(svgDiv);
 				showSect(svgDiv);
-				if (svg.children.length == 0)
-					createSVG();						
+				treeChange_focusPerson(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);					
 			break;
 			case 'infoTab':	
 				hideAllSects(infoDiv);
@@ -354,6 +400,7 @@ function peopleListSearchExit(){
 /* open tree */
 var isInfoChanging = false;
 var global_leafImgSlideshow_info, global_leafImgSlideshow_tree;
+
 function openPerson(evnt, linked = false){
 	var btnLI;
 	if (linked){
@@ -389,6 +436,7 @@ function openPerson(evnt, linked = false){
 		
 		fillPersonInfo(infoDiv, famName, personTag);
 		fillPersonInfo(infoDivTree, famName, personTag);
+		NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
 		
 		//if page != info/tree, go to tree...		
 		const navDiv = document.querySelector('.top_navbar');		
@@ -397,7 +445,11 @@ function openPerson(evnt, linked = false){
 		
 		if ( (currentActive.id != "treeTab") && (currentActive.id != "infoTab") ){
 			navBar_openPage(treeBtn);
-		}	
+		} else if (currentActive.id == "treeTab"){
+			//svg tree create
+			treeChange_focusPerson(personTag, famName);			
+		} else {			
+		}
 
 		//close people div	
 		const pplDiv = document.getElementById("peopleDiv");
@@ -407,8 +459,6 @@ function openPerson(evnt, linked = false){
 			pplTab.classList.toggle("active");	
 		}
 		
-		//svg tree create
-		treeChange_focusPerson(personTag, famName);
 		
 		
 		setTimeout(()=>{isInfoChanging = false;}, 2000);
@@ -872,52 +922,6 @@ function interchangeTreeInfo_Tabs(){
 /* -------------------- */
 
 /*svg*/
-class nodeLetterTag_info {
-	constructor(){
-		this.nodeLetterOrder =  ['nodeA', 'nodeAs', 'nodeB', 'nodeBs', 'nodeC', 'nodeCs', 'nodeD', 'nodeDs', 'nodeE', 'nodeEs'];
-		
-		this.nodeRelations = [
-			'focusGchild', 'focusGchildS', 'focusChild', 'focusChildS', 
-			'focus', 'focusS', 
-			'focusParent', 'focusParentS', 'focusGparent', 'focusGparentS'	];
-		
-		this.nodeList = {
-			'nodeA': '', 'nodeAs': '', 
-			'nodeB': '', 'nodeBs': '', 
-			'nodeC': '', 'nodeCs': '', 
-			'nodeD': '', 'nodeDs': '', 
-			'nodeE': '', 'nodeEs': ''	};
-		
-		this.initialiseNodeLetters();
-		return this;
-	}
-	
-	initialiseNodeLetters(){
-		this.nodeLetterTags = {
-			'focusGchild': 'nodeA',  'focusGchildS' : 'nodeAs', 
-			'focusChild': 'nodeB', 	 'focusChildS' : 'nodeBs', 
-			'focus': 'nodeC', 		 'focusS' : 'nodeCs', 
-			'focusParent': 'nodeD',  'focusParentS' : 'nodeDs', 
-			'focusGparent': 'nodeE', 'focusGparentS' : 'nodeEs'
-		};		
-	}
-	
-	updateNodeLetters(tag, letter){
-		this.nodeLetterTags[tag] = letter;
-	}
-	
-	updateNodeList(letter, obj){
-		this.nodeList[letter] = obj;
-	}
-}
-
-var NODEdetails = new nodeLetterTag_info();
-	
-const rootPeople = {
-	'kesby': 'roseHadkiss',
-	'hadkiss': 'ronHadkiss'
-}
-
 class node {
 	constructor(svg, tagType){
 		this.svg = svg;
@@ -1008,17 +1012,22 @@ class node {
 		this.personTag = personTag;
 		this.famName = famName;
 		
+		const infoDiv = document.getElementById("infoDiv");
+		const treeInfoDiv = document.getElementById("infoDivTree");
+		
 		this.nodeGrpContainer = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
 		
-	//	console.log(this.tagType + ", " + this.personTag);
+		//console.log(this.tagType + ", " + this.personTag);
 		switch (this.tagType){
-			case 'focus':		
+			case 'focus':	
+				fillPersonInfo(infoDiv, famName, personTag);
+				fillPersonInfo(treeInfoDiv, famName, personTag);
+				
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
-				this.parentSTag = personData.parentSpouse ?? 'none';
+				this.parentSTag = personData.parentSpouse ?? 'none';				
 				
-				const rootPeopleVals = Object.values(rootPeople);
 				if (this._isRoot){	
 					this.getLinkedFamily();	
 					this.spouseNode = new node(this.svg, 'focusS').initialise(this.spouseTag, this.otherFam);					
@@ -1287,6 +1296,9 @@ class node {
 		this.tagType = NODEdetails.nodeRelations[newRelationsIndex];			
 		this.newTag = this.tagType;		
 		
+		const infoDiv = document.getElementById("infoDiv");
+		const infoDivTree = document.getElementById("infoDivTree");
+		
 		//change global nodestore
 		NODEdetails.updateNodeLetters(this.tagType, this.whichNode);
 		
@@ -1295,6 +1307,12 @@ class node {
 		
 		switch (first){
 			case 'focusChild': //=> direction left
+				
+				//this becomes focus
+				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
+				fillPersonInfo(infoDiv, this.famName, this.personTag);
+				fillPersonInfo(infoDivTree, this.famName, this.personTag);
+				
 				
 				const getGchildLetter = NODEdetails.nodeLetterTags['focusGchild'];
 				NODEdetails.nodeList[getGchildLetter].nodeGrpContainer.style.opacity = 1;
@@ -1333,6 +1351,11 @@ class node {
 				
 			break;		
 			case 'focusParent': //=> direction right		
+				//this becomes focus
+				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
+				fillPersonInfo(infoDiv, this.famName, this.personTag);
+				fillPersonInfo(infoDivTree, this.famName, this.personTag);
+				
 				//set visibility of gParent and gChildren
 				const getGparentLetter = NODEdetails.nodeLetterTags['focusGparent'];
 				const getGparent = NODEdetails.nodeList[getGparentLetter];
@@ -1370,6 +1393,11 @@ class node {
 				
 			break;				
 			case 'focusParentS': 
+				//this becomes focus
+				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
+				fillPersonInfo(infoDiv, this.famName, this.personTag);
+				fillPersonInfo(infoDivTree, this.famName, this.personTag);
+				
 				//special - changing main line
 				console.log("Second Line Selected");
 			break;	
@@ -1388,15 +1416,18 @@ class node {
 		}, { duration: 1000, queue: false,});
 		
 		if (this.oldTag == "focusParentS"){
-			this.nodeGrpContainer.classList.add("")
+			this.nodeGrpContainer.classList.add("rollOutLeft");
 			Velocity(this.nodeGrpContainer, {
 				opacity: 0, 
 			}, { duration: 1000, queue: false,});
+			setTimeout(()=> {this.nodeGrpContainer.classList.remove("rollOutLeft");}, 1500);
 			
 		} else if (this.tagType == "focusParentS"){
+			this.nodeGrpContainer.classList.add("rollInLeft");
 			Velocity(this.nodeGrpContainer, {
 				opacity: 0.6, 
 			}, { duration: 1000, queue: false,});
+			setTimeout(()=> {this.nodeGrpContainer.classList.remove("rollInLeft");}, 1500);
 		}
 	}
 	
@@ -1487,6 +1518,7 @@ class node {
 	}
 
 }
+
 
 
 class nodeCircle {
@@ -1600,8 +1632,6 @@ class nodeCircle {
 		return circleGrp;
 	}
 }
-
-
 
 function createSVG(){
 	const svgDiv = document.getElementById("svgDiv");
@@ -1818,13 +1848,15 @@ function treeChange_focusPerson(personTag, famName){
 	//from person click
 	const personData = PEOPLERELATIONS[famName][personTag];
 	setFamilyText(svgDiv, famName);
-	
+	NODEdetails.updateFocus({'personTag': personTag, 'famName':famName});
+
 	//if first click, initialise
 	if (!svgDiv.querySelector(".nodeCircleGrp")){
 		initialiseNodes(svgDiv, personTag, famName);
 	} else {
 		//if new person not currently in nodes, 
 		//exitNodes, recreate with new focus;		
+		console.log("Here");
 	}	
 }
 
@@ -1849,12 +1881,12 @@ function initialiseNodes(svgDiv, personTag, famName) {
 	const svg = svgDiv.querySelector("svg");
 	
 	//create all nodes	
+	NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
 	NODEdetails.nodeList.nodeC = new node(svg, 'focus').initialise(personTag, famName);	
 	
 }
 
-
-function treeChange_zoom(thisZoomBtn, which){
+/*function treeChange_zoom(thisZoomBtn, which){
 	const svgDiv = document.getElementById("svgDiv");	
 	const otherZoomBtn = (which == "minus") ? svgDiv.querySelector(".zoomPlus") : svgDiv.querySelector(".zoomMinus");
 	
@@ -1888,6 +1920,7 @@ function treeChange_zoom(thisZoomBtn, which){
 	}
 	
 }
+*/
 
 
 function createNewElement(type, obj, noNS=false){
@@ -1904,7 +1937,6 @@ function createNewElement(type, obj, noNS=false){
     return created;
 }
 
-
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -1916,6 +1948,7 @@ function FAiconFail(){
 	//if script get font awesome fails, replace with png?
 	console.log("Replace Icons...");
 }
+
 
 /* ------ Run on Page Load -------- */
 $(document).ready(function(){	
@@ -1936,6 +1969,7 @@ $(document).ready(function(){
 
 	
 	//tree
+	createSVG();
 	linkingTreeIcons();
 
 	//peopleTab
