@@ -1663,82 +1663,201 @@ class nodeCircle {
 	}
 }
 
-function createSVG(){
-	const svgDiv = document.getElementById("svgDiv");
-	const svg = document.getElementById("mainSVG");
-	const pageWidth = document.getElementsByTagName('body')[0].offsetWidth;
-	
-	const oldViewBox = svg.getAttribute('viewBox');
-	const oldViewBoxArray = oldViewBox.split(' '); // 4 elements
-	const newViewBox =  oldViewBoxArray[0] + ' ' + oldViewBoxArray[1] + ' ' + pageWidth + ' ' + oldViewBoxArray[3];
-	svg.setAttribute('viewBox', newViewBox); 
-	
-	const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
-	
-	//line
-	const lineGrp = treeSVGline(svg, {'x': - 10, 'y': (svgCenterPt.y)}, {'x': (pageWidth + 10), 'y': (svgCenterPt.y)});
-	
-	lineGrp.setAttribute("transform", "translate(0 -70)");	
-	setFamilyText(svgDiv,'family');	
-	
-	svg.style.opacity = 0; 
-	
-	//hide btns - no focus
-	var btnDivs = [];
-	//btnDivs.push( svgDiv.querySelector(".svg_topLeftArea") );
-	btnDivs.push( svgDiv.querySelector(".arrowButtonsDiv") );
-	
-	for (const div of btnDivs) {
-		div.style.display = 'none';
+class treeSVG {
+	constructor(){
+		this.svgDiv = document.getElementById('svgDiv');
+		this.svgElem = document.getElementById('mainSVG');
+	}
+	createSVG() {
+		const pageWidth = document.getElementsByTagName('body')[0].offsetWidth;
+		this.svgWidth = pageWidth;
+		
+		const oldViewBox = this.svgElem.getAttribute('viewBox');
+		const oldViewBoxArray = oldViewBox.split(' '); // 4 elements
+		const newViewBox =  oldViewBoxArray[0] + ' ' + oldViewBoxArray[1] + ' ' + pageWidth + ' ' + oldViewBoxArray[3];
+		this.svgElem.setAttribute('viewBox', newViewBox); 
+		
+		
+		const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
+		this.svgCenterPt = svgCenterPt;
+		
+		const mainLineGrp = this.createMainLine(
+			{'x': - 10, 'y': (svgCenterPt.y)}, 
+			{'x': (pageWidth + 10), 'y': (svgCenterPt.y)}
+		);
+		this.mainLineGrp = mainLineGrp;
+		
+		
+		mainLineGrp.setAttribute("transform", "translate(0 -70)");	
+		this.setFamilyText('');	
+		
+		this.svgElem.style.opacity = 0; 
+		
+		this.showHideButtons('hideAll');
+		
+		this.linkingTreeIcons();
 	}
 	
-}
-
-function treeSVGline(svg, startXY, endXY){
-	
-	var strokeWdth = 8, className = 'mainLine', 
+	createMainLine(startXY, endXY){
+		var strokeWdth = 8, className = 'mainLine', 
 		transXdir = 1, transYdir = 1 ;
-	const lineDefine = {
-		'x1': startXY.x, 'x2': endXY.x,
-		'y1': startXY.y, 'y2': endXY.y,
-		'fill': 'none',
-		'stroke-width': strokeWdth,	
+		const lineDefine = {
+			'x1': startXY.x, 'x2': endXY.x,
+			'y1': startXY.y, 'y2': endXY.y,
+			'fill': 'none',
+			'stroke-width': strokeWdth,	
+		}
+		const shadowLineDefine = Object.assign({}, lineDefine, {
+			'class': 'lineShadow',
+			'stroke': '#000',
+			'stroke-opacity': 0.1,
+		});
+		
+		const lineGrp = new createNewElement('g', {
+			'class': className + '_GRP',
+		});
+		const mainLine = new createNewElement('line', 
+			Object.assign({}, lineDefine, {
+				'class': className,
+				'stroke': '#FF928B'	
+		}));
+		const mainLineShadow1 = new createNewElement('line', shadowLineDefine);
+		const mainLineShadow2 = new createNewElement('line', shadowLineDefine);
+		
+		this.svgElem.prepend(lineGrp);
+		lineGrp.appendChild(mainLine);
+		lineGrp.prepend(mainLineShadow1);
+		lineGrp.prepend(mainLineShadow2);
+		
+		mainLineShadow1.setAttribute('transform', 
+			'translate(' + (transXdir * 1.5) + ', ' +  (transYdir * 1.5) + ')');
+		mainLineShadow2.setAttribute('transform',
+			'translate(' + (transXdir * 3) + ', ' +  (transYdir * 3) + ')');
+		
+		
+		return lineGrp;
 	}
-	const shadowLineDefine = Object.assign({}, lineDefine, {
-		'class': 'lineShadow',
-		'stroke': '#000',
-		'stroke-opacity': 0.1,
-	});
 	
-	const lineGrp = new createNewElement('g', {
-		'class': className + '_GRP',
-	});
-	const mainLine = new createNewElement('line', 
-		Object.assign({}, lineDefine, {
-			'class': className,
-			'stroke': '#FF928B'	
-	}));
-	const mainLineShadow1 = new createNewElement('line', shadowLineDefine);
-	const mainLineShadow2 = new createNewElement('line', shadowLineDefine);
+	setFamilyText(famName){	
+		const familyTextSpan = this.svgDiv.querySelector(".tree_familyText");
+		familyTextSpan.innerHTML = famName.charAt(0).toUpperCase() + famName.slice(1);	
+	}
 	
-	svg.prepend(lineGrp);
-	lineGrp.appendChild(mainLine);
-	lineGrp.prepend(mainLineShadow1);
-	lineGrp.prepend(mainLineShadow2);
+	showHideButtons(showHide, icon = false){
+		var btnDivs = [];
+		btnDivs.push( this.svgDiv.querySelector(".arrowButtonsDiv") );
+		
+		switch (showHide){
+			case 'hideAll':
+				for (const div of btnDivs) {
+					div.style.display = 'none';
+				}
+			break;
+			case 'showAll':
+				for (const div of btnDivs) {
+					div.style.display = '';
+				}
+			break;
+			case 'hide':	
+				switch (icon){
+					case 'sibling':
+						btnDivs.querySelector('.siblingIcon_button').style.display = 'none';
+					break;
+					case 'children':
+						btnDivs.querySelector('.childrenIcon_button').style.display = 'none';
+					break;
+					case 'leftArrow':
+						btnDivs.querySelector('.leftArrow_button').style.display = 'none';
+					break;
+					case 'rightArrow':
+						btnDivs.querySelector('.rightArrow_button').style.display = 'none';
+					break;
+				}
+			break;			
+			case 'show':	
+				switch (icon){
+					case 'sibling':
+						btnDivs.querySelector('.siblingIcon_button').style.display = '';
+					break;
+					case 'children':
+						btnDivs.querySelector('.childrenIcon_button').style.display = '';
+					break;
+					case 'leftArrow':
+						btnDivs.querySelector('.leftArrow_button').style.display = '';
+					break;
+					case 'rightArrow':
+						btnDivs.querySelector('.rightArrow_button').style.display = '';
+					break;
+				}
+			break;
+		}		
+	}
 	
-	mainLineShadow1.setAttribute('transform', 
-		'translate(' + (transXdir * 1.5) + ', ' +  (transYdir * 1.5) + ')');
-	mainLineShadow2.setAttribute('transform',
-		'translate(' + (transXdir * 3) + ', ' +  (transYdir * 3) + ')');
+	linkingTreeIcons(){
+		//add click events
+		this.treeBtns = {
+			'leftArrow': this.svgDiv.querySelectorAll(".leftArrow_button"),
+			'rightArrow': this.svgDiv.querySelectorAll(".rightArrow_button"),
+			'siblings': this.svgDiv.querySelectorAll(".siblingIcon_button"),
+			'children': this.svgDiv.querySelectorAll(".childrenIcon_button")
+		};
+		
+		const famIcon_button = this.svgDiv.querySelectorAll(".famIcon");
+		const arrowBtn_button = this.svgDiv.querySelectorAll(".arrowBtn");	
+		const zoomBtn_button = this.svgDiv.querySelectorAll(".zoomBtn");
+		
+		for (const btn of famIcon_button){
+			btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'famView'));
+		}		
+		for (const btn of arrowBtn_button){
+			btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'arrows'));
+		}
+		for (const btn of zoomBtn_button){	
+			btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'zoom'));	
+		}
+	}
 	
+	initialiseNodes(personTag, famName) {
+		this.showHideButtons('showAll');
+		
+		//create all nodes	
+		NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
+		this.firstFocus = new node(this.svgElem, 'focus').initialise(personTag, famName);	
+		NODEdetails.nodeList.nodeC = this.firstFocus;		
+		
+		this.animateSVGenter();
+	}
 	
-	return lineGrp;
+	animateSVGenter(){
+		this.svgElem.classList.add("vivify");
+		this.svgElem.classList.add("duration-1500");
+		this.svgElem.classList.add("popInBottom");
+		setTimeout(()=>{
+			this.svgElem.style.opacity = 1;
+		}, 800);
+		setTimeout(()=>{
+			this.svgElem.classList.remove("vivify");
+			this.svgElem.classList.remove("duration-1500");
+			this.svgElem.classList.remove("popInBottom");
+		}, 1500);
+	}
+	
+	animateSVGleave(){
+		this.svgElem.classList.add("vivify");
+		this.svgElem.classList.add("duration-1500");
+		this.svgElem.classList.add("popOutBottom");
+		setTimeout(()=>{
+			this.svgElem.style.opacity = 0;
+		}, 800);
+		setTimeout(()=>{
+			this.svgElem.classList.remove("vivify");
+			this.svgElem.classList.remove("duration-1500");
+			this.svgElem.classList.remove("popOutBottom");
+		}, 1500);
+	}
 }
 
-function setFamilyText(svgDiv, famName){	
-	const familyTextSpan = svgDiv.querySelector(".tree_familyText");
-	familyTextSpan.innerHTML = famName.charAt(0).toUpperCase() + famName.slice(1);	
-}
+const tree = new treeSVG();
 
 function createLeafSVG(type) {
 	const infoDiv = (type == 'tree') ?  document.getElementById("infoDivTree") : document.getElementById("infoDiv");
@@ -1795,25 +1914,6 @@ function createLeafSVG(type) {
 	leafSVG.appendChild(topLeafGRP);
 	topLeafGRP.appendChild(topLeaf_fill);
 	topLeafGRP.appendChild(topLeaf_outer);
-	
-}
-
-function linkingTreeIcons(){
-	//add click events
-	const svgDiv = document.getElementById("svgDiv");
-	const famIcon_button = svgDiv.querySelectorAll(".famIcon");
-	const arrowBtn_button = svgDiv.querySelectorAll(".arrowBtn");	
-	const zoomBtn_button = svgDiv.querySelectorAll(".zoomBtn");
-	
-	for (const btn of famIcon_button){
-		btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'famView'));
-	}		
-	for (const btn of arrowBtn_button){
-		btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'arrows'));
-	}
-	for (const btn of zoomBtn_button){	
-		btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'zoom'));	
-	}
 	
 }
 
@@ -1879,7 +1979,7 @@ function treeChange_shift(nodeObj){
 function treeChange_focusPerson(personTag, famName){
 	//from person click
 	const personData = PEOPLERELATIONS[famName][personTag];
-	setFamilyText(svgDiv, famName);
+	tree.setFamilyText(famName);
 	NODEdetails.updateFocus({'personTag': personTag, 'famName':famName});
 	
 
@@ -1890,7 +1990,7 @@ function treeChange_focusPerson(personTag, famName){
 	//const oldActive = navDiv.querySelector('.navTab.active');
 		//animate in
 		
-		initialiseNodes(svgDiv, personTag, famName);
+		tree.initialiseNodes(personTag, famName);
 	} else {
 		//if new person not currently in nodes, 
 		//exitNodes, recreate with new focus;		
@@ -1904,35 +2004,6 @@ function treeChange_focusArrows(btn, arrow){
 	const shiftObjLetter = NODEdetails.nodeLetterTags[shiftTag];
 	const nodeObj = NODEdetails.nodeList[shiftObjLetter];
 	nodeObj.nodeShift(arrow, shiftTag);
-}
-
-function initialiseNodes(svgDiv, personTag, famName) {
-	//show btns
-	var btnDivs = [];
-	//btnDivs.push( svgDiv.querySelector(".svg_topLeftArea") );
-	btnDivs.push( svgDiv.querySelector(".arrowButtonsDiv") );
-	
-	for (const div of btnDivs) {
-		div.style.display = '';
-	}	
-	
-	const svg = svgDiv.querySelector("svg");
-	
-	//create all nodes	
-	NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
-	NODEdetails.nodeList.nodeC = new node(svg, 'focus').initialise(personTag, famName);	
-	
-	svg.classList.add("vivify");
-	svg.classList.add("duration-1500");
-	svg.classList.add("popInBottom");
-	setTimeout(()=>{
-		svg.style.opacity = 1;
-	}, 800);
-	setTimeout(()=>{
-		svg.classList.remove("vivify");
-		svg.classList.remove("duration-1500");
-		svg.classList.remove("popInBottom");
-	}, 1500);
 }
 
 /*function treeChange_zoom(thisZoomBtn, which){
@@ -2019,8 +2090,7 @@ $(document).ready(function(){
 
 	
 	//tree
-	createSVG();
-	linkingTreeIcons();
+	tree.createSVG();
 
 	//peopleTab
 	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
