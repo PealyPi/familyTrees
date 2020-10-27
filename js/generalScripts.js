@@ -1388,6 +1388,7 @@ class node {
 		}, { duration: 1000, queue: false,});
 		
 		if (this.oldTag == "focusParentS"){
+			this.nodeGrpContainer.classList.add("")
 			Velocity(this.nodeGrpContainer, {
 				opacity: 0, 
 			}, { duration: 1000, queue: false,});
