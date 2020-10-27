@@ -1041,6 +1041,7 @@ class node {
 	initialise(personTag, famName){		
 		const personData = PEOPLERELATIONS[famName][personTag] ?? {};
 		const personInfo = PEOPLEINFO[famName][personTag] ?? {};
+		this.personData = personData;
 	
 		this.personTag = personTag;
 		this.famName = famName;
@@ -1351,14 +1352,16 @@ class node {
 		if (first != 'focusParentS')
 			this.animateShift();
 		
+		if (this.newTag == 'focus'){
+			this.checkRelationButtons();
+		}
+		
 		switch (first){
 			case 'focusChild': //=> direction left
-				
 				//this becomes focus
 				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
 				fillPersonInfo(infoDiv, this.famName, this.personTag);
 				fillPersonInfo(infoDivTree, this.famName, this.personTag);
-				
 				
 				const getGchildLetter = NODEdetails.nodeLetterTags['focusGchild'];
 				NODEdetails.nodeList[getGchildLetter].nodeGrpContainer.style.opacity = 1;
@@ -1394,6 +1397,7 @@ class node {
 				setTimeout(()=> {
 					oldParentNode.nodeGrpContainer.style.opacity = 0;
 				}, 1000);
+				
 				
 			break;		
 			case 'focusParent': //=> direction right		
@@ -1450,6 +1454,35 @@ class node {
 		}
 	}
 	
+	checkRelationButtons(){
+		if (this.childTag == 'none'){
+			tree.showHideButtons('hide', 'leftArrow');
+		} else {
+			tree.showHideButtons('show', 'leftArrow');
+		}
+		if (this.parentTag == 'none'){
+			tree.showHideButtons('hide', 'rightArrow');
+		} else {
+			tree.showHideButtons('show', 'rightArrow');
+		}
+		
+		const siblingsCheck = this.personData.siblings ?? 'none';
+		const childrenCheck = this.personData.children ?? 'none';
+		
+		if (siblingsCheck == 'none'){
+			tree.showHideButtons('hide', 'sibling');
+		} else {
+			tree.showHideButtons('show', 'sibling');
+		}
+		
+		if (childrenCheck == 'none'){
+			tree.showHideButtons('hide', 'children');
+		} else {
+			tree.showHideButtons('show', 'children');
+		}	
+		
+	}
+	
 	animateShift () {		
 		const scaleUp = (this.tagType =='focus') ? 2 : 1;
 		Velocity(this.nodeGrpContainer, { 
@@ -1497,7 +1530,7 @@ class node {
 			}, 1500);
 		}
 	}
-		
+	
 	nodeSetPerson(newName, newFam, newTag){
 		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
 		const personInfo = PEOPLEINFO[newFam][newName] ?? {};	
@@ -1774,53 +1807,131 @@ class treeSVG {
 	}
 	
 	showHideButtons(showHide, icon = false){
-		var btnDivs = [];
-		btnDivs.push( this.svgDiv.querySelector(".arrowButtonsDiv") );
+		const btnDiv = this.svgDiv.querySelector(".arrowButtonsDiv") ;
+		const btnArray = btnDiv.querySelectorAll("button");
 		
 		switch (showHide){
 			case 'hideAll':
-				for (const div of btnDivs) {
-					div.style.display = 'none';
-				}
+				this.animateButtonDivEnterExit(btnDiv, 'exit');
+				setTimeout(()=>{
+					for (const btn of btnArray) {
+						btn.style.opacity = 0;
+					}
+				}, 500);
 			break;
 			case 'showAll':
-				for (const div of btnDivs) {
-					div.style.display = '';
+				for (const btn of btnArray) {
+					btn.style.opacity = 1;
 				}
+				this.animateButtonDivEnterExit(btnDiv, 'enter');
 			break;
 			case 'hide':	
 				switch (icon){
 					case 'sibling':
-						btnDivs.querySelector('.siblingIcon_button').style.display = 'none';
+						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
+						this.animateButtonEnterExit(sibBtn, 'exit');
 					break;
 					case 'children':
-						btnDivs.querySelector('.childrenIcon_button').style.display = 'none';
+						const chldBtn = btnDiv.querySelector('.childrenIcon_button');
+						this.animateButtonEnterExit(chldBtn, 'exit');
 					break;
 					case 'leftArrow':
-						btnDivs.querySelector('.leftArrow_button').style.display = 'none';
+						const lftBtn = btnDiv.querySelector('.leftArrow_button');
+						this.animateButtonEnterExit(lftBtn, 'exit');
 					break;
 					case 'rightArrow':
-						btnDivs.querySelector('.rightArrow_button').style.display = 'none';
+						const rghtBtn = btnDiv.querySelector('.rightArrow_button');
+						this.animateButtonEnterExit(rghtBtn, 'exit');
 					break;
 				}
 			break;			
 			case 'show':	
 				switch (icon){
 					case 'sibling':
-						btnDivs.querySelector('.siblingIcon_button').style.display = '';
+						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
+						this.animateButtonEnterExit(sibBtn, 'enter');
 					break;
 					case 'children':
-						btnDivs.querySelector('.childrenIcon_button').style.display = '';
+						const chldBtn = btnDiv.querySelector('.childrenIcon_button');
+						this.animateButtonEnterExit(chldBtn, 'enter');
 					break;
 					case 'leftArrow':
-						btnDivs.querySelector('.leftArrow_button').style.display = '';
+						const lftBtn = btnDiv.querySelector('.leftArrow_button');
+						this.animateButtonEnterExit(lftBtn, 'enter');
 					break;
 					case 'rightArrow':
-						btnDivs.querySelector('.rightArrow_button').style.display = '';
+						const rghtBtn = btnDiv.querySelector('.rightArrow_button');
+						this.animateButtonEnterExit(rghtBtn, 'enter');
 					break;
 				}
 			break;
 		}		
+	}
+	
+	animateButtonDivEnterExit(div, enterExit){
+		switch (enterExit){
+			case 'enter':
+				div.classList.add("vivify");
+				div.classList.add("duration-1500");
+				div.classList.add("driveInBottom");
+				setTimeout(()=>{
+					div.style.opacity = 1;
+				}, 800);
+				setTimeout(()=>{
+					div.classList.remove("vivify");
+					div.classList.remove("duration-1500");
+					div.classList.remove("driveInBottom");
+				}, 1000);			
+			break;
+			case 'exit':
+				div.classList.add("vivify");
+				div.classList.add("duration-1500");
+				div.classList.add("driveOutBottom");
+				setTimeout(()=>{
+					div.style.opacity = 0;
+				}, 800);
+				setTimeout(()=>{
+					div.classList.remove("vivify");
+					div.classList.remove("duration-1500");
+					div.classList.remove("driveOutBottom");
+				}, 1000);
+			break;
+		}
+	}
+	
+	animateButtonEnterExit(btn, enterExit){
+		switch (enterExit){
+			case 'enter':
+				if (btn.style.opacity == 0){
+					btn.classList.add("vivify");
+					btn.classList.add("duration-500");
+					btn.classList.add("flipInX");
+					setTimeout(()=>{
+						btn.style.opacity = 1;
+					}, 800);
+					setTimeout(()=>{
+						btn.classList.remove("vivify");
+						btn.classList.remove("duration-500");
+						btn.classList.remove("flipInX");
+					}, 1000);
+				}
+			break;
+			case 'exit':
+				if (btn.style.opacity == 1){
+					btn.classList.add("vivify");
+					btn.classList.add("duration-500");
+					btn.classList.add("flipOutX");
+					setTimeout(()=>{
+						btn.style.opacity = 0;
+					}, 800);
+					setTimeout(()=>{
+						btn.classList.remove("vivify");
+						btn.classList.remove("duration-500");
+						btn.classList.remove("flipOutX");
+					}, 1000);
+				}
+			break;
+		}
 	}
 	
 	linkingTreeIcons(){
@@ -1855,12 +1966,11 @@ class treeSVG {
 		this.firstFocus = new node(this.svgElem, 'focus').initialise(personTag, famName);	
 		NODEdetails.nodeList.nodeC = this.firstFocus;		
 		
-		this.animateSVGenter();
+		this.animateSVGenterExit('enter');
 	}
 	
 	reInitialiseNodes(personTag, famName) {
-		this.animateSVGleave();
-		
+		this.animateSVGenterExit('exit');		
 		
 		setTimeout(()=> {
 			//clearNodes;
@@ -1873,32 +1983,35 @@ class treeSVG {
 		}, 2000);
 	}
 	
-	animateSVGenter(){
-		this.svgElem.classList.add("vivify");
-		this.svgElem.classList.add("duration-1500");
-		this.svgElem.classList.add("popInBottom");
-		setTimeout(()=>{
-			this.svgElem.style.opacity = 1;
-		}, 800);
-		setTimeout(()=>{
-			this.svgElem.classList.remove("vivify");
-			this.svgElem.classList.remove("duration-1500");
-			this.svgElem.classList.remove("popInBottom");
-		}, 1000);
-	}
-	
-	animateSVGleave(){
-		this.svgElem.classList.add("vivify");
-		this.svgElem.classList.add("duration-1500");
-		this.svgElem.classList.add("popOutBottom");
-		setTimeout(()=>{
-			this.svgElem.style.opacity = 0;
-		}, 800);
-		setTimeout(()=>{
-			this.svgElem.classList.remove("vivify");
-			this.svgElem.classList.remove("duration-1500");
-			this.svgElem.classList.remove("popOutBottom");
-		}, 1500);
+	animateSVGenterExit(enterExit){
+		switch (enterExit){
+			case 'enter':
+			this.svgElem.classList.add("vivify");
+			this.svgElem.classList.add("duration-1500");
+			this.svgElem.classList.add("popInBottom");
+			setTimeout(()=>{
+				this.svgElem.style.opacity = 1;
+			}, 800);
+			setTimeout(()=>{
+				this.svgElem.classList.remove("vivify");
+				this.svgElem.classList.remove("duration-1500");
+				this.svgElem.classList.remove("popInBottom");
+			}, 1000);
+		break;
+		case 'exit':
+			this.svgElem.classList.add("vivify");
+			this.svgElem.classList.add("duration-1500");
+			this.svgElem.classList.add("popOutBottom");
+			setTimeout(()=>{
+				this.svgElem.style.opacity = 0;
+			}, 800);
+			setTimeout(()=>{
+				this.svgElem.classList.remove("vivify");
+				this.svgElem.classList.remove("duration-1500");
+				this.svgElem.classList.remove("popOutBottom");
+			}, 1500);
+			break;
+		}		
 	}
 
 }
@@ -2003,7 +2116,7 @@ function treeChangeView(event, type){
 				}
 			break;
 		}
-		setTimeout(()=> {changingTreeView = false;}, 2000);
+		setTimeout(()=> {changingTreeView = false;}, 3000);
 	}
 }
 
