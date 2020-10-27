@@ -1904,14 +1904,14 @@ class treeSVG {
 			case 'enter':
 				if (btn.style.opacity == 0){
 					btn.classList.add("vivify");
-					btn.classList.add("duration-500");
+					btn.classList.add("duration-1000");
 					btn.classList.add("flipInX");
 					setTimeout(()=>{
 						btn.style.opacity = 1;
-					}, 800);
+					}, 400);
 					setTimeout(()=>{
 						btn.classList.remove("vivify");
-						btn.classList.remove("duration-500");
+						btn.classList.remove("duration-1000");
 						btn.classList.remove("flipInX");
 					}, 1000);
 				}
@@ -1919,14 +1919,14 @@ class treeSVG {
 			case 'exit':
 				if (btn.style.opacity == 1){
 					btn.classList.add("vivify");
-					btn.classList.add("duration-500");
+					btn.classList.add("duration-1000");
 					btn.classList.add("flipOutX");
 					setTimeout(()=>{
 						btn.style.opacity = 0;
 					}, 800);
 					setTimeout(()=>{
 						btn.classList.remove("vivify");
-						btn.classList.remove("duration-500");
+						btn.classList.remove("duration-1000");
 						btn.classList.remove("flipOutX");
 					}, 1000);
 				}
@@ -2116,7 +2116,7 @@ function treeChangeView(event, type){
 				}
 			break;
 		}
-		setTimeout(()=> {changingTreeView = false;}, 3000);
+		setTimeout(()=> {changingTreeView = false;}, 2500);
 	}
 }
 
