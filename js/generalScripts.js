@@ -1433,12 +1433,13 @@ class node {
 			this.nodeGrp.classList.add("hitLeft");
 			
 			Velocity(this.nodeGrpContainer, { opacity: 0 }, { duration: 1100, queue: false });
-			Velocity(this.spouseLineGrp, { opacity: 0 }, { duration: 1100, queue: false });
-			
 			for (const line of this.spouseLineGrp.children ){
-				console.log("Here");
-				Velocity(line, 'reverse', { duration: 2000, queue: false })
+				Velocity(line, { 'stroke-dashoffset': [500, 0] }, { duration: 1000, queue: false })
 			}
+			setTimeout(()=> {
+				Velocity(this.spouseLineGrp, { opacity: 0 }, { duration: 1100, queue: false });
+			}, 500);
+			
 			setTimeout(()=> {
 				this.nodeGrp.classList.remove("vivify");
 				this.nodeGrp.classList.remove("hitLeft");
@@ -1452,7 +1453,7 @@ class node {
 			
 			for (const line of this.spouseLineGrp.children ){
 				setTimeout(()=> {
-					Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false})
+					Velocity(line, { 'stroke-dashoffset': [0, 500] }, { duration: 2000, queue: false})
 				}, 100);
 			}
 			
@@ -1980,16 +1981,10 @@ function treeChange_focusPerson(personTag, famName){
 	//from person click
 	const personData = PEOPLERELATIONS[famName][personTag];
 	tree.setFamilyText(famName);
-	NODEdetails.updateFocus({'personTag': personTag, 'famName':famName});
-	
+	NODEdetails.updateFocus({'personTag': personTag, 'famName':famName});	
 
 	//if first click, initialise
-	if (!svgDiv.querySelector(".nodeCircleGrp")){
-		//if ();
-	//const navDiv = document.querySelector('.top_navbar');
-	//const oldActive = navDiv.querySelector('.navTab.active');
-		//animate in
-		
+	if (!svgDiv.querySelector(".nodeCircleGrp")){		
 		tree.initialiseNodes(personTag, famName);
 	} else {
 		//if new person not currently in nodes, 
