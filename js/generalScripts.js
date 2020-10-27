@@ -454,6 +454,7 @@ function openPerson(evnt, linked = false){
 			//svg tree create
 			treeChange_focusPerson(personTag, famName);			
 		} else {			
+			treeChange_focusPerson(personTag, famName);		
 		}
 
 		//close people div	
@@ -1228,12 +1229,19 @@ class node {
 		//image
 		
 		//spouse line
-		if (this._isSpouse) 
-			this.createSpouseLine();
+		if (this._isSpouse){
+				this.createSpouseLine();
+			if (personTag != 'none'){
+				this.spouseLineGrp.style.opacity = 1;
+			} else {
+				this.spouseLineGrp.style.opacity = 0;
+			}
+			
+		}
 		
 		if (personTag =="none"){
 			nodeGrp.setAttribute("visibility", "hidden");
-			if (this._isSpouse) this.spouseLineGrp.style.opaicty = 0;
+			if (this._isSpouse) this.spouseLineGrp.style.opacity = 0;
 	
 		} else {
 			nodeGrp.setAttribute("visibility", "");
@@ -1829,6 +1837,21 @@ class treeSVG {
 		this.animateSVGenter();
 	}
 	
+	reInitialiseNodes(personTag, famName) {
+		this.animateSVGleave();
+		
+		
+		setTimeout(()=> {
+			//clearNodes;
+			const allContainers = this.svgElem.querySelectorAll(".nodeGrpContainer");
+			for (const container of allContainers){
+				container.remove();
+			}
+			NODEdetails.initialiseNodeLetters();
+			this.initialiseNodes(personTag, famName)
+		}, 2000);
+	}
+	
 	animateSVGenter(){
 		this.svgElem.classList.add("vivify");
 		this.svgElem.classList.add("duration-1500");
@@ -1980,7 +2003,6 @@ function treeChange_shift(nodeObj){
 function treeChange_focusPerson(personTag, famName){
 	//from person click
 	const personData = PEOPLERELATIONS[famName][personTag];
-	tree.setFamilyText(famName);
 	NODEdetails.updateFocus({'personTag': personTag, 'famName':famName});	
 
 	//if first click, initialise
@@ -1988,8 +2010,8 @@ function treeChange_focusPerson(personTag, famName){
 		tree.initialiseNodes(personTag, famName);
 	} else {
 		//if new person not currently in nodes, 
-		//exitNodes, recreate with new focus;		
-		console.log("Here");
+		//exitNodes, recreate with new focus;			
+		tree.reInitialiseNodes(personTag, famName);	
 	}	
 }
 
