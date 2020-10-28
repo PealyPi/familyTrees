@@ -35,24 +35,20 @@ class nodeLetterTag_info {
 		};		
 	}
 	
-	initialiseNodeList(){
-		const emptyList = {
-			'nodeA': '', 'nodeAs': '', 
-			'nodeB': '', 'nodeBs': '', 
-			'nodeC': '', 'nodeCs': '', 
-			'nodeD': '', 'nodeDs': '', 
-			'nodeE': '', 'nodeEs': ''	};
-		for (const node in this.nodeList) delete this.nodeList[node];
-		
-	//	this.nodeList = emptyList;
-	}
-	
 	updateNodeLetters(tag, letter){
+		/*
+		const objKeys = Object.keys(this.nodeLetterTags);
+		for (const key in this.nodeLetterTags){
+			if (this.nodeLetterTags[key] == letter){
+				this.nodeLetterTags[key] = null;
+			}
+		}*/
 		this.nodeLetterTags[tag] = letter;
 	}
 	
 	updateNodeList(letter, obj){
 		this.nodeList[letter] = obj;
+		//console.log("letter:" + letter + ", objTag: " + obj.tagType);
 	}
 	
 	updateFocus(newFocus){
@@ -1081,10 +1077,6 @@ class node {
 		
 		this._isSibling = this.isSibling();
 		
-		if (this.tagType == 'focus'){
-			this.checkRelationButtons();
-		}
-		
 		this.nodeGrpContainer = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
 		
 		//console.log(this.tagType + ", " + this.personTag);
@@ -1114,6 +1106,11 @@ class node {
 				NODEdetails.updateNodeList('nodeCs', this.spouseNode);
 				NODEdetails.updateNodeList('nodeD', this.parentNode);
 				NODEdetails.updateNodeList('nodeB', this.childNode);
+				
+				NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});	
+				
+				this.checkRelationButtons();
+				
 			break;
 			
 			case 'focusParent':				
@@ -1193,8 +1190,8 @@ class node {
 		
 	}
 	
-	reinitialise(personTag, famName) {	
-		//console.log(personTag + ", " + famName + ", tagType: " + this.tagType);
+	reinitialise(personTag, famName) {
+		//console.log(personTag + ", " + famName + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 		const infoDiv = document.getElementById("infoDiv");
 		const infoDivTree = document.getElementById("infoDivTree");
 		
@@ -1223,43 +1220,55 @@ class node {
 				fillPersonInfo(infoDiv, famName, personTag);
 				fillPersonInfo(infoDivTree, famName, personTag);
 				
-				this.checkRelationButtons();
+				setTimeout(()=>{
+					this.checkRelationButtons();
+				}, 500);
+				//console.log(personTag + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			case 'focusParent':
 				this.nodeSetPerson(focusData_parent, famName, this.tagType);
+				//console.log(focusData_parent + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 				
 			case 'focusChild':		
 				this.nodeSetPerson(focusData_child, famName, this.tagType);
+				//console.log(focusData_child + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			case 'focusGchild':
-				this.nodeSetPerson(focusData_gChild, famName, this.tagType);			
+				this.nodeSetPerson(focusData_gChild, famName, this.tagType);
+				//console.log(focusData_gChild + ", tagType: " + this.tagType + ", node: " + this.whichNode);			
 			break;
 			
 			case 'focusGparent':
 				this.nodeSetPerson(focusData_gParent, famName, this.tagType);
+				//console.log(focusData_gParent + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			case 'focusS':
 				this.nodeSetPerson(focusData_spouse, famName, this.tagType);
+				//console.log(focusData_spouse + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			case 'focusChildS':	 
 				this.nodeSetPerson(focusData_childS, famName, this.tagType);
+				//console.log(focusData_childS + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			case 'focusGchildS':	
 				this.nodeSetPerson(focusData_gChildS, famName, this.tagType);
+				//console.log(focusData_gChildS + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;		
 			
 			case 'focusParentS':  
 				this.nodeSetPerson(focusData_parentS, famName, this.tagType);
+				console.log(focusData_parentS + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			case 'focusGparentS':
 				this.nodeSetPerson(focusData_gParentS, famName, this.tagType);
+				//console.log(focusData_gParentS + ", tagType: " + this.tagType + ", node: " + this.whichNode);
 			break;
 			
 			default:
@@ -1448,7 +1457,7 @@ class node {
 		this.oldPosition = this.getNodeTypePosition(this.tagType);
 		const oldTagType = this.tagType;		
 		this.oldTag = oldTagType;	
-
+		
 		const oldRelationsIndex = NODEdetails.nodeRelations.indexOf(oldTagType);
 		var newRelationsIndex = (direction == 'left') ? (oldRelationsIndex + 2) :
 			(direction == 'right') ? (oldRelationsIndex - 2) : '';	
@@ -1467,11 +1476,11 @@ class node {
 		const infoDivTree = document.getElementById("infoDivTree");
 		
 		//change global nodestore
-		NODEdetails.updateNodeLetters(this.tagType, this.whichNode);
 		
-		if (first != 'focusParentS')
+		if (first != 'focusParentS'){
 			this.animateShift();
-		
+			NODEdetails.updateNodeLetters(this.tagType, this.whichNode);
+		}
 		if (this.newTag == 'focus'){
 			this.checkRelationButtons();
 		}
@@ -1545,7 +1554,7 @@ class node {
 				for (const nodeLetter in NODEdetails.nodeList) {
 					if (nodeLetter != this.whichNode)
 						NODEdetails.nodeList[nodeLetter].nodeShift(direction);					
-				}
+				}	
 				
 				const newGparentData = PEOPLERELATIONS[this.famName][this.parentTag] ?? {};
 				const newGparentName = newGparentData.parentMain ?? 'none';
@@ -1563,11 +1572,6 @@ class node {
 				
 			break;				
 			case 'focusParentS': 
-				//this becomes focus
-				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
-				fillPersonInfo(infoDiv, this.famName, this.personTag);
-				fillPersonInfo(infoDivTree, this.famName, this.personTag);
-				
 				this.shiftMainLine();
 			break;	
 		}		
@@ -1576,6 +1580,8 @@ class node {
 	shiftMainLine(){
 		//create dummy for animation
 		const dummyContainer = this.nodeGrpContainer.cloneNode(true);
+		dummyContainer.classList.remove("nodeGrpContainer");	
+		dummyContainer.classList.add("dummyContainer");	
 		this.svg.appendChild(dummyContainer);		
 		const dummyNodeGrp = dummyContainer.querySelector(".nodeGrp");
 		const dummySpouseLineGrp = dummyContainer.querySelector(".spouseLine_GRP");
@@ -1602,20 +1608,8 @@ class node {
 		}, 800);
 		
 		//animate away others
-		tree.animateMainLineShift(dummyContainer);
+		tree.animateMainLineShift(dummyContainer, this.personTag, this.famName);
 		
-		setTimeout(()=>{
-			//reinitialise nodes
-			for (const letter in NODEdetails.nodeList){
-				NODEdetails.nodeList[letter].reinitialise(this.personTag, this.famName);			
-			}
-			
-		}, 2000);
-		setTimeout(()=>{
-			const focusLetter = NODEdetails.nodeLetterTags['focus'];
-			NODEdetails.nodeList[focusLetter].nodeGrpContainer.style.opacity = 1;
-			dummyContainer.remove();
-		}, 3000);
 	}
 	
 	checkRelationButtons(){
@@ -1733,20 +1727,35 @@ class node {
 			case 'focusParent':				
 				this.spouseTag = personData.spouse ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
+				this.childTag = 'none';
+				this.parentSTag = 'none';
 			break;
 			
 			case 'focusChild':				
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
+				this.parentTag = 'none';
+				this.parentSTag = 'none';
 			break;
 			
-			case 'focusGchild':
-				this.spouseTag = personData.spouse ?? 'none';					
-			break;
-			
+			case 'focusGchild': 		
 			case 'focusGparent':
-				this.spouseTag = personData.spouse ?? 'none';				
+				this.spouseTag = personData.spouse ?? 'none';	
+				this.parentTag = 'none';
+				this.parentSTag = 'none';				
+				this.childTag = 'none';					
 			break;	
+			
+			case 'focusS':			
+			case 'focusChildS':				
+			case 'focusGchildS':			
+			case 'focusParentS':  			
+			case 'focusGparentS':
+				this.spouseTag = 'none';		
+				this.parentTag = 'none';
+				this.parentSTag = 'none';				
+				this.childTag = 'none';		
+			break;
 			
 		}
 		return this;
@@ -2098,32 +2107,89 @@ class treeSVG {
 		}
 	}
 	
-	initialiseNodes(personTag, famName) {
+	initialiseNodes(personTag, famName, reinit = false) {
 		this.showHideButtons('showAll');
+		this.firstFocus = new node(this.svgElem, 'focus').initialise(personTag, famName);
 		
-		//create all nodes	
-		NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
-		this.firstFocus = new node(this.svgElem, 'focus').initialise(personTag, famName);	
-		NODEdetails.nodeList.nodeC = this.firstFocus;		
+		if (reinit == "lineShift") {	
+			//group to enter
+			const allNodesGrp = this.groupNodeContainers('group');
+			const lineGrp = this.svgElem.querySelector(".mainLine_GRP");	
+			
+			NODEdetails.nodeList.nodeC.nodeGrpContainer.style.opacity = 0;
+			
+			this.animateGrpEnterExit(lineGrp, 'enter');
+			this.animateGrpEnterExit(allNodesGrp, 'enter');
+			
+			setTimeout(()=>{
+				NODEdetails.nodeList.nodeC.nodeGrpContainer.style.opacity = 1;
+				this.groupNodeContainers('ungroup');
+			}, 1500);
+			
+		} else {
+			this.animateGrpEnterExit(this.svgElem, 'enter');
+		}		
 		
-		this.animateGrpEnterExit(this.svgElem, 'enter');
 	}
 	
-	reInitialiseNodes(personTag, famName) {
-		this.animateGrpEnterExit(this.svgElem, 'exit');		
+	reInitialiseNodes(personTag, famName, lineShift = false) {
+		switch (lineShift){
+			case true:				
+				NODEdetails.initialiseNodeLetters();
+				this.initialiseNodes(personTag, famName, 'lineShift');
+				
+			break;				
+			case false:
+				this.animateGrpEnterExit(this.svgElem, 'exit');		
+				
+				NODEdetails.initialiseNodeLetters();
+				setTimeout(()=> {
+					//clearNodes;
+					const allContainers = this.svgElem.querySelectorAll(".nodeGrpContainer");
+					for (const container of allContainers){
+						container.remove();
+					}
+					
+					this.initialiseNodes(personTag, famName, true);
+				}, 2000);
+			break;		
+		}
 		
-		setTimeout(()=> {
-			//clearNodes;
-			const allContainers = this.svgElem.querySelectorAll(".nodeGrpContainer");
-			for (const container of allContainers){
-				container.remove();
-			}
-			NODEdetails.initialiseNodeLetters();
-			NODEdetails.initialiseNodeList();
-			this.initialiseNodes(personTag, famName)
-		}, 2000);
+		
 	}
 	
+	groupNodeContainers(type, exception = false){
+		switch (type){
+			case 'group':
+				//group to enter
+				const allNodesGrp = new createNewElement('g', {
+					'class': 'allNodesGrp',
+				});
+				this.svgElem.appendChild(allNodesGrp);
+				const nodesArray = this.svgElem.querySelectorAll(".nodeGrpContainer");
+				const lineGrp = this.svgElem.querySelector(".mainLine_GRP");
+		
+				for (const node of nodesArray){
+					if (node != exception){
+						allNodesGrp.appendChild(node);
+					}
+				}
+				$(this.svgElem).prepend(lineGrp);	
+				return allNodesGrp;
+				
+			break;
+			case 'ungroup':
+				const grpToDisband = this.svgElem.querySelector(".allNodesGrp");
+				for (const cntr of grpToDisband.querySelectorAll(".nodeGrpContainer")){
+					this.svgElem.appendChild(cntr);
+				}
+				grpToDisband.remove();
+			break;
+			case 'delete':
+				this.svgElem.querySelector(".allNodesGrp").remove();
+			break;
+		}
+	}
 	
 	animateGrpEnterExit(grp, enterExit){
 		switch (enterExit){
@@ -2157,42 +2223,25 @@ class treeSVG {
 		}			
 	}
 	
-	animateMainLineShift(dummyContainer){
+	animateMainLineShift(dummyContainer, personTag, famName){	
+		this.showHideButtons('hideAll');	
 		//grp all node grps except this one
-		const allNodesGrp = new createNewElement('g', {
-			'class': 'allNodesGrp',
-		});
-		this.svgElem.appendChild(allNodesGrp);
-		
-		const nodesArray = this.svgElem.querySelectorAll(".nodeGrpContainer");
+		const allNodesGrp_start = this.groupNodeContainers('group', dummyContainer);
 		const lineGrp = this.svgElem.querySelector(".mainLine_GRP");
-		$(this.svgElem).prepend(lineGrp);
 		
-		for (const node of nodesArray){
-			if (node != dummyContainer){
-				allNodesGrp.appendChild(node);
-			}
-		}
 		//exit all 
-		this.animateGrpEnterExit(allNodesGrp, 'exit');
+		this.animateGrpEnterExit(allNodesGrp_start, 'exit');
 		this.animateGrpEnterExit(lineGrp, 'exit');		
 		
-		setTimeout(()=> {
-			this.animateGrpEnterExit(lineGrp, 'enter');
-			//set focus to be opacity = 0;
-			const focusLetter = NODEdetails.nodeLetterTags['focus'];
-			NODEdetails.nodeList[focusLetter].nodeGrpContainer.style.opacity = 0;
-			this.animateGrpEnterExit(allNodesGrp, 'enter');
-			setTimeout(()=> {
-				for (const node of nodesArray){
-					if (node != dummyContainer){
-						this.svgElem.appendChild(node);
-					}
-				}
-				allNodesGrp.remove();
-			}, 2000);
-		}, 2000);
-		
+		//when exited, delete nodes and recreate
+		setTimeout(()=>{
+			this.groupNodeContainers('delete');			
+			tree.reInitialiseNodes(personTag, famName, true);
+			
+			setTimeout(()=>{
+				dummyContainer.remove();
+			}, 1500);
+		}, 2000);		
 	}
 }
 

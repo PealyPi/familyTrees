@@ -129,7 +129,7 @@ function nodeDataStorage(){//collapse lvl 2
 			'mainLine':		true,		
 			'familyName': 'bobby',
 			'parentMain': 		'benjaminBobby',
-			'parentSpouse': 		'fannyClarkChapman',	
+			'parentSpouse': 	'fannyClarkChapman',	
 			'siblings': 	['florencePrimroseBobby', 'margaretEllenBobby', 'charlotteBobby', 'samuelJamesBobby', 'annieFlorenceBobby', 'maryAnnBobby', 'janeClarkBobby', 'jamesHerbertBobby' ],
 			'spouse': 		'adaBerriman',	
 			'childMain': 	'maryBobby', 
