@@ -1116,7 +1116,9 @@ class node {
 				
 				NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});	
 				
-				this.checkRelationButtons();
+				setTimeout(()=>{					
+					this.checkRelationButtons();
+				}, 1000);
 				
 			break;
 			
@@ -1615,14 +1617,13 @@ class node {
 	animateShift (oldTag, oldPosition, newPosition) {		
 		const scaleUp = (this.tagType =='focus') ? 2 : 1;
 		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
-		const lineGrp = this.nodeGrpContainer.querySelector(".spouseLine_GRP"); 
+		const lineGrp = this.nodeGrpContainer.querySelector(".spouseLine_GRP"); 	
 	
-	
+		// prevent animation jumping on start
 		Velocity.hook(this.nodeGrpContainer, "translateX", oldPosition.x); 
 		Velocity.hook(this.nodeGrpContainer, "translateY", oldPosition.y); 
 		if (oldTag =='focus') Velocity.hook(nodeGrp, "scale", 2); 
-		else Velocity.hook(nodeGrp, "scale", 1); 
-		
+		else Velocity.hook(nodeGrp, "scale", 1); 		
 		
 		
 		Velocity(this.nodeGrpContainer, { 
@@ -1967,12 +1968,12 @@ class treeSVG {
 				div.classList.add("driveInBottom");
 				setTimeout(()=>{
 					div.style.opacity = 1;
-				}, 800);
+				}, 600);
 				setTimeout(()=>{
 					div.classList.remove("vivify");
 					div.classList.remove("duration-1500");
 					div.classList.remove("driveInBottom");
-				}, 1000);			
+				}, 1900);			
 			break;
 			case 'exit':
 				div.classList.add("vivify");
@@ -1980,7 +1981,7 @@ class treeSVG {
 				div.classList.add("driveOutBottom");
 				setTimeout(()=>{
 					div.style.opacity = 0;
-				}, 800);
+				}, 600);
 				setTimeout(()=>{
 					div.classList.remove("vivify");
 					div.classList.remove("duration-1500");
