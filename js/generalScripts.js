@@ -1115,6 +1115,7 @@ class node {
 				NODEdetails.updateNodeList('nodeB', childNode);
 				
 				NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});	
+				tree.setFamilyText(famName)
 				
 				setTimeout(()=>{					
 					this.checkRelationButtons();
@@ -1819,6 +1820,7 @@ class treeSVG {
 		this.svgDiv = document.getElementById('svgDiv');
 		this.svgElem = document.getElementById('mainSVG');
 	}
+		
 	createSVG() {
 		const pageWidth = document.getElementsByTagName('body')[0].offsetWidth;
 		this.svgWidth = pageWidth;
@@ -1836,11 +1838,7 @@ class treeSVG {
 			{'x': - 10, 'y': (svgCenterPt.y - 70)}, 
 			{'x': (pageWidth + 10), 'y': (svgCenterPt.y- 70)}
 		);
-		this.mainLineGrp = mainLineGrp;
-		
-		
-	//	mainLineGrp.setAttribute("transform", "translate(0 -70)");	
-		this.setFamilyText('');	
+		this.mainLineGrp = mainLineGrp;	
 		
 		this.svgElem.style.opacity = 0; 
 		
