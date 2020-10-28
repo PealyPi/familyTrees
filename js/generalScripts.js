@@ -1842,6 +1842,13 @@ class treeSVG {
 		
 		this.svgElem.style.opacity = 0; 
 		
+		const btnDiv = this.svgDiv.querySelector(".arrowButtonsDiv") ;
+		const btnSib = btnDiv.querySelector("button.siblingIcon_button");
+		const btnChld = btnDiv.querySelector("button.siblingIcon_button");
+		btnSib.addEventListener("click", (evnt) => treeChangeView(event, 'famView'));
+		btnChld.addEventListener("click", (evnt) => treeChangeView(event, 'famView'));
+		
+		
 		this.showHideButtons('hideAll');
 		
 		this.linkingTreeIcons();
@@ -1903,6 +1910,7 @@ class treeSVG {
 					setTimeout(()=>{
 						for (const btn of btnArray) {
 							btn.style.opacity = 0;
+							btn.style.visibility = 'hidden';
 						}
 					}, 500);
 				}
@@ -1911,6 +1919,7 @@ class treeSVG {
 				if (btnDiv.style.opacity == 0){
 					for (const btn of btnArray) {
 						btn.style.opacity = 1;
+							btn.style.visibility = 'visible';
 					}
 					this.animateButtonDivEnterExit(btnDiv, 'enter');
 				}
@@ -2295,8 +2304,7 @@ function treeChangeView(event, type){
 function treeChange_famView(btn, which){	
 	const svgDiv = document.getElementById("svgDiv");
 	
-	console.log(which);
-	
+	console.log(which);	
 	
 } 
 
@@ -2347,42 +2355,6 @@ function treeChange_focusArrows(btn, arrow){
 	nodeObj.nodeShift(arrow, shiftTag);
 }
 
-/*function treeChange_zoom(thisZoomBtn, which){
-	const svgDiv = document.getElementById("svgDiv");	
-	const otherZoomBtn = (which == "minus") ? svgDiv.querySelector(".zoomPlus") : svgDiv.querySelector(".zoomMinus");
-	
-	toggleZoomIcon();
-	//do zoom
-	switch (which){
-		case 'minus': 
-			treeZoomOut();
-		break;
-		case 'plus':
-			treeZoomIn();
-		break;
-	}
-	
-	function toggleZoomIcon(){
-		thisZoomBtn.classList.toggle("btnPulse");
-		setTimeout(() => {
-			$(thisZoomBtn).slideToggle(400, 'swing', function(){
-				$(otherZoomBtn).slideToggle(500, 'swing', function(){
-					otherZoomBtn.classList.toggle("btnPulse");
-				}, 1000);
-			}, 1000);
-		}, 10);		
-	}
-	
-	function treeZoomOut(){
-		
-	}
-	function treeZoomIn(){
-		
-	}
-	
-}
-*/
-
 
 
 function createNewElement(type, obj, noNS=false){
@@ -2419,16 +2391,10 @@ $(document).ready(function(){
 		mask_setVisible('.loading-mask', false);
 	});
 	//navbar
-	//document.addEventListener("click", (evt) => outsideClickNav(evt));
 	const navTabs = document.querySelectorAll('.navTab');
 	for (const tab of navTabs) {
 		tab.addEventListener("click", (evnt) => navBar_clickEvnt(evnt));	
 	}
-	//icon error case
-    /*$(".backup_picture").on("error", function(){
-        $(this).attr('src', './images/nopicture.png');
-    });*/
-
 	
 	//tree
 	tree.createSVG();
@@ -2443,9 +2409,8 @@ $(document).ready(function(){
 	//infoDiv
 	createInfoDivs('tree');	createInfoDivs('info');
 	addPeopleToList();
-	interchangeTreeInfo_Tabs();
-	
-	
+	interchangeTreeInfo_Tabs();	
 	
 });
+
 /* ------------------------------------------------ */

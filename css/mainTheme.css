@@ -484,7 +484,7 @@ button,  button:active, button:hover, button:focus{
 .svg_topLeftArea{
 	position: absolute;
 	top: 40px; left: 100px;
-	height: 100px; /*width: 100px;*/
+	height: 100px;
 	
 }
 .svg_topLeftBtns{
