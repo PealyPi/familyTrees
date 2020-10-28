@@ -1482,7 +1482,7 @@ class node {
 				}
 				
 				//console.log(this.famTags);
-				const newChildData = PEOPLERELATIONS[this.famName][this.childTag] ?? {};
+				const newChildData = PEOPLERELATIONS[this.famName][this.famTags.childTag] ?? {};
 				const newGchildName = newChildData.childMain ?? 'none';
 				
 				const newGchildData = PEOPLERELATIONS[this.famName][newGchildName] ?? {};
@@ -1589,13 +1589,13 @@ class node {
 	}
 	
 	checkRelationButtons(){
-		const parentCheck = this.personData.parentMain ?? 'none';
-		const childCheck = this.personData.childMain ?? 'none';
+	//	const parentCheck = this.personData.parentMain ?? 'none';
+	//	const childCheck = this.personData.childMain ?? 'none';
 		const siblingsCheck = this.personData.siblings ?? this.personData.siblingMain ?? 'none';
 		const childrenCheck = this.personData.children ?? 'none';
 		
 		//console.log("child: " + this.famTags.childTag + ", parent: " + this.famTags.parentTag);
-		
+		/*
 		if (childCheck == 'none'){
 			tree.showHideButtons('hide', 'leftArrow');
 		} else {
@@ -1619,7 +1619,28 @@ class node {
 		} else {
 			tree.showHideButtons('show', 'children');
 			tree.showHideButtons('show', 'leftArrow');
-		}	
+		}	*/
+		
+		var tagChecks = {
+			'childMain': 	'leftArrow',
+			'parentMain': 	'rightArrow',
+			'siblings': 	['siblingMain', 'sibling'],
+			'children': 	'children'
+		};
+		for (const check in tagChecks){
+			if (this.personData.hasOwnProperty(check)){
+				if (Array.isArray(tagChecks[check])){
+					if (this.personData.hasOwnProperty(tagChecks[check][0])){
+						tree.showHideButtons('show', tagChecks[check][1]);
+					}
+				} else {
+					tree.showHideButtons('show', tagChecks[check]);
+				}
+			}
+			else
+				tree.showHideButtons('hide', tagChecks[check]);
+		}
+		
 		
 	}
 	
@@ -2191,6 +2212,7 @@ class treeSVG {
 			}, 1500);
 		}, 2000);		
 	}
+
 }
 
 const tree = new treeSVG();
