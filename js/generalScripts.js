@@ -511,9 +511,10 @@ function openPerson(evnt, linked = false){
 }
 
 function fillPersonInfo(infoDiv, famName, personTag){	
-	const famInfo = PEOPLEINFO[famName];
-	const personInfo = famInfo[personTag];
-	const personRelationsData = PEOPLERELATIONS[famName][personTag];
+
+	const famInfo = PEOPLEINFO[famName] ?? {};
+	const personInfo = famInfo[personTag] ?? {};
+	const personRelationsData = PEOPLERELATIONS[famName][personTag] ?? {};
 	
 	const infoDivSec = infoDiv.querySelector(".infoDivSec");
 	const infoDivMain = infoDivSec.querySelector(".infoMain");
@@ -529,24 +530,29 @@ function fillPersonInfo(infoDiv, famName, personTag){
 	const infoDivType = (infoDiv.id == 'infoDiv') ? 'info' : 'tree';
 	
 	
-	if (mainContainerDiv.style.display == "block"){
-		if (leafSVG.style.display != "none"){
-			$(leafSVG).fadeOut(1000);
-		}
-		$([mainContainerDiv, infoAboutSect]).fadeOut(1000, function(){
-			clearAndFill();			
-		});	
+	if (personTag == ''){
+		clearPersonInfo(infoDiv);	
 		
-		setTimeout(() => {extendDivAndShow()}, 1200);	
-	} else {
-		//first fill		
-		clearAndFill();		
-		extendDivAndShow();
-		if (infoDivType == "info"){
-			$(infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
+	} else {		
+		if (mainContainerDiv.style.display == "block"){
+			if (leafSVG.style.display != "none"){
+				$(leafSVG).fadeOut(1000);
+			}
+			$([mainContainerDiv, infoAboutSect]).fadeOut(1000, function(){
+				clearAndFill();			
+			});	
+			
+			setTimeout(() => {extendDivAndShow()}, 1200);	
 		} else {
-			$(infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
-		}
+			//first fill		
+			clearAndFill();		
+			extendDivAndShow();
+			if (infoDivType == "info"){
+				$(infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
+			} else {
+				$(infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
+			}
+		}		
 	}
 	
 	
@@ -1187,48 +1193,78 @@ class node {
 		
 	}
 	
-	reinitialise(personTag, famName, link = false) {
+	reinitialise(personTag, famName) {	
+		//console.log(personTag + ", " + famName + ", tagType: " + this.tagType);
+		const infoDiv = document.getElementById("infoDiv");
+		const infoDivTree = document.getElementById("infoDivTree");
+		
+		const focusData = PEOPLERELATIONS[famName][personTag] ?? {};
+		
+		const focusData_spouse = focusData.spouse ?? 'none';
+		const focusData_parent = focusData.parentMain ?? 'none';
+		const focusData_parentS = focusData.parentSpouse ?? 'none';
+		const focusData_child = focusData.childMain ?? 'none';
+		
+		const parentData = PEOPLERELATIONS[famName][focusData_parent] ?? {};
+		const childData = PEOPLERELATIONS[famName][focusData_child] ?? {};
+		
+		const focusData_childS = childData.spouse ?? 'none';
+		const focusData_gParent = parentData.parentMain ?? 'none';
+		const focusData_gParentS = parentData.parentSpouse ?? 'none';
+		const focusData_gChild = childData.childMain ?? 'none';
+		
+		const gChildData = PEOPLERELATIONS[famName][focusData_gChild] ?? {};
+		const focusData_gChildS = gChildData.spouse ?? 'none';
+		
 		switch (this.tagType){
 			case 'focus':	
-				NODEdetails.updateNodeList('nodeC', this);
-				/*NODEdetails.updateNodeList('nodeCs', this.spouseNode);
-				NODEdetails.updateNodeList('nodeD', this.parentNode);
-				NODEdetails.updateNodeList('nodeB', this.childNode);*/
-				//set focusParentS (clicked element) to focus, then oldfocus to focusParentS
-				//(nodeLetter)
-				//
+				this.nodeSetPerson(personTag, famName, this.tagType);
+				NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
+				fillPersonInfo(infoDiv, famName, personTag);
+				fillPersonInfo(infoDivTree, famName, personTag);
+				
+				this.checkRelationButtons();
 			break;
 			
-			case 'focusParent':				
+			case 'focusParent':
+				this.nodeSetPerson(focusData_parent, famName, this.tagType);
 			break;
-			
-			case 'focusChild':				
+				
+			case 'focusChild':		
+				this.nodeSetPerson(focusData_child, famName, this.tagType);
 			break;
 			
 			case 'focusGchild':
-				
+				this.nodeSetPerson(focusData_gChild, famName, this.tagType);			
 			break;
 			
 			case 'focusGparent':
+				this.nodeSetPerson(focusData_gParent, famName, this.tagType);
 			break;
 			
-			/* // spouses
-			case 'focusS':	case 'focusChildS':	 case 'focusGchildS':			
-			case 'focusParentS':  case 'focusGparentS':
+			case 'focusS':
+				this.nodeSetPerson(focusData_spouse, famName, this.tagType);
 			break;
-			case 'focusParentS':
-			break;*/
+			
+			case 'focusChildS':	 
+				this.nodeSetPerson(focusData_childS, famName, this.tagType);
+			break;
+			
+			case 'focusGchildS':	
+				this.nodeSetPerson(focusData_gChildS, famName, this.tagType);
+			break;		
+			
+			case 'focusParentS':  
+				this.nodeSetPerson(focusData_parentS, famName, this.tagType);
+			break;
+			
+			case 'focusGparentS':
+				this.nodeSetPerson(focusData_gParentS, famName, this.tagType);
+			break;
 			
 			default:
 				//console.log("Tag doesn't match any...");
 		}
-		return this;
-		/*
-		if (link){
-			
-		} else {
-			
-		}*/
 	}
 	
 	getWhichNode(){		
@@ -1538,52 +1574,48 @@ class node {
 	}
 	
 	shiftMainLine(){
-		const oldTag = this.tagType;
-		const oldLetter = this.whichNode;
-		console.log(oldLetter);
-		//NODEdetails.initialiseNodeLetters();
+		//create dummy for animation
+		const dummyContainer = this.nodeGrpContainer.cloneNode(true);
+		this.svg.appendChild(dummyContainer);		
+		const dummyNodeGrp = dummyContainer.querySelector(".nodeGrp");
+		const dummySpouseLineGrp = dummyContainer.querySelector(".spouseLine_GRP");
+		
+		this.nodeGrpContainer.style.opacity = 0;		
+		const newFocusPosition = this.getNodeTypePosition('focus');
 		const oldPosition = this.getNodeTypePosition('focusParentS');		
-		this.tagType = 'focus';
 		
 		//animate this node to focus position
-		for (const line of this.spouseLineGrp.children ){
+		for (const line of dummySpouseLineGrp.children ){
 			Velocity(line, { 'stroke-dashoffset': [500, 0] }, { duration: 1000, queue: false })
-		}
-		
-		const newFocusPosition = this.getNodeTypePosition('focus');
+		}	
 		
 		setTimeout(()=>{
-			Velocity(this.nodeGrpContainer, { 
+			Velocity(dummyContainer, { 
 				translateX: [newFocusPosition.x , oldPosition.x], 
 				translateY: [newFocusPosition.y , oldPosition.y], 
 				opacity: [1 , 0.6], 
 			}, { duration: 1500, queue: false,});
 			
-			Velocity(this.nodeGrp, { 
+			Velocity(dummyNodeGrp, { 
 				scale: 2
 			}, { duration: 1500, queue: false,});
 		}, 800);
 		
 		//animate away others
-		tree.animateMainLineShift(this.nodeGrpContainer);
+		tree.animateMainLineShift(dummyContainer);
 		
-		//reinitialise nodes
 		setTimeout(()=>{
-			//NODEdetails.initialiseNodeLetters();	
+			//reinitialise nodes
+			for (const letter in NODEdetails.nodeList){
+				NODEdetails.nodeList[letter].reinitialise(this.personTag, this.famName);			
+			}
 			
-			this.reinitialise(this.personTag, this.famName);
-			
-			console.log(NODEdetails.nodeList);
-			console.log(NODEdetails.getNodeObj('focusParent'));
-			/*var allNodesGrp = []
-			const nodesArray = this.svg.querySelectorAll(".nodeGrpContainer");
-			for (const node of nodesArray){
-				if (node != this.nodeGrpContainer){
-					//allNodesGrp.push(node);
-					tree.animateGrpEnterExit(node, 'enter');
-				}
-			}*/
 		}, 2000);
+		setTimeout(()=>{
+			const focusLetter = NODEdetails.nodeLetterTags['focus'];
+			NODEdetails.nodeList[focusLetter].nodeGrpContainer.style.opacity = 1;
+			dummyContainer.remove();
+		}, 3000);
 	}
 	
 	checkRelationButtons(){
@@ -1692,8 +1724,6 @@ class node {
 		
 		switch (this.tagType){
 			case 'focus':		
-				//this.nodeGrpContainer.setAttribute("visibility", "");				
-		
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
@@ -1701,46 +1731,22 @@ class node {
 			break;
 			
 			case 'focusParent':				
-				//this.nodeGrpContainer.setAttribute("visibility", "");
 				this.spouseTag = personData.spouse ?? 'none';
 				this.parentTag = personData.parentMain ?? 'none';
 			break;
 			
 			case 'focusChild':				
-				//this.nodeGrpContainer.setAttribute("visibility", "");
 				this.spouseTag = personData.spouse ?? 'none';
 				this.childTag = personData.childMain ?? 'none';
 			break;
 			
 			case 'focusGchild':
-				//this.nodeGrpContainer.setAttribute("visibility", "hidden");
 				this.spouseTag = personData.spouse ?? 'none';					
 			break;
 			
 			case 'focusGparent':
-				//this.nodeGrpContainer.setAttribute("visibility", "hidden"); 
 				this.spouseTag = personData.spouse ?? 'none';				
 			break;	
-			/*
-			case 'focusS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;
-			
-			case 'focusChildS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;
-			
-			case 'focusGchildS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;
-			
-			case 'focusParentS':
-				this.nodeGrpContainer.setAttribute("visibility", "");
-			break;				
-			
-			case 'focusGparentS':
-				this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			break;*/
 			
 		}
 		return this;
@@ -2151,7 +2157,7 @@ class treeSVG {
 		}			
 	}
 	
-	animateMainLineShift(newFocusContainer){
+	animateMainLineShift(dummyContainer){
 		//grp all node grps except this one
 		const allNodesGrp = new createNewElement('g', {
 			'class': 'allNodesGrp',
@@ -2163,7 +2169,7 @@ class treeSVG {
 		$(this.svgElem).prepend(lineGrp);
 		
 		for (const node of nodesArray){
-			if (node != newFocusContainer){
+			if (node != dummyContainer){
 				allNodesGrp.appendChild(node);
 			}
 		}
@@ -2173,6 +2179,18 @@ class treeSVG {
 		
 		setTimeout(()=> {
 			this.animateGrpEnterExit(lineGrp, 'enter');
+			//set focus to be opacity = 0;
+			const focusLetter = NODEdetails.nodeLetterTags['focus'];
+			NODEdetails.nodeList[focusLetter].nodeGrpContainer.style.opacity = 0;
+			this.animateGrpEnterExit(allNodesGrp, 'enter');
+			setTimeout(()=> {
+				for (const node of nodesArray){
+					if (node != dummyContainer){
+						this.svgElem.appendChild(node);
+					}
+				}
+				allNodesGrp.remove();
+			}, 2000);
 		}, 2000);
 		
 	}
