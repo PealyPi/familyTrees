@@ -1481,7 +1481,6 @@ class node {
 						NODEdetails.nodeList[nodeLetter].nodeShift(direction);					
 				}
 				
-				//console.log(this.famTags);
 				const newChildData = PEOPLERELATIONS[this.famName][this.famTags.childTag] ?? {};
 				const newGchildName = newChildData.childMain ?? 'none';
 				
@@ -1514,7 +1513,6 @@ class node {
 				getGparent.nodeGrpContainer.style.opacity = 1;
 				
 				
-				//console.log(this.famTags);
 				//set new gparent info
 				//if famName change... other				
 				const getOldGchildLetter = NODEdetails.nodeLetterTags['focusGchild'];
@@ -1589,38 +1587,8 @@ class node {
 	}
 	
 	checkRelationButtons(){
-	//	const parentCheck = this.personData.parentMain ?? 'none';
-	//	const childCheck = this.personData.childMain ?? 'none';
 		const siblingsCheck = this.personData.siblings ?? this.personData.siblingMain ?? 'none';
 		const childrenCheck = this.personData.children ?? 'none';
-		
-		//console.log("child: " + this.famTags.childTag + ", parent: " + this.famTags.parentTag);
-		/*
-		if (childCheck == 'none'){
-			tree.showHideButtons('hide', 'leftArrow');
-		} else {
-			tree.showHideButtons('show', 'leftArrow');
-		}
-		if (parentCheck == 'none'){
-			tree.showHideButtons('hide', 'rightArrow');
-		} else {
-			tree.showHideButtons('show', 'rightArrow');
-		}
-		
-		if (siblingsCheck == 'none'){
-			tree.showHideButtons('hide', 'sibling');
-		} else {
-			tree.showHideButtons('show', 'sibling');
-		}
-		
-		if (childrenCheck == 'none'){
-			tree.showHideButtons('hide', 'leftArrow');
-			tree.showHideButtons('hide', 'children');
-		} else {
-			tree.showHideButtons('show', 'children');
-			tree.showHideButtons('show', 'leftArrow');
-		}	*/
-		
 		var tagChecks = {
 			'childMain': 	'leftArrow',
 			'parentMain': 	'rightArrow',
@@ -1648,6 +1616,14 @@ class node {
 		const scaleUp = (this.tagType =='focus') ? 2 : 1;
 		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
 		const lineGrp = this.nodeGrpContainer.querySelector(".spouseLine_GRP"); 
+	
+	
+		Velocity.hook(this.nodeGrpContainer, "translateX", oldPosition.x); 
+		Velocity.hook(this.nodeGrpContainer, "translateY", oldPosition.y); 
+		if (oldTag =='focus') Velocity.hook(nodeGrp, "scale", 2); 
+		else Velocity.hook(nodeGrp, "scale", 1); 
+		
+		
 		
 		Velocity(this.nodeGrpContainer, { 
 			translateX: [newPosition.x , oldPosition.x], 
@@ -1710,10 +1686,8 @@ class node {
 		
 		if (this.personTag == 'none'){
 			this.nodeGrpContainer.setAttribute("visibility", "hidden");
-			//nodeGrp.setAttribute("visibility", "hidden");
 		} else {
-			this.nodeGrpContainer.setAttribute("visibility", "");		
-			//nodeGrp.setAttribute("visibility", "");			
+			this.nodeGrpContainer.setAttribute("visibility", "");	
 		}
 		
 		const newNameText  = personInfo.name ?? '';
