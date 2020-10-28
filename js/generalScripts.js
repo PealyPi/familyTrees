@@ -2058,7 +2058,11 @@ class treeSVG {
 	}
 	
 	initialiseNodes(personTag, famName, reinit = false) {
-		this.showHideButtons('showAll');
+		if (!reinit){ 
+			setTimeout(()=>{
+				this.showHideButtons('showAll');
+			}, 900) ;
+		}
 		this.firstFocus = new node(this.svgElem, 'focus').initialise(personTag, famName);
 		
 		if (reinit == "lineShift") {	

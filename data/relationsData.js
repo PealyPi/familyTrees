@@ -89,6 +89,7 @@ function nodeDataStorage(){//collapse lvl 2
 			'parentSpouse': 'mariaBerriman',	
 			'spouse': 		'sidneyCharlesBobby',	
 			'childMain': 	'maryBobby', 
+			'children': 	['maryBobby', 'floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby'],
 		};
 			//gen4
 			kesby.johnBerriman = {	
