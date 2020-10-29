@@ -445,7 +445,11 @@ button,  button:active, button:hover, button:focus{
 	
 	background-color: var(--colourDarkPurple_RGB_Transparent);
 }
-.vineLine{	
+
+#famViewSVG{
+	position:absolute;
+	top:0; left: 0;
+	display:none;
 }
 
 .personCircle{

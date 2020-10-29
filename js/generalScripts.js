@@ -1359,7 +1359,7 @@ class node {
 		//spouse line
 		var spouseLineGrp;
 		if (this._isSpouse){			
-			spouseLineGrp = this.createSpouseLine();
+			spouseLineGrp = tree.createLines(nodeGrpContainer, 'spouseLine', ['m', -120, -200, 'v', 200, 'h', 120]);
 			if (personTag != 'none'){
 				spouseLineGrp.style.opacity = 1;
 			} else {
@@ -1384,46 +1384,6 @@ class node {
 		
 		return nodeGrpContainer;
 		
-	}
-	
-	createSpouseLine(){		
-		//console.log("Here: create spouse line for " + this.personTag);
-		//const linePathD = 'm 0 0 h -120 v -200';
-		const linePathD = 'm -120 -200 v 200 h 120';
-		const lineDefine = {
-			'fill': 'none',
-			'stroke-width': 6,	
-			'stroke-dasharray': 500,
-			'stroke-dashoffset': 500,			
-			'd': linePathD
-		}
-		const shadowLineDefine = Object.assign({}, lineDefine, {
-			'class': 'lineShadow',
-			'stroke': '#000',
-			'stroke-opacity': 0.1,
-		});
-		
-		const lineGrp = new createNewElement('g', {
-			'class': 'spouseLine_GRP',
-		});
-		const mainLine = new createNewElement('path', 
-			Object.assign({}, lineDefine, {
-				'class': 'spouseLine',
-				'stroke': '#FF928B'	
-		}));
-		const mainLineShadow1 = new createNewElement('path', shadowLineDefine);
-		const mainLineShadow2 = new createNewElement('path', shadowLineDefine);
-		
-		this.nodeGrpContainer.prepend(lineGrp);
-		lineGrp.appendChild(mainLine);
-		lineGrp.prepend(mainLineShadow1);
-		lineGrp.prepend(mainLineShadow2);
-		
-		//console.log(mainLine.getTotalLength()); //=320
-		mainLineShadow1.setAttribute('transform', 'translate(-1.5, 1.5)');
-		mainLineShadow2.setAttribute('transform', 'translate(-3, 3)');
-		
-		return lineGrp;
 	}
 	
 	nodeShift(direction, first = false){
@@ -1816,12 +1776,12 @@ class nodeCircle {
 }
 
 class treeSVG {
-	constructor(){
+	constructor(svgElem){
 		this.svgDiv = document.getElementById('svgDiv');
-		this.svgElem = document.getElementById('mainSVG');
+		this.svgElem = svgElem;
 	}
 		
-	createSVG() {
+	createSVG(famView = false) {
 		const pageWidth = document.getElementsByTagName('body')[0].offsetWidth;
 		this.svgWidth = pageWidth;
 		
@@ -1834,65 +1794,96 @@ class treeSVG {
 		const svgCenterPt = {'x': (pageWidth/2),'y': (oldViewBoxArray[3]/2)};
 		this.svgCenterPt = svgCenterPt;
 		
-		const mainLineGrp = this.createMainLine(
-			{'x': - 10, 'y': (svgCenterPt.y - 70)}, 
-			{'x': (pageWidth + 10), 'y': (svgCenterPt.y- 70)}
-		);
-		this.mainLineGrp = mainLineGrp;	
-		
-		this.svgElem.style.opacity = 0; 
-		
-		const btnDiv = this.svgDiv.querySelector(".arrowButtonsDiv") ;
-		const btnSib = btnDiv.querySelector("button.siblingIcon_button");
-		const btnChld = btnDiv.querySelector("button.siblingIcon_button");
-		btnSib.addEventListener("click", (evnt) => treeChangeView(event, 'famView'));
-		btnChld.addEventListener("click", (evnt) => treeChangeView(event, 'famView'));
-		
-		
-		this.showHideButtons('hideAll');
-		
-		this.linkingTreeIcons();
+		if (!famView){
+			//const mainLineGrp = this.createMainLine(
+			//	{'x': - 10, 'y': (svgCenterPt.y - 70)}, 
+			//	{'x': (pageWidth + 10), 'y': (svgCenterPt.y- 70)}
+			//);
+			const mainLineGrp = this.createLines(this.svgElem, 'mainLine', ['m', -10, (svgCenterPt.y - 70), 'h', pageWidth]);
+			this.mainLineGrp = mainLineGrp;	
+			
+			this.svgElem.style.opacity = 0; 
+			
+			const btnDiv = this.svgDiv.querySelector(".arrowButtonsDiv") ;
+			const btnSib = btnDiv.querySelector("button.siblingIcon_button");
+			const btnChld = btnDiv.querySelector("button.siblingIcon_button");
+			btnSib.addEventListener("click", (evnt) => treeChangeView(event, 'famView'));
+			btnChld.addEventListener("click", (evnt) => treeChangeView(event, 'famView'));
+			
+			
+			this.showHideButtons('hideAll');
+			
+			this.linkingTreeIcons();
+			
+		} else {
+			
+		}
 	}
 	
-	createMainLine(startXY, endXY){
-		var strokeWdth = 8, className = 'mainLine', 
-		transXdir = 1, transYdir = 1 ;
-		const lineDefine = {
-			'x1': startXY.x, 'x2': endXY.x,
-			'y1': startXY.y, 'y2': endXY.y,
-			'fill': 'none',
-			'stroke-width': strokeWdth,	
-		}
-		const shadowLineDefine = Object.assign({}, lineDefine, {
-			'class': 'lineShadow',
+	
+	createLines(nodeContainer, type, points){ 		
+		var lineConfig, shadowDirection;
+		const pathD = points.join(" ");
+		
+		switch (type){
+			case 'mainLine':
+				// points = ['m', -10, (svgCenterPt.y - 70), 'h', pageWidth];
+				lineConfig = {
+					'fill': 'none',
+					'stroke-width': 8,			
+					'd': pathD
+				}
+				shadowDirection = 'default';
+			break;
+			case 'spouseLine': 
+				// points = ['m', -120, -200, 'v', 200, 'h', 120];
+				lineConfig = {
+					'fill': 'none',
+					'stroke-width': 6,	
+					'stroke-dasharray': 500,
+					'stroke-dashoffset': 500,			
+					'd': pathD
+				}
+				shadowDirection = 'leftDown';
+			break;	
+		}		
+		
+		console.log("here");
+		
+		const shadowLineDefine = Object.assign({}, lineConfig, {
+			'class': type + '_lineShadow',
 			'stroke': '#000',
 			'stroke-opacity': 0.1,
 		});
 		
 		const lineGrp = new createNewElement('g', {
-			'class': className + '_GRP',
+			'class': type + '_GRP',
 		});
-		const mainLine = new createNewElement('line', 
-			Object.assign({}, lineDefine, {
-				'class': className,
+		const mainLine = new createNewElement('path', 
+			Object.assign({}, lineConfig, {
+				'class': type,
 				'stroke': '#FF928B'	
 		}));
-		const mainLineShadow1 = new createNewElement('line', shadowLineDefine);
-		const mainLineShadow2 = new createNewElement('line', shadowLineDefine);
+		const mainLineShadow1 = new createNewElement('path', shadowLineDefine);
+		const mainLineShadow2 = new createNewElement('path', shadowLineDefine);
 		
-		this.svgElem.prepend(lineGrp);
+		nodeContainer.prepend(lineGrp);
 		lineGrp.appendChild(mainLine);
 		lineGrp.prepend(mainLineShadow1);
 		lineGrp.prepend(mainLineShadow2);
 		
-		mainLineShadow1.setAttribute('transform', 
-			'translate(' + (transXdir * 1.5) + ', ' +  (transYdir * 1.5) + ')');
-		mainLineShadow2.setAttribute('transform',
-			'translate(' + (transXdir * 3) + ', ' +  (transYdir * 3) + ')');
+		//console.log(mainLine.getTotalLength()); //=320
+		const shadowXY = (shadowDirection == 'leftDown') ? {'x': -1, 'y': 1} : {'x': 1, 'y': 1};
 		
+		mainLineShadow1.setAttribute('transform', 
+			'translate(' + (shadowXY.x * 1.5) + ', ' +  (shadowXY.y * 1.5) + ')');
+		mainLineShadow2.setAttribute('transform',
+			'translate(' + (shadowXY.x * 3) + ', ' +  (shadowXY.y * 3) + ')');
 		
 		return lineGrp;
+		
 	}
+	
 	
 	setFamilyText(famName){	
 		const familyTextSpan = this.svgDiv.querySelector(".tree_familyText");
@@ -2201,7 +2192,6 @@ class treeSVG {
 
 }
 
-const tree = new treeSVG();
 
 function createLeafSVG(type) {
 	const infoDiv = (type == 'tree') ?  document.getElementById("infoDivTree") : document.getElementById("infoDiv");
@@ -2388,6 +2378,10 @@ function FAiconFail(){
 }
 
 
+
+const tree = new treeSVG(document.getElementById('mainSVG'));
+const famView = new treeSVG(document.getElementById('famViewSVG'));
+
 /* ------ Run on Page Load -------- */
 $(document).ready(function(){	
 	//loader
@@ -2402,6 +2396,7 @@ $(document).ready(function(){
 	
 	//tree
 	tree.createSVG();
+	famView.createSVG(true);
 
 	//peopleTab
 	const peopleDropdowns = document.querySelectorAll('.ppl_dropdownBtn');
