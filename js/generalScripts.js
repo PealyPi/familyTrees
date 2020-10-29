@@ -727,6 +727,7 @@ class woodInfoTab {
 		const datesDiv = infoDivMain.querySelector(".info_dates");
 		
 		const leafSVG = this.leafSVG;	
+		const thisType = this.type;
 		
 		
 		if (personName == '')
@@ -766,7 +767,7 @@ class woodInfoTab {
 			const datesText = document.createTextNode(personInfo.dates);
 			datesDiv.appendChild(datesText);
 			
-		
+			
 			//info dependent
 			const bornNameDiv = infoDivMain.querySelector(".info_neeName");
 		
@@ -833,7 +834,6 @@ class woodInfoTab {
 					addLeafImgs();
 			}
 			
-			
 			function addLeafImgs(){
 				const personImgs = personInfo.imgs; //[{icon}, {url, config}]
 				var leafImgArr = [];
@@ -843,7 +843,7 @@ class woodInfoTab {
 						leafImgArr.push(img);
 					}
 				});
-				const clipPathURL = 'url(#' + infoDivType +  '_topLeaf_clipPath)';
+				const clipPathURL = 'url(#' + thisType +  '_topLeaf_clipPath)';
 				var leafSVGimgArr = [];
 				leafImgArr.forEach((arrLeafImg)=> {
 					const leafImgSVGobj = new createNewElement('image', { 
@@ -885,11 +885,33 @@ class woodInfoTab {
 			}
 		}
 	}
+
+	fillInExtendedTable(personAbout){
+		for (const aboutKey in personAbout){
+			const dataClass = aboutKey + "Val";
+			const relatedDiv = this.divExtended.querySelector('.' + dataClass);		
+
+			if (aboutKey == "marriedTo"){				
+				const marriedToSpan = document.createElement('span');
+				marriedToSpan.classList.add('personLink');
+				const marriedToText = document.createTextNode(personAbout[aboutKey]);
+				marriedToSpan.appendChild(marriedToText);
+				relatedDiv.appendChild(marriedToSpan);
+
+				//add click function
+				marriedToSpan.classList.add('personLink');
+				marriedToSpan.addEventListener("click", (evnt) => openPerson(evnt, linked=true));
+
+			} else {
+				relatedDiv.innerHTML = personAbout[aboutKey];				
+			}			
+		}
+	}
 	
 	extendDivAndShow (bool, about = false){
 		switch (bool){
 			case true:
-				fillInExtendedTable(about);
+				this.fillInExtendedTable(about);
 				$(this.divExtended).fadeIn(1000);		
 				$([this.containerDiv, this.infoAboutDiv]).fadeIn(700);
 			break;
@@ -933,7 +955,7 @@ class woodInfoTab {
 		const allOldImgs = this.leafSVG.getElementsByTagName("image");
 		
 		if (allOldImgs.length > 0){
-			for (i=0; i<allOldImgs.length; i++){
+			for (var i = 0; i < allOldImgs.length; i++){
 				leafGrp.removeChild(allOldImgs[i]);
 			}
 		}
