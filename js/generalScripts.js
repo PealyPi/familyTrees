@@ -1212,12 +1212,12 @@ class node {
 		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
 		
 		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
-		const personInfo = PEOPLEINFO[newFam][newName] ?? {};	
+		const personInfo = PEOPLEINFO[newFam][newName] ?? {};			
 		
-		this.personData = personData;
+		this.personInfo = personInfo;	
+		this.personData = personData;	
 		this.personTag = newName;
-		this.famName = newFam;
-		this.tagType = newTag;		
+		this.famName = newFam;	this.tagType = newTag;		
 		
 		this.getFamilyTags();	
 		
@@ -1232,6 +1232,18 @@ class node {
 		
 		this.nodeGrpContainer.querySelector(".svgDatesTxt").textContent = newDatesText;
 		this.nodeGrpContainer.querySelector(".svgNameTxt").textContent = newNameText;	
+		
+		if ( (this.personInfo.imgs) && (this.personInfo.imgs[0].icon) ){
+			if (this.iconImg)			
+				this.iconImg.setAttribute('href', this.personInfo.imgs[0].icon);
+			else 
+				this.addPersonIconImg();						
+		} else {
+			if (this.iconImg){
+				this.iconImg.remove();
+				this.iconImg = null;				
+			}	
+		}
 		
 		//if (this.tagType == 'focusGparent') console.log(this.personTag + ", tag :  " + this.tagType + ", name : " + (newNameText!= '') + ", dates : " + (newDatesText!= ''));
 	}
@@ -1533,11 +1545,14 @@ class node {
 				'clip-path': 'url(#imgCircleClipPath)'
 			});
 			
+			this.iconImg = icon;
 			const circleGrp = this.nodeGrpContainer.querySelector(".nodeCircleGrp");
 			circleGrp.appendChild(icon);
 		}
 		
 	}
+	
+	
 	
 	// ---- fns ----
 	nodeShift(direction, first = false){
