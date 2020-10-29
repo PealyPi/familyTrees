@@ -1813,7 +1813,7 @@ class treeSVG {
 			
 			this.showHideButtons('hideAll');
 			
-			this.linkingTreeIcons();
+			this.treeIcon_EVENTS();
 			
 		} else {
 			
@@ -1846,9 +1846,18 @@ class treeSVG {
 				}
 				shadowDirection = 'leftDown';
 			break;	
+			
+			default:
+				lineConfig = {
+					'fill': 'none',
+					'stroke-width': 6,	
+					'stroke-dasharray': 500,
+					'stroke-dashoffset': 500,			
+					'd': pathD
+				}
+				shadowDirection = 'leftDown';
+			
 		}		
-		
-		console.log("here");
 		
 		const shadowLineDefine = Object.assign({}, lineConfig, {
 			'class': type + '_lineShadow',
@@ -1884,7 +1893,6 @@ class treeSVG {
 		
 	}
 	
-	
 	setFamilyText(famName){	
 		const familyTextSpan = this.svgDiv.querySelector(".tree_familyText");
 		familyTextSpan.innerHTML = famName.charAt(0).toUpperCase() + famName.slice(1);	
@@ -1897,7 +1905,7 @@ class treeSVG {
 		switch (showHide){
 			case 'hideAll':
 				if (btnDiv.style.opacity == 1){
-					this.animateButtonDivEnterExit(btnDiv, 'exit');
+					VIVIFY_animateElems(btnDiv, 'buttonDiv', 'exit');
 					setTimeout(()=>{
 						for (const btn of btnArray) {
 							btn.style.opacity = 0;
@@ -1912,26 +1920,26 @@ class treeSVG {
 						btn.style.opacity = 1;
 							btn.style.visibility = 'visible';
 					}
-					this.animateButtonDivEnterExit(btnDiv, 'enter');
+					VIVIFY_animateElems(btnDiv, 'buttonDiv', 'enter');
 				}
 			break;
 			case 'hide':	
 				switch (icon){
 					case 'sibling':
 						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
-						this.animateButtonEnterExit(sibBtn, 'exit');
+						VIVIFY_animateElems(sibBtn, 'buttons', 'exit');
 					break;
 					case 'children':
 						const chldBtn = btnDiv.querySelector('.childrenIcon_button');
-						this.animateButtonEnterExit(chldBtn, 'exit');
+						VIVIFY_animateElems(chldBtn, 'buttons', 'exit');
 					break;
 					case 'leftArrow':
 						const lftBtn = btnDiv.querySelector('.leftArrow_button');
-						this.animateButtonEnterExit(lftBtn, 'exit');
+						VIVIFY_animateElems(lftBtn, 'buttons', 'exit');
 					break;
 					case 'rightArrow':
 						const rghtBtn = btnDiv.querySelector('.rightArrow_button');
-						this.animateButtonEnterExit(rghtBtn, 'exit');
+						VIVIFY_animateElems(rghtBtn, 'buttons', 'exit');
 					break;
 				}
 			break;			
@@ -1939,112 +1947,43 @@ class treeSVG {
 				switch (icon){
 					case 'sibling':
 						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
-						this.animateButtonEnterExit(sibBtn, 'enter');
+						VIVIFY_animateElemsElems(sibBtn, 'buttons', 'enter');
 					break;
 					case 'children':
 						const chldBtn = btnDiv.querySelector('.childrenIcon_button');
-						this.animateButtonEnterExit(chldBtn, 'enter');
+						VIVIFY_animateElems(chldBtn, 'buttons', 'enter');
 					break;
 					case 'leftArrow':
 						const lftBtn = btnDiv.querySelector('.leftArrow_button');
-						this.animateButtonEnterExit(lftBtn, 'enter');
+						VIVIFY_animateElems(lftBtn, 'buttons', 'enter');
 					break;
 					case 'rightArrow':
 						const rghtBtn = btnDiv.querySelector('.rightArrow_button');
-						this.animateButtonEnterExit(rghtBtn, 'enter');
+						VIVIFY_animateElems(rghtBtn, 'buttons', 'enter');
 					break;
 				}
 			break;
 		}		
 	}
 	
-	animateButtonDivEnterExit(div, enterExit){
-		switch (enterExit){
-			case 'enter':
-				div.classList.add("vivify");
-				div.classList.add("duration-1500");
-				div.classList.add("driveInBottom");
-				setTimeout(()=>{
-					div.style.opacity = 1;
-				}, 600);
-				setTimeout(()=>{
-					div.classList.remove("vivify");
-					div.classList.remove("duration-1500");
-					div.classList.remove("driveInBottom");
-				}, 1900);			
-			break;
-			case 'exit':
-				div.classList.add("vivify");
-				div.classList.add("duration-1500");
-				div.classList.add("driveOutBottom");
-				setTimeout(()=>{
-					div.style.opacity = 0;
-				}, 600);
-				setTimeout(()=>{
-					div.classList.remove("vivify");
-					div.classList.remove("duration-1500");
-					div.classList.remove("driveOutBottom");
-				}, 1000);
-			break;
-		}
-	}
-	
-	animateButtonEnterExit(btn, enterExit){
-		switch (enterExit){
-			case 'enter':
-				if (btn.style.opacity == 0){
-					btn.classList.add("vivify");
-					btn.classList.add("duration-1000");
-					btn.classList.add("flipInX");
-					setTimeout(()=>{
-						btn.style.opacity = 1;
-					}, 400);
-					setTimeout(()=>{
-						btn.classList.remove("vivify");
-						btn.classList.remove("duration-1000");
-						btn.classList.remove("flipInX");
-					}, 1000);
-				}
-			break;
-			case 'exit':
-				if (btn.style.opacity == 1){
-					btn.classList.add("vivify");
-					btn.classList.add("duration-1000");
-					btn.classList.add("flipOutX");
-					setTimeout(()=>{
-						btn.style.opacity = 0;
-					}, 800);
-					setTimeout(()=>{
-						btn.classList.remove("vivify");
-						btn.classList.remove("duration-1000");
-						btn.classList.remove("flipOutX");
-					}, 1000);
-				}
-			break;
-		}
-	}
-	
-	linkingTreeIcons(){
+	treeIcon_EVENTS(){
 		//add click events
 		this.treeBtns = {
-			'leftArrow': this.svgDiv.querySelectorAll(".leftArrow_button"),
-			'rightArrow': this.svgDiv.querySelectorAll(".rightArrow_button"),
-			'siblings': this.svgDiv.querySelectorAll(".siblingIcon_button"),
-			'children': this.svgDiv.querySelectorAll(".childrenIcon_button")
+			'leftArrow': 	this.svgDiv.querySelectorAll(".leftArrow_button"),
+			'rightArrow': 	this.svgDiv.querySelectorAll(".rightArrow_button"),
+			'siblings': 	this.svgDiv.querySelectorAll(".siblingIcon_button"),
+			'children': 	this.svgDiv.querySelectorAll(".childrenIcon_button")
 		};
 		
-		const famIcon_button = this.svgDiv.querySelectorAll(".famIcon");
+		const famIcon_button = 	this.svgDiv.querySelectorAll(".famIcon");
 		const arrowBtn_button = this.svgDiv.querySelectorAll(".arrowBtn");	
-		const zoomBtn_button = this.svgDiv.querySelectorAll(".zoomBtn");
+		const zoomBtn_button = 	this.svgDiv.querySelectorAll(".zoomBtn");
 		
 		for (const btn of famIcon_button){
 			btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'famView'));
 		}		
 		for (const btn of arrowBtn_button){
 			btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'arrows'));
-		}
-		for (const btn of zoomBtn_button){	
-			btn.addEventListener("click", (evnt) => treeChangeView(evnt, 'zoom'));	
 		}
 	}
 	
@@ -2063,8 +2002,8 @@ class treeSVG {
 			
 			NODEdetails.nodeList.nodeC.nodeGrpContainer.style.opacity = 0;
 			
-			this.animateGrpEnterExit(lineGrp, 'enter');
-			this.animateGrpEnterExit(allNodesGrp, 'enter');
+			animateGrpEnterExit(lineGrp, 'enter');
+			animateGrpEnterExit(allNodesGrp, 'enter');
 			
 			setTimeout(()=>{
 				NODEdetails.nodeList.nodeC.nodeGrpContainer.style.opacity = 1;
@@ -2072,7 +2011,7 @@ class treeSVG {
 			}, 1500);
 			
 		} else {
-			this.animateGrpEnterExit(this.svgElem, 'enter');
+			animateGrpEnterExit(this.svgElem, 'enter');
 		}		
 		
 	}
@@ -2085,7 +2024,7 @@ class treeSVG {
 				
 			break;				
 			case false:
-				this.animateGrpEnterExit(this.svgElem, 'exit');		
+				animateGrpEnterExit(this.svgElem, 'exit');		
 				
 				NODEdetails.initialiseNodeLetters();
 				setTimeout(()=> {
@@ -2106,7 +2045,6 @@ class treeSVG {
 	groupNodeContainers(type, exception = false){
 		switch (type){
 			case 'group':
-				//group to enter
 				const allNodesGrp = new createNewElement('g', {
 					'class': 'allNodesGrp',
 				});
@@ -2136,38 +2074,6 @@ class treeSVG {
 		}
 	}
 	
-	animateGrpEnterExit(grp, enterExit){
-		switch (enterExit){
-			case 'enter':
-				grp.classList.add("vivify");
-				grp.classList.add("duration-1500");
-				grp.classList.add("popInBottom");
-				setTimeout(()=>{
-					grp.style.opacity = 1;
-				}, 800);
-				setTimeout(()=>{
-					grp.classList.remove("vivify");
-					grp.classList.remove("duration-1500");
-					grp.classList.remove("popInBottom");
-				}, 1500);
-			break;
-			case 'exit':
-				grp.classList.add("vivify");
-				grp.classList.add("duration-1500");
-				grp.classList.add("popOutBottom");
-				setTimeout(()=>{
-					grp.style.opacity = 0;
-				}, 800);
-				setTimeout(()=>{
-					grp.classList.remove("vivify");
-					grp.classList.remove("duration-1500");
-					grp.classList.remove("popOutBottom");
-				}, 1500);
-			break;
-			
-		}			
-	}
-	
 	animateMainLineShift(dummyContainer, personTag, famName){	
 		this.showHideButtons('hideAll');	
 		//grp all node grps except this one
@@ -2175,8 +2081,8 @@ class treeSVG {
 		const lineGrp = this.svgElem.querySelector(".mainLine_GRP");
 		
 		//exit all 
-		this.animateGrpEnterExit(allNodesGrp_start, 'exit');
-		this.animateGrpEnterExit(lineGrp, 'exit');		
+		animateGrpEnterExit(allNodesGrp_start, 'exit');
+		animateGrpEnterExit(lineGrp, 'exit');		
 		
 		//when exited, delete nodes and recreate
 		setTimeout(()=>{
@@ -2191,7 +2097,6 @@ class treeSVG {
 	}
 
 }
-
 
 function createLeafSVG(type) {
 	const infoDiv = (type == 'tree') ?  document.getElementById("infoDivTree") : document.getElementById("infoDiv");
@@ -2349,7 +2254,109 @@ function treeChange_focusArrows(btn, arrow){
 	nodeObj.nodeShift(arrow, shiftTag);
 }
 
+/* -- vivify animating-- */
 
+function animateGrpEnterExit(grp, enterExit){
+	switch (enterExit){
+		case 'enter':
+			grp.classList.add("vivify");
+			grp.classList.add("duration-1500");
+			grp.classList.add("popInBottom");
+			setTimeout(()=>{
+				grp.style.opacity = 1;
+			}, 800);
+			setTimeout(()=>{
+				grp.classList.remove("vivify");
+				grp.classList.remove("duration-1500");
+				grp.classList.remove("popInBottom");
+			}, 1500);
+		break;
+		case 'exit':
+			grp.classList.add("vivify");
+			grp.classList.add("duration-1500");
+			grp.classList.add("popOutBottom");
+			setTimeout(()=>{
+				grp.style.opacity = 0;
+			}, 800);
+			setTimeout(()=>{
+				grp.classList.remove("vivify");
+				grp.classList.remove("duration-1500");
+				grp.classList.remove("popOutBottom");
+			}, 1500);
+		break;
+		
+	}			
+}
+
+function VIVIFY_animateElems(elem, type, enterExit){
+	switch (type){
+		case 'buttonDiv':
+			switch (enterExit){
+				case 'enter':
+					elem.classList.add("vivify");
+					elem.classList.add("duration-1500");
+					elem.classList.add("driveInBottom");
+					setTimeout(()=>{
+						elem.style.opacity = 1;
+					}, 600);
+					setTimeout(()=>{
+						elem.classList.remove("vivify");
+						elem.classList.remove("duration-1500");
+						elem.classList.remove("driveInBottom");
+					}, 1900);			
+				break;
+				case 'exit':
+					elem.classList.add("vivify");
+					elem.classList.add("duration-1500");
+					elem.classList.add("driveOutBottom");
+					setTimeout(()=>{
+						elem.style.opacity = 0;
+					}, 600);
+					setTimeout(()=>{
+						elem.classList.remove("vivify");
+						elem.classList.remove("duration-1500");
+						elem.classList.remove("driveOutBottom");
+					}, 1000);
+				break;
+			}
+		break;
+		
+		case 'buttons':
+			switch (enterExit){
+				case 'enter':
+					if (elem.style.opacity == 0){
+						elem.classList.add("vivify");
+						elem.classList.add("duration-1000");
+						elem.classList.add("flipInX");
+						setTimeout(()=>{
+							elem.style.opacity = 1;
+						}, 400);
+						setTimeout(()=>{
+							elem.classList.remove("vivify");
+							elem.classList.remove("duration-1000");
+							elem.classList.remove("flipInX");
+						}, 1000);
+					}
+				break;
+				case 'exit':
+					if (elem.style.opacity == 1){
+						elem.classList.add("vivify");
+						elem.classList.add("duration-1000");
+						elem.classList.add("flipOutX");
+						setTimeout(()=>{
+							elem.style.opacity = 0;
+						}, 800);
+						setTimeout(()=>{
+							elem.classList.remove("vivify");
+							elem.classList.remove("duration-1000");
+							elem.classList.remove("flipOutX");
+						}, 1000);
+					}
+				break;
+			}
+		break;
+	}
+}
 
 function createNewElement(type, obj, noNS=false){
     var created = !noNS ? document.createElementNS('http://www.w3.org/2000/svg', type) 
