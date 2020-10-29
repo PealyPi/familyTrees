@@ -145,7 +145,7 @@ class navBar {
 		var btn = event.target;
 		const btnID = btn.id ?? '';		
 		
-		if (!isPageTransitioning){
+		if (!this.isPageTransitioning){
 			this.isPageTransitioning = true;
 			
 			if (link){
@@ -253,7 +253,6 @@ class navBar {
 	}
 	
 }
-
 
 class peopleTab {
 	constructor(){
@@ -1047,6 +1046,7 @@ class node {
 		this.getWhichNode();
 	}
 	
+	// ---- info ----
 	getFamilyTags() {
 		this.famTags = {
 			'spouseTag': 	this.personData.spouse ?? 'none',
@@ -1138,10 +1138,109 @@ class node {
 		
 	}
 	
-	initialise(personTag, famName){		
-		const personInfo = PEOPLEINFO[famName][personTag] ?? {};
+	getWhichNode(){		
+		switch (this.tagType){
+			case 'focus':
+				this.whichNode = 'nodeC';	
+			break;
+			
+			case 'focusParent':
+				this.whichNode = 'nodeD';
+			break;
+			
+			case 'focusChild':
+				this.whichNode = 'nodeB';
+			break;
+			
+			case 'focusGchild':
+				this.whichNode = 'nodeA';					
+			break;
+			
+			case 'focusGparent':
+				this.whichNode = 'nodeE';
+			break;			
+			
+			case 'focusS':
+				this.whichNode = 'nodeCs';
+			break;
+			
+			case 'focusChildS':
+				this.whichNode = 'nodeBs';
+			break;
+			
+			case 'focusGchildS':
+				this.whichNode = 'nodeAs';
+			break;
+			
+			case 'focusParentS':
+				this.whichNode = 'nodeDs';
+			break;				
+			
+			case 'focusGparentS':
+				this.whichNode = 'nodeEs';
+			break;			
+		}
+	}
+	
+	checkRelationButtons(){
+		const siblingsCheck = this.personData.siblings ?? this.personData.siblingMain ?? 'none';
+		const childrenCheck = this.personData.children ?? 'none';
+		var tagChecks = {
+			'childMain': 	'leftArrow',
+			'parentMain': 	'rightArrow',
+			'siblings': 	['siblingMain', 'sibling'],
+			'children': 	'children'
+		};
+		for (const check in tagChecks){
+			if (this.personData.hasOwnProperty(check)){
+				if (Array.isArray(tagChecks[check])){
+					if (this.personData.hasOwnProperty(tagChecks[check][0])){
+						tree.showHideButtons('show', tagChecks[check][1]);
+					}
+				} else {
+					tree.showHideButtons('show', tagChecks[check]);
+				}
+			}
+			else
+				tree.showHideButtons('hide', tagChecks[check]);
+		}
 		
+		
+	}
+	
+	nodeSetPerson(newName, newFam, newTag){
+		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
+		
+		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
+		const personInfo = PEOPLEINFO[newFam][newName] ?? {};	
+		
+		this.personData = personData;
+		this.personTag = newName;
+		this.famName = newFam;
+		this.tagType = newTag;		
+		
+		this.getFamilyTags();	
+		
+		if (this.personTag == 'none'){
+			this.nodeGrpContainer.setAttribute("visibility", "hidden");
+		} else {
+			this.nodeGrpContainer.setAttribute("visibility", "");	
+		}
+		
+		const newNameText  = personInfo.name ?? '';
+		const newDatesText  = personInfo.dates ?? '';
+		
+		this.nodeGrpContainer.querySelector(".svgDatesTxt").textContent = newDatesText;
+		this.nodeGrpContainer.querySelector(".svgNameTxt").textContent = newNameText;	
+		
+		//if (this.tagType == 'focusGparent') console.log(this.personTag + ", tag :  " + this.tagType + ", name : " + (newNameText!= '') + ", dates : " + (newDatesText!= ''));
+	}
+
+	// ---- create ----
+	initialise(personTag, famName){		
+		const personInfo = PEOPLEINFO[famName][personTag] ?? {};		
 		const personData = PEOPLERELATIONS[famName][personTag] ?? {};
+		this.personInfo = personInfo;
 		this.personData = personData;
 	
 		this.personTag = personTag;
@@ -1152,6 +1251,9 @@ class node {
 		this._isSibling = this.isSibling();
 		
 		this.nodeGrpContainer = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
+		
+		if (personInfo.hasOwnProperty("imgs"))
+			this.addPersonIconImg();
 		
 		//console.log(this.tagType + ", " + this.personTag);
 		switch (this.tagType){
@@ -1309,50 +1411,6 @@ class node {
 		}
 	}
 	
-	getWhichNode(){		
-		switch (this.tagType){
-			case 'focus':
-				this.whichNode = 'nodeC';	
-			break;
-			
-			case 'focusParent':
-				this.whichNode = 'nodeD';
-			break;
-			
-			case 'focusChild':
-				this.whichNode = 'nodeB';
-			break;
-			
-			case 'focusGchild':
-				this.whichNode = 'nodeA';					
-			break;
-			
-			case 'focusGparent':
-				this.whichNode = 'nodeE';
-			break;			
-			
-			case 'focusS':
-				this.whichNode = 'nodeCs';
-			break;
-			
-			case 'focusChildS':
-				this.whichNode = 'nodeBs';
-			break;
-			
-			case 'focusGchildS':
-				this.whichNode = 'nodeAs';
-			break;
-			
-			case 'focusParentS':
-				this.whichNode = 'nodeDs';
-			break;				
-			
-			case 'focusGparentS':
-				this.whichNode = 'nodeEs';
-			break;			
-		}
-	}
-	
 	createInitialNode(personTag, personInfo, startXY){
 		const nodeScale = (this.tagType == 'focus') ? 2 : 1; 
 		const nodeOpacity = (this._isSpouse) ? (this.tagType == "focusParentS") ? 0.6 : 0 : 1;
@@ -1441,12 +1499,47 @@ class node {
 			
 		}
 		//add click event for non-focus
-		circleGrp.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));
+		circleGrp.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));		
 		
 		return nodeGrpContainer;
 		
 	}
 	
+	addPersonIconImg(){
+		const iconImg = this.personInfo.imgs[0];
+		const iconUrl = iconImg.icon ?? false;
+		
+		const iconSize = 90;
+		if (iconUrl){
+			if (!document.getElementById('def_nodeIconClipPath')){
+				const def = this.svgElem ?? new createNewElement('defs', {
+					'id':'def_nodeIconClipPath',
+				});
+					const clipPath = new createNewElement('clipPath', {
+						'id' : 'imgCircleClipPath',				
+					});
+						const circleClip = new createNewElement('circle', {
+							'cx': 0, 'cy': 0,
+							'r' : iconSize,					
+					});
+				$(this.svgElem).prepend(def);
+			}
+			
+			const icon = new createNewElement('image', {				
+				'class': 'personIcon',
+				'x': -(iconSize/2),	'y': -(iconSize/2),
+				'width': iconSize, 'height': iconSize,	
+				'href': iconUrl,
+				'clip-path': 'url(#imgCircleClipPath)'
+			});
+			
+			const circleGrp = this.nodeGrpContainer.querySelector(".nodeCircleGrp");
+			circleGrp.appendChild(icon);
+		}
+		
+	}
+	
+	// ---- fns ----
 	nodeShift(direction, first = false){
 		//direction right => nodes moving left => relations index -ve	
 		const oldPosition = this.getNodeTypePosition(this.tagType);
@@ -1610,32 +1703,6 @@ class node {
 		
 	}
 	
-	checkRelationButtons(){
-		const siblingsCheck = this.personData.siblings ?? this.personData.siblingMain ?? 'none';
-		const childrenCheck = this.personData.children ?? 'none';
-		var tagChecks = {
-			'childMain': 	'leftArrow',
-			'parentMain': 	'rightArrow',
-			'siblings': 	['siblingMain', 'sibling'],
-			'children': 	'children'
-		};
-		for (const check in tagChecks){
-			if (this.personData.hasOwnProperty(check)){
-				if (Array.isArray(tagChecks[check])){
-					if (this.personData.hasOwnProperty(tagChecks[check][0])){
-						tree.showHideButtons('show', tagChecks[check][1]);
-					}
-				} else {
-					tree.showHideButtons('show', tagChecks[check]);
-				}
-			}
-			else
-				tree.showHideButtons('hide', tagChecks[check]);
-		}
-		
-		
-	}
-	
 	animateShift (oldTag, oldPosition, newPosition) {		
 		const scaleUp = (this.tagType =='focus') ? 2 : 1;
 		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
@@ -1694,34 +1761,6 @@ class node {
 		}
 	}
 	
-	nodeSetPerson(newName, newFam, newTag){
-		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
-		
-		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
-		const personInfo = PEOPLEINFO[newFam][newName] ?? {};	
-		
-		this.personData = personData;
-		this.personTag = newName;
-		this.famName = newFam;
-		this.tagType = newTag;		
-		
-		this.getFamilyTags();	
-		
-		if (this.personTag == 'none'){
-			this.nodeGrpContainer.setAttribute("visibility", "hidden");
-		} else {
-			this.nodeGrpContainer.setAttribute("visibility", "");	
-		}
-		
-		const newNameText  = personInfo.name ?? '';
-		const newDatesText  = personInfo.dates ?? '';
-		
-		this.nodeGrpContainer.querySelector(".svgDatesTxt").textContent = newDatesText;
-		this.nodeGrpContainer.querySelector(".svgNameTxt").textContent = newNameText;	
-		
-		//if (this.tagType == 'focusGparent') console.log(this.personTag + ", tag :  " + this.tagType + ", name : " + (newNameText!= '') + ", dates : " + (newDatesText!= ''));
-	}
-
 }
 
 class nodeCircle {
@@ -2184,7 +2223,7 @@ class treeChangeEvents {
 					this.arrowFocus(whichArrow);
 				break;
 				case 'treeNode':
-					if (btn.tagName == "circle") {
+					if ((btn.tagName == "circle") || (btn.tagName == "image")) {
 						btn = btn.parentElement;
 					}
 					const nodeLetter = btn.id.replace("_circleGrp", "");
@@ -2388,14 +2427,13 @@ function FAiconFail(){
 
 
 
-const navObj = new navBar();
-const pplTab = new peopleTab();
-const infoTab = new woodInfoTab('info');
-const treeInfoTab = new woodInfoTab('tree');
-const treeChange = new treeChangeEvents(document.getElementById('svgDiv'));
-const tree = new treeSVG(document.getElementById('mainSVG'));
-const famView = new treeSVG(document.getElementById('famViewSVG'));
-var isPageTransitioning = false;
+const navObj 	= new navBar();
+const pplTab 	= new peopleTab();
+const infoTab 	= new woodInfoTab('info');
+const treeInfoTab 	= new woodInfoTab('tree');
+const treeChange 	= new treeChangeEvents(document.getElementById('svgDiv'));
+const tree 		= new treeSVG(document.getElementById('mainSVG'));
+const famView 	= new treeSVG(document.getElementById('famViewSVG'));
 
 /* ------ Run on Page Load -------- */
 $(document).ready(function(){	
