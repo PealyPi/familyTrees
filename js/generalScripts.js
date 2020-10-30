@@ -2372,6 +2372,43 @@ class treeSVG {
 					['20%', '35%', '50%', '65%', '80%'], ['20%', '32.5%', '45%', '57.5%', '70%', '82.5%'], 
 					['20%', '30%', '40%', '50%', '60%', '70%', '80%'],
 				];
+				/*
+				[0, 0, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5]
+
+				count>2
+					[count % 2 == 0]
+						eg count = 7, odd
+						//midIndex = MATH.ceil(count/2); (4)
+						midIndex = MATH.floor(count/2); (3) - array index starts at 0
+						
+						i: 0, val=20
+							val = 50+ ( (i-midIndex)*spacing[count])
+								-3*10 = 50-30;
+						
+						i:1, val = 50+ ( (1-3)*10) = 50-20 = 30 
+						i:6, val = 50+ ( (6-3)*10) = 20 50+30 = 80  
+						
+						count = 5, 
+							midIndex = 2, i:0 val = 50 + ( (0-2)*15) = 50-30 = 20 
+										i:3 val = 50 + ( (3-2)*15) = 50+15 = 65 
+						
+					[count % 2 == 1]
+						for i<mid, midIndex = count/2 -1, negate = -1
+						for i>mid, midIndex = count/2, negate = 1
+						
+						val = (50+(negate)*spacing/2) + ( (i-midIndex)*spacing[count])
+						
+						eg count = 6, even
+						(spacing 10)
+						i: 0,  val = (50-5)  + ( (0-2)*10) =  45-20 = 25 
+						i: 1,  val = (50-5)  + ( (1-2)*10) =  45-10 = 35    
+						i: 2,  val = (50-5)  + ( (2-2)*10) =  45 
+						i: 3,  val = (50+5)  + ( (3-3)*10) =  55   
+						i: 4,  val = (50+5)  + ( (4-3)*10) =  55+10 = 65   
+						i: 5,  val = (50+5)  + ( (5-3)*10) =  55+20 = 75   
+						
+				*/
+				const xSpacing = [0, 0, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
 				
 				var kidSpacingX, kidSpacingY;
 				console.log(kidCount);
@@ -2382,14 +2419,7 @@ class treeSVG {
 				}else {
 					kidSpacingY = ['60%', '75%'];
 				}
-				//tX 15% min, 85% max, ty 70%
-				//tx: 20% spacing
-				//kidCount 	1 => 50%
-				//			2 => 40%; 60% 
-				//			3 => 30%, 50%, 70%
-				//			4 => 20%, 40%, 60%, 80%
-				// > 4, reduce size, span 2 lineShift
-				// ty = 
+				
 				var childrenObjs = {};
 				for (let i=0; i < kidCount; i++){
 					var kidFam = focusObj.famName;
