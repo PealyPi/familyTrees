@@ -1244,11 +1244,44 @@ class node {
 			this.nodeGrpContainer.setAttribute("visibility", "");	
 		}
 		
-		const newNameText  = personInfo.name ?? '';
-		const newDatesText  = personInfo.dates ?? '';
-		
+		const newDatesText  = personInfo.dates ?? '';		
 		this.nodeGrpContainer.querySelector(".svgDatesTxt").textContent = newDatesText;
-		this.nodeGrpContainer.querySelector(".svgNameTxt").textContent = newNameText;	
+		
+		
+		const svgNameTxt = this.nodeGrpContainer.querySelector(".svgNameTxt");
+		removeAllChildNodes(svgNameTxt);
+		
+		//name length check
+		var nameArray;
+		const newNameText  = personInfo.name ?? '';
+
+		if (newNameText){
+			if (newNameText.length < 13) nameArray = newNameText;
+			else nameArray = newNameText.match(/(.{1,13})(?:\s|$)/g);				
+		}
+		
+		if (Array.isArray(nameArray)){
+			for (let nameLine of nameArray){
+				const dyVal = (nameLine == nameArray[0]) ? "0.6em" : "1.2em";
+				
+				const nameTextLine = new createNewElement('tspan', {
+					'class': 'svgNameTxt_span',
+					'x': 	0,
+					'dy':	dyVal,
+					'textContent': 	nameLine ?? '',					
+				});	
+				svgNameTxt.appendChild(nameTextLine);
+			}
+		} else {
+			const nameTextLine = new createNewElement('tspan', {
+				'class': 'svgNameTxt_span',
+				'x': 	0,
+				'textContent': 	nameArray ?? '',					
+			});	
+			svgNameTxt.appendChild(nameTextLine);
+		}
+		
+	
 		
 		if ( (this.personInfo.imgs) && (this.personInfo.imgs[0].icon) ){
 			if (this.iconImg)			
@@ -1495,7 +1528,7 @@ class node {
 			
 			'textContent': 	(personInfo.dates ?? ''),			
 		});	
-		nodeGrp.appendChild(personDatesText);
+		nodeGrp.appendChild(personDatesText);		
 		
 		const personNameText = new createNewElement('text', {
 			'class': 		'svgNameTxt',
@@ -1504,16 +1537,39 @@ class node {
 			'font-size': 	configs.fontSz,
 			'fill':	'white',
 			'x': 	0,	
-			'y': 	configs.textY,	
-			
-			'textContent': 	(personInfo.name ?? ''),			
+			'y': 	configs.textY,			
 		});	
 		nodeGrp.appendChild(personNameText);
 		
-		//this.personDatesText = personDatesText;
-		//this.personNameText = personNameText;
+		const newNameText  = personInfo.name ?? '';
 		
-		//image
+		var nameArray;
+		if (newNameText){
+			if (newNameText.length < 13) nameArray = newNameText;
+			else nameArray = newNameText.match(/(.{1,13})(?:\s|$)/g);						
+		}
+		
+		if (Array.isArray(nameArray)){
+			for (let nameLine of nameArray){
+				const dyVal = (nameLine == nameArray[0]) ? "0.6em" : "1.2em";
+				
+				const nameTextLine = new createNewElement('tspan', {
+					'class': 'svgNameTxt_span',
+					'x': 	0,
+					'dy':	dyVal,
+					'textContent': 	nameLine ?? '',					
+				});	
+				personNameText.appendChild(nameTextLine);
+			}
+		} else {
+			const nameTextLine = new createNewElement('tspan', {
+					'class': 'svgNameTxt_span',
+					'x': 	0,
+					'textContent': 	nameArray ?? '',					
+				});	
+				personNameText.appendChild(nameTextLine);
+		}
+		
 		
 		//spouse line
 		var spouseLineGrp;
@@ -2585,7 +2641,11 @@ function FAiconFail(){
 	console.log("Replace Icons...");
 }
 
-
+function removeAllChildNodes(parent) {
+	while (parent.firstChild) {
+		parent.removeChild(parent.firstChild);
+	}
+}
 
 const navObj 	= new navBar();
 const pplTab 	= new peopleTab();
