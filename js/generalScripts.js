@@ -1969,6 +1969,17 @@ class nodeCircle {
 		circleGrp.prepend(circleShadow1);
 		circleGrp.prepend(circleShadow2);
 		
+		
+		//silhouette
+		const silh = new createNewElement('path', {
+			'class': 'nodeSilhouette',
+			'd': nodeSilhouette(),
+			'fill': '#fff',
+			'fill-opacity': 0.4,
+			'stroke': 'none',
+		});
+		circleGrp.appendChild(silh);
+		
 		return circleGrp;
 	}
 }
