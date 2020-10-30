@@ -55,7 +55,7 @@ class nodeLetterTag_info {
 		this.currentFocus = newFocus;
 		//console.log("newFocus: " + newFocus.personTag + ", " +  newFocus.famName);
 	}
-	
+		
 	getNodeObj(nodeTag){
 		const nodeLetter = this.nodeLetterTags[nodeTag];
 		return this.nodeList[nodeLetter];		
@@ -966,7 +966,6 @@ class woodInfoTab {
 
 /* -------------------- */
 
-
 function peopleListSearch() {
 	// Declare variables
 	var input, filter, ul, li, a, i, txtValue;
@@ -1043,6 +1042,7 @@ class node {
 		this.tagType = tagType;	
 		this._isSpouse = this.isSpouse();
 		this._isRoot = this.isRoot();
+		this.xy = this.getNodeTypePosition(tagType);
 		this.getWhichNode();
 	}
 	
@@ -1133,7 +1133,21 @@ class node {
 			break;				
 			case 'focusGparentS': 
 				return {'x': (svgWidth+offScreenX), 'y': spouseLine};
-			break;				
+			break;	
+			
+			case 'famView_parentNode':
+				return {'x': '35%', 'y': '22%'};
+			break;
+			case 'famView_spouseNode':
+				return {'x': '65%', 'y': '22%'};
+			break;
+			case 'famView_childNode':
+				return {'x': '50%', 'y': '70%'};
+			break;
+			
+			/**/
+			default:
+				return {'x': 0, 'y': 0};
 		}
 		
 	}
@@ -1178,7 +1192,10 @@ class node {
 			
 			case 'focusGparentS':
 				this.whichNode = 'nodeEs';
-			break;			
+			break;
+
+			default:
+				this.whichNode = this.tagType;
 		}
 	}
 	
@@ -1243,9 +1260,7 @@ class node {
 				this.iconImg.remove();
 				this.iconImg = null;				
 			}	
-		}
-		
-		//if (this.tagType == 'focusGparent') console.log(this.personTag + ", tag :  " + this.tagType + ", name : " + (newNameText!= '') + ", dates : " + (newDatesText!= ''));
+		}		
 	}
 
 	// ---- create ----
@@ -1334,6 +1349,9 @@ class node {
 					Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 1100, queue: false });
 				}
 			break;
+			
+			default:
+				
 		}
 		return this;
 		
@@ -1427,11 +1445,12 @@ class node {
 		const nodeScale = (this.tagType == 'focus') ? 2 : 1; 
 		const nodeOpacity = (this._isSpouse) ? (this.tagType == "focusParentS") ? 0.6 : 0 : 1;
 		
+		const isPx = (String(startXY.x).search('%') == -1) ? 'px' : '';
+		
 		const nodeGrpContainer = new createNewElement('g', {
-			'id': this.whichNode + '_GrpContainer',
 			'class': 'nodeGrpContainer',
-			'style': 'transform: translateX(' + startXY.x + 'px) translateY(' + startXY.y + 'px); opacity: '+ nodeOpacity,
-		});
+			'style': 'transform: translateX(' + startXY.x + isPx + ') translateY(' + startXY.y + isPx + '); opacity: '+ nodeOpacity,
+		});		
 		
 		if (this._isSpouse)
 			this.svg.prepend(nodeGrpContainer);
@@ -1439,12 +1458,21 @@ class node {
 			this.svg.appendChild(nodeGrpContainer);
 		
 		const nodeGrp = new createNewElement('g', {
-			'id': this.whichNode + '_Grp',
 			'class': 'nodeGrp',
 			'style': 'transform: scale(' + nodeScale + ')',
 		});
 		nodeGrpContainer.appendChild(nodeGrp);
 		this.nodeGrpContainer = nodeGrpContainer;
+		
+		if ( (this.whichNode == this.tagType) || (this.whichNode == this.tagType)){
+			console.log(this.whichNode);
+			nodeGrpContainer.classList.add(this.whichNode + '_GrpContainer');
+			nodeGrp.classList.add(this.whichNode + '_Grp');
+		} else {
+			//console.log(this.whichNode);
+			nodeGrpContainer.setAttribute('id', this.whichNode + '_GrpContainer');
+			nodeGrp.setAttribute('id', this.whichNode + '_Grp');
+		}
 		
 		const circleGrp = new nodeCircle(nodeGrp).createCircle(this.whichNode);		
 		
@@ -1557,7 +1585,7 @@ class node {
 	// ---- fns ----
 	nodeShift(direction, first = false){
 		//direction right => nodes moving left => relations index -ve	
-		const oldPosition = this.getNodeTypePosition(this.tagType);
+		const oldPosition = this.xy;
 		const oldTag = this.tagType;	
 		
 		const oldRelationsIndex = NODEdetails.nodeRelations.indexOf(oldTag);
@@ -1571,6 +1599,7 @@ class node {
 		}
 		
 		const newPosition = this.getNodeTypePosition(NODEdetails.nodeRelations[newRelationsIndex]);
+		this.xy = newPosition;
 		this.tagType = NODEdetails.nodeRelations[newRelationsIndex];			
 		const newTag = this.tagType;
 		
@@ -1893,7 +1922,7 @@ class treeSVG {
 		this.svgDiv = document.getElementById('svgDiv');
 		this.svgElem = svgElem;
 	}
-		
+	
 	createSVG(famView = false) {
 		const pageWidth = document.getElementsByTagName('body')[0].offsetWidth;
 		this.svgWidth = pageWidth;
@@ -2010,7 +2039,7 @@ class treeSVG {
 	showHideButtons(showHide, icon = false){
 		const btnDiv = this.svgDiv.querySelector(".arrowButtonsDiv") ;
 		const btnArray = btnDiv.querySelectorAll("button");
-		
+	
 		switch (showHide){
 			case 'hideAll':
 				if (btnDiv.style.opacity == 1){
@@ -2145,7 +2174,7 @@ class treeSVG {
 					
 					if (famName != 'famView'){
 						this.initialiseNodes(personTag, famName, true);
-					}
+					} 
 					
 				}, 2000);
 			break;		
@@ -2207,7 +2236,124 @@ class treeSVG {
 			}, 1500);
 		}, 2000);		
 	}
+	
+	dummyAnimate_toFamView(focusObj, type){
+		
+		//hide buttonDiv
+		tree.showHideButtons('hideAll');
+		
+		const animEndPos = (type =='children') ? {'x': '35%', 'y': '22%'} : {'x': 0, 'y': 0}; // sibling position based on how many siblings...
+		
+		const dummyContainer = focusObj.nodeGrpContainer.cloneNode(true);
+		dummyContainer.classList.add("focusContainer");
+		dummyContainer.removeAttribute("id");
+		const dummyNodeGrp = dummyContainer.querySelector(".nodeGrp");
+		focusObj.nodeGrpContainer.style.opacity = 0;
+		this.svgElem.style.display = 'block';
+		this.svgElem.style.opacity = 1;		
+		
+		//duplicate focus
+		this.svgElem.appendChild(dummyContainer);		
+		
+		tree.reInitialiseNodes('', 'famView', false);	
+		
+		this.createFamViewNodes(focusObj, type);
+		/*const allNodesGrp = this.groupNodeContainers('group', dummyContainer);
+		
+		setTimeout(()=> {
+			animateGrpEnterExit(allNodesGrp, 'enter');
+		}, 1000);*/
+		
+			Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
+			Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
+			Velocity.hook(dummyNodeGrp, "scale", 2); 
+			Velocity(dummyContainer, { 
+				translateX: [animEndPos.x , focusObj.xy.x], 
+				translateY: [animEndPos.y , focusObj.xy.y], 
+			}, { duration: 1500, queue: false,});
+			
+			Velocity(dummyNodeGrp, { 
+				scale: 1
+			}, { duration: 1500, queue: false,});
+		
+		setTimeout(()=> {
+			
+		}, 1000);
+		
+	}
+	
+	createFamViewNodes (focusObj, type){
+		switch (type){
+			case 'sibling':
+				console.log("Siblings...");
+			break;
+			case 'children':
+				console.log("Children...");
+				const spouse = focusObj.personData.spouse;
+				const kids = focusObj.personData.children;
+				
+				const spouseFam = (focusObj.personData.spouseFamily ?? focusObj.famName);
+				
+				const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, spouseFam);	
+				spouseNode.nodeGrpContainer.setAttribute('id', spouseNode.tagType + "_" + spouseNode.personTag);
+				//spouseNode.nodeGrpContainer.style.opacity = 0;
+				
+				const kidCount = kids.length;
+				const kidSpacingXA = [
+					['50%'], ['40%', '60%'], ['30%', '50%', '70%'], ['20%', '40%', '60%', '80%'], 
+					['20%', '35%', '50%', '65%', '80%'], ['20%', '32.5%', '45%', '57.5%', '70%', '82.5%'], 
+					['20%', '30%', '40%', '50%', '60%', '70%', '80%'],
+				];
+				
+				var kidSpacingY;
+				console.log(kidCount);
+				if (kidCount < 5)
+					kidSpacingY = '70%';
+				else {
+					kidSpacingY = ['60%', '75%'];
+				}
+				//tX 15% min, 85% max, ty 70%
+				//tx: 20% spacing
+				//kidCount 	1 => 50%
+				//			2 => 40%; 60% 
+				//			3 => 30%, 50%, 70%
+				//			4 => 20%, 40%, 60%, 80%
+				// > 4, reduce size, span 2 lineShift
+				// ty = 
+				var childrenObjs = {};
+				for (let i=0; i < kidCount; i++){
+					var kidFam = focusObj.famName;
+					//check focus fam info for kids[0]
+					var childInfo = PEOPLERELATIONS[focusObj.famName][kids[i]] ?? false;
+					if (!childInfo){
+						childInfo = PEOPLERELATIONS[spouseFam][kids[i]] ?? false;
+					
+						if (childInfo) kidFam = spouseFam;
+						else console.log("can't find info for child " + kids[i]);
+					}
+					const kidNode = new node(this.svgElem, 'famView_childNode').initialise(kids[i], kidFam);	
+					kidNode.nodeGrpContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag);					
+					
+					//kidNode.nodeGrpContainer.style.opacity = 0;				
 
+					const tXstring = 'translateX(' + kidSpacingXA[kidCount-1][i] + ') ';
+					const tYstring = (kidCount < 5) ? 'translateY(' + kidSpacingY + ')'
+						: (i % 2 == 0) ? 'translateY(' + kidSpacingY[0] + ')' 
+						: 'translateY(' + kidSpacingY[1] + ') ' ;
+					
+					kidNode.nodeGrpContainer.style.transform = tXstring + tYstring;
+					
+					if (kidCount > 4)
+						kidNode.nodeGrpContainer.style.transform += 'scale(0.8)';
+					
+					childrenObjs[kidNode.personTag] = kidNode;
+				}
+				
+			break;
+		}
+		
+	}
+	
 }
 
 class treeChangeEvents {
@@ -2254,9 +2400,8 @@ class treeChangeEvents {
 	}
 	
 	changeToFamView(type){
-		tree.reInitialiseNodes('', 'famView', false);		
-		//do... 
-		//type = siblings or children
+		const currentFocus = NODEdetails.getNodeObj('focus');
+		famView.dummyAnimate_toFamView(currentFocus, type);	
 		
 	}
 	
