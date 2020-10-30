@@ -2366,17 +2366,20 @@ class treeSVG {
 				//spouseNode.nodeGrpContainer.style.opacity = 0;
 				
 				const kidCount = kids.length;
+				
 				const kidSpacingXA = [
 					['50%'], ['40%', '60%'], ['30%', '50%', '70%'], ['20%', '40%', '60%', '80%'], 
 					['20%', '35%', '50%', '65%', '80%'], ['20%', '32.5%', '45%', '57.5%', '70%', '82.5%'], 
 					['20%', '30%', '40%', '50%', '60%', '70%', '80%'],
 				];
 				
-				var kidSpacingY;
+				var kidSpacingX, kidSpacingY;
 				console.log(kidCount);
-				if (kidCount < 5)
+				if (kidCount < 5){
 					kidSpacingY = '70%';
-				else {
+				} else if (kidCount < 8){
+					kidSpacingY = ['60%', '75%'];
+				}else {
 					kidSpacingY = ['60%', '75%'];
 				}
 				//tX 15% min, 85% max, ty 70%
@@ -2411,7 +2414,7 @@ class treeSVG {
 					kidNode.nodeGrpContainer.style.transform = tXstring + tYstring;
 					
 					if (kidCount > 4)
-						kidNode.nodeGrpContainer.style.transform += 'scale(0.8)';
+						kidNode.nodeGrpContainer.style.transform += 'scale(0.6)';
 					
 					childrenObjs[kidNode.personTag] = kidNode;
 				}
@@ -2451,7 +2454,7 @@ class treeChangeEvents {
 					this.arrowFocus(whichArrow);
 				break;
 				case 'treeNode':
-					if ((btn.tagName == "circle") || (btn.tagName == "image")) {
+					if ((btn.tagName == "circle") || (btn.tagName == "image") || (btn.tagName == "path")) {
 						btn = btn.parentElement;
 					}
 					const nodeLetter = btn.id.replace("_circleGrp", "");
