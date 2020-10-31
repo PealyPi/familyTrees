@@ -1136,13 +1136,13 @@ class node {
 			break;	
 			
 			case 'famView_parentNode':
-				return {'x': '35%', 'y': '22%'};
+				return {'x': svgWidth * 35/100, 'y': svgHeight * 22/100};
 			break;
 			case 'famView_spouseNode':
-				return {'x': '65%', 'y': '22%'};
+				return {'x': svgWidth * 65/100, 'y': svgHeight * 22/100};
 			break;
 			case 'famView_childNode':
-				return {'x': '50%', 'y': '70%'};
+				return {'x': svgWidth * 50/100, 'y': svgHeight * 70/100};
 			break;
 			
 			/**/
@@ -2335,7 +2335,6 @@ class treeSVG {
 		tree.reInitialiseNodes('', 'famView', false);	
 		
 		const famNodes = this.createFamViewNodes(focusObj, type);
-		console.log(famNodes);
 		
 		Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
 		Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
@@ -2361,17 +2360,14 @@ class treeSVG {
 		$(this.svgElem).prepend(lineGrp);
 		
 		let mainPos = {'x': svgWidth * parseFloat(animEndPos.x /100), 'y': svgHeight * parseFloat(animEndPos.y /100)};		
-		let spousePos_perc = famNodes.spouse.xy;
-		spousePos_perc.x = parseFloat(spousePos_perc.x.replace("%", ""));
-		spousePos_perc.y = parseFloat(spousePos_perc.y.replace("%", ""));
-		let spousePosX = svgWidth * parseFloat(spousePos_perc.x/100);
 		
-		const spousePathPoints = ['M', mainPos.x, mainPos.y, 'H', spousePosX];
+		const spousePos = famNodes.spouse.xy;
+		const spousePathPoints = ['M', mainPos.x, mainPos.y, 'H', spousePos.x];
 		const spouseLines = this.createLines(lineGrp, 'famView_spouseLine', spousePathPoints);
 		
 		//line down
 		let kidCount = Object.keys(famNodes.children).length;
-		let midSpousePoint = mainPos.x + ((spousePosX - mainPos.x) / 2);
+		let midSpousePoint = mainPos.x + ((spousePos.x - mainPos.x) / 2);
 		
 		let lineDownY = (kidCount < 5) ? svgHeight * 0.55 : svgHeight * 0.48;
 		const lineDown_pathPoints = ['M', midSpousePoint, mainPos.y, 'V', (lineDownY - extendLine + 0.1)];
@@ -2404,12 +2400,10 @@ class treeSVG {
 		var childLines = [];
 		for (const kid in famNodes.children){
 			let kidPos = famNodes.children[kid].xy;
-			const kidPos_perc = {'x': svgWidth * parseFloat(kidPos.x/100), 'y': svgHeight * parseFloat(kidPos.y/100)};
-			const kidPathPoints = ['M', kidPos_perc.x, lineDownY, 'V', kidPos_perc.y];
+			const kidPathPoints = ['M', kidPos.x, lineDownY, 'V', kidPos.y];
 			const kidLines = this.createLines(lineGrp, 'famView_childLine', kidPathPoints);
 			childLines.push(kidLines);
 		}
-		console.log(childLines);
 		
 		setTimeout(()=> {
 			for (const line of spouseLines.children ){
@@ -2435,11 +2429,11 @@ class treeSVG {
 				}, 500);
 				}, 500);
 			}, 500);	
-			VIVIFY_animateElems(famNodes.spouse.nodeGrpContainer, 'famViewNodes', 'enter');
+			svgAnimate('spin', 'enter', famNodes.spouse, {'scale':1});
 			
 			setTimeout(()=> {
 				for (const kidName in famNodes.children){
-					VIVIFY_animateElems(famNodes.children[kidName].nodeGrpContainer, 'famViewNodes', 'enter');
+					svgAnimate('spin', 'enter', famNodes.children[kidName], {'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
 				}
 			}, 1000);
 			
@@ -2465,21 +2459,24 @@ class treeSVG {
 				
 				const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, spouseFam);	
 				spouseNode.nodeGrpContainer.setAttribute('id', spouseNode.tagType + "_" + spouseNode.personTag);
-				spouseNode.nodeGrpContainer.style.opacity = 0;
-				famObjs['spouse'] = spouseNode;
+				//spouseNode.nodeGrpContainer.style.opacity = 0;	
+				famObjs['spouse'] = spouseNode;	
+				
+				spouseNode.nodeGrpContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';		
+				spouseNode.nodeGrpContainer.querySelector(".nodeGrp").style.opacity = 0;
 				
 				const kidCount = kids.length;
 				
 				const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
 				var midIndex = Math.floor(kidCount / 2);
 				
-				var kidSpacingX, kidSpacingY, kidScale;
+				var kidSpacingX, kidSpacingY;
 				if (kidCount < 5){
 					kidSpacingY = '70%'; 
 				} else if (kidCount < 8){
-					kidSpacingY = ['60%', '75%']; kidScale = 'scale(0.8)';
+					kidSpacingY = ['60%', '75%'];
 				} else {
-					kidSpacingY = ['60%', '75%']; kidScale = 'scale(0.6)';
+					kidSpacingY = ['60%', '75%']; 
 				}
 				
 				//console.log("count: " + kidCount + ", mid: " + midIndex);
@@ -2494,32 +2491,40 @@ class treeSVG {
 						else console.log("can't find info for child " + kids[i]);
 					}
 					const kidNode = new node(this.svgElem, 'famView_childNode').initialise(kids[i], kidFam);	
-					kidNode.nodeGrpContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag);					
+					kidNode.nodeGrpContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag); 
 					
-					kidNode.nodeGrpContainer.style.opacity = 0;						
+					//kidNode.nodeGrpContainer.style.opacity = 0;					
 					
 					//spacing
-					var xCalc = 0;
+					var xCalcPerc = 0;
 					if (kidCount % 2 == 1){
-						xCalc =  50 + ( (i - midIndex) * xSpacing[kidCount]);
+						xCalcPerc =  50 + ( (i - midIndex) * xSpacing[kidCount]);
 					} else {
 						const negate = (i < midIndex) ? -1 : 1;
 						const midIndexAdapt = (i < midIndex) ? (midIndex - 1) : midIndex;
-						xCalc = (50 + (negate * xSpacing[kidCount]/2) + ( (i - midIndexAdapt) * xSpacing[kidCount]) );	
+						xCalcPerc = (50 + (negate * xSpacing[kidCount]/2) + ( (i - midIndexAdapt) * xSpacing[kidCount]) );	
 					}
 					//console.log(i + ": " + xCalc);
 					
-					const tXstring = 'translateX(' + xCalc + '%) ';
-					let tY = (kidCount < 5) ? kidSpacingY : (i % 2 == 0) ? kidSpacingY[0] : kidSpacingY[1];
-					const tYstring = 'translateY(' + tY + ')'; ;
+					let tYperc = (kidCount < 5) ? parseInt(kidSpacingY.replace("%","")) : (i % 2 == 0) ? parseInt(kidSpacingY[0].replace("%","")) : parseInt(kidSpacingY[1].replace("%",""));
 					
-					kidNode.xy = {'x': xCalc, 'y': parseInt(tY.replace("%", ""))};
-					kidNode.nodeGrpContainer.style.transform = tXstring + tYstring;
+					//go from % to pt
+					const svgWidth = focusObj.svg.getBoundingClientRect().width;
+					const svgHeight = focusObj.svg.getBoundingClientRect().height;
 					
-					if (kidCount > 4)
-						kidNode.nodeGrpContainer.style.transform += kidScale;
+					const tY = svgHeight * (tYperc / 100);
+					const tX = svgWidth * (xCalcPerc / 100);
+					
+					const tString = 'translateX(' + tX + 'px) translateY(' + tY + 'px) ';
+					
+					kidNode.xy = {'x': tX, 'y': tY};
+					kidNode.nodeGrpContainer.style.transform = '';
+					kidNode.nodeGrpContainer.style.transform += tString;					
+					kidNode.nodeGrpContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';	
+					kidNode.nodeGrpContainer.querySelector(".nodeGrp").style.opacity = 0;	
 					
 					famObjs['children'][kidNode.personTag] = kidNode;
+					//console.log(kidNode.nodeGrpContainer.style.transform);
 				}
 				
 				return famObjs;
@@ -2537,7 +2542,7 @@ class treeChangeEvents {
 		this.treeSVG = svgDiv.querySelector("#mainSVG");
 		this.famViewSVG = svgDiv.querySelector("#famViewSVG");
 		
-		this.changinTreeView = false;
+		this.changingTreeView = false;
 	}
 	
 	treeChangeView(event, type){
@@ -2570,7 +2575,7 @@ class treeChangeEvents {
 					} 
 				break;
 			}
-			setTimeout(()=> {this.changingTreeView = false;}, 2500);
+			setTimeout(()=> {this.changingTreeView = false;}, 1000);
 		}
 	}
 	
@@ -2627,6 +2632,38 @@ class treeChangeEvents {
 }
 
 /* -------------------- */
+
+function svgAnimate(type, enterExit, elemNode, config){
+	//Checking if Percentage
+	let elemTransform = elemNode.nodeGrpContainer.style.transform;
+	
+	Velocity.hook(elemNode.nodeGrpContainer, "translateX", elemNode.xy.x); 
+	Velocity.hook(elemNode.nodeGrpContainer, "translateY", elemNode.xy.y);
+	switch (type){
+		case 'spin':
+			switch (enterExit){
+				case 'enter':
+					//Velocity.hook(elemNode.nodeGrpContainer, "scale", 0); 
+					//Velocity.hook(elemNode.nodeGrpContainer, "rotateZ", '0deg');
+					//Velocity.hook(elemNode.nodeGrpContainer, "opacity", 0);
+					const grp = (elemNode.nodeGrpContainer).querySelector(".nodeGrp");
+					Velocity(grp, { 
+						scale: [config.scale, 0],
+						rotateZ: '360deg',
+						opacity: [1, 0],
+					}, {duration: 1500, queue: false, complete: function(elements) {
+							grp.style.transform = "translateX(" + elemNode.xy.x + ") translateY(" + elemNode.xy.y + ")"; 
+						}
+					});
+					
+				break;
+				case 'exit':
+					
+				break;
+			}
+		break;
+	}
+}
 
 /* -- vivify animating -- */
 function animateGrpEnterExit(grp, enterExit){
@@ -2728,41 +2765,6 @@ function VIVIFY_animateElems(elem, type, enterExit){
 				break;
 			}
 		break;
-		
-		case 'famViewNodes':
-			switch (enterExit){
-				case 'enter':
-					if (elem.style.opacity == 0){
-						elem.classList.add("vivify");
-						elem.classList.add("duration-1000");
-						elem.classList.add("spinIn");
-						setTimeout(()=>{
-							elem.style.opacity = 1;
-						}, 400);
-						setTimeout(()=>{
-							elem.classList.remove("vivify");
-							elem.classList.remove("duration-1000");
-							elem.classList.remove("spinIn");
-						}, 1000);
-					}
-				break;
-				case 'exit':
-					if (elem.style.opacity == 1){
-						elem.classList.add("vivify");
-						elem.classList.add("duration-1000");
-						elem.classList.add("spinOut");
-						setTimeout(()=>{
-							elem.style.opacity = 0;
-						}, 800);
-						setTimeout(()=>{
-							elem.classList.remove("vivify");
-							elem.classList.remove("duration-1000");
-							elem.classList.remove("spinOut");
-						}, 1000);
-					}
-				break;
-			}
-		break
 	}
 }
 
@@ -2800,6 +2802,7 @@ function removeAllChildNodes(parent) {
 		parent.removeChild(parent.firstChild);
 	}
 }
+
 
 const navObj 	= new navBar();
 const pplTab 	= new peopleTab();
