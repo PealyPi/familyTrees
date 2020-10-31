@@ -196,6 +196,7 @@ function nodeDataStorage(){//collapse lvl 2
 				'siblings': 	['nathonBobby', 'annBobby', 'carolineBobby', 'harrieBobby', 'walterBobby', 'williamBobby'],
 				'spouse': 		'fannyClarkChapman',	
 				'childMain': 	'sidneyCharlesBobby', 
+				'children':		['maryBobby', 'floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby']
 			};
 			
 			kesby.nathonBobby = {		

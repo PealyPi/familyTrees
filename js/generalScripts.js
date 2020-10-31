@@ -2373,7 +2373,7 @@ class treeSVG {
 					['20%', '30%', '40%', '50%', '60%', '70%', '80%'],
 				];
 				/*
-				[0, 0, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5]
+				[0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5]
 
 				count>2
 					[count % 2 == 0]
@@ -2408,19 +2408,20 @@ class treeSVG {
 						i: 5,  val = (50+5)  + ( (5-3)*10) =  55+20 = 75   
 						
 				*/
-				const xSpacing = [0, 0, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
-				
-				var kidSpacingX, kidSpacingY;
-				console.log(kidCount);
+				const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
+				var childrenObjs = {};
+				var midIndex = Math.floor(kidCount / 2);
+					
+				var kidSpacingX, kidSpacingY, kidScale;
 				if (kidCount < 5){
-					kidSpacingY = '70%';
+					kidSpacingY = '70%'; 
 				} else if (kidCount < 8){
-					kidSpacingY = ['60%', '75%'];
-				}else {
-					kidSpacingY = ['60%', '75%'];
+					kidSpacingY = ['60%', '75%']; kidScale = 'scale(0.8)';
+				} else {
+					kidSpacingY = ['60%', '75%']; kidScale = 'scale(0.6)';
 				}
 				
-				var childrenObjs = {};
+				//console.log("count: " + kidCount + ", mid: " + midIndex);
 				for (let i=0; i < kidCount; i++){
 					var kidFam = focusObj.famName;
 					//check focus fam info for kids[0]
@@ -2435,8 +2436,21 @@ class treeSVG {
 					kidNode.nodeGrpContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag);					
 					
 					//kidNode.nodeGrpContainer.style.opacity = 0;				
-
-					const tXstring = 'translateX(' + kidSpacingXA[kidCount-1][i] + ') ';
+					
+					//console.log(kidNode.personTag);
+					
+					//spacing
+					var xCalc = 0;
+					if (kidCount % 2 == 1){
+						xCalc =  50 + ( (i - midIndex) * xSpacing[kidCount]);
+					} else {
+						const negate = (i < midIndex) ? -1 : 1;
+						const midIndexAdapt = (i < midIndex) ? (midIndex - 1) : midIndex;
+						xCalc = (50 + (negate * xSpacing[kidCount]/2) + ( (i - midIndexAdapt) * xSpacing[kidCount]) );	
+					}
+					//console.log(i + ": " + xCalc);
+					
+					const tXstring = 'translateX(' + xCalc + '%) ';
 					const tYstring = (kidCount < 5) ? 'translateY(' + kidSpacingY + ')'
 						: (i % 2 == 0) ? 'translateY(' + kidSpacingY[0] + ')' 
 						: 'translateY(' + kidSpacingY[1] + ') ' ;
@@ -2444,7 +2458,7 @@ class treeSVG {
 					kidNode.nodeGrpContainer.style.transform = tXstring + tYstring;
 					
 					if (kidCount > 4)
-						kidNode.nodeGrpContainer.style.transform += 'scale(0.6)';
+						kidNode.nodeGrpContainer.style.transform += kidScale;
 					
 					childrenObjs[kidNode.personTag] = kidNode;
 				}
