@@ -1598,18 +1598,15 @@ class node {
 		}
 		
 		if (personTag =="none"){
-			//nodeGrp.setAttribute("visibility", "hidden");
 			nodeGrpContainer.setAttribute("visibility", "hidden");
 			if (this._isSpouse) spouseLineGrp.style.opacity = 0;
 	
 		} else {
-			//nodeGrp.setAttribute("visibility", "");
-			nodeGrpContainer.setAttribute("visibility", "");
+			nodeGrpContainer.removeAttribute("visibility");
 			if (this._isSpouse) spouseLineGrp.style.opaicty = 0;
 			
 		}
 		//add click event for non-focus
-		//circleGrp.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));	
 		$(circleGrp).click((evnt) => treeChange.treeChangeView(evnt, 'treeNode'));		
 		
 		return nodeGrpContainer;
@@ -2208,7 +2205,6 @@ class treeSVG {
 						let btnCSS = window.getComputedStyle(treeBtn);
 						let btnDisplay = btnCSS.getPropertyValue('display'); 
 						if (treeBtn.style.display == 'none'){
-							console.log("here");
 							treeBtn.style.display = 'block';
 						} else if (btnDisplay == 'none'){
 							treeBtn.style.display = 'block';
@@ -2232,15 +2228,16 @@ class treeSVG {
 		const famIcon_button = 	this.svgDiv.querySelectorAll(".famIcon");
 		const arrowBtn_button = this.svgDiv.querySelectorAll(".arrowBtn");	
 		const zoomBtn_button = 	this.svgDiv.querySelectorAll(".zoomBtn");
-		const famView_treeIcon_button = this.svgDiv.querySelector(".famView_treeIcon");
 		
 		for (const btn of famIcon_button){
-			btn.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'famView'));
+			if (btn.classList.contains("famView_treeIcon"))
+				btn.addEventListener("click", () => this.famView_backToTree());
+			else 
+				btn.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'famView'));
 		}		
 		for (const btn of arrowBtn_button){
 			btn.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'arrows'));
 		}
-		famView_treeIcon_button.addEventListener("click", () => this.famView_backToTree());
 	}
 	
 	initialiseNodes(personTag, famName, reinit = false) {
@@ -2366,11 +2363,10 @@ class treeSVG {
 		setTimeout(()=> {
 			//clearAll;
 			removeAllChildNodes(famViewSVG);
-		}, 2000);
+			famViewSVG.style.display = "none";
+			this.initialiseNodes(currentFocus.personTag, currentFocus.famName);
+		}, 1000);		
 		
-		console.log(currentFocus);
-		
-		//initialiseNodes(currentFocus.personTag, currentFocus.famName);
 	}
 	
 	dummyAnimate_toFamView(focusObj, type){
@@ -2404,7 +2400,6 @@ class treeSVG {
 		tree.reInitialiseNodes('', 'famView', false);	
 		
 		const famNodes = this.createFamViewNodes(focusObj, type);
-		console.log(famNodes);
 		
 		Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
 		Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
@@ -2541,7 +2536,7 @@ class treeSVG {
 		const hghltGrp = new createNewElement('g', {
 			'class': 'focusHighlightGrp',
 		});
-		$(grpContainer).prepend(hghltGrp);
+		$(grp).prepend(hghltGrp);
 		
 		const hghltCircle = new createNewElement('circle', {
 			'class': 'focusHighlightGrpCircle',
