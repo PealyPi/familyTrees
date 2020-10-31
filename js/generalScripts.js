@@ -5,6 +5,21 @@
 var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = nodeDataStorage();
 
+function findPersonsFamily(personName){
+	const famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
+	var correctFam = '';
+	for (fam of famOptions){
+		const famBool = PEOPLERELATIONS[fam][personName] ?? false;
+		if (famBool)
+			correctFam = fam;
+	}
+	
+	if (!correctFam) 
+		console.log("Error: person not in data");
+	else 
+		return correctFam;
+}
+
 class nodeLetterTag_info {
 	constructor(){
 		this.nodeLetterOrder =  ['nodeA', 'nodeAs', 'nodeB', 'nodeBs', 'nodeC', 'nodeCs', 'nodeD', 'nodeDs', 'nodeE', 'nodeEs'];
@@ -55,7 +70,7 @@ class nodeLetterTag_info {
 		this.currentFocus = newFocus;
 		//console.log("newFocus: " + newFocus.personTag + ", " +  newFocus.famName);
 	}
-		
+	
 	getNodeObj(nodeTag){
 		const nodeLetter = this.nodeLetterTags[nodeTag];
 		return this.nodeList[nodeLetter];		
@@ -1594,7 +1609,8 @@ class node {
 			
 		}
 		//add click event for non-focus
-		circleGrp.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));		
+		//circleGrp.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));	
+		$(circleGrp).click((evnt) => treeChange.treeChangeView(evnt, 'treeNode'));		
 		
 		return nodeGrpContainer;
 		
@@ -1870,8 +1886,7 @@ class nodeCircle {
 	createCircle(whichNode){		
 		const circleRadius = 50;
 		const circleBorder = 4;
-		const circleFullWidth = circleRadius + circleBorder;
-		
+		const circleFullWidth = circleRadius + circleBorder;		
 		
 		const circleGrp = new createNewElement('g', {
 			'id': whichNode + '_circleGrp',
@@ -2024,7 +2039,6 @@ class treeSVG {
 		}
 	}
 	
-	
 	createLines(nodeContainer, type, points){ 		
 		var lineConfig, shadowDirection;
 		const pathD = points.join(" ");
@@ -2116,6 +2130,7 @@ class treeSVG {
 	showHideButtons(showHide, icon = false){
 		const btnDiv = this.svgDiv.querySelector(".arrowButtonsDiv") ;
 		const btnArray = btnDiv.querySelectorAll("button");
+		const topLeftDiv = this.svgDiv.querySelector(".svg_topLeftArea");
 	
 		switch (showHide){
 			case 'hideAll':
@@ -2156,6 +2171,18 @@ class treeSVG {
 						const rghtBtn = btnDiv.querySelector('.rightArrow_button');
 						VIVIFY_animateElems(rghtBtn, 'buttons', 'exit');
 					break;
+					case 'famViewTree':
+						const treeBtn = topLeftDiv.querySelector('.famView_treeIcon');
+						let btnCSS = window.getComputedStyle(treeBtn);
+						let btnDisplay = btnCSS.getPropertyValue('display'); 
+						if (treeBtn.style.display == 'block'){
+							treeBtn.style.display = 'none';
+							
+						} else if (btnDisplay == 'block'){
+							treeBtn.style.display = 'none';
+						}
+						VIVIFY_animateElems(treeBtn, 'buttons', 'exit');
+					break;
 				}
 			break;			
 			case 'show':	
@@ -2176,6 +2203,18 @@ class treeSVG {
 						const rghtBtn = btnDiv.querySelector('.rightArrow_button');
 						VIVIFY_animateElems(rghtBtn, 'buttons', 'enter');
 					break;
+					case 'famViewTree':
+						const treeBtn = topLeftDiv.querySelector('.famView_treeIcon');
+						let btnCSS = window.getComputedStyle(treeBtn);
+						let btnDisplay = btnCSS.getPropertyValue('display'); 
+						if (treeBtn.style.display == 'none'){
+							console.log("here");
+							treeBtn.style.display = 'block';
+						} else if (btnDisplay == 'none'){
+							treeBtn.style.display = 'block';
+						}
+						VIVIFY_animateElems(treeBtn, 'buttons', 'enter');
+					break;
 				}
 			break;
 		}		
@@ -2193,6 +2232,7 @@ class treeSVG {
 		const famIcon_button = 	this.svgDiv.querySelectorAll(".famIcon");
 		const arrowBtn_button = this.svgDiv.querySelectorAll(".arrowBtn");	
 		const zoomBtn_button = 	this.svgDiv.querySelectorAll(".zoomBtn");
+		const famView_treeIcon_button = this.svgDiv.querySelector(".famView_treeIcon");
 		
 		for (const btn of famIcon_button){
 			btn.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'famView'));
@@ -2200,6 +2240,7 @@ class treeSVG {
 		for (const btn of arrowBtn_button){
 			btn.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'arrows'));
 		}
+		famView_treeIcon_button.addEventListener("click", () => this.famView_backToTree());
 	}
 	
 	initialiseNodes(personTag, famName, reinit = false) {
@@ -2314,10 +2355,29 @@ class treeSVG {
 		}, 2000);		
 	}
 	
+	famView_backToTree(){
+		tree.showHideButtons('showAll');
+		tree.showHideButtons('hide', 'famViewTree');
+		
+		let currentFocus = NODEdetails.currentFocus;
+		
+		let famViewSVG = document.getElementById("famViewSVG");
+		animateGrpEnterExit(famViewSVG, 'exit');
+		setTimeout(()=> {
+			//clearAll;
+			removeAllChildNodes(famViewSVG);
+		}, 2000);
+		
+		console.log(currentFocus);
+		
+		//initialiseNodes(currentFocus.personTag, currentFocus.famName);
+	}
+	
 	dummyAnimate_toFamView(focusObj, type){
 		
 		//hide buttonDiv
 		tree.showHideButtons('hideAll');
+		tree.showHideButtons('show', 'famViewTree');
 		
 		const animEndPos = (type =='children') ? {'x': '35', 'y': '22'} : {'x': 0, 'y': 0}; // sibling position based on how many siblings...
 		
@@ -2329,12 +2389,16 @@ class treeSVG {
 		this.svgElem.style.display = 'block';
 		this.svgElem.style.opacity = 1;		
 		
+		const dummyFocusHT = this.createFocusHighlight(dummyContainer);
+		dummyFocusHT.classList.add("focusHLT");
+		
 		//duplicate focus
 		this.svgElem.appendChild(dummyContainer);		
 		
 		tree.reInitialiseNodes('', 'famView', false);	
 		
 		const famNodes = this.createFamViewNodes(focusObj, type);
+		console.log(famNodes);
 		
 		Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
 		Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
@@ -2465,6 +2529,26 @@ class treeSVG {
 		
 	}
 	
+	createFocusHighlight(grpContainer){ //for all
+		let grp = grpContainer.querySelector(".nodeGrp");		
+		
+		const hghltGrp = new createNewElement('g', {
+			'class': 'focusHighlightGrp',
+		});
+		$(grpContainer).prepend(hghltGrp);
+		
+		const hghltCircle = new createNewElement('circle', {
+			'class': 'focusHighlightGrpCircle',
+			'r': 60, 'cx': 0, 'cy': 0,
+			'fill': '#fff',
+			'fill-opacity': 0.5,
+			'stroke': 'none',
+		});
+		hghltGrp.appendChild(hghltCircle);
+		
+		return hghltGrp;
+	}
+	
 	createFamViewNodes (focusObj, type){
 		switch (type){
 			case 'sibling':
@@ -2481,8 +2565,10 @@ class treeSVG {
 				
 				const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, spouseFam);	
 				spouseNode.nodeGrpContainer.setAttribute('id', spouseNode.tagType + "_" + spouseNode.personTag);
-				//spouseNode.nodeGrpContainer.style.opacity = 0;	
-				famObjs['spouse'] = spouseNode;	
+				
+				const spouseNodeHT = this.createFocusHighlight(spouseNode.nodeGrpContainer);
+				
+				famObjs['spouse'] = spouseNode;					
 				
 				spouseNode.nodeGrpContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';		
 				spouseNode.nodeGrpContainer.querySelector(".nodeGrp").style.opacity = 0;
@@ -2515,7 +2601,7 @@ class treeSVG {
 					const kidNode = new node(this.svgElem, 'famView_childNode').initialise(kids[i], kidFam);	
 					kidNode.nodeGrpContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag); 
 					
-					//kidNode.nodeGrpContainer.style.opacity = 0;					
+					const kidNodeHT = this.createFocusHighlight(kidNode.nodeGrpContainer);					
 					
 					//spacing
 					var xCalcPerc = 0;
@@ -2547,8 +2633,18 @@ class treeSVG {
 					
 					famObjs['children'][kidNode.personTag] = kidNode;
 					//console.log(kidNode.nodeGrpContainer.style.transform);
-				}
+					
+					//remove click event from circleGrp
+					let kidCircleGrp = kidNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
+					//kidCircleGrp.removeEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));
 				
+					kidCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+					$(kidCircleGrp).off('click');
+				}
+				let spouseCircleGrp = spouseNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
+				//spouseCircleGrp.removeEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));
+				spouseCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+				$(spouseCircleGrp).off('click');
 				return famObjs;
 				
 			break;
@@ -2579,7 +2675,7 @@ class treeChangeEvents {
 				case 'famView':
 					const whichFamType = (btn.classList.contains("siblingIcon_button")) ? 'sibling' 
 						: (btn.classList.contains("childrenIcon_button")) ? 'children' : '';
-					this.changeToFamView(whichFamType);
+					this.changeToFamView(whichFamType, 'to');
 				break;
 				case 'arrows':
 					const whichArrow = (btn.classList.contains("leftArrow_button")) ? 'left' : 'right';
@@ -2601,10 +2697,50 @@ class treeChangeEvents {
 		}
 	}
 	
-	changeToFamView(type){
-		const currentFocus = NODEdetails.getNodeObj('focus');
-		famView.dummyAnimate_toFamView(currentFocus, type);	
+	changeToFamView(type, toFrom){
+		switch (toFrom){
+			case 'to':
+				const currentFocus = NODEdetails.getNodeObj('focus');
+				famView.dummyAnimate_toFamView(currentFocus, type);	
+			break;
+			case 'from':
+			break;			
+		}
+	}
+	
+	famView_changeFocus(event){
+		let clickedCircleGrp = event.target;
+		if ((clickedCircleGrp.tagName == "circle") || (clickedCircleGrp.tagName == "image") || (clickedCircleGrp.tagName == "path")) {
+			clickedCircleGrp = clickedCircleGrp.parentElement;
+		}
 		
+		const famViewSVG = document.getElementById("famViewSVG");
+		const allHightlightGrps = famViewSVG.querySelectorAll(".focusHighlightGrp");
+		
+		for (const hlt of allHightlightGrps){
+			if (hlt.classList.contains("focusHLT")) hlt.classList.remove("focusHLT");
+		}		
+		
+		const clickedContainer = $(clickedCircleGrp).parents(".nodeGrpContainer")[0];
+		
+		var clickedId = clickedContainer.id;
+		let clickedPerson;
+		if (clickedId.search("famView_childNode_") != -1)
+			clickedPerson = clickedId.replace("famView_childNode_", "");
+		else if (clickedId.search("famView_spouseNode_") != -1)
+			clickedPerson = clickedId.replace("famView_spouseNode_", "");
+		else if (clickedId.search("famView_siblingNode_") != -1)
+			clickedPerson = clickedId.replace("famView_siblingNode_", "");
+		
+		const clickedPersonFam = findPersonsFamily(clickedPerson);	
+
+		clickedContainer.querySelector(".focusHighlightGrp").classList.add("focusHLT");
+		
+		NODEdetails.updateFocus({'personTag': clickedPerson, 'famName': clickedPersonFam});
+		//update info
+		
+		infoTab.fillPersonInfo(clickedPersonFam, clickedPerson);
+		treeInfoTab.fillPersonInfo(clickedPersonFam, clickedPerson);
 	}
 	
 	arrowFocus(direction){
@@ -2657,8 +2793,8 @@ class treeChangeEvents {
 
 function svgAnimate(type, enterExit, elemNode, config){
 	//Checking if Percentage
-	let elemTransform = elemNode.nodeGrpContainer.style.transform;
-	let grp = (elemNode.nodeGrpContainer).querySelector(".nodeGrp");
+	let container = elemNode.nodeGrpContainer;
+	let grp = container.querySelector(".nodeGrp");
 	const queueVal = config.queue ?? false;
 	Velocity.hook(elemNode.nodeGrpContainer, "translateX", elemNode.xy.x); 
 	Velocity.hook(elemNode.nodeGrpContainer, "translateY", elemNode.xy.y);
@@ -2701,6 +2837,9 @@ function svgAnimate(type, enterExit, elemNode, config){
 		
 		case 'rollFromTop':
 			case 'enter':
+				Velocity(container, { 
+					opacity: [1, 0],
+				}, {duration: 1500, queue: queueVal});
 				Velocity.hook(grp, "translateY", '-10px');
 				Velocity.hook(grp, "rotateZ", '145deg');
 				Velocity(grp, { 
