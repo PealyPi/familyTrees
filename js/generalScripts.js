@@ -2427,11 +2427,11 @@ class treeSVG {
 				}
 			}		
 			
-			svgAnimate('spin', 'enter', famNodes.spouse, {'queue': 'spouseNodeQueue', 'scale':1});
+			svgAnimate('rollFromLeft', 'enter', famNodes.spouse, {'queue': 'spouseNodeQueue', 'scale':1});
 			
 			var childGrpsAll = [];
 			for (const kidName in famNodes.children){
-				svgAnimate('spin', 'enter', famNodes.children[kidName], {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
+				svgAnimate('rollFromTop', 'enter', famNodes.children[kidName], {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
 				childGrpsAll.push( famNodes.children[kidName].nodeGrpContainer.querySelector(".nodeGrp") );
 			}
 			const lineAcrosChildrenAll = Array.from(lineAcrossChildrenLeft.children).concat(Array.from(lineAcrossChildrenRight.children));
@@ -2658,15 +2658,15 @@ class treeChangeEvents {
 function svgAnimate(type, enterExit, elemNode, config){
 	//Checking if Percentage
 	let elemTransform = elemNode.nodeGrpContainer.style.transform;
-	
+	let grp = (elemNode.nodeGrpContainer).querySelector(".nodeGrp");
+	const queueVal = config.queue ?? false;
 	Velocity.hook(elemNode.nodeGrpContainer, "translateX", elemNode.xy.x); 
 	Velocity.hook(elemNode.nodeGrpContainer, "translateY", elemNode.xy.y);
+	
 	switch (type){
 		case 'spin':
 			switch (enterExit){
 				case 'enter':
-					const grp = (elemNode.nodeGrpContainer).querySelector(".nodeGrp");
-					const queueVal = config.queue ?? false;
 					Velocity(grp, { 
 						scale: [config.scale, 0],
 						rotateZ: '360deg',
@@ -2678,9 +2678,43 @@ function svgAnimate(type, enterExit, elemNode, config){
 					
 				break;
 				case 'exit':
-					
 				break;
 			}
+		break;
+		case 'rollFromLeft':
+			case 'enter':
+				Velocity.hook(grp, "translateX", '-10px');
+				Velocity.hook(grp, "rotateZ", '145deg');
+				Velocity(grp, { 
+					translateX: 0,
+					scale: [config.scale, 0],
+					rotateZ: '380deg',
+					opacity: [1, 0],
+				}, {duration: 800, queue: queueVal});
+				Velocity(grp, { 
+					rotateZ: '360deg',
+				}, {duration: 300, queue: queueVal, delay: 100});
+			break;
+			case 'exit':
+			break;
+		break;
+		
+		case 'rollFromTop':
+			case 'enter':
+				Velocity.hook(grp, "translateY", '-10px');
+				Velocity.hook(grp, "rotateZ", '145deg');
+				Velocity(grp, { 
+					translateY: 0,
+					scale: [config.scale, 0],
+					rotateZ: '380deg',
+					opacity: [1, 0],
+				}, {duration: 800, queue: queueVal});
+				Velocity(grp, { 
+					rotateZ: '360deg',
+				}, {duration: 300, queue: queueVal, delay: 100});
+			break;
+			case 'exit':
+			break;
 		break;
 	}
 }
