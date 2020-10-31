@@ -2407,38 +2407,60 @@ class treeSVG {
 		
 		setTimeout(()=> {
 			for (const line of spouseLines.children ){
-				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
+				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 1500, queue: 'spouseQueue' });
 			}
-			setTimeout(()=> {
-				for (const line of lineDown.children ){
-					Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
-				}		
-				setTimeout(()=> {
-					for (const line of lineAcrossChildrenLeft.children ){
-						Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
-					}
-					for (const line of lineAcrossChildrenRight.children ){
-						Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
-					}
-					setTimeout(()=> {
-						for (const line of childLines){
-							for (const subline of line.children ){
-								Velocity(subline, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
-							}
-						}
-				}, 500);
-				}, 500);
-			}, 500);	
-			svgAnimate('spin', 'enter', famNodes.spouse, {'scale':1});
+			for (const line of lineDown.children ){
+				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineDownQueue' });
+			}		
+			for (const line of lineAcrossChildrenLeft.children ){
+				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineAcrossQueue' });
+			}
+			for (const line of lineAcrossChildrenRight.children ){
+				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineAcrossQueue' });
+			}
 			
-			setTimeout(()=> {
-				for (const kidName in famNodes.children){
-					svgAnimate('spin', 'enter', famNodes.children[kidName], {'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
+			var childLinesAll = [];
+			for (const line of childLines){
+				for (const subline of line.children ){
+					Velocity(subline, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'childLineQueue' });
+					childLinesAll.push(subline);
 				}
+			}		
+			
+			svgAnimate('spin', 'enter', famNodes.spouse, {'queue': 'spouseNodeQueue', 'scale':1});
+			
+			var childGrpsAll = [];
+			for (const kidName in famNodes.children){
+				svgAnimate('spin', 'enter', famNodes.children[kidName], {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
+				childGrpsAll.push( famNodes.children[kidName].nodeGrpContainer.querySelector(".nodeGrp") );
+			}
+			const lineAcrosChildrenAll = Array.from(lineAcrossChildrenLeft.children).concat(Array.from(lineAcrossChildrenRight.children));
+			
+			//set queue times
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(spouseLines.children, "spouseQueue");
+			}, 0);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(lineDown.children, "lineDownQueue")
+			}, 500);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(lineAcrosChildrenAll, "lineAcrossQueue");
 			}, 1000);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(childLinesAll, "childLineQueue");
+			}, 1500);
+			
+			
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(famNodes.spouse.nodeGrpContainer.querySelector(".nodeGrp"), "spouseNodeQueue");
+			}, 500);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(childGrpsAll, "childNodesQueue");
+			}, 1750);
 			
 			
 		}, 1000);
+		
 		
 		
 	}
@@ -2643,15 +2665,13 @@ function svgAnimate(type, enterExit, elemNode, config){
 		case 'spin':
 			switch (enterExit){
 				case 'enter':
-					//Velocity.hook(elemNode.nodeGrpContainer, "scale", 0); 
-					//Velocity.hook(elemNode.nodeGrpContainer, "rotateZ", '0deg');
-					//Velocity.hook(elemNode.nodeGrpContainer, "opacity", 0);
 					const grp = (elemNode.nodeGrpContainer).querySelector(".nodeGrp");
+					const queueVal = config.queue ?? false;
 					Velocity(grp, { 
 						scale: [config.scale, 0],
 						rotateZ: '360deg',
 						opacity: [1, 0],
-					}, {duration: 1500, queue: false, complete: function(elements) {
+					}, {duration: 1500, queue: queueVal, complete: function(elements) {
 							grp.style.transform = "translateX(" + elemNode.xy.x + ") translateY(" + elemNode.xy.y + ")"; 
 						}
 					});
