@@ -2383,11 +2383,17 @@ class treeSVG {
 		
 		const dummyContainer = focusObj.nodeGrpContainer.cloneNode(true);
 		dummyContainer.classList.add("focusContainer");
-		dummyContainer.removeAttribute("id");
+		dummyContainer.setAttribute("id", "famView_focusNode_" + focusObj.personTag);		
 		const dummyNodeGrp = dummyContainer.querySelector(".nodeGrp");
+		
 		focusObj.nodeGrpContainer.style.opacity = 0;
 		this.svgElem.style.display = 'block';
-		this.svgElem.style.opacity = 1;		
+		this.svgElem.style.opacity = 1;	
+
+		const dummyContainer_circleGrp = dummyContainer.querySelector(".nodeCircleGrp");
+		$(dummyContainer_circleGrp).off('click');
+		dummyContainer_circleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+		
 		
 		const dummyFocusHT = this.createFocusHighlight(dummyContainer);
 		dummyFocusHT.classList.add("focusHLT");
@@ -2636,15 +2642,15 @@ class treeSVG {
 					
 					//remove click event from circleGrp
 					let kidCircleGrp = kidNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
-					//kidCircleGrp.removeEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));
-				
-					kidCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+					
 					$(kidCircleGrp).off('click');
+					kidCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+					
 				}
 				let spouseCircleGrp = spouseNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
-				//spouseCircleGrp.removeEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'treeNode'));
-				spouseCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
 				$(spouseCircleGrp).off('click');
+				spouseCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+				
 				return famObjs;
 				
 			break;
@@ -2731,6 +2737,8 @@ class treeChangeEvents {
 			clickedPerson = clickedId.replace("famView_spouseNode_", "");
 		else if (clickedId.search("famView_siblingNode_") != -1)
 			clickedPerson = clickedId.replace("famView_siblingNode_", "");
+		else if (clickedId.search("famView_focusNode_") != -1)
+			clickedPerson = clickedId.replace("famView_focusNode_", "");
 		
 		const clickedPersonFam = findPersonsFamily(clickedPerson);	
 
