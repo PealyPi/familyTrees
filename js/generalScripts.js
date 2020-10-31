@@ -1262,7 +1262,7 @@ class node {
 		
 		if (Array.isArray(nameArray)){
 			for (let nameLine of nameArray){
-				const dyVal = (nameLine == nameArray[0]) ? "0.6em" : "1.2em";
+				const dyVal = (nameLine == nameArray[0]) ? "0em" : "1.2em";
 				
 				const nameTextLine = new createNewElement('tspan', {
 					'class': 'svgNameTxt_span',
@@ -1498,7 +1498,6 @@ class node {
 		this.nodeGrpContainer = nodeGrpContainer;
 		
 		if ( (this.whichNode == this.tagType) || (this.whichNode == this.tagType)){
-			console.log(this.whichNode);
 			nodeGrpContainer.classList.add(this.whichNode + '_GrpContainer');
 			nodeGrp.classList.add(this.whichNode + '_Grp');
 		} else {
@@ -1551,7 +1550,7 @@ class node {
 		
 		if (Array.isArray(nameArray)){
 			for (let nameLine of nameArray){
-				const dyVal = (nameLine == nameArray[0]) ? "0.6em" : "1.2em";
+				const dyVal = (nameLine == nameArray[0]) ? "0em" : "1.2em";
 				
 				const nameTextLine = new createNewElement('tspan', {
 					'class': 'svgNameTxt_span',
@@ -2051,6 +2050,17 @@ class treeSVG {
 				}
 				shadowDirection = 'leftDown';
 			break;	
+		
+			case 'famView_lineDown': 
+				lineConfig = {
+					'fill': 'none',
+					'stroke-width': 6,	
+					'stroke-dasharray': 500,
+					'stroke-dashoffset': 500,			
+					'd': pathD
+				}
+				shadowDirection = 'left';
+			break;
 			
 			default:
 				lineConfig = {
@@ -2087,7 +2097,7 @@ class treeSVG {
 		lineGrp.prepend(mainLineShadow2);
 		
 		//console.log(mainLine.getTotalLength()); //=320
-		const shadowXY = (shadowDirection == 'leftDown') ? {'x': -1, 'y': 1} : {'x': 1, 'y': 1};
+		const shadowXY = (shadowDirection == 'leftDown') ? {'x': -1, 'y': 1} : (shadowDirection == 'left') ? {'x': -1, 'y': 0} : {'x': 1, 'y': 1};
 		
 		mainLineShadow1.setAttribute('transform', 
 			'translate(' + (shadowXY.x * 1.5) + ', ' +  (shadowXY.y * 1.5) + ')');
@@ -2309,7 +2319,7 @@ class treeSVG {
 		//hide buttonDiv
 		tree.showHideButtons('hideAll');
 		
-		const animEndPos = (type =='children') ? {'x': '35%', 'y': '22%'} : {'x': 0, 'y': 0}; // sibling position based on how many siblings...
+		const animEndPos = (type =='children') ? {'x': '35', 'y': '22'} : {'x': 0, 'y': 0}; // sibling position based on how many siblings...
 		
 		const dummyContainer = focusObj.nodeGrpContainer.cloneNode(true);
 		dummyContainer.classList.add("focusContainer");
@@ -2324,28 +2334,118 @@ class treeSVG {
 		
 		tree.reInitialiseNodes('', 'famView', false);	
 		
-		this.createFamViewNodes(focusObj, type);
-		/*const allNodesGrp = this.groupNodeContainers('group', dummyContainer);
+		const famNodes = this.createFamViewNodes(focusObj, type);
+		console.log(famNodes);
 		
-		setTimeout(()=> {
-			animateGrpEnterExit(allNodesGrp, 'enter');
-		}, 1000);*/
+		Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
+		Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
+		Velocity.hook(dummyNodeGrp, "scale", 2); 
+		Velocity(dummyContainer, { 
+			translateX: [(animEndPos.x + "%") , focusObj.xy.x], 
+			translateY: [(animEndPos.y + "%") , focusObj.xy.y], 
+		}, { duration: 1500, queue: false,});
 		
-			Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
-			Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
-			Velocity.hook(dummyNodeGrp, "scale", 2); 
-			Velocity(dummyContainer, { 
-				translateX: [animEndPos.x , focusObj.xy.x], 
-				translateY: [animEndPos.y , focusObj.xy.y], 
-			}, { duration: 1500, queue: false,});
+		Velocity(dummyNodeGrp, { 
+			scale: 1
+		}, { duration: 1500, queue: false,});
 			
-			Velocity(dummyNodeGrp, { 
-				scale: 1
-			}, { duration: 1500, queue: false,});
+		//draw lines
+		const extendLine = 2.9;
+		//spouseLine
+		const svgWidth = this.svgElem.getBoundingClientRect().width;
+		const svgHeight = this.svgElem.getBoundingClientRect().height;
+		
+		const lineGrp = new createNewElement('g', {
+			'class': 'famView_lines_GRP',
+		});
+		$(this.svgElem).prepend(lineGrp);
+		
+		let mainPos = {'x': svgWidth * parseFloat(animEndPos.x /100), 'y': svgHeight * parseFloat(animEndPos.y /100)};		
+		let spousePos_perc = famNodes.spouse.xy;
+		spousePos_perc.x = parseFloat(spousePos_perc.x.replace("%", ""));
+		spousePos_perc.y = parseFloat(spousePos_perc.y.replace("%", ""));
+		let spousePosX = svgWidth * parseFloat(spousePos_perc.x/100);
+		
+		const spousePathPoints = ['M', mainPos.x, mainPos.y, 'H', spousePosX];
+		const spouseLines = this.createLines(lineGrp, 'famView_spouseLine', spousePathPoints);
+		
+		//line down
+		let kidCount = Object.keys(famNodes.children).length;
+		let midSpousePoint = mainPos.x + ((spousePosX - mainPos.x) / 2);
+		
+		let lineDownY = (kidCount < 5) ? svgHeight * 0.55 : svgHeight * 0.48;
+		const lineDown_pathPoints = ['M', midSpousePoint, mainPos.y, 'V', (lineDownY - extendLine + 0.1)];
+		
+		const lineDown = this.createLines(lineGrp, 'famView_lineDown', lineDown_pathPoints);
+		
+		
+		//lineAcrossChildren
+		const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
+		var midIndex = Math.floor(kidCount / 2), xSpacingForCount = xSpacing[kidCount];
+		var firstKidPos_perc, lastKidPos_perc;
+		
+		if (kidCount % 2 == 1){
+			firstKidPos_perc =  50 + ( (0 - midIndex) * xSpacingForCount);
+			lastKidPos_perc =  50 + ( ((kidCount-1) - midIndex) * xSpacingForCount);
+		} else {
+			const midIndexAdapt = (midIndex - 1);
+			firstKidPos_perc = (50 + (-1 * xSpacingForCount/2) + ( (0 - midIndexAdapt) * xSpacingForCount) );
+			lastKidPos_perc = (50 + (1 * xSpacingForCount/2) + ( ((kidCount-1) - midIndex) * xSpacingForCount) );
+		}
+		
+		var firstKidPos = svgWidth * parseFloat(firstKidPos_perc/100);
+		var lastKidPos = svgWidth * parseFloat(lastKidPos_perc/100);
+		const lineAcrossChildrenLeft_pathPoints = ['M', midSpousePoint, lineDownY, 'H', firstKidPos - extendLine];
+		const lineAcrossChildrenRight_pathPoints = ['M', midSpousePoint, lineDownY, 'H', lastKidPos + extendLine];
+		
+		const lineAcrossChildrenLeft = this.createLines(lineGrp, 'famView_lineAcrossChildrenLLeft', lineAcrossChildrenLeft_pathPoints);
+		const lineAcrossChildrenRight = this.createLines(lineGrp, 'famView_lineAcrossChildrenRight', lineAcrossChildrenRight_pathPoints);
+		
+		var childLines = [];
+		for (const kid in famNodes.children){
+			let kidPos = famNodes.children[kid].xy;
+			const kidPos_perc = {'x': svgWidth * parseFloat(kidPos.x/100), 'y': svgHeight * parseFloat(kidPos.y/100)};
+			const kidPathPoints = ['M', kidPos_perc.x, lineDownY, 'V', kidPos_perc.y];
+			const kidLines = this.createLines(lineGrp, 'famView_childLine', kidPathPoints);
+			childLines.push(kidLines);
+		}
+		console.log(childLines);
 		
 		setTimeout(()=> {
+			for (const line of spouseLines.children ){
+				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
+			}
+			setTimeout(()=> {
+				for (const line of lineDown.children ){
+					Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
+				}		
+				setTimeout(()=> {
+					for (const line of lineAcrossChildrenLeft.children ){
+						Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
+					}
+					for (const line of lineAcrossChildrenRight.children ){
+						Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
+					}
+					setTimeout(()=> {
+						for (const line of childLines){
+							for (const subline of line.children ){
+								Velocity(subline, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: false });
+							}
+						}
+				}, 500);
+				}, 500);
+			}, 500);	
+			VIVIFY_animateElems(famNodes.spouse.nodeGrpContainer, 'famViewNodes', 'enter');
+			
+			setTimeout(()=> {
+				for (const kidName in famNodes.children){
+					VIVIFY_animateElems(famNodes.children[kidName].nodeGrpContainer, 'famViewNodes', 'enter');
+				}
+			}, 1000);
+			
 			
 		}, 1000);
+		
 		
 	}
 	
@@ -2355,7 +2455,9 @@ class treeSVG {
 				console.log("Siblings...");
 			break;
 			case 'children':
-				console.log("Children...");
+				//console.log("Children...");
+				var famObjs = {'spouse': '', 'children': {}};
+				
 				const spouse = focusObj.personData.spouse;
 				const kids = focusObj.personData.children;
 				
@@ -2363,55 +2465,14 @@ class treeSVG {
 				
 				const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, spouseFam);	
 				spouseNode.nodeGrpContainer.setAttribute('id', spouseNode.tagType + "_" + spouseNode.personTag);
-				//spouseNode.nodeGrpContainer.style.opacity = 0;
+				spouseNode.nodeGrpContainer.style.opacity = 0;
+				famObjs['spouse'] = spouseNode;
 				
 				const kidCount = kids.length;
 				
-				const kidSpacingXA = [
-					['50%'], ['40%', '60%'], ['30%', '50%', '70%'], ['20%', '40%', '60%', '80%'], 
-					['20%', '35%', '50%', '65%', '80%'], ['20%', '32.5%', '45%', '57.5%', '70%', '82.5%'], 
-					['20%', '30%', '40%', '50%', '60%', '70%', '80%'],
-				];
-				/*
-				[0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5]
-
-				count>2
-					[count % 2 == 0]
-						eg count = 7, odd
-						//midIndex = MATH.ceil(count/2); (4)
-						midIndex = MATH.floor(count/2); (3) - array index starts at 0
-						
-						i: 0, val=20
-							val = 50+ ( (i-midIndex)*spacing[count])
-								-3*10 = 50-30;
-						
-						i:1, val = 50+ ( (1-3)*10) = 50-20 = 30 
-						i:6, val = 50+ ( (6-3)*10) = 20 50+30 = 80  
-						
-						count = 5, 
-							midIndex = 2, i:0 val = 50 + ( (0-2)*15) = 50-30 = 20 
-										i:3 val = 50 + ( (3-2)*15) = 50+15 = 65 
-						
-					[count % 2 == 1]
-						for i<mid, midIndex = count/2 -1, negate = -1
-						for i>mid, midIndex = count/2, negate = 1
-						
-						val = (50+(negate)*spacing/2) + ( (i-midIndex)*spacing[count])
-						
-						eg count = 6, even
-						(spacing 10)
-						i: 0,  val = (50-5)  + ( (0-2)*10) =  45-20 = 25 
-						i: 1,  val = (50-5)  + ( (1-2)*10) =  45-10 = 35    
-						i: 2,  val = (50-5)  + ( (2-2)*10) =  45 
-						i: 3,  val = (50+5)  + ( (3-3)*10) =  55   
-						i: 4,  val = (50+5)  + ( (4-3)*10) =  55+10 = 65   
-						i: 5,  val = (50+5)  + ( (5-3)*10) =  55+20 = 75   
-						
-				*/
 				const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
-				var childrenObjs = {};
 				var midIndex = Math.floor(kidCount / 2);
-					
+				
 				var kidSpacingX, kidSpacingY, kidScale;
 				if (kidCount < 5){
 					kidSpacingY = '70%'; 
@@ -2435,9 +2496,7 @@ class treeSVG {
 					const kidNode = new node(this.svgElem, 'famView_childNode').initialise(kids[i], kidFam);	
 					kidNode.nodeGrpContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag);					
 					
-					//kidNode.nodeGrpContainer.style.opacity = 0;				
-					
-					//console.log(kidNode.personTag);
+					kidNode.nodeGrpContainer.style.opacity = 0;						
 					
 					//spacing
 					var xCalc = 0;
@@ -2451,17 +2510,19 @@ class treeSVG {
 					//console.log(i + ": " + xCalc);
 					
 					const tXstring = 'translateX(' + xCalc + '%) ';
-					const tYstring = (kidCount < 5) ? 'translateY(' + kidSpacingY + ')'
-						: (i % 2 == 0) ? 'translateY(' + kidSpacingY[0] + ')' 
-						: 'translateY(' + kidSpacingY[1] + ') ' ;
+					let tY = (kidCount < 5) ? kidSpacingY : (i % 2 == 0) ? kidSpacingY[0] : kidSpacingY[1];
+					const tYstring = 'translateY(' + tY + ')'; ;
 					
+					kidNode.xy = {'x': xCalc, 'y': parseInt(tY.replace("%", ""))};
 					kidNode.nodeGrpContainer.style.transform = tXstring + tYstring;
 					
 					if (kidCount > 4)
 						kidNode.nodeGrpContainer.style.transform += kidScale;
 					
-					childrenObjs[kidNode.personTag] = kidNode;
+					famObjs['children'][kidNode.personTag] = kidNode;
 				}
+				
+				return famObjs;
 				
 			break;
 		}
@@ -2667,6 +2728,41 @@ function VIVIFY_animateElems(elem, type, enterExit){
 				break;
 			}
 		break;
+		
+		case 'famViewNodes':
+			switch (enterExit){
+				case 'enter':
+					if (elem.style.opacity == 0){
+						elem.classList.add("vivify");
+						elem.classList.add("duration-1000");
+						elem.classList.add("spinIn");
+						setTimeout(()=>{
+							elem.style.opacity = 1;
+						}, 400);
+						setTimeout(()=>{
+							elem.classList.remove("vivify");
+							elem.classList.remove("duration-1000");
+							elem.classList.remove("spinIn");
+						}, 1000);
+					}
+				break;
+				case 'exit':
+					if (elem.style.opacity == 1){
+						elem.classList.add("vivify");
+						elem.classList.add("duration-1000");
+						elem.classList.add("spinOut");
+						setTimeout(()=>{
+							elem.style.opacity = 0;
+						}, 800);
+						setTimeout(()=>{
+							elem.classList.remove("vivify");
+							elem.classList.remove("duration-1000");
+							elem.classList.remove("spinOut");
+						}, 1000);
+					}
+				break;
+			}
+		break
 	}
 }
 
