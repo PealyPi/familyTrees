@@ -258,9 +258,11 @@ class navBar {
 		
 		for (const sect of allHideSects) {
 			setTimeout(()=> {
-				sect.style.visibility = 'hidden';	
+				$(sect).fadeOut(1000, function(){ 		
+					sect.style.opacity = 1;				
+				});				
 				this.peachTree.style.opacity = 1;	
-			}, 1000);	
+			}, 800);	
 			setTimeout(()=> {
 				sect.style.display = 'none';	
 			}, 3000);	
@@ -268,11 +270,16 @@ class navBar {
 	}
 	
 	showSect (active){
-		active.style.visibility = 'hidden';
+		console.log(active.style.opacity);
+		active.style.opacity = 0;
 		active.style.display = 'block';
 		setTimeout(()=> {
-			if ((active == imgsDiv) || (active == this.infoDiv)){this.peachTree.style.opacity = 0.4;}
-			active.style.visibility = 'visible';					
+			$(active).fadeIn(1000, function(){ 		
+				active.style.opacity = 1;
+			});
+			if ((active == imgsDiv) || (active == this.infoDiv)){
+				this.peachTree.style.opacity = 0.4;
+			}					
 		}, 1000);
 	}
 	
@@ -421,14 +428,29 @@ class peopleTab {
 			const currentActive = navDiv.querySelector('.navTab.active');
 			const treeBtn = navDiv.querySelector('#treeTab');
 			
-			if ( (currentActive.id != "treeTab") && (currentActive.id != "infoTab") ){
-				navObj.openPage(treeBtn);
-			} else if (currentActive.id == "treeTab"){
-				//svg tree create
-				treeChange.newFocus(personTag, famName);			
-			} else {			
-				treeChange.newFocus(personTag, famName);		
+			const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
+		
+			if (famViewBool){
+				if ((currentActive.id == "treeTab")){
+					tree.famView_backToTree();
+					
+				} else if ((currentActive.id == "infoTab")){
+					tree.famView_backToTree();	
+					treeChange.newFocus(personTag, famName);
+					
+				} else {
+					tree.famView_backToTree();	
+					navObj.openPage(treeBtn);	
+				}
+				
+			} else {
+				if ((currentActive.id == "treeTab") || (currentActive.id == "infoTab")){
+					treeChange.newFocus(personTag, famName);					
+				} else {
+					navObj.openPage(treeBtn);					
+				}
 			}
+			
 
 			//close people div	
 			const pplDiv = document.getElementById("peopleDiv");
@@ -2829,10 +2851,14 @@ class treeChangeEvents {
 		//from person click
 		const personData = PEOPLERELATIONS[famName][personName];
 		NODEdetails.updateFocus({'personTag': personName, 'famName':famName});	
-
+		
+		const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
+		
 		//if first click, initialise
-		if (!this.svgDiv.querySelector(".nodeCircleGrp")){		
+		if ( (!this.svgDiv.querySelector(".nodeCircleGrp") && (!famViewBool)) ){		
 			tree.initialiseNodes(personName, famName);
+		} else if (famViewBool) {
+			tree.famView_backToTree();
 		} else {
 			const isPersonAdjacent = NODEdetails.isPersonAdjacent(personName);
 			
