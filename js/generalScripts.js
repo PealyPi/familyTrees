@@ -2794,10 +2794,13 @@ class treeChangeEvents {
 			clickedPerson = clickedId.replace("famView_spouseNode_", "");
 		else if (clickedId.search("famView_siblingNode_") != -1)
 			clickedPerson = clickedId.replace("famView_siblingNode_", "");
+		else if (clickedId.search("famView_parentNode_") != -1)
+			clickedPerson = clickedId.replace("famView_parentNode_", "");
 		else if (clickedId.search("famView_focusNode_") != -1)
 			clickedPerson = clickedId.replace("famView_focusNode_", "");
-		
-		const clickedPersonFam = findPersonsFamily(clickedPerson);	
+		else 
+			console.log("Error: famView change focus - famView_Xnode tag not right...");
+		const clickedPersonFam = findPersonsFamily(clickedPerson);
 
 		clickedContainer.querySelector(".focusHighlightGrp").classList.add("focusHLT");
 		
