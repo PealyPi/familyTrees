@@ -223,6 +223,9 @@ class navBar {
 				mask.classList.toggle("activeTransition");
 			}
 			
+			
+			const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
+			
 			//hide all				
 			switch (newActiveID){
 				case 'homeTab':		
@@ -231,7 +234,7 @@ class navBar {
 				case 'treeTab':		
 					this.hideAllSects(this.svgDiv);
 					this.showSect(this.svgDiv);
-					if (NODEdetails.currentFocus!= '')
+					if ((!famViewBool) && (NODEdetails.currentFocus != ''))
 						treeChange.newFocus(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);	
 				break;
 				case 'infoTab':	
@@ -270,7 +273,6 @@ class navBar {
 	}
 	
 	showSect (active){
-		console.log(active.style.opacity);
 		active.style.opacity = 0;
 		active.style.display = 'block';
 		setTimeout(()=> {
