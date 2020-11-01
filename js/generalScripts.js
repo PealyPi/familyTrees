@@ -5,19 +5,28 @@
 var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = nodeDataStorage();
 
-function findPersonsFamily(personName){
+function findPersonsFamily(personName, startFam = false){
 	const famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
+	if (startFam){
+		famOptions.splice(famOptions.indexOf(startFam), 1);
+		famOptions.unshift(startFam);
+	}
+
 	var correctFam = '';
 	for (fam of famOptions){
 		const famBool = PEOPLERELATIONS[fam][personName] ?? false;
-		if (famBool)
+		if (famBool){
 			correctFam = fam;
+			return correctFam;
+			break;
+		}
 	}
 	
-	if (!correctFam) 
-		console.log("Error: person not in data");
-	else 
-		return correctFam;
+	if (!correctFam) {
+		console.log("Error: person not in data"); 
+		return false;
+	}
+	
 }
 
 class nodeLetterTag_info {
@@ -2411,8 +2420,7 @@ class treeSVG {
 			origFocusPos = {
 				'x': svgWidth * parseFloat(origFocus_newPosPerc.x /100), 
 				'y': svgHeight * parseFloat(origFocus_newPosPerc.y /100)
-			} 
-			
+			} 			
 			spouseLineStart = origFocusPos;			
 			
 		} else {
@@ -2486,9 +2494,7 @@ class treeSVG {
 		
 		
 		// ------- Animating ------- //
-			console.log(focusObj.xy);
-			console.log(origFocusPos);
-		//old focus			
+		//old focus					
 		Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
 		Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
 		Velocity.hook(dummyNodeGrp, "scale", 2); 
@@ -2527,19 +2533,14 @@ class treeSVG {
 			}		
 			
 			svgAnimate('rollFromLeft', 'enter', famObjs.spouse.node, {'queue': 'spouseNodeQueue', 'scale':1});
-			if (type == "sibling") svgAnimate('rollFromLeft', 'enter', famObjs.parentMain.node, {'queue': 'spouseNodeQueue', 'scale':1});
+			if (type == "sibling") 
+				svgAnimate('rollFromRight', 'enter', famObjs.parentMain.node, {'queue': 'spouseNodeQueue', 'scale':1});
 			
 			var childGrpsAll = [];
 			for (const kidName in famObjs.children){
-				if (kidName == 'focus'){
-					svgAnimate('rollFromTop', 'enter', famObjs.children[kidName].nodeContainer, {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
-					childGrpsAll.push( famObjs.children[kidName].nodeContainer.nodeGrpContainer.querySelector(".nodeGrp") );
-					
-				}
-				else {
+				if (kidName != 'focus'){
 					svgAnimate('rollFromTop', 'enter', famObjs.children[kidName].node, {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
-					childGrpsAll.push( famObjs.children[kidName].node.nodeGrpContainer.querySelector(".nodeGrp") );
-					
+					childGrpsAll.push( famObjs.children[kidName].node.nodeGrpContainer.querySelector(".nodeGrp") );				
 				}
 			}
 			const lineAcrosChildrenAll = Array.from(lineAcrossChildrenLeft.children).concat(Array.from(lineAcrossChildrenRight.children));
@@ -2551,20 +2552,23 @@ class treeSVG {
 			setTimeout(()=>{
 				Velocity.Utilities.dequeue(lineDown.children, "lineDownQueue")
 			}, 500);
-			setTimeout(()=>{
-				Velocity.Utilities.dequeue(lineAcrosChildrenAll, "lineAcrossQueue");
-			}, 1000);
-			setTimeout(()=>{
-				Velocity.Utilities.dequeue(childLinesAll, "childLineQueue");
-			}, 1500);
-			
 			
 			setTimeout(()=>{
 				Velocity.Utilities.dequeue(famObjs.spouse.node.nodeGrpContainer.querySelector(".nodeGrp"), "spouseNodeQueue");
+				if (type == "sibling") Velocity.Utilities.dequeue(famObjs.parentMain.node.nodeGrpContainer.querySelector(".nodeGrp"), "spouseNodeQueue");
 			}, 500);
+			
+			
+			const childLineAcrossStart = (type == "sibling") ? 0 : 1000;
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(lineAcrosChildrenAll, "lineAcrossQueue");
+			}, childLineAcrossStart);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(childLinesAll, "childLineQueue");
+			}, (childLineAcrossStart + 500));
 			setTimeout(()=>{
 				Velocity.Utilities.dequeue(childGrpsAll, "childNodesQueue");
-			}, 1750);
+			}, (childLineAcrossStart + 750));
 			
 			
 		}, 1000);
@@ -2604,7 +2608,7 @@ class treeSVG {
 		
 		
 		//spouse
-		const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, findPersonsFamily(spouse));	
+		const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, findPersonsFamily(spouse, focusObj.famName));	
 		spouseNode.nodeGrpContainer.setAttribute('id', spouseNode.tagType + "_" + spouseNode.personTag);		
 		const spouseNodeHT = this.createFocusHighlight(spouseNode.nodeGrpContainer);
 		famObjs['spouse'].node = spouseNode;		
@@ -2618,9 +2622,9 @@ class treeSVG {
 		
 		//parentMain
 		if (type == 'sibling'){
-			childrenList.unshift(focusContainer);
-			
+			childrenList.unshift(focusObj.personTag);			
 			const parentMain = focusObj.personData.parentMain;
+			
 			const parentMainNode = new node(this.svgElem, 'famView_parentNode').initialise(parentMain, focusObj.famName);	
 			parentMainNode.nodeGrpContainer.setAttribute('id', parentMainNode.tagType + "_" + parentMainNode.personTag);
 			
@@ -2650,9 +2654,9 @@ class treeSVG {
 		}
 		
 		for (let i=0; i < kidCount; i++){
-			var kidFam = focusObj.famName;
+			var kidFam = findPersonsFamily(childrenList[i], focusObj.famName);
 			//check focus fam info for childrenList[0]
-			var childInfo = PEOPLERELATIONS[focusObj.famName][childrenList[i]] ?? findPersonsFamily(childrenList[i]);
+			var childInfo = PEOPLERELATIONS[kidFam][childrenList[i]];
 			
 			var kidNodeContainer; var kidNode;
 			if ( (type=='sibling') && (i==0)){
@@ -2691,11 +2695,14 @@ class treeSVG {
 			else famObjs.children[kidNode.personTag].xy = {'x': tX, 'y': tY};
 			const tString = 'translateX(' + tX + 'px) translateY(' + tY + 'px) ';
 			
-			kidNodeContainer.style.transform = '';
-			kidNodeContainer.style.transform += tString;					
-			kidNodeContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';	
-			kidNodeContainer.querySelector(".nodeGrp").style.opacity = 0;	
-			
+			if ( (type =='sibling') && (i == 0)){
+				//focus
+			} else {
+				kidNodeContainer.style.transform = '';
+				kidNodeContainer.style.transform += tString;					
+				kidNodeContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';	
+				kidNodeContainer.querySelector(".nodeGrp").style.opacity = 0;	
+			}
 			
 			//remove click event from circleGrp
 			let kidCircleGrp = kidNodeContainer.querySelector(".nodeCircleGrp");
@@ -2850,9 +2857,8 @@ class treeChangeEvents {
 /* -------------------- */
 
 function svgAnimate(type, enterExit, elemNodeObj, config){
-	//Checking if Percentage
-	console.log(typeof elemNodeObj)
-	let container = (typeof elemNodeObj == 'object') ? elemNodeObj.nodeGrpContainer :elemNodeObj ;
+	//Checking if Percentage	
+	let container = elemNodeObj.nodeGrpContainer;
 	let grp = container.querySelector(".nodeGrp");
 	const queueVal = config.queue ?? false;
 	Velocity.hook(elemNodeObj.nodeGrpContainer, "translateX", elemNodeObj.xy.x); 
@@ -2900,7 +2906,7 @@ function svgAnimate(type, enterExit, elemNodeObj, config){
 					opacity: [1, 0],
 				}, {duration: 1500, queue: queueVal});
 				Velocity.hook(grp, "translateY", '-10px');
-				Velocity.hook(grp, "rotateZ", '145deg');
+				Velocity.hook(grp, "rotateZ", '215deg');
 				Velocity(grp, { 
 					translateY: 0,
 					scale: [config.scale, 0],
@@ -2909,6 +2915,26 @@ function svgAnimate(type, enterExit, elemNodeObj, config){
 				}, {duration: 800, queue: queueVal});
 				Velocity(grp, { 
 					rotateZ: '360deg',
+				}, {duration: 300, queue: queueVal, delay: 100});
+			break;
+			case 'exit':
+			break;
+		break;
+		case 'rollFromRight':
+			case 'enter':
+				Velocity(container, { 
+					opacity: [1, 0],
+				}, {duration: 1500, queue: queueVal});
+				Velocity.hook(grp, "translateY", '10px');
+				Velocity.hook(grp, "rotateZ", '145deg');
+				Velocity(grp, { 
+					translateY: 0,
+					scale: [config.scale, 0],
+					rotateZ: '-20deg',
+					opacity: [1, 0],
+				}, {duration: 800, queue: queueVal});
+				Velocity(grp, { 
+					rotateZ: '0deg',
 				}, {duration: 300, queue: queueVal, delay: 100});
 			break;
 			case 'exit':
