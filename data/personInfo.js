@@ -155,6 +155,7 @@ function personInfoStorage(){
 					
 					'benjaminBobby': {
 						'name':		'Benjamin Bobby',
+						'LI_name': 	'Benjamin4 Bobby',
 						'dates': 	'1856 - 1926', 	
 					},
 						'nathonBobby': {

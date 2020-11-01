@@ -1028,6 +1028,10 @@ ul#peopleList li:hover span{
 	letter-spacing: 1.6px;
 }
 
+ul#peopleList #nonMainDropdownBtn{
+	font-size: 18px;
+	color: #ddd;
+}
 /* -----------    ------------- */
 
 

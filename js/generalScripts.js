@@ -307,15 +307,16 @@ class peopleTab {
 		for (const fam of famKeys){
 			const famData = PEOPLEINFO[fam];
 			const eachFamKeys = Object.keys(famData);	
-			const famDropDiv = this.pplList.querySelector("#" + fam + "DropdownDiv");
+			let famDropDiv = this.pplList.querySelector("#" + fam + "DropdownDiv");
+			let nonMainDropDiv = this.pplList.querySelector("#nonMainDropdownDiv");
 			
 			eachFamKeys.forEach(function( personTag, i ) {
-				const personName = famData[personTag].name;
+				const personData = PEOPLERELATIONS[fam][personTag];
+				const personName = famData[personTag].LI_name ?? famData[personTag].name;
 				
 				const personLI = document.createElement("li");	
 				personLI.id = 'li_' + personTag;	
 				personLI.classList.add('pplChooseLI');	
-				famDropDiv.appendChild(personLI);
 				
 				
 				const liIcon = document.createElement("i");	
@@ -326,13 +327,42 @@ class peopleTab {
 				const liSpan = document.createElement("span");
 				personLI.appendChild(liSpan);
 				const liSpanText = document.createTextNode(personName);
-				liSpan.appendChild(liSpanText);		
+				liSpan.appendChild(liSpanText);	
+				
+				
+				if (!personData.mainLine){
+					//const checkedLI = checkForRepeats('nonMain', personLI);
+					//nonMainDropDiv.appendChild(checkedLI);
+					nonMainDropDiv.appendChild(personLI);
+				} else {					
+					//const checkedLI = checkForRepeats(fam, personLI);
+					//famDropDiv.appendChild(personLI);	
+					famDropDiv.appendChild(personLI);
+				}
 			});
 		}
 		
-		//add click event
-		
+		//add click event		
 		this.allHeaderDropdowns = this.pplList.querySelectorAll('.ppl_dropdownBtn');
+		
+		
+		/*function checkForRepeats(fam, personLI){
+			
+			const dropDiv = (fam == 'nonMain') ? this.pplList.querySelector("#nonMainDropdownDiv")
+				: this.pplList.querySelector("#" + fam + "DropdownDiv");
+				
+			let checkingName = personLI.querySelector("span").;
+			
+			const dropDiv_allLI = dropDiv.querySelectorAll("li");
+			for (const li of dropDiv_allLI){
+				const liSpan = dropDiv.querySelector("span");
+			}
+			
+			
+			
+			return checkedLI;
+		}*/
+		
 	}
 	
 	addClickEVENTs(){
@@ -1039,7 +1069,13 @@ function peopleListSearch() {
 	}
 	
 	//if all li values are display none, hide dropbutton
-	const dropDivs = document.querySelectorAll('.ppl_dropdownContainer');
+	const dropDivs = Array.from(ul.querySelectorAll('.ppl_dropdownContainer'));
+	//const nonMainDiv = ul.querySelector('#nonMainDropdownDiv');
+	//const nonMainBtn = ul.querySelector('#nonMainDropdownBtn');
+	//nonMainBtn.style.display = "";
+	
+	//dropDivs.splice(dropDivs.indexOf(nonMainDiv), 1);
+
 	for (const dropDiv of dropDivs){
 		const dropFamName = dropDiv.id.replace("DropdownDiv", "");
 		const dropBtn = document.getElementById(dropFamName + "DropdownBtn");
