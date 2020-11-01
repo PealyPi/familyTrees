@@ -1963,7 +1963,8 @@ class nodeCircle {
 		circleGrp.appendChild(circleBorderLeft);
 		circleGrp.appendChild(circleBorderBot);
 		
-		const circleBorderLength = circleBorderRight.getTotalLength();
+		const circleBorderLength = (document.getElementById("svgDiv").style.display == 'none') ? 313.65
+			: circleBorderRight.getTotalLength();
 		var offsetLngths = [0, (circleBorderLength/4), (circleBorderLength/2), ((3*circleBorderLength)/4)];
 		
 		offsetLngths = offsetLngths.map(x => (x + 70));
@@ -2979,14 +2980,14 @@ function animateGrpEnterExit(grp, enterExit){
 	switch (enterExit){
 		case 'enter':
 			grp.classList.add("vivify");
-			grp.classList.add("duration-1500");
+			grp.classList.add("duration-2000");
 			grp.classList.add("popInBottom");
 			setTimeout(()=>{
 				grp.style.opacity = 1;
 			}, 800);
 			setTimeout(()=>{
 				grp.classList.remove("vivify");
-				grp.classList.remove("duration-1500");
+				grp.classList.remove("duration-2000");
 				grp.classList.remove("popInBottom");
 			}, 1500);
 		break;
