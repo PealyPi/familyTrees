@@ -2625,8 +2625,8 @@ class treeSVG {
 	createFamViewNodes (focusObj, type, focusContainer){
 		var famObjs = {'spouse': {'node': '', 'xy': ''}, 'children': {}, 'parentMain': {'node': '', 'xy': ''}};
 		
-		//siblingsSection - need 2 parents and siblings
-		//childrenSection - need 1 spouse and children
+		//siblingsSection - need 2 parents and siblings, childrenSection - need 1 spouse and children
+		
 		const spouse = (type == 'children') ? focusObj.personData.spouse : focusObj.personData.parentSpouse;
 		var childrenList = (type == 'children') ? focusObj.personData.children : focusObj.personData.siblings;
 		const parentMain = (type == 'sibling') ? focusObj.personData.parentMain : '';				

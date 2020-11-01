@@ -47,39 +47,53 @@ function nodeDataStorage(){//collapse lvl 2
 	kesby.floBobby = {		
 		'mainLine':		false,	
 		'familyName': 	'bobby',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
 		'siblingMain': 'maryBobby',
 	};
 	kesby.charlesEdwardBobby = {	
 		'mainLine':		false,	
 		'familyName': 	'bobby',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
 		'siblingMain': 'maryBobby',
 	};
 	kesby.lotBobby = {	
 		'mainLine':		false,	
 		'familyName': 	'bobby',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
 		'spouse': 		'jimCoyle',	
 		'siblingMain': 'maryBobby',
 	};
 	kesby.sidBobby = {		
 		'mainLine':		false,	
 		'familyName': 	'bobby',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
 		'siblingMain': 'maryBobby',
 	};
 	kesby.harryBobby = {		
 		'mainLine':		false,	
 		'familyName': 	'bobby',
+		'parentMain': 		'sidneyCharlesBobby',	
+		'parentSpouse': 	'adaBerriman',
 		'siblingMain': 'maryBobby',
 	};
 	kesby.jackBobby = {			
 		'mainLine':		false,	
 		'familyName': 	'bobby',
+		'parentMain': 		'sidneyCharlesBobby',	
+		'parentSpouse': 	'adaBerriman',
 		'siblingMain': 'maryBobby',
 	};
 	kesby.jeanBobby = {			
-			'mainLine':		false,	
-			'familyName': 	'bobby',
+		'mainLine':		false,	
+		'familyName': 	'bobby',
+		'parentMain': 		'sidneyCharlesBobby',	
+		'parentSpouse': 	'adaBerriman',
 		'siblingMain': 'maryBobby',
-		};
+	};
 	
 		//gen3
 		kesby.adaBerriman = {	
