@@ -199,6 +199,11 @@ class navBar {
 		const newTabColor = newActiveID + "Colour";		
 		
 		if ( btn == this.pplBtn){
+			if (this.pplBtn.classList.contains("active"))
+				pplTab.focusSearchbox('blur');
+			else 
+				pplTab.focusSearchbox('focus');
+			
 			this.peopleDiv.classList.toggle("sliding");
 			newActive.classList.toggle("active");
 			
@@ -223,6 +228,7 @@ class navBar {
 				mask.classList.toggle("activeTransition");
 			}
 			
+			pplTab.focusSearchbox('blur');
 			
 			const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
 			
@@ -331,12 +337,8 @@ class peopleTab {
 				
 				
 				if (!personData.mainLine){
-					//const checkedLI = checkForRepeats('nonMain', personLI);
-					//nonMainDropDiv.appendChild(checkedLI);
 					nonMainDropDiv.appendChild(personLI);
 				} else {					
-					//const checkedLI = checkForRepeats(fam, personLI);
-					//famDropDiv.appendChild(personLI);	
 					famDropDiv.appendChild(personLI);
 				}
 			});
@@ -344,24 +346,6 @@ class peopleTab {
 		
 		//add click event		
 		this.allHeaderDropdowns = this.pplList.querySelectorAll('.ppl_dropdownBtn');
-		
-		
-		/*function checkForRepeats(fam, personLI){
-			
-			const dropDiv = (fam == 'nonMain') ? this.pplList.querySelector("#nonMainDropdownDiv")
-				: this.pplList.querySelector("#" + fam + "DropdownDiv");
-				
-			let checkingName = personLI.querySelector("span").;
-			
-			const dropDiv_allLI = dropDiv.querySelectorAll("li");
-			for (const li of dropDiv_allLI){
-				const liSpan = dropDiv.querySelector("span");
-			}
-			
-			
-			
-			return checkedLI;
-		}*/
 		
 	}
 	
@@ -378,6 +362,10 @@ class peopleTab {
 		for (const ppl of peopleChoose) {
 			ppl.addEventListener("click", (evnt) => this.openPerson(evnt));	
 		}
+		
+		const exitBtn = document.getElementById('peopleDivExit');
+		exitBtn.addEventListener("click", (evnt) => this.closeTab());	
+		
 	}
 	
 	detectClick(event){
@@ -389,7 +377,9 @@ class peopleTab {
 			&& ($(clickedElement).parents("#peopleDiv").length == 0)	){
 			
 				this.peopleDiv.classList.toggle("sliding");
-				this.pplTab.classList.toggle("active");	
+				this.pplTab.classList.toggle("active");				
+				
+				this.focusSearchbox('blur');
 		}
 	}
 	
@@ -501,6 +491,8 @@ class peopleTab {
 	closeTab(){
 		this.peopleDiv.classList.toggle("sliding");
 		this.pplTab.classList.toggle("active");
+		
+		this.focusSearchbox('blur');
 	}
 
 	toggleSearchIcon(type) {
@@ -531,7 +523,14 @@ class peopleTab {
 		}
 	}
 
-	
+	focusSearchbox(focusBlur){
+		const searchbox = this.peopleDiv.querySelector("#peopleSearching");
+		if (focusBlur == 'blur'){
+			$(searchbox).blur();
+		} else if (focusBlur == 'focus'){
+			$(searchbox).focus();
+		}
+	}
 
 }
 
@@ -1070,11 +1069,6 @@ function peopleListSearch() {
 	
 	//if all li values are display none, hide dropbutton
 	const dropDivs = Array.from(ul.querySelectorAll('.ppl_dropdownContainer'));
-	//const nonMainDiv = ul.querySelector('#nonMainDropdownDiv');
-	//const nonMainBtn = ul.querySelector('#nonMainDropdownBtn');
-	//nonMainBtn.style.display = "";
-	
-	//dropDivs.splice(dropDivs.indexOf(nonMainDiv), 1);
 
 	for (const dropDiv of dropDivs){
 		const dropFamName = dropDiv.id.replace("DropdownDiv", "");
@@ -1096,28 +1090,33 @@ function peopleListSearch() {
 }
 
 function peopleListSearchExit(){
-		const exitIcon = "fa-times-circle";
-		const searchIcon = "fa-search";
-		
-		const searchIconDiv = document.getElementById('peopleSearchIcon');
-		const targetIcon = searchIconDiv.querySelector("i");
-		const searchInput = document.getElementById('peopleSearching');
-		
-		//check current icon is exit
-		const iconType = targetIcon.classList[1];
-		if (iconType == exitIcon){
-			//clear search
-			searchInput.value = "";
-			peopleListSearch();
-		}
-		
-		const dropBtns = document.querySelectorAll(".ppl_dropdownBtn");
-		dropBtns.forEach((dropBtn)=>{
-			dropBtn.style.display = "";
-		});
-		
+	const exitIcon = "fa-times-circle";
+	const searchIcon = "fa-search";
+	
+	const searchIconDiv = document.getElementById('peopleSearchIcon');
+	const targetIcon = searchIconDiv.querySelector("i");
+	const searchInput = document.getElementById('peopleSearching');
+	
+	//check current icon is exit
+	const iconType = targetIcon.classList[1];
+	if (iconType == exitIcon){
+		pplTab.focusSearchbox('focus');
+		//clear search
+		searchInput.value = "";
+		peopleListSearch();
 	}
+	
+	const dropBtns = document.querySelectorAll(".ppl_dropdownBtn");
+	dropBtns.forEach((dropBtn)=>{
+		dropBtn.style.display = "";
+	});
+	
+}
 
+function unblurSearch(input){
+	//input.value = '';
+	//peopleListSearchExit();
+}
 
 /* -- tree Div -- */
 class node {
@@ -3150,6 +3149,7 @@ function removeAllChildNodes(parent) {
 }
 
 
+
 const navObj 	= new navBar();
 const pplTab 	= new peopleTab();
 const infoTab 	= new woodInfoTab('info');
@@ -3168,7 +3168,6 @@ $(document).ready(function(){
 	//tree
 	tree.createSVG();
 	famView.createSVG(true);
-	
 });
 
 /* ------------------------------------------------ */

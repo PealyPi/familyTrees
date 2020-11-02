@@ -98,8 +98,16 @@
 		</div>
 	</div>
 	<div id="peopleDiv">
-		<button id="peopleDivExit" onclick="closePeopleTab();"><i class="fas fa-times"></i></button>
-		<input type="text" id="peopleSearching" onkeyup="peopleListSearch(this);" placeholder="Search for Person"><button id="peopleSearchIcon" onClick="peopleListSearchExit();"><i class="fas fa-search"></i></button>
+		<button id="peopleDivExit"><i class="fas fa-times"></i></button>
+		<div class = "searchDiv">
+			<input type="text" id="peopleSearching" placeholder="Search for Person"
+				onkeyup="peopleListSearch(this);" >
+			<svg width="271px" height="54px" viewBox="0 0 271 54" class="searchBorder">
+				<polyline points="270,1 270,53 1,53 1,1 270,1" class="searchBg-line" />
+			</svg>
+			<button id="peopleSearchIcon" onClick="peopleListSearchExit();"><i class="fas fa-search"></i></button>
+		</div>
+		
 		<ul id="peopleList">
 			<button id="kesbyDropdownBtn" class="ppl_dropdownBtn">Kesby <i class="fa fa-caret-down"></i></button>
 			<div id="kesbyDropdownDiv" class="ppl_dropdownContainer"></div>

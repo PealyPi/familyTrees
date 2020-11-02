@@ -897,77 +897,6 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	font-size:24px;
 	cursor: pointer;
 }
-/*scroll*/
-#peopleDiv::-webkit-scrollbar, .ppl_dropdownContainer::-webkit-scrollbar {
-  width: 10px;
-  background: var(--colourGreenDarker_RGB_Transparent); 
-}
-#peopleDiv::-webkit-scrollbar-track, .ppl_dropdownContainer::-webkit-scrollbar-track {
-  border-radius: 3px;
-}
-#peopleDiv::-webkit-scrollbar-thumb, .ppl_dropdownContainer::-webkit-scrollbar-thumb {
-  background: var(--colourMint); 
-  border-radius: 10px;
-}
-#peopleDiv::-webkit-scrollbar-thumb:hover, .ppl_dropdownContainer::-webkit-scrollbar-thumb:hover {
-  background: var(--colourMint); 
-}
-
-#peopleDiv input{
-	width: 225px; 
-	height: 50px;
-	padding-left: 10px;
-	
-	font-family: var(--mainFontFamily);
-	font-size: 24px;
-	background-color: var(--colourMint);
-	text-shadow: 1px 1px 2px rgb(0, 0, 0, 0.6);
-	color: white;
-	border: 4px solid white;
-}
-#peopleDiv input::placeholder{
-	/*color: var(--greyFontColour);*/
-	color: white;
-	text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.4);
-	padding-bottom: -3px;
-}
-#peopleDiv input[type="text" i]{
-	padding-right: 43px;
-}
-#peopleDiv input:focus, #peopleDiv input:active{
-	outline: none;
-}
-#peopleDiv #peopleSearchIcon{
-	position: absolute;
-	left: 250px;
-	top: 58px;
-	width: 30px;
-	height: 30px;
-	color: white;
-	font-size:30px;
-	cursor: pointer;
-}
-ol,ul{
-	list-style:none;
-	padding-inline-start: 0;
-	margin-block-start: 0;
-    margin-block-end: 0;
-	margin-inline-start: 0;
-    margin-inline-end: 0;
-}
-ul#peopleList{
-	cursor: default;
-	width: 290px; 
-	margin: 12px 0;
-	padding-top: 10px;
-	
-	font-size: 16px; 
-	border-top: 3px solid #fff;
-	
-	/*list-style:  square inside url('../media/chevron-left-solid.svg');*/
-	
-}
-
 
 ul#peopleList li{
 	cursor: pointer;	
@@ -1032,6 +961,115 @@ ul#peopleList #nonMainDropdownBtn{
 	font-size: 18px;
 	color: #ddd;
 }
+
+
+/*--searchbox --*/
+#peopleDiv .searchDiv{
+	position: relative;
+	width: 280px; 
+	height: 55px;
+	top: 0; left: 0;
+	padding-left: 10px;
+}
+#peopleDiv input{
+	width: 216px; 
+	height: 51px;
+	
+	font-family: var(--mainFontFamily);
+	font-size: 24px;
+	color: white;
+	/*border: 1px solid #ddd;*/
+	border-width: 1px; border-style: solid;
+	border-color: #ccc #ddd #ddd #ccc;
+	
+	
+	background: transparent;
+	transition: 1s ease-in-out;
+	
+}
+#peopleDiv svg.searchBorder{
+	position: absolute;
+	left: 10px;
+	top: 0;
+	fill: none;
+	stroke: #fff;
+	stroke-dasharray: 180 650;
+	stroke-dashoffset: 180;
+	transition: 1s ease-in-out;
+	
+	pointer-events: none;
+}
+#peopleDiv input::placeholder{
+	color: #ddd;
+	padding-bottom: -3px;
+}
+#peopleDiv input[type="text" i]{
+	padding: 0 43px 0 10px;
+}
+#peopleDiv .searchDiv:hover input, #peopleDiv input:focus {
+	transition: 1s ease-in-out;
+	background: rgb(255, 255, 255, 0.2);
+}
+#peopleDiv .searchDiv:hover svg.searchBorder, #peopleDiv .input:focus ~ svg.searchBorder{
+	stroke-dashoffset: -650;	
+}
+
+#peopleDiv input:focus, #peopleDiv input:active{
+	outline: none;
+}
+#peopleDiv #peopleSearchIcon{
+	position: absolute;
+	left: 240px;
+	top: 15px;
+	width: 20px;
+	height: 20px;
+	color: white;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+
+#peopleDiv .searchHl-line {
+	
+}
+
+ol,ul{
+	list-style:none;
+	padding-inline-start: 0;
+	margin-block-start: 0;
+    margin-block-end: 0;
+	margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+ul#peopleList{
+	cursor: default;
+	width: 290px; 
+	margin: 12px 0;
+	padding-top: 10px;
+	
+	font-size: 16px; 
+	border-top: 3px solid #fff;
+	
+	/*list-style:  square inside url('../media/chevron-left-solid.svg');*/
+	
+}
+
+/*scroll*/
+#peopleDiv::-webkit-scrollbar, .ppl_dropdownContainer::-webkit-scrollbar {
+  width: 10px;
+  background: var(--colourGreenDarker_RGB_Transparent); 
+}
+#peopleDiv::-webkit-scrollbar-track, .ppl_dropdownContainer::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+#peopleDiv::-webkit-scrollbar-thumb, .ppl_dropdownContainer::-webkit-scrollbar-thumb {
+  background: var(--colourMint); 
+  border-radius: 10px;
+}
+#peopleDiv::-webkit-scrollbar-thumb:hover, .ppl_dropdownContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--colourMint); 
+}
+
 /* -----------    ------------- */
 
 
