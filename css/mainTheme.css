@@ -864,13 +864,10 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 }
 
 /* --- Ppl Tab --- */
-#peopleDiv button{	
-	background: none;
-}
 #peopleDiv {
 	position: fixed;
 	height: 80%;
-	width: 290px;
+	width: 300px;
 	top: var(--navBarHeight);
 	right: 0;
 	bottom: 0;
@@ -887,6 +884,10 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	border-top: 6px solid var(--colourMint);
 	border-bottom: 6px solid var(--colourMint);
 }
+#peopleDiv button{	
+	background: none;
+}
+
 #peopleDiv.sliding {
 	transform: translate(-100%);	
 }
@@ -1008,7 +1009,7 @@ ul#peopleList #nonMainDropdownBtn{
 }
 #peopleDiv .searchDiv:hover input, #peopleDiv input:focus {
 	transition: 1s ease-in-out;
-	background: rgb(255, 255, 255, 0.2);
+	background: rgb(255, 255, 255, 0.1);
 }
 #peopleDiv .searchDiv:hover svg.searchBorder, #peopleDiv .input:focus ~ svg.searchBorder{
 	stroke-dashoffset: -650;	
@@ -1029,9 +1030,6 @@ ul#peopleList #nonMainDropdownBtn{
 }
 
 
-#peopleDiv .searchHl-line {
-	
-}
 
 ol,ul{
 	list-style:none;
@@ -1059,15 +1057,18 @@ ul#peopleList{
   width: 10px;
   background: var(--colourGreenDarker_RGB_Transparent); 
 }
-#peopleDiv::-webkit-scrollbar-track, .ppl_dropdownContainer::-webkit-scrollbar-track {
+#peopleDiv::-webkit-scrollbar-track{
   border-radius: 3px;
 }
-#peopleDiv::-webkit-scrollbar-thumb, .ppl_dropdownContainer::-webkit-scrollbar-thumb {
+#peopleDiv::-webkit-scrollbar-thumb{
   background: var(--colourMint); 
   border-radius: 10px;
 }
-#peopleDiv::-webkit-scrollbar-thumb:hover, .ppl_dropdownContainer::-webkit-scrollbar-thumb:hover {
+#peopleDiv::-webkit-scrollbar-thumb:hover {
   background: var(--colourMint); 
+}
+.ppl_dropdownContainer::-webkit-scrollbar {
+	display: none;
 }
 
 /* -----------    ------------- */
