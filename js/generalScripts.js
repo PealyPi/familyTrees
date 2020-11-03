@@ -1281,24 +1281,27 @@ class node {
 	checkRelationButtons(){
 		const siblingsCheck = this.personData.siblings ?? this.personData.siblingMain ?? 'none';
 		const childrenCheck = this.personData.children ?? 'none';
+		
 		var tagChecks = {
 			'childMain': 	'leftArrow',
 			'parentMain': 	'rightArrow',
-			'siblings': 	['siblingMain', 'sibling'],
-			'children': 	'children'
+			'siblings': 	'siblings',
+			'children': 	'children',
 		};
 		for (const check in tagChecks){
-			if (this.personData.hasOwnProperty(check)){
-				if (Array.isArray(tagChecks[check])){
-					if (this.personData.hasOwnProperty(tagChecks[check][0])){
-						tree.showHideButtons('show', tagChecks[check][1]);
-					}
+			//console.log(this.personTag + " check " + check + " ? " + this.personData.hasOwnProperty(check));
+			
+			if (this.personData.hasOwnProperty(check)){	
+				tree.showHideButtons('show', tagChecks[check]);				
+			}
+			else {
+				if ((check == "siblings") && this.personData.hasOwnProperty('siblingMain')){
+					//tree.showHideButtons('show', tagChecks[check]);	//isSibling
+					tree.showHideButtons('hide', tagChecks[check]);
 				} else {
-					tree.showHideButtons('show', tagChecks[check]);
+					tree.showHideButtons('hide', tagChecks[check]);
 				}
 			}
-			else
-				tree.showHideButtons('hide', tagChecks[check]);
 		}
 		
 		
@@ -2216,8 +2219,9 @@ class treeSVG {
 				}
 			break;
 			case 'hide':	
+				//console.log("hiding " + icon);
 				switch (icon){
-					case 'sibling':
+					case 'siblings':
 						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
 						VIVIFY_animateElems(sibBtn, 'buttons', 'exit');
 					break;
@@ -2248,6 +2252,7 @@ class treeSVG {
 				}
 			break;			
 			case 'show':	
+				//console.log("showing " + icon);
 				switch (icon){
 					case 'sibling':
 						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
@@ -2502,7 +2507,6 @@ class treeSVG {
 				case 'children': 
 					let focusPos_percentage = {'x': '35', 'y': '22'};
 					
-					console.log(svgH);
 					focusPos.x = svgW * parseFloat(focusPos_percentage.x /100);
 					focusPos.y = svgH * parseFloat(focusPos_percentage.y /100);
 					spousePos = famObjs.spouse.node.xy;
@@ -3079,6 +3083,12 @@ function VIVIFY_animateElems(elem, type, enterExit){
 		case 'buttonDiv':
 			switch (enterExit){
 				case 'enter':
+					//check nonactive btns re hidden
+					for (let btn of elem.children){
+						if (!btn.classList.contains("active")){
+							btn.style.opacity = 0
+						}
+					}
 					elem.classList.add("vivify");
 					elem.classList.add("duration-1500");
 					elem.classList.add("driveInBottom");
@@ -3111,17 +3121,23 @@ function VIVIFY_animateElems(elem, type, enterExit){
 			switch (enterExit){
 				case 'enter':
 					if (elem.style.opacity == 0){
-						elem.classList.add("vivify");
-						elem.classList.add("duration-1000");
-						elem.classList.add("flipInX");
+						//elem.style.display = 'inline-block';
+						elem.classList.add("active");
 						setTimeout(()=>{
-							elem.style.opacity = 1;
-						}, 400);
-						setTimeout(()=>{
-							elem.classList.remove("vivify");
-							elem.classList.remove("duration-1000");
-							elem.classList.remove("flipInX");
-						}, 1000);
+							elem.classList.add("vivify");
+							elem.classList.add("duration-1000");
+							elem.classList.add("flipInX");
+							setTimeout(()=>{
+								elem.style.opacity = 1;
+							}, 400);
+							setTimeout(()=>{
+								elem.classList.remove("vivify");
+								elem.classList.remove("duration-1000");
+								elem.classList.remove("flipInX");
+							}, 1000);
+						}, 0);
+					} else if (!elem.classList.contains("active")){
+						console.log("Here");
 					}
 				break;
 				case 'exit':
@@ -3131,11 +3147,13 @@ function VIVIFY_animateElems(elem, type, enterExit){
 						elem.classList.add("flipOutX");
 						setTimeout(()=>{
 							elem.style.opacity = 0;
+							elem.classList.remove("active");
 						}, 800);
 						setTimeout(()=>{
 							elem.classList.remove("vivify");
 							elem.classList.remove("duration-1000");
 							elem.classList.remove("flipOutX");
+						//	elem.style.display = 'none';
 						}, 1000);
 					}
 				break;

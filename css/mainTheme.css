@@ -526,11 +526,12 @@ button,  button:active, button:hover, button:focus{
 	position: relative;
 	bottom: 100px;
 	text-align: center;
+	height: 72px;
 }
 .arrowBtn{
 	cursor: pointer;
 	height: 56px;
-	width: 48px;
+	width: 0px;
 	position: relative;
 	top: 10px;
 	display:inline-block;	
@@ -539,8 +540,15 @@ button,  button:active, button:hover, button:focus{
 	background:none;
 	color: white;
 	opacity: 0.8;
-	transition: all 0.7s;	
+	transition: all 0.7s, width 1s;	
+	pointer-events: none;
 }
+.arrowBtn.active{
+	width: 48px;
+	pointer-events: auto;
+	
+}
+
 .leftArrow_button{	
 	float: left;
 }
@@ -562,12 +570,18 @@ button,  button:active, button:hover, button:focus{
 .famIcon {
 	position: relative;
 	top: 0px;
-	width: 70px; height: 70px;
+	width: 0px; height: 70px;
 	cursor: pointer;
 	display: inline-block;
-	margin: auto 20px;
+	margin: 0px;
 	opacity: 0.8;
-	transition: all 0.7s;
+	transition: all 0.7s, width 1s;
+	pointer-events: none;
+}
+.famIcon.active {
+	width: 70px;
+	margin: auto 20px;
+	pointer-events: auto;
 }
 .siblingIcon_button{
 	background: url(../media/siblingsIcon.png);
