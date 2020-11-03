@@ -156,8 +156,8 @@ class navBar {
 	
 	addClickEVENTs(){
 		//tree&Info btns
-		document.getElementById("treeInfoLinkBTN").addEventListener("click", (evnt) => this.navClick_EVENT(evnt, link=true));
-		document.getElementById("infoTreeLinkBTN").addEventListener("click", (evnt) => this.navClick_EVENT(evnt, link=true));
+		document.getElementById("treeInfoLinkBTN").addEventListener("click", (evnt) => this.navClick_EVENT(evnt, true));
+		document.getElementById("infoTreeLinkBTN").addEventListener("click", (evnt) => this.navClick_EVENT(evnt, true));
 	
 		//nav btns
 		for (const tab of this.allNavBtns) {
@@ -849,7 +849,7 @@ class woodInfoTab {
 			
 			setTimeout(()=>{
 				this._fillingInfo = false
-			}, 2100);
+			}, 2300);
 		}
 		
 		function fillInfo(){
