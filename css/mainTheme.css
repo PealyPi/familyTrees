@@ -446,6 +446,8 @@ button,  button:active, button:hover, button:focus{
 	background-color: var(--colourDarkPurple_RGB_Transparent);
 }
 
+#mainSVG{
+}
 #famViewSVG{
 	position:absolute;
 	top:0; left: 0;

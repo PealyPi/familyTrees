@@ -422,7 +422,7 @@ class peopleTab {
 			const personName = personNameWithComma.replace(",", "");
 			
 			//console.log(personName);
-			for (i = 0; i < dropLIs.length; i++) {	
+			for (let i = 0; i < dropLIs.length; i++) {	
 				if (dropLIs[i].innerText == personName) {
 					btnLI = dropLIs[i];	
 				}				
@@ -893,7 +893,7 @@ class woodInfoTab {
 						varSpan.appendChild(varText);
 						
 						//add click function
-						varSpan.addEventListener("click", (evnt) => openPerson(evnt, linked=true));
+						varSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
 					});
 					
 					//const relativeNamesStr = relativeNamesList.join(", ");
@@ -976,7 +976,7 @@ class woodInfoTab {
 
 				//add click function
 				marriedToSpan.classList.add('personLink');
-				marriedToSpan.addEventListener("click", (evnt) => openPerson(evnt, linked=true));
+				marriedToSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
 
 			} else {
 				relatedDiv.innerHTML = personAbout[aboutKey];				
@@ -1113,10 +1113,6 @@ function peopleListSearchExit(){
 	
 }
 
-function unblurSearch(input){
-	//input.value = '';
-	//peopleListSearchExit();
-}
 
 /* -- tree Div -- */
 class node {
@@ -2421,6 +2417,7 @@ class treeSVG {
 		}, 2000);		
 	}
 	
+	
 	famView_backToTree(){
 		tree.showHideButtons('showAll');
 		tree.showHideButtons('hide', 'famViewTree');
@@ -2438,201 +2435,241 @@ class treeSVG {
 		
 	}
 	
-	dummyAnimate_toFamView(focusObj, type){		
+	animateToFamView(focusObj, type){		
 		
-		//duplicate Focus
-		const dummyContainer = focusObj.nodeGrpContainer.cloneNode(true);
-		dummyContainer.classList.add("focusContainer");
-		dummyContainer.setAttribute("id", "famView_focusNode_" + focusObj.personTag);		
-		const dummyNodeGrp = dummyContainer.querySelector(".nodeGrp");
+		let svg = this.svgElem;
 		
-		const dummyFocusHT = this.createFocusHighlight(dummyContainer);
-		dummyFocusHT.classList.add("focusHLT");
+		const clonedFocusContainer = cloningFocus(focusObj);
+		const clonedFocusGrp = clonedFocusContainer.querySelector(".nodeGrp");
+		const clonedFocusHT = this.createFocusHighlight(clonedFocusContainer);
+		clonedFocusHT.classList.add("focusHLT");
 		
-		const dummyContainer_circleGrp = dummyContainer.querySelector(".nodeCircleGrp");
-		$(dummyContainer_circleGrp).off('click');
-		dummyContainer_circleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+		hideTreeSVG();
+		showFamViewSVG();
+		const svgW = svg.getBoundingClientRect().width;
+		const svgH = svg.getBoundingClientRect().height;
 		
-		this.svgElem.appendChild(dummyContainer);	
+		const famObjs = this.createFamViewNodes(focusObj, type, clonedFocusContainer);	
 		
+		let kidCount = Object.keys(famObjs.children).length;		
+		let positions = getPositions(type);	
 		
-		//hideShow
-		tree.showHideButtons('hideAll');
-		tree.showHideButtons('show', 'famViewTree');	
+		const childSpacing = getChildrenSpacing(famObjs);
 		
-		focusObj.nodeGrpContainer.style.opacity = 0;
-		this.svgElem.style.display = 'block';
-		this.svgElem.style.opacity = 1;		
+		let lineDownY = (childSpacing.count < 5) ? svgH * 0.55 : svgH * 0.48;
+		var allLines = formLines(famObjs);
 		
-		tree.reInitialiseNodes('', 'famView', false);	
-		
-		
-		//create famView new nodes		
-		const famObjs = this.createFamViewNodes(focusObj, type, dummyContainer);			
-		
-		//Get positions
-		const svgWidth = this.svgElem.getBoundingClientRect().width;
-		const svgHeight = this.svgElem.getBoundingClientRect().height;
-		
-		var origFocusPos, spouseLineStart, parentMainPos;
-		if (type == 'children'){
-			const origFocus_newPosPerc = {'x': '35', 'y': '22'};
-			origFocusPos = {
-				'x': svgWidth * parseFloat(origFocus_newPosPerc.x /100), 
-				'y': svgHeight * parseFloat(origFocus_newPosPerc.y /100)
-			} 			
-			spouseLineStart = origFocusPos;			
-			
-		} else {
-			origFocusPos = famObjs.children['focus'].xy;
-			
-			spouseLineStart = famObjs.parentMain.node.xy;
-			parentMainPos = spouseLineStart;
-		}
-		
-		const spousePos = famObjs.spouse.node.xy;	
-		let midSpousePoint = spouseLineStart.x + ((spousePos.x - spouseLineStart.x) / 2);
-		
-		
-		//children
-		const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
-		
-		let kidCount = Object.keys(famObjs.children).length;
-		var midIndex = Math.floor(kidCount / 2), 
-			xSpacingForCount = xSpacing[kidCount];
-			
-		var firstKidPos_perc, lastKidPos_perc;
-		
-		if (kidCount % 2 == 1){
-			firstKidPos_perc =  50 + ( (0 - midIndex) * xSpacingForCount);
-			lastKidPos_perc =  50 + ( ((kidCount-1) - midIndex) * xSpacingForCount);
-		} else {
-			const midIndexAdapt = (midIndex - 1);
-			firstKidPos_perc = (50 + (-1 * xSpacingForCount/2) + ( (0 - midIndexAdapt) * xSpacingForCount) );
-			lastKidPos_perc = (50 + (1 * xSpacingForCount/2) + ( ((kidCount-1) - midIndex) * xSpacingForCount) );
-		}
-		
-		var firstKidPos = svgWidth * parseFloat(firstKidPos_perc/100);
-		var lastKidPos = svgWidth * parseFloat(lastKidPos_perc/100);
-		
-		
-		
-		// ------- Lines ------- //		
-		//lines
-		const extendLine = 2.9;		
-		const lineGrp = new createNewElement('g', {
-			'class': 'famView_lines_GRP',
-		});
-		$(this.svgElem).prepend(lineGrp);
-		
-		//line Between Parents
-		const spousePathPoints = ['M', spouseLineStart.x, spouseLineStart.y, 'H', spousePos.x];		
-		const spouseLines = this.createLines(lineGrp, 'famView_spouseLine', spousePathPoints);
-		
-		
-		//line down		
-		let lineDownY = (kidCount < 5) ? svgHeight * 0.55 : svgHeight * 0.48;
-		const lineDown_pathPoints = ['M', midSpousePoint, spouseLineStart.y, 'V', (lineDownY - extendLine + 0.1)];
-		
-		const lineDown = this.createLines(lineGrp, 'famView_lineDown', lineDown_pathPoints);
-		
-		
-		//lineAcrossChildren	
-		const lineAcrossChildrenLeft_pathPoints = ['M', midSpousePoint, lineDownY, 'H', firstKidPos - extendLine];
-		const lineAcrossChildrenRight_pathPoints = ['M', midSpousePoint, lineDownY, 'H', lastKidPos + extendLine];
-		
-		const lineAcrossChildrenLeft = this.createLines(lineGrp, 'famView_lineAcrossChildrenLLeft', lineAcrossChildrenLeft_pathPoints);
-		const lineAcrossChildrenRight = this.createLines(lineGrp, 'famView_lineAcrossChildrenRight', lineAcrossChildrenRight_pathPoints);
-		
-		var childLines = [];
-		for (const kid in famObjs.children){
-			let kidPos = famObjs.children[kid].xy;
-			const kidPathPoints = ['M', kidPos.x, lineDownY, 'V', kidPos.y];
-			const kidLines = this.createLines(lineGrp, 'famView_childLine', kidPathPoints);
-			childLines.push(kidLines);
-		}
-		
-		
-		// ------- Animating ------- //
-		//old focus					
-		Velocity.hook(dummyContainer, "translateX", focusObj.xy.x); 
-		Velocity.hook(dummyContainer, "translateY", focusObj.xy.y); 
-		Velocity.hook(dummyNodeGrp, "scale", 2); 
-		Velocity(dummyContainer, { 
-			translateX: [(origFocusPos.x) , focusObj.xy.x], 
-			translateY: [(origFocusPos.y) , focusObj.xy.y], 
-		}, { duration: 1500, queue: false,});
-		
-		const dummyScale = (type=="children") ? 1 :  (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6;
-		Velocity(dummyNodeGrp, { 
-			scale: dummyScale
-		}, { duration: 1500, queue: false,});		
-		
-		
+		allLines['childLines'] = eachChildLines(allLines.grp, famObjs);
+		var containersToQueue = animateNodes();
+		animateLines(allLines);	
 		
 		setTimeout(()=> {
-			for (const line of spouseLines.children ){
-				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 1500, queue: 'spouseQueue' });
+			allAnimationTimings(allLines, containersToQueue);
+		}, 1000);
+		
+		
+		function cloningFocus(focusObj){
+			const clonedFocusContainer = focusObj.nodeGrpContainer.cloneNode(true);
+			clonedFocusContainer.classList.add("focusContainer");
+			clonedFocusContainer.setAttribute("id", "famView_focusNode_" + focusObj.personTag);			
+			
+		
+			const clonedFocus_circleGrp = clonedFocusContainer.querySelector(".nodeCircleGrp");
+			$(clonedFocus_circleGrp).off('click');
+			clonedFocus_circleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
+			
+			
+			svg.appendChild(clonedFocusContainer);	
+			return clonedFocusContainer; 
+		}
+		
+		function hideTreeSVG(){
+			tree.showHideButtons('hideAll');	
+			focusObj.nodeGrpContainer.style.opacity = 0;	
+		
+			svg.style.display = 'block';
+			svg.style.opacity = 1;			
+			tree.reInitialiseNodes('', 'famView', false);	
+		}
+		
+		function showFamViewSVG(){
+			tree.showHideButtons('show', 'famViewTree');			
+		}
+		
+		function getPositions(type){
+			let focusPos = {}, midSpousePoint, spousePos;
+			switch (type){
+				case 'children': 
+					let focusPos_percentage = {'x': '35', 'y': '22'};
+					
+					console.log(svgH);
+					focusPos.x = svgW * parseFloat(focusPos_percentage.x /100);
+					focusPos.y = svgH * parseFloat(focusPos_percentage.y /100);
+					spousePos = famObjs.spouse.node.xy;
+					
+					midSpousePoint = focusPos.x + ((spousePos.x - focusPos.x) / 2);
+					
+					return {
+						'focus': focusPos,
+						'parentMain': focusPos,
+						'spouse': famObjs.spouse.node.xy,
+						'midSpouse': midSpousePoint
+					}
+				break;
+				case 'sibling': 	
+					focusPos = famObjs.children['focus'].xy;
+					let parentMain = famObjs.parentMain.node.xy;	
+					spousePos = famObjs.spouse.node.xy;				
+					midSpousePoint = parentMain.x + ((spousePos.x - parentMain.x) / 2);
+					
+					return {
+						'focus': famObjs.children['focus'].xy,
+						'parentMain': parentMain,
+						'spouse': famObjs.spouse.node.xy,
+						'midSpouse': midSpousePoint
+					}
+				break;
 			}
-			for (const line of lineDown.children ){
-				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineDownQueue' });
-			}		
-			for (const line of lineAcrossChildrenLeft.children ){
-				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineAcrossQueue' });
-			}
-			for (const line of lineAcrossChildrenRight.children ){
-				Velocity(line, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineAcrossQueue' });
+		}
+		
+		function getChildrenSpacing(famObjs){
+			const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
+			
+			var midIndex = Math.floor(kidCount / 2), 
+				xSpacingForCount = xSpacing[kidCount];
+				
+			var firstKidPos_perc, lastKidPos_perc;
+			if (kidCount % 2 == 1){
+				firstKidPos_perc =  50 + ( (0 - midIndex) * xSpacingForCount);
+				lastKidPos_perc =  50 + ( ((kidCount-1) - midIndex) * xSpacingForCount);
+			} else {
+				const midIndexAdapt = (midIndex - 1);
+				firstKidPos_perc = (50 + (-1 * xSpacingForCount/2) + ( (0 - midIndexAdapt) * xSpacingForCount) );
+				lastKidPos_perc = (50 + (1 * xSpacingForCount/2) + ( ((kidCount-1) - midIndex) * xSpacingForCount) );
 			}
 			
+			var firstKidPos = svgW * parseFloat(firstKidPos_perc/100);
+			var lastKidPos = svgW * parseFloat(lastKidPos_perc/100);
+			return {'first': firstKidPos, 'last': lastKidPos};
+		}
+		
+		function formLines(famObjs){
+			let LINEADD = 2.9;
+			
+			const lineGrp = new createNewElement('g', {
+				'class': 'famView_lines_GRP',
+			});
+			$(svg).prepend(lineGrp);
+			
+			const spousePathPoints = ['M', positions.parentMain.x, positions.parentMain.y, 'H', positions.spouse.x];	
+			const lineDown_pathPoints = ['M', positions.midSpouse, positions.parentMain.y, 'V', (lineDownY - LINEADD + 0.1)];
+			
+			const lineAcrossL_pathPoints = ['M', positions.midSpouse, lineDownY, 'H', childSpacing.first - LINEADD];
+			const lineAcrossR_pathPoints = ['M', positions.midSpouse, lineDownY, 'H', childSpacing.last + LINEADD];
+			
+			const spouseLine = famView.createLines(lineGrp, 'famView_spouseLine', spousePathPoints);			
+			const lineDown = famView.createLines(lineGrp, 'famView_lineDown', lineDown_pathPoints);			
+			const lineAcrossChildrenLeft = famView.createLines(lineGrp, 'famView_lineAcrossChildrenLLeft', lineAcrossL_pathPoints);
+			const lineAcrossChildrenRight = famView.createLines(lineGrp, 'famView_lineAcrossChildrenRight', lineAcrossR_pathPoints);
+			
+			return {'grp': lineGrp, 'spouseLine': spouseLine, 'lineDown': lineDown, 'lineAcrossL': lineAcrossChildrenLeft, 'lineAcrossR': lineAcrossChildrenRight};
+		}
+		
+		function eachChildLines(lineGrp, famObjs){
+			var childLines = [];
+			for (const kid in famObjs.children){
+				let kidPos = famObjs.children[kid].xy;
+				const kidPathPoints = ['M', kidPos.x, lineDownY, 'V', kidPos.y];
+				const kidLines = famView.createLines(lineGrp, 'famView_childLine', kidPathPoints);
+				childLines.push(kidLines);
+			}
+			return childLines;
+		}
+		
+		function animateNodes(){
+			var containersToQueue = {};
+		
+			Velocity.hook(clonedFocusContainer, "translateX", focusObj.xy.x); 
+			Velocity.hook(clonedFocusContainer, "translateY", focusObj.xy.y); 
+			Velocity.hook(clonedFocusGrp, "scale", 2); 
+			Velocity(clonedFocusContainer, { 
+				translateX: [(positions.focus.x) , focusObj.xy.x], 
+				translateY: [(positions.focus.y) , focusObj.xy.y], 
+			}, { duration: 1500, queue: false,});
+			
+			const clonedFocusScale = (type=="children") ? 1 :  (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6;
+			Velocity(clonedFocusGrp, { 
+				scale: clonedFocusScale
+			}, { duration: 1500, queue: false,});
+			
+			
+			svgAnimate('rollFromLeft', 'enter', famObjs.spouse.node, {'queue': 'spouseNodeQueue', 'scale':1});
+			if (type == "sibling") {
+				svgAnimate('rollFromRight', 'enter', famObjs.parentMain.node, {'queue': 'spouseNodeQueue', 'scale':1});
+				containersToQueue['parentMain'] = famObjs.parentMain.node.nodeGrpContainer;
+			}
+			var childNodesContainers = [];
+			for (const kidName in famObjs.children){
+				if (kidName != 'focus'){
+					svgAnimate('rollFromTop', 'enter', famObjs.children[kidName].node, {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
+					childNodesContainers.push( famObjs.children[kidName].node.nodeGrpContainer );				
+				}
+			}
+			
+			containersToQueue['spouse'] = famObjs.spouse.node.nodeGrpContainer;
+			containersToQueue['childNodes'] = childNodesContainers;
+			
+			return containersToQueue;
+		}
+		
+		function animateLines(lines){
+			Velocity(lines.spouseLine.children, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'spouseQueue' });
+			
+			Velocity(lines.lineDown.children, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineDownQueue' });
+			
+			Velocity(lines.lineAcrossL.children, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineAcrossQueue' });
+			Velocity(lines.lineAcrossR.children, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'lineAcrossQueue' });
+			
+			
 			var childLinesAll = [];
-			for (const line of childLines){
+			for (const line of lines.childLines){
 				for (const subline of line.children ){
 					Velocity(subline, { 'stroke-dashoffset': 0 }, { duration: 2000, queue: 'childLineQueue' });
 					childLinesAll.push(subline);
 				}
-			}		
-			
-			svgAnimate('rollFromLeft', 'enter', famObjs.spouse.node, {'queue': 'spouseNodeQueue', 'scale':1});
-			if (type == "sibling") 
-				svgAnimate('rollFromRight', 'enter', famObjs.parentMain.node, {'queue': 'spouseNodeQueue', 'scale':1});
-			
-			var childGrpsAll = [];
-			for (const kidName in famObjs.children){
-				if (kidName != 'focus'){
-					svgAnimate('rollFromTop', 'enter', famObjs.children[kidName].node, {'queue': 'childNodesQueue', 'scale': (kidCount < 5) ? 1 : (kidCount < 8) ? 0.8 : 0.6});
-					childGrpsAll.push( famObjs.children[kidName].node.nodeGrpContainer.querySelector(".nodeGrp") );				
-				}
 			}
-			const lineAcrosChildrenAll = Array.from(lineAcrossChildrenLeft.children).concat(Array.from(lineAcrossChildrenRight.children));
+			lines['childrenAll'] = childLinesAll;
+		}
+		
+		function allAnimationTimings(lines, containersToQueue){
+			const lineAcross_startTime = (type == "sibling") ? 0 : 1000;
 			
-			//set queue times
 			setTimeout(()=>{
-				Velocity.Utilities.dequeue(spouseLines.children, "spouseQueue");
+				Velocity.Utilities.dequeue(lines.spouseLine.children, "spouseQueue");
 			}, 0);
 			setTimeout(()=>{
-				Velocity.Utilities.dequeue(lineDown.children, "lineDownQueue")
+				Velocity.Utilities.dequeue(lines.lineDown.children, "lineDownQueue")
 			}, 500);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(lines.lineAcrossL.children, "lineAcrossQueue");
+				Velocity.Utilities.dequeue(lines.lineAcrossR.children, "lineAcrossQueue");
+			}, lineAcross_startTime);
+			setTimeout(()=>{
+				Velocity.Utilities.dequeue(lines.childrenAll, "childLineQueue");
+			}, (lineAcross_startTime + 500));
+			
 			
 			setTimeout(()=>{
-				Velocity.Utilities.dequeue(famObjs.spouse.node.nodeGrpContainer.querySelector(".nodeGrp"), "spouseNodeQueue");
-				if (type == "sibling") Velocity.Utilities.dequeue(famObjs.parentMain.node.nodeGrpContainer.querySelector(".nodeGrp"), "spouseNodeQueue");
-			}, 500);
+				Velocity.Utilities.dequeue(containersToQueue.spouse.querySelector(".nodeGrp"), "spouseNodeQueue");
+				if (type == "sibling") Velocity.Utilities.dequeue(containersToQueue.parentMain.querySelector(".nodeGrp"), "spouseNodeQueue");
+			}, 500);			
 			
-			
-			const childLineAcrossStart = (type == "sibling") ? 0 : 1000;
 			setTimeout(()=>{
-				Velocity.Utilities.dequeue(lineAcrosChildrenAll, "lineAcrossQueue");
-			}, childLineAcrossStart);
-			setTimeout(()=>{
-				Velocity.Utilities.dequeue(childLinesAll, "childLineQueue");
-			}, (childLineAcrossStart + 500));
-			setTimeout(()=>{
-				Velocity.Utilities.dequeue(childGrpsAll, "childNodesQueue");
-			}, (childLineAcrossStart + 750));
-			
-			
-		}, 1000);
-		
+				for (const childContainer of containersToQueue.childNodes){					
+					Velocity.Utilities.dequeue(childContainer.querySelector(".nodeGrp"), "childNodesQueue");
+				}
+			}, (lineAcross_startTime + 750));			
+		}
 		
 		
 	}
@@ -2658,82 +2695,44 @@ class treeSVG {
 	}
 	
 	createFamViewNodes (focusObj, type, focusContainer){
-		var famObjs = {'spouse': {'node': '', 'xy': ''}, 'children': {}, 'parentMain': {'node': '', 'xy': ''}};
+		let svg = this.svgElem;
+		const svgW = this.svgElem.getBoundingClientRect().width;
+		const svgH = this.svgElem.getBoundingClientRect().height;
 		
-		//siblingsSection - need 2 parents and siblings, childrenSection - need 1 spouse and children
-		
-		const spouse = (type == 'children') ? focusObj.personData.spouse : focusObj.personData.parentSpouse;
-		var childrenList = (type == 'children') ? focusObj.personData.children : focusObj.personData.siblings;
-		const parentMain = (type == 'sibling') ? focusObj.personData.parentMain : '';				
-		
-		
-		//spouse
-		const spouseNode = new node(this.svgElem, 'famView_spouseNode').initialise(spouse, findPersonsFamily(spouse, focusObj.famName));	
-		spouseNode.nodeGrpContainer.setAttribute('id', spouseNode.tagType + "_" + spouseNode.personTag);		
-		const spouseNodeHT = this.createFocusHighlight(spouseNode.nodeGrpContainer);
-		famObjs['spouse'].node = spouseNode;		
-		spouseNode.nodeGrpContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';		
-		spouseNode.nodeGrpContainer.querySelector(".nodeGrp").style.opacity = 0;
-		
-		let spouseCircleGrp = spouseNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
-		$(spouseCircleGrp).off('click');
-		spouseCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
-		
-		
-		//parentMain
-		if (type == 'sibling'){
-			childrenList.unshift(focusObj.personTag);			
-			const parentMain = focusObj.personData.parentMain;
+		var famObjs = {
+			'spouse': 		{'node': '', 'xy': ''}, 
+			'children': 	{}, 
+			'parentMain': 	{'node': '', 'xy': ''}
+		};
+		var childList = []; 
+		var spouse, parentMain;
+		if (type == 'children'){
+			spouse = focusObj.personData.spouse;
+			childList = focusObj.personData.children;
 			
-			const parentMainNode = new node(this.svgElem, 'famView_parentNode').initialise(parentMain, focusObj.famName);	
-			parentMainNode.nodeGrpContainer.setAttribute('id', parentMainNode.tagType + "_" + parentMainNode.personTag);
-			
-			const parentMainNodeHT = this.createFocusHighlight(parentMainNode.nodeGrpContainer);
-			famObjs['parentMain'].node = parentMainNode;		
-			parentMainNode.nodeGrpContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';		
-			parentMainNode.nodeGrpContainer.querySelector(".nodeGrp").style.opacity = 0;
-			
-			let parentMainCircleGrp = parentMainNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
-			$(parentMainCircleGrp).off('click');
-			parentMainCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
-		}
-		
-		//children		
-		const kidCount = childrenList.length;
-		
-		const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
-		var midIndex = Math.floor(kidCount / 2);
-		
-		var kidSpacingX, kidSpacingY;
-		if (kidCount < 5){
-			kidSpacingY = '70%'; 
-		} else if (kidCount < 8){
-			kidSpacingY = ['60%', '75%'];
 		} else {
-			kidSpacingY = ['60%', '75%']; 
+			spouse = focusObj.personData.parentSpouse;
+			childList = focusObj.personData.siblings ?? [];
+			childList.unshift(focusObj.personTag);
+			parentMain = focusObj.personData.parentMain;	
+
+			createNode(parentMain, 'parentMain', 'famView_parentNode');	
 		}
 		
-		for (let i=0; i < kidCount; i++){
-			var kidFam = findPersonsFamily(childrenList[i], focusObj.famName);
-			//check focus fam info for childrenList[0]
-			var childInfo = PEOPLERELATIONS[kidFam][childrenList[i]];
+		createNode(spouse, 'spouse', 'famView_spouseNode');	
+		
+		
+		let kidCount = childList.length;
+		
+		var getChildPos = function(i, kidCount){
+			const xSpacing = [0, 20, 20, 20, 20, 15, 15, 10, 10, 10, 7.5, 7.5];
+			var midIndex = Math.floor(kidCount / 2);
+			var xCalcPerc;
 			
-			var kidNodeContainer; var kidNode;
-			if ( (type=='sibling') && (i==0)){
-				kidNodeContainer = focusContainer;
-				famObjs['children']['focus'] = {'nodeContainer': kidNodeContainer};
-			} else {
-				kidNode = new node(this.svgElem, 'famView_childNode').initialise(childrenList[i], kidFam);				
-				famObjs['children'][kidNode.personTag] = {'node': kidNode};
-				
-				kidNodeContainer = kidNode.nodeGrpContainer;
-				kidNodeContainer.setAttribute('id', kidNode.tagType + "_" + kidNode.personTag); 
-			}
+			let kidSpacingY = (kidCount < 5) ? '70%' 
+				: (kidCount < 8) ? ['60%', '75%'] 
+				:['60%', '75%'];
 			
-			const kidNodeHT = this.createFocusHighlight(kidNodeContainer);					
-			
-			//spacing
-			var xCalcPerc = 0;
 			if (kidCount % 2 == 1){
 				xCalcPerc =  50 + ( (i - midIndex) * xSpacing[kidCount]);
 			} else {
@@ -2741,38 +2740,70 @@ class treeSVG {
 				const midIndexAdapt = (i < midIndex) ? (midIndex - 1) : midIndex;
 				xCalcPerc = (50 + (negate * xSpacing[kidCount]/2) + ( (i - midIndexAdapt) * xSpacing[kidCount]) );	
 			}
-			//console.log(i + ": " + xCalc);
 			
-			let tYperc = (kidCount < 5) ? parseInt(kidSpacingY.replace("%","")) : (i % 2 == 0) ? parseInt(kidSpacingY[0].replace("%","")) : parseInt(kidSpacingY[1].replace("%",""));
+			let tYperc = 
+				(kidCount < 5) ? parseInt(kidSpacingY.replace("%","")) : 
+				(i % 2 == 0) ? parseInt(kidSpacingY[0].replace("%","")) : 
+				parseInt(kidSpacingY[1].replace("%",""));
 			
-			//go from % to pt
-			const svgWidth = focusObj.svg.getBoundingClientRect().width;
-			const svgHeight = focusObj.svg.getBoundingClientRect().height;
+			const tY = svgH * (tYperc / 100);
+			const tX = svgW * (xCalcPerc / 100);			
 			
-			const tY = svgHeight * (tYperc / 100);
-			const tX = svgWidth * (xCalcPerc / 100);
-			if ( (type=='sibling') && (i==0) ) famObjs.children.focus.xy = {'x': tX, 'y': tY};
-			else famObjs.children[kidNode.personTag].xy = {'x': tX, 'y': tY};
-			const tString = 'translateX(' + tX + 'px) translateY(' + tY + 'px) ';
-			
-			if ( (type =='sibling') && (i == 0)){
-				//focus
-			} else {
-				kidNodeContainer.style.transform = '';
-				kidNodeContainer.style.transform += tString;					
-				kidNodeContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';	
-				kidNodeContainer.querySelector(".nodeGrp").style.opacity = 0;	
-			}
-			
-			//remove click event from circleGrp
-			let kidCircleGrp = kidNodeContainer.querySelector(".nodeCircleGrp");
-			
-			$(kidCircleGrp).off('click');
-			kidCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));
-			
+			return {'x': tX, 'y': tY};
 		}
 		
+		doChildNodes(childList);		
+		
 		return famObjs;
+		
+		
+		
+		function createNode(member, memberType, classNm, xyPos=false){
+			var nodeFam = focusObj.famName;
+			if (memberType == 'children'){
+				nodeFam = findPersonsFamily(member, focusObj.famName);	
+			}
+			let memberNode = new node(svg, classNm).initialise(member, nodeFam);
+			memberNode.nodeGrpContainer.setAttribute('id', memberNode.tagType + "_" + memberNode.personTag);
+			const nodeHLT = famView.createFocusHighlight(memberNode.nodeGrpContainer);
+			
+			if (memberType == 'children'){
+				famObjs[memberType][memberNode.personTag] = {
+					'node': memberNode,
+					'xy': xyPos
+				};	
+				
+				const tString = 'translateX(' + xyPos.x + 'px) translateY(' + xyPos.y + 'px) ';
+				memberNode.nodeGrpContainer.style.transform = tString;				
+				
+			} else {
+				famObjs[memberType]['node'] = memberNode;	
+			}
+			
+			memberNode.nodeGrpContainer.querySelector(".nodeGrp").style.transform = 'scale(0)';		
+			memberNode.nodeGrpContainer.querySelector(".nodeGrp").style.opacity = 0;
+			
+			let nodeCircleGrp = memberNode.nodeGrpContainer.querySelector(".nodeCircleGrp");
+			$(nodeCircleGrp).off('click');
+			nodeCircleGrp.addEventListener("click", (evnt) => treeChange.famView_changeFocus(evnt));			
+		}
+		
+		function doChildNodes(childList){			
+			for (let i=0; i < kidCount; i++){		
+				let xyPos = getChildPos(i, kidCount);
+				
+				if ( (type=='sibling') && (i==0)){
+					famObjs['children']['focus'] = {
+						'nodeContainer': focusContainer,
+						'xy': {'x': xyPos.x, 'y': xyPos.y}
+					};
+				} else {					
+					createNode(childList[i], 'children', 'famView_childNode', xyPos);
+				}		
+				
+			}
+		}
+		
 	}
 	
 }
@@ -2824,7 +2855,7 @@ class treeChangeEvents {
 		switch (toFrom){
 			case 'to':
 				const currentFocus = NODEdetails.getNodeObj('focus');
-				famView.dummyAnimate_toFamView(currentFocus, type);	
+				famView.animateToFamView(currentFocus, type);	
 			break;
 			case 'from':
 			break;			
