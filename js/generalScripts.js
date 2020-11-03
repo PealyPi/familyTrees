@@ -321,7 +321,7 @@ class peopleTab {
 				const personName = famData[personTag].LI_name ?? famData[personTag].name;
 				
 				const personLI = document.createElement("li");	
-				personLI.id = 'li_' + personTag;	
+				personLI.id = 'li_' + fam + "_" + personTag;	
 				personLI.classList.add('pplChooseLI');	
 				
 				
@@ -439,14 +439,11 @@ class peopleTab {
 			
 			const btnLIid = btnLI.id;
 			var famName, personTag;
-			if (btnLI.tagName == "LI"){
-				personTag = btnLIid.replace("li_", "");
-				const liDropParent = btnLI.parentElement;
-				famName = liDropParent.id.replace("DropdownDiv", "");
-			} else if (btnLI.tagName == "SPAN"){
+			if ( (btnLI.tagName == "LI")||(btnLI.tagName == "SPAN") ){
 				let relativeSpanArray = btnLIid.split("_");
 				famName = relativeSpanArray[1]; 
 				personTag = relativeSpanArray[2]; 
+				
 			}
 			
 			infoTab.fillPersonInfo(famName, personTag);
