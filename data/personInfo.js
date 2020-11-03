@@ -13,7 +13,7 @@ function personInfoStorage(){
 				'diedOn': '28th March 2020',
 				'marriedOn':	'26 Mar 1949',
 				'marriedAt':	'St Peter and Paul Church, Swanscombe',
-				'marriedTo':	'Ronald Hadkiss',				
+				'marriedTo':	'ronaldHadkiss',				
 			},	
 				
 			'imgs': [

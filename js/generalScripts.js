@@ -436,10 +436,18 @@ class peopleTab {
 		
 		if (!this.isInfoChanging){
 			this.isInfoChanging = true;
+			
 			const btnLIid = btnLI.id;
-			const personTag = btnLIid.replace("li_", "");
-			const liDropParent = btnLI.parentElement;
-			const famName = liDropParent.id.replace("DropdownDiv", "");
+			var famName, personTag;
+			if (btnLI.tagName == "LI"){
+				personTag = btnLIid.replace("li_", "");
+				const liDropParent = btnLI.parentElement;
+				famName = liDropParent.id.replace("DropdownDiv", "");
+			} else if (btnLI.tagName == "SPAN"){
+				let relativeSpanArray = btnLIid.split("_");
+				famName = relativeSpanArray[1]; 
+				personTag = relativeSpanArray[2]; 
+			}
 			
 			infoTab.fillPersonInfo(famName, personTag);
 			treeInfoTab.fillPersonInfo(famName, personTag);
@@ -467,7 +475,7 @@ class peopleTab {
 				
 			} else {
 				if ((currentActive.id == "treeTab") || (currentActive.id == "infoTab")){
-					treeChange.newFocus(personTag, famName);					
+					treeChange.newFocus(personTag, famName);	
 				} else {
 					navObj.openPage(treeBtn);					
 				}
@@ -548,6 +556,8 @@ class woodInfoTab {
 		this.createInfoDivs(type);
 		
 		this.infoData = this.infoDivSec.querySelectorAll(".infoData");
+		
+		this._fillingInfo = false;
 	}
 	
 	createInfoDivs(type){	
@@ -805,34 +815,41 @@ class woodInfoTab {
 		const leafSVG = this.leafSVG;	
 		const thisType = this.type;
 		
-		
-		if (personName == '')
-			this.clearInfo();	
+		if (!this._fillingInfo){
+			this._fillingInfo = true;
 			
-		else {		
-			if (this.containerDiv.style.display == "block"){
-				if (leafSVG.style.display != "none"){
-					$(leafSVG).fadeOut(1000);
-				}
-				const thisObj = this;
-				$([this.containerDiv, this.infoAboutDiv]).fadeOut(1000, function(){
-					thisObj.clearInfo();
-					fillInfo();						
-				});	
+			if (personName == '')
+				this.clearInfo();	
 				
-				setTimeout(() => {this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '')}, 1200);	
-			} else {
-				//first fill		
-				this.clearInfo();
-				fillInfo();	
-				this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '');
-				
-				if (this.type == "info"){
-					$(this.infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
+			else {		
+				if (this.containerDiv.style.display == "block"){
+					if (leafSVG.style.display != "none"){
+						$(leafSVG).fadeOut(1000);
+					}
+					const thisObj = this;
+					$([this.containerDiv, this.infoAboutDiv]).fadeOut(1000, function(){
+						thisObj.clearInfo();
+						fillInfo();							
+					});	
+					
+					setTimeout(() => {this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '')}, 1200);	
 				} else {
-					$(this.infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
-				}
-			}		
+					//first fill		
+					this.clearInfo();
+					fillInfo();	
+					this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '');
+					
+					if (this.type == "info"){
+						$(this.infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
+					} else {
+						$(this.infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
+					}
+				}		
+			}
+			
+			setTimeout(()=>{
+				this._fillingInfo = false
+			}, 2100);
 		}
 		
 		function fillInfo(){
@@ -875,6 +892,7 @@ class woodInfoTab {
 						
 						const varSpan = document.createElement('span');
 						varSpan.classList.add('personLink');
+						varSpan.setAttribute("id", "relative_" + famName + "_" + relative);
 						const varText = document.createTextNode(relativeName + ", ");
 						
 						//check current line # characters - new line if at max
@@ -967,10 +985,16 @@ class woodInfoTab {
 			const dataClass = aboutKey + "Val";
 			const relatedDiv = this.divExtended.querySelector('.' + dataClass);		
 
-			if (aboutKey == "marriedTo"){				
+			if (aboutKey == "marriedTo"){
+				let spouseTag = personAbout[aboutKey];	
+				let spouseFam = findPersonsFamily(spouseTag);				
+				let spouseInfo = PEOPLEINFO[spouseFam][spouseTag] ?? {};		
+				let spouseName = spouseInfo.name
+				
 				const marriedToSpan = document.createElement('span');
 				marriedToSpan.classList.add('personLink');
-				const marriedToText = document.createTextNode(personAbout[aboutKey]);
+				marriedToSpan.setAttribute("id", "relative_" + spouseFam + "_" + spouseTag);
+				const marriedToText = document.createTextNode(spouseName);
 				marriedToSpan.appendChild(marriedToText);
 				relatedDiv.appendChild(marriedToSpan);
 
@@ -1378,7 +1402,7 @@ class node {
 	}
 
 	// ---- create ----
-	initialise(personTag, famName){		
+	initialise(personTag, famName){	
 		const personInfo = PEOPLEINFO[famName][personTag] ?? {};		
 		const personData = PEOPLERELATIONS[famName][personTag] ?? {};
 		this.personInfo = personInfo;
@@ -2313,6 +2337,7 @@ class treeSVG {
 				this.showHideButtons('showAll');
 			}, 900) ;
 		}
+		
 		this.firstFocus = new node(this.svgElem, 'focus').initialise(personTag, famName);
 		
 		if (reinit == "lineShift") {	
