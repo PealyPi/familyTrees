@@ -1289,9 +1289,8 @@ class node {
 			'children': 	'children',
 		};
 		for (const check in tagChecks){
-			//console.log(this.personTag + " check " + check + " ? " + this.personData.hasOwnProperty(check));
-			
 			if (this.personData.hasOwnProperty(check)){	
+				//console.log(this.personTag + " check " + check + " ? " + this.personData.hasOwnProperty(check));
 				tree.showHideButtons('show', tagChecks[check]);				
 			}
 			else {
@@ -2204,7 +2203,6 @@ class treeSVG {
 					setTimeout(()=>{
 						for (const btn of btnArray) {
 							btn.style.opacity = 0;
-							btn.style.visibility = 'hidden';
 						}
 					}, 500);
 				}
@@ -2213,7 +2211,6 @@ class treeSVG {
 				if (btnDiv.style.opacity == 0){
 					for (const btn of btnArray) {
 						btn.style.opacity = 1;
-							btn.style.visibility = 'visible';
 					}
 					VIVIFY_animateElems(btnDiv, 'buttonDiv', 'enter');
 				}
@@ -2254,9 +2251,9 @@ class treeSVG {
 			case 'show':	
 				//console.log("showing " + icon);
 				switch (icon){
-					case 'sibling':
+					case 'siblings':
 						const sibBtn = btnDiv.querySelector('.siblingIcon_button');
-						VIVIFY_animateElemsElems(sibBtn, 'buttons', 'enter');
+						VIVIFY_animateElems(sibBtn, 'buttons', 'enter');
 					break;
 					case 'children':
 						const chldBtn = btnDiv.querySelector('.childrenIcon_button');
@@ -2851,7 +2848,7 @@ class treeChangeEvents {
 					} 
 				break;
 			}
-			setTimeout(()=> {this.changingTreeView = false;}, 1000);
+			setTimeout(()=> {this.changingTreeView = false;}, 1500);
 		}
 	}
 	
@@ -3121,7 +3118,6 @@ function VIVIFY_animateElems(elem, type, enterExit){
 			switch (enterExit){
 				case 'enter':
 					if (elem.style.opacity == 0){
-						//elem.style.display = 'inline-block';
 						elem.classList.add("active");
 						setTimeout(()=>{
 							elem.classList.add("vivify");
@@ -3136,9 +3132,7 @@ function VIVIFY_animateElems(elem, type, enterExit){
 								elem.classList.remove("flipInX");
 							}, 1000);
 						}, 0);
-					} else if (!elem.classList.contains("active")){
-						console.log("Here");
-					}
+					} 
 				break;
 				case 'exit':
 					if (elem.style.opacity == 1){
@@ -3153,7 +3147,6 @@ function VIVIFY_animateElems(elem, type, enterExit){
 							elem.classList.remove("vivify");
 							elem.classList.remove("duration-1000");
 							elem.classList.remove("flipOutX");
-						//	elem.style.display = 'none';
 						}, 1000);
 					}
 				break;
