@@ -892,12 +892,15 @@ class woodInfoTab {
 						varSpan.setAttribute("id", "relative_" + famName + "_" + relative);
 						const varText = document.createTextNode(relativeName + ", ");
 						
+						if (relativeLinesCount == 0)
+						varSpan.classList.add('infoLineA');
 						//check current line # characters - new line if at max
 						relativeNamesListStr += (relativeName + ", ");
 						const stringLength = relativeNamesListStr.length;
 						const maxStrLength = (relativeLinesCount == 0) 
 							? 50 : 50;
 						if (relativeNamesListStr.length > maxStrLength){
+							varSpan.classList.remove('infoLineA');
 							relativeLinesCount += 1;
 							relativeNamesListStr = '';
 							const lineBreak = document.createElement('br');
