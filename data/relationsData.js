@@ -111,8 +111,8 @@ function nodeDataStorage(){//collapse lvl 2
 				'gen': 4,
 				'mainLine':		true,		
 				'familyName': 'berriman',
-				'parentL': 		'georgeBerriman',
-				'parentR': 		'anneBerriman',	
+				'parentMain': 		'georgeBerriman',
+				'parentSpouse': 		'anneBerriman',	
 				'spouse': 		'mariaBerriman',	
 				'childMain': 	'adaBerriman', 
 			};
