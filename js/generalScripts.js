@@ -674,7 +674,7 @@ class woodInfoTab {
 		const aboutRowMarried1 = aboutTable.insertRow(-1);
 		const head_marriedCell = document.createElement("th");
 		head_marriedCell.setAttribute('rowspan', '3');	
-		head_marriedCell.setAttribute('class', 'aboutBold');		
+		head_marriedCell.classList.add('aboutBold');		
 		aboutRowMarried1.appendChild(head_marriedCell);
 		const head_marriedText = document.createTextNode('Married: ');
 		head_marriedCell.appendChild(head_marriedText);
@@ -880,8 +880,17 @@ class woodInfoTab {
 			
 			const infoVariablesKeys = Object.keys(infoVariables);
 			infoVariablesKeys.forEach((infoVar)=>{
-				if (personRelationsData.hasOwnProperty(infoVar)){
+				if (personRelationsData.hasOwnProperty(infoVar)){		
+				
 					const relativesList = personRelationsData[infoVar];
+					let maxStrLength = (relativesList.length > 8) 
+						? 80 : 50;			
+					
+					//store spans in array to access if linecount > 1
+					let currentDiv = infoVariables[infoVar] //eg info_siblings
+					let sectTitle = currentDiv.querySelector("span.aboutBold");
+					var firstLine_spanStore = [];
+					var all_spanStore = [];
 					
 					var relativeNamesListStr = ''; var relativeLinesCount = 0;
 					relativesList.forEach((relative)=>{		
@@ -893,14 +902,15 @@ class woodInfoTab {
 						const varText = document.createTextNode(relativeName + ", ");
 						
 						if (relativeLinesCount == 0)
-						varSpan.classList.add('infoLineA');
+							firstLine_spanStore.push(varSpan);
+						
+						all_spanStore.push(varSpan);
+						
 						//check current line # characters - new line if at max
 						relativeNamesListStr += (relativeName + ", ");
 						const stringLength = relativeNamesListStr.length;
-						const maxStrLength = (relativeLinesCount == 0) 
-							? 50 : 50;
 						if (relativeNamesListStr.length > maxStrLength){
-							varSpan.classList.remove('infoLineA');
+							
 							relativeLinesCount += 1;
 							relativeNamesListStr = '';
 							const lineBreak = document.createElement('br');
@@ -913,6 +923,19 @@ class woodInfoTab {
 						//add click function
 						varSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
 					});
+					
+					//reduce lineheight if multiple lines
+					if (relativeLinesCount > 0){
+						sectTitle.classList.add('infoLineA');
+						for (let firstLineSpan of firstLine_spanStore){
+							firstLineSpan.classList.add('infoLineA');
+						}
+						if (relativeLinesCount > 2){
+							for (let spanName of all_spanStore){
+								spanName.classList.add('manyRelatives');
+							}
+						}
+					}
 					
 					//const relativeNamesStr = relativeNamesList.join(", ");
 					infoVariables[infoVar].style.display = "block";

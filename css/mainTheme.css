@@ -694,25 +694,28 @@ button,  button:active, button:hover, button:focus{
 	background-size: 300px, 300px, auto;
 }
 
-.infoLineA{
-	line-height: 10px;
+.infoDivSec .infoLineA{
+	line-height: 10px !important;
 }
-.aboutBold{
+.infoDivSec .manyRelatives {
+	font-size: 18px;
+}
+.infoDivSec .aboutBold{
 	font-size: 30px;
 	font-family: var(--mainNameFont);
     color: rgb(57,35,35, 0.9);
     text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
 	font-weight: bold;
-	line-height: 20px;
+	line-height: 50px;
 	letter-spacing: 4px;
 }
-.aboutSubBold{
+.infoDivSec .aboutSubBold{
 	font-size: 30px;
 	font-family: var(--mainNameFont);
     color: rgb(175, 127, 127, 0.8);
     text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
 	font-weight: bold;
-	line-height: 20px;
+	line-height: 50px;
 	letter-spacing: 4px;
 	
 }
