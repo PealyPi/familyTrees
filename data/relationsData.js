@@ -23,11 +23,11 @@ function nodeDataStorage(){//collapse lvl 2
 	
 	kesby.jackKesby = {			
 		'mainLine':		false,	
-		'familyName': 'kesby',
+		'familyName': 	'kesby',
 		'parentSpouse':	'johnNevilleKesby',
 		'parentMain': 	'maryBobby',
-		'spouse': 	'juneKesby',	
-		'siblingMain': 'roseHadkiss',
+		'spouse': 		'juneKesby',	
+		'siblingMain': 	'roseHadkiss',
 	};
 	
 	// --- bobby
@@ -36,8 +36,8 @@ function nodeDataStorage(){//collapse lvl 2
 		'gen': 2,
 		'mainLine':		true,		
 		'familyName': 'bobby',
-		'parentMain': 		'sidneyCharlesBobby',	
-		'parentSpouse': 	'adaBerriman',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
 		'siblings': 	['floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby'],
 		'spouse': 		'johnNevilleKesby',	
 		'childMain': 	'roseHadkiss', 
@@ -64,21 +64,21 @@ function nodeDataStorage(){//collapse lvl 2
 		'parentMain': 	'sidneyCharlesBobby',	
 		'parentSpouse': 'adaBerriman',
 		'spouse': 		'jimCoyle',	
-		'siblingMain': 'maryBobby',
+		'siblingMain': 	'maryBobby',
 	};
 	kesby.sidBobby = {		
 		'mainLine':		false,	
 		'familyName': 	'bobby',
 		'parentMain': 	'sidneyCharlesBobby',	
 		'parentSpouse': 'adaBerriman',
-		'siblingMain': 'maryBobby',
+		'siblingMain': 	'maryBobby',
 	};
 	kesby.harryBobby = {		
 		'mainLine':		false,	
 		'familyName': 	'bobby',
-		'parentMain': 		'sidneyCharlesBobby',	
-		'parentSpouse': 	'adaBerriman',
-		'siblingMain': 'maryBobby',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
+		'siblingMain': 	'maryBobby',
 	};
 	kesby.jackBobby = {			
 		'mainLine':		false,	
@@ -134,7 +134,7 @@ function nodeDataStorage(){//collapse lvl 2
 				kesby.anneBerriman = {	
 					'gen': 5,
 					'mainLine':		true,		
-					'familyName': 'berriman',
+					'familyName': 	'berriman',
 					'spouse': 		'georgeBerriman',	
 					'childMain': 	'johnBerriman', 
 				};
@@ -360,7 +360,12 @@ function nodeDataStorage(){//collapse lvl 2
 								'gen': 8,
 								'mainLine':		true,		
 								'familyName': 'bobby',
-								'spouse': 		['ursulaPitman'],	
+								'parentMain': 	'johnBobby',
+								'parentSpouse': 'maryHayward',	
+								'spouse': 		'ursulaPitman',
+								'otherSpouse': 	'marthaPrime',
+								'siblings': 	['sarahBobby'],
+								'half-siblings':['mary8Bobby', 'bridgetBobby', 'ellisBobby'],
 								'childMain': 	'jamesBobby', 
 							};
 							kesby.ursulaPitman = {	
@@ -370,9 +375,326 @@ function nodeDataStorage(){//collapse lvl 2
 								'spouse': 		['benjamin8Bobby'],	
 								'childMain': 	'jamesBobby', 
 							};
-	
-	
-	// --- kesby
+							
+							kesby.sarahBobby = {		
+								'mainLine':		false,	
+								'familyName': 	'bobby',
+								'siblingMain': 	'benjamin8Bobby',
+							};
+							kesby.mary8Bobby = {		
+								'mainLine':		false,	
+								'familyName': 	'bobby',
+								'siblingMain': 	'benjamin8Bobby',
+							};		
+							kesby.bridgetBobby = {		
+								'mainLine':		false,	
+								'familyName': 	'bobby',
+								'siblingMain': 	'benjamin8Bobby',
+							};					
+							kesby.ellisBobby = {		
+								'mainLine':		false,	
+								'familyName': 	'bobby',
+								'siblingMain': 	'benjamin8Bobby',
+							};
+							
+								//gen9
+								kesby.johnBobby = {	
+									'gen': 8,
+									'mainLine':		true,		
+									'familyName': 	'bobby',
+									'parentMain': 	'johnBauby',
+									'parentSpouse': 'elizabethFord',	
+									'spouse': 		'maryHayward',
+									'otherSpouse': 	'marthaPrime',
+									'childMain': 	'benjamin8Bobby', 
+									'children': 	['benjamin8Bobby', 'sarahBobby'],
+									'otherChildren':['mary8Bobby', 'bridgetBobby', 'ellisBobby'],
+									'siblings':		['susan9Bobby', 'dorothyBobby', 'dorothy9Bobby2', 'hannahBobby', 'mary9Bobby', 'elizabethBobby'],
+								};
+								kesby.maryHayward = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'spouseMain': 	'johnBobby',
+									'childMain': 	'benjamin8Bobby', 
+									'children': 	['benjamin8Bobby', 'sarahBobby'],
+								};
+							
+								kesby.marthaPrime = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'spouseMain': 	'benjamin8Bobby',
+								};
+								
+								kesby.susan9Bobby = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'siblingMain': 	'johnBobby',
+								};
+								kesby.dorothyBobby = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'siblingMain': 	'johnBobby',
+								};
+								kesby.dorothy9Bobby2 = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'siblingMain': 	'johnBobby',
+								};
+								kesby.hannahBobby = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'siblingMain': 	'johnBobby',
+								};
+								kesby.mary9Bobby = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'siblingMain': 	'johnBobby',
+								};
+								kesby.elizabethBobby = {		
+									'mainLine':		false,	
+									'familyName': 	'bobby',
+									'siblingMain': 	'johnBobby',
+								};
+								
+									//gen10
+									kesby.johnBauby = {	
+										'gen': 8,
+										'mainLine':		true,		
+										'familyName': 	'bobby',
+										'parentMain': 	'john11Bauby',
+										'parentSpouse': 'mary11Bauby',	
+										'spouse': 		'elizabethFord',
+										'childMain': 	'johnBobby', 
+										'children': 	['johnBobby', 'susan9Bobby', 'dorothyBobby', 'dorothy9Bobby2', 'hannahBobby', 'mary9Bobby', 'elizabethBobby'],
+										'siblings':		['elizabethBauby', 'thomasBauby'],
+									};
+									kesby.elizabethFord = {		
+										'mainLine':		false,	
+										'familyName': 	'bobby',
+										'spouseMain': 	'johnBauby',
+										'childMain': 	'johnBobby', 
+										'children': 	['johnBobby', 'susan9Bobby', 'dorothyBobby', 'dorothy9Bobby2', 'hannahBobby', 'mary9Bobby', 'elizabethBobby'],
+									};
+									
+									kesby.elizabethBauby = {		
+										'mainLine':		false,	
+										'familyName': 	'bobby',
+										'siblingMain': 	'johnBauby',
+									};
+									kesby.thomasBauby = {		
+										'mainLine':		false,	
+										'familyName': 	'bobby',
+										'siblingMain': 	'johnBauby',
+									};
+										
+										//gen11
+										kesby.john11Bauby = {	
+											'gen': 8,
+											'mainLine':		true,		
+											'familyName': 	'bobby',
+											'parentMain': 	'johnBolbi',
+											'parentSpouse': 'maryBolbi',	
+											'spouse': 		'mary11Bauby',
+											'childMain': 	'johnBobby', 
+											'children': 	['johnBobby', 'elizabethBauby', 'thomasBauby'],
+											'siblings':		['edmondBauby', 'annBauby', 'mary11Bauby_sib', 'susan11Bauby'],
+										};
+										kesby.mary11Bauby = {		
+											'mainLine':		false,	
+											'familyName': 	'bobby',
+											'spouseMain': 	'john11Bauby',
+											'childMain': 	'johnBobby', 
+											'children': 	['johnBobby', 'elizabethBauby', 'thomasBauby'],
+										};
+										
+										kesby.edmondBauby = {		
+											'mainLine':		false,	
+											'familyName': 	'bobby',
+											'siblingMain': 	'john11Bauby',
+										};
+										kesby.annBauby = {		
+											'mainLine':		false,	
+											'familyName': 	'bobby',
+											'siblingMain': 	'john11Bauby',
+										};
+										kesby.mary11Bauby_sib = {		
+											'mainLine':		false,	
+											'familyName': 	'bobby',
+											'siblingMain': 	'john11Bauby',
+										};
+										kesby.susan11Bauby = {		
+											'mainLine':		false,	
+											'familyName': 	'bobby',
+											'siblingMain': 	'john11Bauby',
+										};
+										
+											//gen12
+											kesby.johnBolbi = {	
+												'gen': 8,
+												'mainLine':		true,		
+												'familyName': 	'bobby',
+												'parentMain': 	'edmundBawbeye',
+												'parentSpouse': 'margretMaen',	
+												'spouse': 		'maryBolbi',
+												'childMain': 	'john11Bauby', 
+												'children': 	['john11Bauby', 'edmondBauby', 'annBauby', 'mary11Bauby_sib', 'susan11Bauby'],
+												'siblings':		['faithBolbi', 'williamBolbi', 'william12Bolbi2', 'thomasBolbi', 'mary12Bolbi', 'margaretBolbi', 'edmondBolbi', 'edwardBobli', 'aliceBolbi'],
+											};
+											kesby.maryBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'spouseMain': 	'johnBolbi',
+												'childMain': 	'john11Bauby', 
+												'children': 	['john11Bauby', 'edmondBauby', 'annBauby', 'mary11Bauby_sib', 'susan11Bauby'],
+											};
+											
+											kesby.faithBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.williamBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.william12Bolbi2 = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.thomasBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.mary12Bolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.margaretBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.edmondBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.edwardBobli = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											kesby.aliceBolbi = {		
+												'mainLine':		false,	
+												'familyName': 	'bobby',
+												'siblingMain': 	'johnBolbi',
+											};
+											
+												//gen13
+												kesby.edmundBawbeye = {	
+													'gen': 8,
+													'mainLine':		true,		
+													'familyName': 	'bobby',
+													'parentMain': 	'robertBawbeye',
+													'parentSpouse': 'allineBawbeye',	
+													'spouse': 		'margretMaen',
+													'childMain': 	'johnBolbi', 
+													'children': 	['johnBolbi', 'faithBolbi', 'williamBolbi', 'william12Bolbi2', 'thomasBolbi', 'mary12Bolbi', 'margaretBolbi', 'edmondBolbi', 'edwardBobli', 'aliceBolbi'],
+													'siblings':		['sonBawbeye', 'daughterBawbeye', 'johnBawbeye', 'alynBawbeye', 'rogerBawbeye', 'robert13Bawbeye', 'alline13Bawbeye', 'richardBawbeye', 'susanBawbeye', 'susan13Bawbeye2', 'john13Bawbeye2'],
+												};
+												kesby.margretMaen = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'spouseMain': 	'johnBolbi',
+													'childMain': 	'johnBolbi', 
+													'children': 	['johnBolbi', 'faithBolbi', 'williamBolbi', 'william12Bolbi2', 'thomasBolbi', 'mary12Bolbi', 'margaretBolbi', 'edmondBolbi', 'edwardBobli', 'aliceBolbi'],
+												};
+												
+												kesby.sonBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.daughterBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.johnBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.alynBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.rogerBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.robert13Bawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.alline13Bawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.richardBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.susanBawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.susan13Bawbeye2 = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												kesby.john13Bawbeye2 = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'siblingMain': 	'edmundBawbeye',
+												};
+												
+												
+													//gen14
+													kesby.robertBawbeye = {	
+														'gen': 8,
+														'mainLine':		true,		
+														'familyName': 	'bobby',	
+														'spouse': 		'allineBawbeye',
+														'otherSpouse':	'mary14Bawbeye',
+														'childMain': 	'edmundBawbeye', 
+														'children': 	['edmundBawbeye', 'sonBawbeye', 'daughterBawbeye', 'johnBawbeye', 'alynBawbeye', 'rogerBawbeye', 'robert13Bawbeye', 'alline13Bawbeye', 'richardBawbeye', 'susanBawbeye', 'susan13Bawbeye2', 'john13Bawbeye2'],
+													};
+													kesby.allineBawbeye = {		
+														'mainLine':		false,	
+														'familyName': 	'bobby',
+														'spouseMain': 	'johnBolbi',
+														'childMain': 	'edmundBawbeye', 
+														'children': 	['edmundBawbeye', 'sonBawbeye', 'daughterBawbeye', 'johnBawbeye', 'alynBawbeye', 'rogerBawbeye', 'robert13Bawbeye', 'alline13Bawbeye', 'richardBawbeye', 'susanBawbeye', 'susan13Bawbeye2', 'john13Bawbeye2'],
+													};
+													kesby.mary14Bawbeye = {		
+													'mainLine':		false,	
+													'familyName': 	'bobby',
+													'spouseMain': 	'robertBawbeye',
+												};
+											
+	// --- kesby		
 	//gen2
 	kesby.johnNevilleKesby = {	
 		'gen': 2,
@@ -508,13 +830,6 @@ function nodeDataStorage(){//collapse lvl 2
 			'otherParent': 	'benjaminSmith',
 		};
 		
-			kesby.benjaminSmith = {	
-				'gen': 4,
-				'mainLine':		false,	
-				'familyName': 	'kesby',
-				'spouseMainR': 	'harrietSmith',
-			}
-			
 			//gen4
 			kesby.johnKesby = {	
 				'gen': 4,
@@ -531,6 +846,13 @@ function nodeDataStorage(){//collapse lvl 2
 				'childMain': 	'alfredSmithKesby', 
 			};
 	
+			kesby.benjaminSmith = {	
+				'gen': 4,
+				'mainLine':		false,	
+				'familyName': 	'kesby',
+				'spouseMainR': 	'harrietSmith',
+			}
+			
 	
 
 	//hadkiss
