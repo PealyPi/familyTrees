@@ -163,7 +163,7 @@ function generateRelationsData(data) {
 	}
 }
 
-
+console.log(PEOPLERELATIONS);
 checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
 //checkRelationsDataFilled(PEOPLERELATIONS);
 
@@ -2804,7 +2804,6 @@ class treeSVG {
 		
 		let svg = this.svgElem;
 		
-		console.log(PEOPLERELATIONS['kesby']['roseHadkiss']);
 		const clonedFocusContainer = cloningFocus(focusObj);
 		const clonedFocusGrp = clonedFocusContainer.querySelector(".nodeGrp");
 		const clonedFocusHT = this.createFocusHighlight(clonedFocusContainer);
@@ -3099,8 +3098,6 @@ class treeSVG {
 		}
 		
 		createNode(spouse, 'spouse', 'famView_spouseNode');	
-		
-		console.log(childList);
 		
 		let kidCount = childList.length;
 		
