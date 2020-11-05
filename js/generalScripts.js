@@ -2814,14 +2814,10 @@ class treeSVG {
 			}
 			
 			spouse = useFocusObjData.parentSpouse;
-			childList = useFocusObjData.siblings ?? [];
-			childList.unshift(mainTag);
-			parentMain = useFocusObjData.parentMain;	
-			
-			//change order of childlist so current focusobj is at front (for isSibling)			
+			childList = useFocusObjData.siblings ?? [];		
 			childList.splice (childList.indexOf(focusObj.personTag), 1);
 			childList.unshift(focusObj.personTag);
-			//console.log(childList);
+			parentMain = useFocusObjData.parentMain;					
 
 			createNode(parentMain, 'parentMain', 'famView_parentNode');				
 			
@@ -2829,6 +2825,7 @@ class treeSVG {
 		
 		createNode(spouse, 'spouse', 'famView_spouseNode');	
 		
+		console.log(childList);
 		
 		let kidCount = childList.length;
 		
