@@ -27,13 +27,7 @@ function checkDataMatches(infoData, relationsData){
 			let secongUnmatched = unmatched.second.join(", ");
 			if (firstUnmatched) console.log("personInfo: " + firstUnmatched);
 			if (secongUnmatched) console.log("relationsData: " + secongUnmatched);
-		}
-		
-		function checkValues(value, index){
-			if (value != relSorted[index]){
-				console.log(value);
-			}
-		}
+		}		
 		
 		function getArrayDiffs(firstArr, secondArr){
 			var firstNonmatched = [], secondNonmatched = [];
@@ -930,7 +924,6 @@ class woodInfoTab {
 			const infoVariablesKeys = Object.keys(infoVariables);
 			infoVariablesKeys.forEach((infoVar)=>{
 				if (personRelationsData.hasOwnProperty(infoVar)){
-					console.log(infoVar);		
 				
 					const relativesList = personRelationsData[infoVar];
 					let maxStrLength = (relativesList.length > 8) 
@@ -944,7 +937,6 @@ class woodInfoTab {
 					
 					var relativeNamesListStr = ''; var relativeLinesCount = 0;
 					relativesList.forEach((relative)=>{		
-						console.log(relative);		
 						const relativeName = famInfo[relative].name;
 						
 						const varSpan = document.createElement('span');
@@ -1393,8 +1385,8 @@ class node {
 			}
 			else {
 				if ((check == "siblings") && this.personData.hasOwnProperty('siblingMain')){
-					//tree.showHideButtons('show', tagChecks[check]);	//isSibling
-					tree.showHideButtons('hide', tagChecks[check]);
+					tree.showHideButtons('show', tagChecks[check]);	//isSibling
+					//tree.showHideButtons('hide', tagChecks[check]);
 				} else {
 					tree.showHideButtons('hide', tagChecks[check]);
 				}
@@ -2806,17 +2798,33 @@ class treeSVG {
 		};
 		var childList = []; 
 		var spouse, parentMain;
+		var siblingMainObj, siblingMain;
 		if (type == 'children'){
 			spouse = focusObj.personData.spouse;
 			childList = focusObj.personData.children;
 			
 		} else {
-			spouse = focusObj.personData.parentSpouse;
-			childList = focusObj.personData.siblings ?? [];
+			let useFocusObjData, mainTag;
+			if (focusObj.isSibling()){				
+				useFocusObjData = PEOPLERELATIONS[focusObj.famName][focusObj.mainSibling];					
+				mainTag = focusObj.mainSibling;
+			} else {
+				useFocusObjData = focusObj.personData;
+				mainTag = focusObj.personTag;
+			}
+			
+			spouse = useFocusObjData.parentSpouse;
+			childList = useFocusObjData.siblings ?? [];
+			childList.unshift(mainTag);
+			parentMain = useFocusObjData.parentMain;	
+			
+			//change order of childlist so current focusobj is at front (for isSibling)			
+			childList.splice (childList.indexOf(focusObj.personTag), 1);
 			childList.unshift(focusObj.personTag);
-			parentMain = focusObj.personData.parentMain;	
+			//console.log(childList);
 
-			createNode(parentMain, 'parentMain', 'famView_parentNode');	
+			createNode(parentMain, 'parentMain', 'famView_parentNode');				
+			
 		}
 		
 		createNode(spouse, 'spouse', 'famView_spouseNode');	

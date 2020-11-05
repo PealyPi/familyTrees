@@ -90,8 +90,8 @@ function nodeDataStorage(){//collapse lvl 2
 	kesby.jeanBobby = {			
 		'mainLine':		false,	
 		'familyName': 	'bobby',
-		'parentMain': 		'sidneyCharlesBobby',	
-		'parentSpouse': 	'adaBerriman',
+		'parentMain': 	'sidneyCharlesBobby',	
+		'parentSpouse': 'adaBerriman',
 		'siblingMain': 'maryBobby',
 	};
 	
