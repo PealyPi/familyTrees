@@ -3,9 +3,171 @@
 /* ============================================================ */
 /* preload info /relations data */
 var PEOPLEINFO = personInfoStorage();
-var PEOPLERELATIONS = nodeDataStorage();
+var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
+
+function generateRelationsData(data) {
+	
+	var finalData = {'kesby': {}, 'hadkiss': {}, 'peal': {}, 'mckenzie': {}};
+	let rootPeople = {'kesby': 'roseHadkiss', 'hadkiss': 'ronaldHadkiss', 'peal': '', 'mckenzie': ''};
+	
+	for (let fam in data){
+		if (fam == 'kesby'){
+		//get first of obj
+		let rootPerson = rootPeople[fam];
+		let rootData = data[fam][rootPerson];
+		finalData[fam][rootPerson] = rootData;
+		
+		let keyChecks = (rootData.isRoot) ? (rootData.isMainLine) ? true : false : false;
+		if (!keyChecks){
+			console.log("Error: root person " + rootPerson + " has incorrect initial keys");
+		} else {
+			
+			generateParent(fam, rootPerson, rootData.parentMain, true);
+			generateParent(fam, rootPerson, rootData.parentSpouse, false);
+			generateSiblings(fam, rootPerson);
+		}
+		}
+	}
+	
+	console.log(finalData);
+	return finalData;
+	
+	function generateSiblings(fam, thisTag){
+		var finalSiblingObj = {};
+		let thisData = finalData[fam][thisTag];
+		let siblingList = thisData.siblings ?? [];
+		
+		let newSiblingObj;
+		if (siblingList != 0){
+			//console.log((siblingList == 0) + " <=>" + (siblingList.length == 0));
+			let thisSubFamily = finalData[fam][thisTag].familyName;
+			let siblingObj = {
+				'isMainLine':	false,
+				'familyName':	thisSubFamily,
+				'siblingMain': 	thisTag
+			};		
+			
+			for (let sibling of siblingList){
+				finalData[fam][sibling] = Object.assign({}, finalData[fam][sibling] ?? {}, siblingObj);				
+				
+			}
+		}
+		
+		
+		
+	}
+	
+	function generateHalfSiblings(fam, subFamilyName, thisTag){
+		let thisData = finalData[fam][thisTag];
+		let halfSiblingList = thisData['half-siblings'];
+		//check thisTags parents
+		
+		let thisParentMainTag = thisData.parentMain;
+		let thisParentSpouseTag = thisData.parentSpouse;
+		
+		var halfSib_parentMain, halfSib_parentSpouse;
+		for (let checkParent of [thisParentMainTag, thisParentSpouseTag]){
+			let thisParentData = finalData[fam][checkParent];
+			
+			if (thisParentData.hasOwnProperty("otherSpouse")){
+				halfSib_parentMain = checkParent;
+				halfSib_parentSpouse = thisParentData.otherSpouse;	
+
+				//add other spouse data
+				generateOtherSpouse(fam, subFamilyName, halfSib_parentSpouse, halfSib_parentMain);
+			}			
+		}
+		
+		let halfSiblingObj = {
+			'isMainLine':	false,
+			'familyName':	subFamilyName,
+			'siblingMain': 	thisTag,
+			'parentMain':	halfSib_parentMain,
+			'parentSpouse':	halfSib_parentSpouse,
+		};		
+		
+		for (let halfSibling of halfSiblingList){
+			finalData[fam][halfSibling] = Object.assign({}, finalData[fam][halfSibling] ?? {}, halfSiblingObj);				
+			
+			let parentMainData = finalData[fam][halfSib_parentMain];
+			let parentSpouseData = finalData[fam][halfSib_parentSpouse];
+			
+			if (!parentMainData)
+				parentMainData = {'otherChildren': [halfSibling]};
+			else {				
+				if (parentMainData.hasOwnProperty("otherChildren"))
+					parentMainData.otherChildren.push(halfSibling);
+				else 
+					parentMainData.otherChildren = [halfSibling];
+			}
+			
+			if (!parentSpouseData)
+				parentSpouseData = {'children': [halfSibling]};
+			else {				
+				if (parentSpouseData.hasOwnProperty("otherChildren"))
+					parentSpouseData.otherChildren.push(halfSibling);
+				else 
+					parentSpouseData.otherChildren = [halfSibling];
+			}
+		}
+		
+		
+	}
+	
+	function generateOtherSpouse(fam, subFamName, thisTag, mainSpouseTag){
+		let otherSpouseObj = {
+			'isMainLine':	false,
+			'familyName':	subFamName,
+			'spouseMain': 	mainSpouseTag,
+		};		
+		finalData[fam][thisTag] = Object.assign({}, finalData[fam][thisTag], otherSpouseObj);
+		console.log("thisTag: " + thisTag + ", mainSpouseTag: " + mainSpouseTag);
+		console.log(finalData[fam][thisTag]);
+	}
+	
+	function generateParent(fam, childTag, parentTag, parentMain = false){
+		//console.log(finalData[fam][childTag].siblings ?? 'Here');
+		let childData = finalData[fam][childTag];
+		let thisData = data[fam][parentTag];
+		
+		let subFamilyName = (parentMain) ? childData.familyName : thisData.familyName;
+		let spouseTag = (parentMain) ? childData.parentSpouse : childData.parentMain;
+		
+		let childSiblings = childData.siblings ?? [];
+		var childrenArray = [childTag].concat(childSiblings);
+		
+		//console.log("parent: " + parentTag + ", child: " + childTag);
+		//console.log("create Siblings: " + childSiblings.join(", "));
+		
+		let baseObj = {
+			'isMainLine': 	true,
+			'isMainParent': parentMain,
+			'familyName': 	subFamilyName,
+			'spouse': 		spouseTag,
+			'childMain':	childTag,
+			'children':		childrenArray
+		}
+		let newThisObj = Object.assign({}, thisData, baseObj);
+		finalData[fam][parentTag] = newThisObj;
+		
+		if (thisData.parentMain)
+			generateParent(fam, parentTag, thisData.parentMain, true);
+		if (thisData.parentSpouse)
+			generateParent(fam, parentTag, thisData.parentSpouse, false);
+		if (thisData.siblings)
+			generateSiblings(fam, parentTag);
+		if (thisData['half-siblings'])
+			generateHalfSiblings(fam, subFamilyName, parentTag);
+		if (thisData.otherSpouse)
+			generateOtherSpouse(fam, subFamilyName, thisData.otherSpouse, parentTag);
+	}
+}
+
+
 
 checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
+//checkRelationsDataFilled(PEOPLERELATIONS);
+
 function checkDataMatches(infoData, relationsData){
 	for (let fam in infoData){
 		let infoKeys = Object.keys(infoData[fam]);
@@ -48,6 +210,101 @@ function checkDataMatches(infoData, relationsData){
 	}
 }
 
+
+
+function checkRelationsDataFilled(relationsData){
+	let mainLine_mainParentGuide = {			
+			'gen': 0,
+			'isMainLine':		true,		
+			'isMainParent': true,
+			'familyName':   '',
+			
+			'parentMain': 	'',	
+			'parentSpouse': '',
+			//'siblings': 	[],
+			//'half-siblings': 	[],
+		
+			'spouse': 		'',	
+			'childMain': 	'', 
+			'children': 	[], 
+	}
+	let mainLine_otherParentGuide = {			
+			'gen': 0,
+			'isMainLine':		true,		
+			'isMainParent': false,
+			'familyName':   '',
+		
+			'spouse': 		'',	
+			'childMain': 	'', 
+			'children': 	[], 
+	}
+	
+	let isSiblingGuide = {		
+			'isMainLine':		false,		
+			'familyName':   '',
+			
+			'parentMain': 	'',	
+			'parentSpouse': '',
+			'siblingMain':  '',
+	}
+	let isSpouseGuide = {	
+			'isMainLine':		false,		
+			'familyName':   '',
+			
+			'spouseMain': 	'',	
+	}
+	
+	for (let fam in relationsData){
+		for (let person in relationsData[fam]){			
+			let thisPersonObj = relationsData[fam][person];
+			var missingKeys = [], wrongTypeKeys = [];			
+			var compareObj;			
+			
+			if (thisPersonObj.isMainLine == true){				
+				if (thisPersonObj.isMainParent == true)	
+					compareObj = mainLine_mainParentGuide;
+				 else 
+					compareObj = mainLine_otherParentGuide;				
+			} else {	
+				if (thisPersonObj.hasOwnProperty('siblingMain'))
+					compareObj = isSiblingGuide;
+				else if (thisPersonObj.hasOwnProperty('spouseMain'))
+					compareObj = isSpouseGuide;
+				else 
+					console.log("RelationsData Error: " + person + " is not mainLine, but has neither spouseMain or siblingMain");
+			}
+			
+			for (let keyCheck in compareObj){
+				if (!thisPersonObj.hasOwnProperty(keyCheck))
+					missingKeys.push(keyCheck);
+				else if (typeof thisPersonObj[keyCheck] != typeof compareObj[keyCheck])
+					wrongTypeKeys.push(keyCheck);
+			}
+			
+			let errorString = "RelationsData Error: " + person + " ";
+			if ( (!missingKeys == 0) || (!wrongTypeKeys == 0) ){
+				if (missingKeys.length != 0){
+					if (missingKeys.length > 1)
+						errorString += "is missing properties " + missingKeys.join(" ");
+					else 
+						errorString += "is missing property " + missingKeys[0];
+				}
+				if (wrongTypeKeys.length != 0){
+					if (missingKeys.length != 0)
+						errorString += " and ";		
+					
+					errorString += "has wrong property type for " + wrongTypeKeys.join(" ");
+				}
+				
+				console.log(errorString);
+			}
+			
+		}
+	}
+	
+	
+}
+
 function findPersonsFamily(personName, startFam = false){
 	const famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
 	if (startFam){
@@ -71,6 +328,8 @@ function findPersonsFamily(personName, startFam = false){
 	}
 	
 }
+
+
 
 class nodeLetterTag_info {
 	constructor(){
@@ -362,7 +621,9 @@ class peopleTab {
 			eachFamKeys.forEach(function( personTag, i ) {
 				const personData = PEOPLERELATIONS[fam][personTag];
 				const personName = famData[personTag].LI_name ?? famData[personTag].name;
-				
+	
+
+			
 				const personLI = document.createElement("li");	
 				personLI.id = 'li_' + fam + "_" + personTag;	
 				personLI.classList.add('pplChooseLI');	
@@ -379,7 +640,7 @@ class peopleTab {
 				liSpan.appendChild(liSpanText);	
 				
 				
-				if (!personData.mainLine){
+				if (!personData.isMainLine){
 					nonMainDropDiv.appendChild(personLI);
 				} else {					
 					famDropDiv.appendChild(personLI);
@@ -1240,6 +1501,10 @@ class node {
 		return (NODEdetails.nodeRelations.indexOf(this.tagType) % 2 == 1);
 	}
 	
+	isOtherSpouse(){
+		return this.personData.hasOwnProperty("spouseMain");
+	}
+	
 	isSibling(){
 		const isSiblingBool = this.personData.hasOwnProperty("siblingMain");
 		
@@ -1250,6 +1515,10 @@ class node {
 			this.parentSTag = mainSiblingData.parentSpouse;
 		}
 		return isSiblingBool;
+	}
+	
+	isHalfSibling(){
+		return this.personData.hasOwnProperty("isHalfSibling");
 	}
 	
 	getLinkedFamily(){
@@ -1387,6 +1656,9 @@ class node {
 				if ((check == "siblings") && this.personData.hasOwnProperty('siblingMain')){
 					tree.showHideButtons('show', tagChecks[check]);	//isSibling
 					//tree.showHideButtons('hide', tagChecks[check]);
+				} else if ((check == "siblings") && this.personData.hasOwnProperty('siblingMain')){
+					tree.showHideButtons('show', tagChecks[check]);	//isSibling
+					//tree.showHideButtons('hide', tagChecks[check]);
 				} else {
 					tree.showHideButtons('hide', tagChecks[check]);
 				}
@@ -1400,12 +1672,12 @@ class node {
 		const nodeGrp = this.nodeGrpContainer.querySelector(".nodeGrp"); 
 		
 		const personData = PEOPLERELATIONS[newFam][newName] ?? {};
-		const personInfo = PEOPLEINFO[newFam][newName] ?? {};			
+		const personInfo = PEOPLEINFO[newFam][newName] ?? {};		
 		
 		this.personInfo = personInfo;	
 		this.personData = personData;	
 		this.personTag = newName;
-		this.famName = newFam;	this.tagType = newTag;		
+		this.famName = newFam;	this.tagType = newTag;
 		
 		this.getFamilyTags();	
 		
@@ -1471,6 +1743,7 @@ class node {
 	initialise(personTag, famName){	
 		const personInfo = PEOPLEINFO[famName][personTag] ?? {};		
 		const personData = PEOPLERELATIONS[famName][personTag] ?? {};
+		
 		this.personInfo = personInfo;
 		this.personData = personData;
 	
@@ -2532,6 +2805,7 @@ class treeSVG {
 		
 		let svg = this.svgElem;
 		
+		console.log(PEOPLERELATIONS['kesby']['roseHadkiss']);
 		const clonedFocusContainer = cloningFocus(focusObj);
 		const clonedFocusGrp = clonedFocusContainer.querySelector(".nodeGrp");
 		const clonedFocusHT = this.createFocusHighlight(clonedFocusContainer);
@@ -2804,13 +3078,15 @@ class treeSVG {
 			childList = focusObj.personData.children;
 			
 		} else {
-			let useFocusObjData, mainTag;
+			let useFocusObjData;
+	
 			if (focusObj.isSibling()){				
-				useFocusObjData = PEOPLERELATIONS[focusObj.famName][focusObj.mainSibling];					
-				mainTag = focusObj.mainSibling;
+				useFocusObjData = PEOPLERELATIONS[focusObj.famName][focusObj.mainSibling];	
+			} else if (focusObj.isSpouse()){
+				
 			} else {
-				useFocusObjData = focusObj.personData;
-				mainTag = focusObj.personTag;
+				useFocusObjData = PEOPLERELATIONS[focusObj.famName][focusObj.personTag];
+				
 			}
 			
 			spouse = useFocusObjData.parentSpouse;
@@ -3023,7 +3299,6 @@ class treeChangeEvents {
 	
 	newFocus(personName, famName){
 		//from person click
-		const personData = PEOPLERELATIONS[famName][personName];
 		NODEdetails.updateFocus({'personTag': personName, 'famName':famName});	
 		
 		const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
