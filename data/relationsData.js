@@ -224,23 +224,13 @@ function nodeDataStorage(){//collapse lvl 2
 		
 			//gen4
 			kesby.johnKesby = {	
-				'gen': 4,
-				'mainLine':		true,	
-				'isMainParent': true,	
-				'familyName': 	'kesby',
-				'spouse': 		'harrietSmith',	
-				'childMain': 	'alfredSmithKesby', 				
+				'spouse': 		'harrietSmith',					
 			};
 			kesby.harrietSmith = {	
 				'familyName': 	'kesby',
 				'otherSpouse': 	'benjaminSmith',
 			};
 	
-			kesby.benjaminSmith = {	
-				'familyName': 	'kesby',
-				'spouse': 		'harrietSmith',
-			}
-			
 	
 
 	//hadkiss
@@ -256,21 +246,7 @@ function nodeDataStorage(){//collapse lvl 2
 	
 	
 	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};
-	/*
-	switch (famName){
-		case 'kesby': 
-			return allFams.kesby;
-		break;
-		case 'hadkiss': 
-			return allFams.hadkiss;
-		break;
-		case 'peal': 
-			return allFams.peal;
-		break;
-		case 'mckenzie': 
-			return allFams.mckenzie;
-		break;		
-	}	*/
+
 	return allFams;
 }
 

@@ -29,7 +29,9 @@ function generateRelationsData(data) {
 		}
 	}
 	
-	console.log(finalData);
+	//change when hadkiss added
+	finalData.hadkiss = nodeDataStorage().hadkiss;
+	
 	return finalData;
 	
 	function generateSiblings(fam, thisTag){
@@ -121,12 +123,10 @@ function generateRelationsData(data) {
 			'spouseMain': 	mainSpouseTag,
 		};		
 		finalData[fam][thisTag] = Object.assign({}, finalData[fam][thisTag], otherSpouseObj);
-		console.log("thisTag: " + thisTag + ", mainSpouseTag: " + mainSpouseTag);
-		console.log(finalData[fam][thisTag]);
+		//console.log("thisTag: " + thisTag + ", mainSpouseTag: " + mainSpouseTag);
 	}
 	
 	function generateParent(fam, childTag, parentTag, parentMain = false){
-		//console.log(finalData[fam][childTag].siblings ?? 'Here');
 		let childData = finalData[fam][childTag];
 		let thisData = data[fam][parentTag];
 		
@@ -162,7 +162,6 @@ function generateRelationsData(data) {
 			generateOtherSpouse(fam, subFamilyName, thisData.otherSpouse, parentTag);
 	}
 }
-
 
 
 checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
