@@ -461,6 +461,10 @@ function personInfoStorage(){
 														'LI_name':	'Daughter Bawbeye',
 														'dates': 	'1556 - 1556', 	
 													},
+													'johnBawbeye': {
+														'name':		'John Bawbeye',
+														'dates': 	'1546 - 1546', 	
+													},
 													'alynBawbeye': {
 														'name':		'Alyn Bawbeye',
 														'dates': 	'1551 - 1551', 	

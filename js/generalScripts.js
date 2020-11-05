@@ -5,6 +5,55 @@
 var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = nodeDataStorage();
 
+checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
+function checkDataMatches(infoData, relationsData){
+	for (let fam in infoData){
+		let infoKeys = Object.keys(infoData[fam]);
+		let relKeys = Object.keys(relationsData[fam]);	
+		
+		let infoSorted = infoKeys.sort();
+		let relSorted = relKeys.sort();
+		
+		var isEqual = function (firstArr, secondArr) {
+			return firstArr.length === secondArr.length &&
+				firstArr.every((value, index) => value === secondArr[index])		
+		};		
+		
+		if ( !isEqual(infoSorted, relSorted) ){
+			let unmatched = getArrayDiffs(infoSorted, relSorted);
+			console.log("Info/Data People not matched");
+			
+			let firstUnmatched = unmatched.first.join(", ");
+			let secongUnmatched = unmatched.second.join(", ");
+			if (firstUnmatched) console.log("personInfo: " + firstUnmatched);
+			if (secongUnmatched) console.log("relationsData: " + secongUnmatched);
+		}
+		
+		function checkValues(value, index){
+			if (value != relSorted[index]){
+				console.log(value);
+			}
+		}
+		
+		function getArrayDiffs(firstArr, secondArr){
+			var firstNonmatched = [], secondNonmatched = [];
+			for (let person of firstArr){
+				if (!secondArr.includes(person))
+					firstNonmatched.push(person);
+			}
+			
+			for (let person of secondArr){
+				if (!firstArr.includes(person))
+					secondNonmatched.push(person);
+			}
+			
+			let firstDiffs = [], secondDiffs = [];
+			return {'first': firstNonmatched, 'second': secondNonmatched}
+		};
+		
+	}
+}
+
 function findPersonsFamily(personName, startFam = false){
 	const famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
 	if (startFam){
@@ -880,7 +929,8 @@ class woodInfoTab {
 			
 			const infoVariablesKeys = Object.keys(infoVariables);
 			infoVariablesKeys.forEach((infoVar)=>{
-				if (personRelationsData.hasOwnProperty(infoVar)){		
+				if (personRelationsData.hasOwnProperty(infoVar)){
+					console.log(infoVar);		
 				
 					const relativesList = personRelationsData[infoVar];
 					let maxStrLength = (relativesList.length > 8) 
@@ -894,6 +944,7 @@ class woodInfoTab {
 					
 					var relativeNamesListStr = ''; var relativeLinesCount = 0;
 					relativesList.forEach((relative)=>{		
+						console.log(relative);		
 						const relativeName = famInfo[relative].name;
 						
 						const varSpan = document.createElement('span');
