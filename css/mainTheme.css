@@ -196,7 +196,9 @@ button,  button:active, button:hover, button:focus{
 .left_navbar{
 	float: left;
 	display:inline-block;	
-	margin-top: -11px;
+	position: relative;
+	/* margin-top: -11px; */
+	/* top: 10px; */
 }
 .right_navbar{
 	float:right;
@@ -206,6 +208,7 @@ button,  button:active, button:hover, button:focus{
 
 .top_navbar button{
 	position: relative;
+	/*top: 10px;*/
 	height: var(--navButtonHeight);
 	width: var(--navButtonHeight);
 	display: inline-block;
@@ -230,8 +233,9 @@ button,  button:active, button:hover, button:focus{
 .top_navbar button#treeTab{
 	background: url('../media/treeIcon.svg') center no-repeat; 
 	background-size: 27px;	
-	top: 11px;	
+	top: -8px;	
 }
+
 .top_navbar button:after{
 	position: absolute;
 	width: 100%; 
@@ -320,6 +324,7 @@ button,  button:active, button:hover, button:focus{
 
 .top_navbar .navTabDiv{
 	display:inline-block;
+	position: relative;
 	opacity: 0;
 	font-family: var(--mainFontFamily);
 	font-size:14px;

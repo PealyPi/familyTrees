@@ -163,9 +163,8 @@ function generateRelationsData(data) {
 	}
 }
 
-console.log(PEOPLERELATIONS);
+//console.log(PEOPLERELATIONS);
 checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
-//checkRelationsDataFilled(PEOPLERELATIONS);
 
 function checkDataMatches(infoData, relationsData){
 	for (let fam in infoData){
@@ -184,10 +183,10 @@ function checkDataMatches(infoData, relationsData){
 			let unmatched = getArrayDiffs(infoSorted, relSorted);
 			console.log("Info/Data People not matched");
 			
-			let firstUnmatched = unmatched.first.join(", ");
-			let secongUnmatched = unmatched.second.join(", ");
-			if (firstUnmatched) console.log("personInfo: " + firstUnmatched);
-			if (secongUnmatched) console.log("relationsData: " + secongUnmatched);
+			let infoNotRelations = unmatched.first.join(", ");
+			let relationsNotInfo = unmatched.second.join(", ");
+			if (infoNotRelations) console.log("In personInfo, not relationsData: " + infoNotRelations);
+			if (relationsNotInfo) console.log("In relationsData, not personInfo: " + relationsNotInfo);
 		}		
 		
 		function getArrayDiffs(firstArr, secondArr){
@@ -209,100 +208,6 @@ function checkDataMatches(infoData, relationsData){
 	}
 }
 
-
-
-function checkRelationsDataFilled(relationsData){
-	let mainLine_mainParentGuide = {			
-			'gen': 0,
-			'isMainLine':		true,		
-			'isMainParent': true,
-			'familyName':   '',
-			
-			'parentMain': 	'',	
-			'parentSpouse': '',
-			//'siblings': 	[],
-			//'half-siblings': 	[],
-		
-			'spouse': 		'',	
-			'childMain': 	'', 
-			'children': 	[], 
-	}
-	let mainLine_otherParentGuide = {			
-			'gen': 0,
-			'isMainLine':		true,		
-			'isMainParent': false,
-			'familyName':   '',
-		
-			'spouse': 		'',	
-			'childMain': 	'', 
-			'children': 	[], 
-	}
-	
-	let isSiblingGuide = {		
-			'isMainLine':		false,		
-			'familyName':   '',
-			
-			'parentMain': 	'',	
-			'parentSpouse': '',
-			'siblingMain':  '',
-	}
-	let isSpouseGuide = {	
-			'isMainLine':		false,		
-			'familyName':   '',
-			
-			'spouseMain': 	'',	
-	}
-	
-	for (let fam in relationsData){
-		for (let person in relationsData[fam]){			
-			let thisPersonObj = relationsData[fam][person];
-			var missingKeys = [], wrongTypeKeys = [];			
-			var compareObj;			
-			
-			if (thisPersonObj.isMainLine == true){				
-				if (thisPersonObj.isMainParent == true)	
-					compareObj = mainLine_mainParentGuide;
-				 else 
-					compareObj = mainLine_otherParentGuide;				
-			} else {	
-				if (thisPersonObj.hasOwnProperty('siblingMain'))
-					compareObj = isSiblingGuide;
-				else if (thisPersonObj.hasOwnProperty('spouseMain'))
-					compareObj = isSpouseGuide;
-				else 
-					console.log("RelationsData Error: " + person + " is not mainLine, but has neither spouseMain or siblingMain");
-			}
-			
-			for (let keyCheck in compareObj){
-				if (!thisPersonObj.hasOwnProperty(keyCheck))
-					missingKeys.push(keyCheck);
-				else if (typeof thisPersonObj[keyCheck] != typeof compareObj[keyCheck])
-					wrongTypeKeys.push(keyCheck);
-			}
-			
-			let errorString = "RelationsData Error: " + person + " ";
-			if ( (!missingKeys == 0) || (!wrongTypeKeys == 0) ){
-				if (missingKeys.length != 0){
-					if (missingKeys.length > 1)
-						errorString += "is missing properties " + missingKeys.join(" ");
-					else 
-						errorString += "is missing property " + missingKeys[0];
-				}
-				if (wrongTypeKeys.length != 0){
-					if (missingKeys.length != 0)
-						errorString += " and ";		
-					
-					errorString += "has wrong property type for " + wrongTypeKeys.join(" ");
-				}
-				
-				console.log(errorString);
-			}
-			
-		}
-	}
-	
-	
-}
 
 function findPersonsFamily(personName, startFam = false){
 	const famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
