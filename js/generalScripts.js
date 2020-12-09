@@ -1441,7 +1441,8 @@ class node {
 		const midLine = (svgHeight/2)-70;
 		const spouseLine = midLine+200;
 		
-		const childX = 115;
+		// const childX = 115;
+		const childX = svgWidth/5;
 		const parentX = svgWidth - childX;
 		const offScreenX = 130;
 		
@@ -2349,7 +2350,7 @@ class treeSVG {
 		this.svgCenterPt = svgCenterPt;
 		
 		if (!famView){
-			const mainLineGrp = this.createLines(this.svgElem, 'mainLine', ['m', -10, (svgCenterPt.y - 70), 'h', pageWidth]);
+			const mainLineGrp = this.createLines(this.svgElem, 'mainLine', ['m', -50, (svgCenterPt.y - 70), 'h', (pageWidth+50)]);
 			this.mainLineGrp = mainLineGrp;	
 			
 			this.svgElem.style.opacity = 0; 

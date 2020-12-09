@@ -78,7 +78,7 @@ body{
 	
 	background:transparent center center;
 	background-attachment:fixed;
-	background-color: var(--colourDarkPurple);	
+	background-color: var(--colourPink);	
 	
 	font-family: var(--mainFontFamily);
 	color:#fff;	
@@ -451,17 +451,11 @@ button,  button:active, button:hover, button:focus{
 	background-color: var(--colourDarkPurple_RGB_Transparent);
 }
 
-@media only screen and (max-width: 1322px) {
-	#mainSVG{
-		left:0 !important;
-		right: 0 !important;
-	}
-}
 #mainSVG{
 	max-height: 570px;
 	width:100%;
 	position: relative;
-	left:1%;
+	left:0;
 	right:0;
 }
 #famViewSVG{
