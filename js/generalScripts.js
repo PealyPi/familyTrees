@@ -1339,12 +1339,13 @@ function peopleListSearch() {
 	}
 	//if search gen#,
 	var genSearchBool = false, inputGenNum;
-	const genRegExpr = /(GEN)\s*(\d+)/g;
-	let match = genRegExpr.exec(filter);
+	const genRegExpr = /(GEN)\s*(\d+)/g, genRegExprFull = /(GENERATION)\s*(\d+)/g;
+	let match = genRegExpr.exec(filter), matchFull = genRegExprFull.exec(filter);
 	
-	if (match !== null){
+	if ((match !== null) || (matchFull !== null)){
 		genSearchBool = true;
-		inputGenNum = `${match[2]}`;
+		let rightMatch = match ?? matchFull;
+		inputGenNum = `${rightMatch[2]}`;
 	} 
 	// Loop through all list items, and hide those who don't match the search query
 	for (i = 0; i < li.length; i++) {
