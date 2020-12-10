@@ -4,6 +4,9 @@
 /* preload info /relations data */
 var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
+var PEOPLETAGfromNAME = storePeopleTagNames('tagFromName', PEOPLEINFO, PEOPLERELATIONS);
+var PEOPLENAMEfromTAG = storePeopleTagNames('nameFromTag', PEOPLEINFO, PEOPLERELATIONS);
+//console.log(PEOPLERELATIONS);
 
 function generateRelationsData(data) {
 	
@@ -140,6 +143,7 @@ function generateRelationsData(data) {
 		//console.log("create Siblings: " + childSiblings.join(", "));
 		
 		let baseObj = {
+			'gen':	(childData.gen + 1),
 			'isMainLine': 	true,
 			'isMainParent': parentMain,
 			'familyName': 	subFamilyName,
@@ -149,6 +153,7 @@ function generateRelationsData(data) {
 		}
 		let newThisObj = Object.assign({}, thisData, baseObj);
 		finalData[fam][parentTag] = newThisObj;
+		//console.log(parentTag);		console.log("gen" + newThisObj.gen);
 		
 		if (thisData.parentMain)
 			generateParent(fam, parentTag, thisData.parentMain, true);
@@ -163,9 +168,30 @@ function generateRelationsData(data) {
 	}
 }
 
-//console.log(PEOPLERELATIONS);
-checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
+function storePeopleTagNames(type, infoData, relationsData){
+	var nameFromTagObj = {}, tagFromNameObj = {};
+	const famKeys = Object.keys(infoData);
+	
+	for (const fam of famKeys){
+		const famData = infoData[fam];
+		const eachFamKeys = Object.keys(famData);	
+		
+		eachFamKeys.forEach(function( personTag, i ) {
+			const personData = relationsData[fam][personTag];
+			const LIpersonName = famData[personTag].LI_name ?? famData[personTag].name;	
 
+			nameFromTagObj[personTag] = LIpersonName;
+			tagFromNameObj[LIpersonName] = personTag;
+		});
+	}	
+	
+	if (type == "tagFromName")
+		return tagFromNameObj;
+	else if (type == "nameFromTag")
+		return nameFromTagObj;
+}
+
+checkDataMatches(PEOPLEINFO, PEOPLERELATIONS);
 function checkDataMatches(infoData, relationsData){
 	for (let fam in infoData){
 		let infoKeys = Object.keys(infoData[fam]);
@@ -524,8 +550,7 @@ class peopleTab {
 			
 			eachFamKeys.forEach(function( personTag, i ) {
 				const personData = PEOPLERELATIONS[fam][personTag];
-				const personName = famData[personTag].LI_name ?? famData[personTag].name;
-	
+				const personName = famData[personTag].LI_name ?? famData[personTag].name;	
 
 			
 				const personLI = document.createElement("li");	
@@ -1312,11 +1337,33 @@ function peopleListSearch() {
 	} else {
 		pplTab.toggleSearchIcon('exit');	
 	}
+	//if search gen#,
+	var genSearchBool = false, inputGenNum;
+	const genRegExpr = /(GEN)\s*(\d+)/g;
+	let match = genRegExpr.exec(filter);
+	
+	if (match !== null){
+		genSearchBool = true;
+		inputGenNum = `${match[2]}`;
+	} 
 	// Loop through all list items, and hide those who don't match the search query
 	for (i = 0; i < li.length; i++) {
 		txtValue = li[i].textContent || li[i].innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
 		  li[i].style.display = "";
+		  
+		} else if (genSearchBool){
+			//get person data, check gen
+			let personTag = PEOPLETAGfromNAME[txtValue];
+			let personFam = findPersonsFamily(personTag);
+			let personData = PEOPLERELATIONS[personFam][personTag];
+			let personGen = personData.gen;
+			
+			if (personGen == inputGenNum)
+				li[i].style.display = "";
+			else 
+				 li[i].style.display = "none";
+			
 		} else {
 		  li[i].style.display = "none";
 		}
@@ -1324,6 +1371,8 @@ function peopleListSearch() {
 	
 	//if all li values are display none, hide dropbutton
 	const dropDivs = Array.from(ul.querySelectorAll('.ppl_dropdownContainer'));
+	
+	
 
 	for (const dropDiv of dropDivs){
 		const dropFamName = dropDiv.id.replace("DropdownDiv", "");
