@@ -761,6 +761,15 @@ button,  button:active, button:hover, button:focus{
 	text-align: center;	
 	letter-spacing: 1px;
 }
+.info_gen{
+	font-size: 30px;
+	text-align: right;
+	
+	position: absolute;
+	top: 32%;
+	right: 15%;
+	
+}
 .info_neeName{
 	display: none;
 	font-size: 24px;

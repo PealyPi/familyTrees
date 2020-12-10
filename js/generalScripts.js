@@ -23,8 +23,8 @@ function generateRelationsData(data) {
 		let keyChecks = (rootData.isRoot) ? (rootData.isMainLine) ? true : false : false;
 		if (!keyChecks){
 			console.log("Error: root person " + rootPerson + " has incorrect initial keys");
-		} else {
 			
+		} else {			
 			generateParent(fam, rootPerson, rootData.parentMain, true);
 			generateParent(fam, rootPerson, rootData.parentSpouse, false);
 			generateSiblings(fam, rootPerson);
@@ -822,6 +822,13 @@ class woodInfoTab {
 		datesDiv.classList.add('info_dates');
 		containerDiv.appendChild(datesDiv);
 		
+		const genDiv = document.createElement("div");
+		this.genDiv = genDiv;
+		genDiv.classList.add('infoData');
+		genDiv.classList.add('aboutBold');
+		genDiv.classList.add('info_gen');
+		containerDiv.appendChild(genDiv);
+		
 		const bornNameDiv  = document.createElement("div");
 		this.bornNameDiv = bornNameDiv;
 		bornNameDiv.classList.add('infoData');
@@ -1041,6 +1048,7 @@ class woodInfoTab {
 		const infoDivMain = this.infoDivMain;
 		const nameDiv = infoDivMain.querySelector(".info_name");
 		const datesDiv = infoDivMain.querySelector(".info_dates");
+		const genDiv = infoDivMain.querySelector(".info_gen");
 		
 		const leafSVG = this.leafSVG;	
 		const thisType = this.type;
@@ -1089,6 +1097,9 @@ class woodInfoTab {
 			
 			const datesText = document.createTextNode(personInfo.dates);
 			datesDiv.appendChild(datesText);
+			
+			const genText = document.createTextNode("Gen " + personRelationsData.gen);
+			genDiv.appendChild(genText);
 			
 			
 			//info dependent
