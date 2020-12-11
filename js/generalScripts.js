@@ -2626,9 +2626,9 @@ class treeSVG {
 			'children': 	this.svgDiv.querySelectorAll(".childrenIcon_button")
 		};
 		
-		const famIcon_button = 	this.svgDiv.querySelectorAll(".famIcon");
+		const famIcon_button  = this.svgDiv.querySelectorAll(".famIcon");
 		const arrowBtn_button = this.svgDiv.querySelectorAll(".arrowBtn");	
-		const zoomBtn_button = 	this.svgDiv.querySelectorAll(".zoomBtn");
+		const zoomBtn_button  = this.svgDiv.querySelectorAll(".zoomBtn");
 		
 		for (const btn of famIcon_button){
 			if (btn.classList.contains("famView_treeIcon"))
@@ -2639,6 +2639,8 @@ class treeSVG {
 		for (const btn of arrowBtn_button){
 			btn.addEventListener("click", (evnt) => treeChange.treeChangeView(evnt, 'arrows'));
 		}
+		
+		
 	}
 	
 	initialiseNodes(personTag, famName, reinit = false) {
