@@ -7,6 +7,7 @@ var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
 var PEOPLETAGfromNAME = storePeopleTagNames('tagFromName', PEOPLEINFO, PEOPLERELATIONS);
 var PEOPLENAMEfromTAG = storePeopleTagNames('nameFromTag', PEOPLEINFO, PEOPLERELATIONS);
 //console.log(PEOPLERELATIONS);
+console.log(PEOPLERELATIONS.kesby);
 
 function generateRelationsData(data) {
 	
@@ -153,7 +154,8 @@ function generateRelationsData(data) {
 		}
 		let newThisObj = Object.assign({}, thisData, baseObj);
 		finalData[fam][parentTag] = newThisObj;
-		//console.log(parentTag);		console.log("gen" + newThisObj.gen);
+		//console.log(parentTag);		console.log("gen" + newThisObj.gen); 
+		//console.log( newThisObj.isMainLine);
 		
 		if (thisData.parentMain)
 			generateParent(fam, parentTag, thisData.parentMain, true);
@@ -165,6 +167,7 @@ function generateRelationsData(data) {
 			generateHalfSiblings(fam, subFamilyName, parentTag);
 		if (thisData.otherSpouse)
 			generateOtherSpouse(fam, subFamilyName, thisData.otherSpouse, parentTag);
+			
 	}
 }
 
@@ -1099,7 +1102,8 @@ class woodInfoTab {
 			datesDiv.appendChild(datesText);
 			
 			const genText = document.createTextNode("Gen " + personRelationsData.gen);
-			genDiv.appendChild(genText);
+			if (personRelationsData.gen !== undefined)
+				genDiv.appendChild(genText);
 			
 			
 			//info dependent
