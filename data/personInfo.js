@@ -21,17 +21,19 @@ function personInfoStorage(){
 					}, 
 					
 				//imgs[1]	
-				{'leafImg': '../familyTrees/media/images/roseKesby_image2.jpg',
+				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss1.jpg',
 				'leafTransform': {'x': -30, 'y': 0},
-				'leafWidth': 200	},
-				
+				'leafWidth': 200	},				
 				//imgs[2]
-				{'leafImg': '../familyTrees/media/images/roseKesby_image3.jpg', 
+				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss2.jpg', 
 				'leafTransform': {'x': -20, 'y': 0}, 
-				'leafWidth': 200},
-				
+				'leafWidth': 200},				
 				//imgs[3]
-				{'leafImg': '../familyTrees/media/images/roseKesby_image4.jpg', 
+				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss3.jpg', 
+				'leafTransform': {'x': 15, 'y': 8}, 
+				'leafWidth': 110},
+				//imgs[3]
+				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss4.jpg', 
 				'leafTransform': {'x': 15, 'y': 8}, 
 				'leafWidth': 110},
 				
@@ -622,14 +624,40 @@ function personInfoStorage(){
 	
 	const hadkiss = {
 		'ronaldHadkiss': {
-			'name':		'Ronald Hadkiss',
-			'dates': 	' - 1995',	 
+			'name':		'Ronald Leonard Hadkiss',
+			'dates': 	'1925 - 1995',	 
 			'about': { 
-				'diedOn': '9th January 1995',
+				'bornOn': 	'6th August 1925',
+				'bornAt': 	'34 Enfield Rd, Dalston, London, N1',
+				'diedOn':	'9th January 1995',
+				'diedAt':	'West Hill Hospital, Dartford',	
 				'marriedOn':	'26 Mar 1949',
 				'marriedAt':	'St Peter and Paul Church, Swanscombe',
 				'marriedTo':	'Rose Hadkiss',				
 			},	
+				
+			'imgs': [
+				{ 'icon': '../familyTrees/media/images/icons/ronHadkiss.png', 
+					}, 
+					
+				//imgs[1]	
+				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss1.jpg',
+				'leafTransform': {'x': -30, 'y': 0},
+				'leafWidth': 200	},
+				//imgs[2]	
+				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss2.jpg',
+				'leafTransform': {'x': -30, 'y': 0},
+				'leafWidth': 200	},
+				//imgs[3]	
+				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss3.jpg',
+				'leafTransform': {'x': -30, 'y': 0},
+				'leafWidth': 200	},
+				//imgs[4]	
+				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss4.jpg',
+				'leafTransform': {'x': -30, 'y': 0},
+				'leafWidth': 200	},
+				
+			],
 		},	
 	};
 	
