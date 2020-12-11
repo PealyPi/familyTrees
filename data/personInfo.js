@@ -254,7 +254,7 @@ function personInfoStorage(){
 									'name':		'Thomas Bobby',
 									'dates': 	'1759 - 1816', 	
 								},
-								'johnBobby': {
+								'john7Bobby': {
 									'name':		'John Bobby',
 									'dates': 	'1756 - 1764', 	
 								},

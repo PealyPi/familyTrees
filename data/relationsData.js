@@ -101,11 +101,11 @@ function nodeDataStorage(){//collapse lvl 2
 						kesby.jamesBobby = {		
 							'parentMain': 	'benjamin8Bobby',
 							'parentSpouse': 'ursulaPitman',	
-							'siblings': 	['thomasBobby', 'johnBobby', 'william7Bobby'],
+							'siblings': 	['thomasBobby', 'john7Bobby', 'william7Bobby'],
 						};
 						kesby.suzannaBobby = {		
 							'familyName':	'bobby',
-							'siblings': 	['thomasBobby', 'johnBobby', 'william7Bobby'],
+							'siblings': 	['thomasBobby', 'john7Bobby', 'william7Bobby'],
 						};			
 						
 							

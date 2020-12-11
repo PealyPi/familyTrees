@@ -372,7 +372,7 @@ function nodeDataStorage(){//collapse lvl 2
 							'familyName': 	'bobby',
 							'siblingMain': 	'jamesBobby',
 						};
-						kesby.johnBobby = {	
+						kesby.john7Bobby = {	
 							'mainLine':		false,	
 							'familyName': 	'bobby',
 							'siblingMain': 	'jamesBobby',

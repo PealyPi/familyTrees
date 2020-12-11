@@ -6,8 +6,7 @@ var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
 var PEOPLETAGfromNAME = storePeopleTagNames('tagFromName', PEOPLEINFO, PEOPLERELATIONS);
 var PEOPLENAMEfromTAG = storePeopleTagNames('nameFromTag', PEOPLEINFO, PEOPLERELATIONS);
-//console.log(PEOPLERELATIONS);
-console.log(PEOPLERELATIONS.kesby);
+//console.log(PEOPLERELATIONS.kesby);
 
 function generateRelationsData(data) {
 	
@@ -52,6 +51,8 @@ function generateRelationsData(data) {
 				'familyName':	thisSubFamily,
 				'siblingMain': 	thisTag
 			};		
+			
+			let test = finalData.kesby.johnBobby ?? null;
 			
 			for (let sibling of siblingList){
 				finalData[fam][sibling] = Object.assign({}, finalData[fam][sibling] ?? {}, siblingObj);				
@@ -127,7 +128,7 @@ function generateRelationsData(data) {
 			'spouseMain': 	mainSpouseTag,
 		};		
 		finalData[fam][thisTag] = Object.assign({}, finalData[fam][thisTag], otherSpouseObj);
-		//console.log("thisTag: " + thisTag + ", mainSpouseTag: " + mainSpouseTag);
+		//console.log("thisTag: " + thisTag + ", mainSpouseTag: " + mainSpouseTag + ", mainSpouse Main Bool: " + finalData[fam][mainSpouseTag].isMainLine);
 	}
 	
 	function generateParent(fam, childTag, parentTag, parentMain = false){
