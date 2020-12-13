@@ -1061,6 +1061,7 @@ class woodInfoTab {
 		
 		const leafSVG = this.leafSVG;	
 		const thisType = this.type;
+		const thisObj = this;
 		
 		if (!this._fillingInfo){
 			this._fillingInfo = true;
@@ -1073,17 +1074,16 @@ class woodInfoTab {
 					if (leafSVG.style.display != "none"){
 						$(leafSVG).fadeOut(1000);
 					}
-					const thisObj = this;
 					$([this.containerDiv, this.infoAboutDiv]).fadeOut(1000, function(){
 						thisObj.clearInfo();
-						fillInfo(this);							
+						fillInfo(thisObj);							
 					});	
 					
 					setTimeout(() => {this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '')}, 1200);	
 				} else {
 					//first fill		
 					this.clearInfo();
-					fillInfo(this);	
+					fillInfo(thisObj);	
 					this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '');
 					
 					if (this.type == "info"){
@@ -1280,6 +1280,7 @@ class woodInfoTab {
 	
 	addImgDebugControls(){
 		let debugButtonDiv = document.querySelector("#imgDebugControlsDIV");
+		//debugButtonDiv.style.display = 'block';
 		//let previousBtn = debugButtonDiv.querySelector("#imgDebugPrevious");
 		//let playBtn  = debugButtonDiv.querySelector("#imgDebugPlay");
 		let pauseBtn = debugButtonDiv.querySelector("#imgDebugPause");

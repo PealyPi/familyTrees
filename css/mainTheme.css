@@ -447,8 +447,7 @@ button,  button:active, button:hover, button:focus{
 	right: 0;
 	top: 10%;
 	z-index: 40;
-	display: none;
-	display: block;
+	/*display: none;*/
 }
 .imgDebugControls {
 	display: inline-block;
@@ -815,8 +814,9 @@ button,  button:active, button:hover, button:focus{
 	text-align: right;
 	
 	position: absolute;
-	top: 29%;
-	right: 17%;
+	top: 35%;
+	right: 19%;
+	color: rgb(57,35,35, 0.9);
 	
 }
 .info_neeName{
@@ -950,10 +950,12 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 
 
 .leafSVG{
-	width: 320px; height: 264px;
+	/*width: 320px; height: 264px;*/
+	width: 400px; height: 330px;
+	
 	position: absolute;
-	right: -50px;
-	top: -50px;
+	right: -78px;
+	top: -64px;
 	z-index: var(--woodLeafZ); 
 	display: none;
 }
