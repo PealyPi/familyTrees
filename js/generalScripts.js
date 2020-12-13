@@ -6,6 +6,7 @@ var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
 var PEOPLETAGfromNAME = storePeopleTagNames('tagFromName', PEOPLEINFO, PEOPLERELATIONS);
 var PEOPLENAMEfromTAG = storePeopleTagNames('nameFromTag', PEOPLEINFO, PEOPLERELATIONS);
+var PEOPLEIMGlinks = pplImageLinks();
 //console.log(PEOPLERELATIONS.kesby);
 
 function generateRelationsData(data) {
@@ -1203,43 +1204,27 @@ class woodInfoTab {
 			function addLeafImgs(){
 				const personImgs = personInfo.imgs; //[{icon}, {url, config}]
 				var leafImgArr = [];
-				
 				let personImgIconURL =  '../familyTrees/media/images/icons/' + personName + '.png';
-				let personImgFolder = '../familyTrees/media/images/' + personName + '/';
-				let imgCount = personInfo.imgCount;
-				let imgConfigs = personInfo.imgConfigs ?? false;
+				let imgArray = PEOPLEIMGlinks[famName][personName];
+				let imgCount = imgArray.length;
 				
-				let defaultImgConfig = {
-					'leafTransform': {'x': -30, 'y': 0},
-					'leafWidth': 200	
-				};
+				let defaultImgTrnsfm = {'x': -30, 'y': 0};
 				
-				for (var i=1; i<=imgCount; i++)	{
-					var currentImgConfig;
-					if (imgConfigs){
-						if (imgConfigs.hasOwnProperty('img'+ i)){
-							currentImgConfig = imgConfigs['img'+ i];
-						} else {
-							currentImgConfig = defaultImgConfig;
-						}
-					} else {
-						currentImgConfig = defaultImgConfig;
-					}
-					
-					let currentImgURL = personImgFolder + personName + i + '.jpg';
-					let currentImgObj = Object.assign({}, currentImgConfig, {'imgUrl': currentImgURL});
-					
-					leafImgArr.push(currentImgObj);					
+				for (var i=0; i<imgCount; i++){					
+					leafImgArr.push(personImgIconURL[i]);					
 				}
 				
 				const clipPathURL = 'url(#' + thisType +  '_topLeaf_clipPath)';
 				var leafSVGimgArr = [];
+				
 				leafImgArr.forEach((arrLeafImg)=> {
+					let imgTrnsfm = arrLeafImg.leafTransform ?? defaultImgTrnsfm;
+					
 					const leafImgSVGobj = new createNewElement('image', { 
 						'class': 'svg_leafImg',
-						'href': arrLeafImg.imgUrl,
-						'x': arrLeafImg.leafTransform.x,
-						'width': arrLeafImg.leafWidth,
+						'href': arrLeafImg.link,
+						'x': imgTrnsfm.x,
+						//'width': arrLeafImg.leafWidth,
 						'clip-path': clipPathURL,
 					});	
 					leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
