@@ -1235,35 +1235,34 @@ class woodInfoTab {
 						'clip-path': clipPathURL,
 					});	
 					leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
-					leafSVGimgArr.push(leafImgSVGobj);
+					arrImgObjs.imgDOMelem = leafImgSVGobj;
 				});
 				
 				shuffle(leafImgArr);
 				setTimeout(() => { 
-					//$(leafSVGimgArr[0]).fadeIn(1000);//first image	
-					leafSVGimgArr[0].classList.add("activeImg");
+					leafImgArr[0].imgDOMelem.classList.add("activeImg");
 				}, 1400);
 				
 				var imgIndex = 0;
 				var leafImgFades = function(){
 					//console.log(imgIndex);
-					if (imgIndex == (leafSVGimgArr.length-1)){ //last img
-						leafSVGimgArr[imgIndex].classList.remove("activeImg");
-						leafSVGimgArr[0].classList.add("activeImg");
+					if (imgIndex == (leafImgArr.length-1)){ //last img
+						leafImgArr[imgIndex].imgDOMelem.classList.remove("activeImg");
+						leafImgArr[0].imgDOMelem.classList.add("activeImg");
 						imgIndex = 0;
 						
 					} else {		
-						leafSVGimgArr[imgIndex].classList.remove("activeImg");
-						leafSVGimgArr[imgIndex+1].classList.add("activeImg");		
+						leafImgArr[imgIndex].imgDOMelem.classList.remove("activeImg");
+						leafImgArr[imgIndex+1].imgDOMelem.classList.add("activeImg");		
 						imgIndex++;
 					}
 				}
 				
-				infoOrTree.imgArray = leafSVGimgArr;
+				infoOrTree.imgObjsArray = leafImgArr;
 				
 				infoOrTree.imgSlideshowFn = leafImgFades;
-				if (infoOrTree == infoTab){
-					infoOrTree.addImgDebugControls(infoOrTree);
+				if (infoOrTree == treeInfoTab){
+					infoOrTree.addImgDebugControls();
 				}
 				
 				setTimeout( () => {
@@ -1280,33 +1279,37 @@ class woodInfoTab {
 	
 	addImgDebugControls(){
 		let debugButtonDiv = document.querySelector("#imgDebugControlsDIV");
-		//debugButtonDiv.style.display = 'block';
-		//let previousBtn = debugButtonDiv.querySelector("#imgDebugPrevious");
-		//let playBtn  = debugButtonDiv.querySelector("#imgDebugPlay");
+		
 		let pauseBtn = debugButtonDiv.querySelector("#imgDebugPause");
 		let nextBtn  = debugButtonDiv.querySelector("#imgDebugNext");
-		//playBtn.addEventListener("click", (evnt) => {console.log("Play"); treeInfoTab.leafImgSlides('start', infoTab.imgSlideshowFn)});
 		pauseBtn.addEventListener("click", (evnt) => {treeInfoTab.leafImgSlides('stop')});
 		nextBtn.addEventListener("click", (evnt) => {treeInfoTab.nextSlideshowImg()});
 	}
 	
 	nextSlideshowImg(){ //infoTab ONLY
-		let imgArrayCount = treeInfoTab.imgArray.length;
+		let imgArrayCount = treeInfoTab.imgObjsArray.length;
 		if (imgArrayCount > 1){
 			var imgIndex;
 			for (var i=0; i< imgArrayCount; i++){
-				if (treeInfoTab.imgArray[i].classList.contains("activeImg"))
+				console.log(treeInfoTab.imgObjsArray[i].imgDOMelem);
+				if (treeInfoTab.imgObjsArray[i].imgDOMelem.classList.contains("activeImg"))
 					imgIndex = i;				
 			}
 			
 			if (imgIndex == (imgArrayCount-1)){ //last img
-				treeInfoTab.imgArray[imgIndex].classList.remove("activeImg");
-				treeInfoTab.imgArray[0].classList.add("activeImg");				
+				treeInfoTab.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
+				treeInfoTab.imgObjsArray[0].imgDOMelem.classList.add("activeImg");		
+				currentSlideImgTags(treeInfoTab.imgObjsArray[0]);		
 			} else {		
-				treeInfoTab.imgArray[imgIndex].classList.remove("activeImg");
-				treeInfoTab.imgArray[imgIndex+1].classList.add("activeImg");	
+				treeInfoTab.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
+				treeInfoTab.imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
+				currentSlideImgTags(treeInfoTab.imgObjsArray[imgIndex+1]);	
 			}	
-		}		
+		}	
+	}
+	
+	currentSlideImgTags(currentImgObj){
+		console.log(currentImgObj);
 	}
 
 	fillInExtendedTable(personAbout){
