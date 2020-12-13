@@ -1076,14 +1076,14 @@ class woodInfoTab {
 					const thisObj = this;
 					$([this.containerDiv, this.infoAboutDiv]).fadeOut(1000, function(){
 						thisObj.clearInfo();
-						fillInfo();							
+						fillInfo(this);							
 					});	
 					
 					setTimeout(() => {this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '')}, 1200);	
 				} else {
 					//first fill		
 					this.clearInfo();
-					fillInfo();	
+					fillInfo(this);	
 					this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '');
 					
 					if (this.type == "info"){
@@ -1099,7 +1099,7 @@ class woodInfoTab {
 			}, 2300);
 		}
 		
-		function fillInfo(){
+		function fillInfo(infoOrTree){
 			//create and set name, dates
 			const nameText = document.createTextNode(personInfo.name);
 			nameDiv.appendChild(nameText);
@@ -1222,7 +1222,7 @@ class woodInfoTab {
 				}
 				
 				const clipPathURL = 'url(#' + thisType +  '_topLeaf_clipPath)';
-				var leafSVGimgArr = [];				
+				var leafSVGimgArr = [];		
 				
 				leafImgArr.forEach((arrImgObjs)=> {
 					let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
@@ -1240,32 +1240,72 @@ class woodInfoTab {
 				
 				shuffle(leafImgArr);
 				setTimeout(() => { 
-					$(leafSVGimgArr[0]).fadeIn(1000);//first image	
+					//$(leafSVGimgArr[0]).fadeIn(1000);//first image	
+					leafSVGimgArr[0].classList.add("activeImg");
 				}, 1400);
 				
 				var imgIndex = 0;
 				var leafImgFades = function(){
+					//console.log(imgIndex);
 					if (imgIndex == (leafSVGimgArr.length-1)){ //last img
-						$(leafSVGimgArr[imgIndex]).fadeOut(1000);
-						$(leafSVGimgArr[0]).fadeIn(1000);
+						leafSVGimgArr[imgIndex].classList.remove("activeImg");
+						leafSVGimgArr[0].classList.add("activeImg");
 						imgIndex = 0;
 						
 					} else {		
-						$(leafSVGimgArr[imgIndex]).fadeOut(1000);
-						$(leafSVGimgArr[imgIndex+1]).fadeIn(1000);			
+						leafSVGimgArr[imgIndex].classList.remove("activeImg");
+						leafSVGimgArr[imgIndex+1].classList.add("activeImg");		
 						imgIndex++;
 					}
 				}
 				
+				infoOrTree.imgArray = leafSVGimgArr;
+				
+				infoOrTree.imgSlideshowFn = leafImgFades;
+				if (infoOrTree == infoTab){
+					infoOrTree.addImgDebugControls(infoOrTree);
+				}
+				
 				setTimeout( () => {
-					infoTab.leafImgSlides('start', leafImgFades)
+					infoOrTree.leafImgSlides('start', leafImgFades);
 				}, 500);
 				
 				//fade in leaf
 				$(leafSVG).fadeIn(1000);
 			}
 			
-		}
+			
+		}		
+	}
+	
+	addImgDebugControls(){
+		let debugButtonDiv = document.querySelector("#imgDebugControlsDIV");
+		//let previousBtn = debugButtonDiv.querySelector("#imgDebugPrevious");
+		//let playBtn  = debugButtonDiv.querySelector("#imgDebugPlay");
+		let pauseBtn = debugButtonDiv.querySelector("#imgDebugPause");
+		let nextBtn  = debugButtonDiv.querySelector("#imgDebugNext");
+		//playBtn.addEventListener("click", (evnt) => {console.log("Play"); treeInfoTab.leafImgSlides('start', infoTab.imgSlideshowFn)});
+		pauseBtn.addEventListener("click", (evnt) => {treeInfoTab.leafImgSlides('stop')});
+		nextBtn.addEventListener("click", (evnt) => {treeInfoTab.nextSlideshowImg()});
+	}
+	
+	nextSlideshowImg(){ //infoTab ONLY
+		let imgArrayCount = treeInfoTab.imgArray.length;
+		if (imgArrayCount > 1){
+			var imgIndex;
+			for (var i=0; i< imgArrayCount; i++){
+				if (treeInfoTab.imgArray[i].classList.contains("activeImg"))
+					imgIndex = i;				
+			}
+			
+			if (imgIndex == (imgArrayCount-1)){ //last img
+				treeInfoTab.imgArray[imgIndex].classList.remove("activeImg");
+				treeInfoTab.imgArray[0].classList.add("activeImg");				
+			} else {		
+				treeInfoTab.imgArray[imgIndex].classList.remove("activeImg");
+				treeInfoTab.imgArray[imgIndex+1].classList.add("activeImg");	
+			}	
+		}		
 	}
 
 	fillInExtendedTable(personAbout){
