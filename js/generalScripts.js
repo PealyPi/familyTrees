@@ -6,7 +6,7 @@ var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
 var PEOPLETAGfromNAME = storePeopleTagNames('tagFromName', PEOPLEINFO, PEOPLERELATIONS);
 var PEOPLENAMEfromTAG = storePeopleTagNames('nameFromTag', PEOPLEINFO, PEOPLERELATIONS);
-var PEOPLEIMGlinks = pplImageLinks();
+var PEOPLEIMGs = pplImageLinks();
 //console.log(PEOPLERELATIONS.kesby);
 
 function generateRelationsData(data) {
@@ -49,6 +49,7 @@ function generateRelationsData(data) {
 			let thisSubFamily = finalData[fam][thisTag].familyName;
 			let siblingObj = {
 				'isMainLine':	false,
+				'mainFamily':	fam,
 				'familyName':	thisSubFamily,
 				'siblingMain': 	thisTag
 			};		
@@ -88,6 +89,7 @@ function generateRelationsData(data) {
 		
 		let halfSiblingObj = {
 			'isMainLine':	false,
+			'mainFamily':	fam,
 			'familyName':	subFamilyName,
 			'siblingMain': 	thisTag,
 			'parentMain':	halfSib_parentMain,
@@ -125,6 +127,7 @@ function generateRelationsData(data) {
 	function generateOtherSpouse(fam, subFamName, thisTag, mainSpouseTag){
 		let otherSpouseObj = {
 			'isMainLine':	false,
+			'mainFamily':	fam,
 			'familyName':	subFamName,
 			'spouseMain': 	mainSpouseTag,
 		};		
@@ -149,6 +152,7 @@ function generateRelationsData(data) {
 			'gen':	(childData.gen + 1),
 			'isMainLine': 	true,
 			'isMainParent': parentMain,
+			'mainFamily':	fam,
 			'familyName': 	subFamilyName,
 			'spouse': 		spouseTag,
 			'childMain':	childTag,
@@ -1205,26 +1209,29 @@ class woodInfoTab {
 				const personImgs = personInfo.imgs; //[{icon}, {url, config}]
 				var leafImgArr = [];
 				let personImgIconURL =  '../familyTrees/media/images/icons/' + personName + '.png';
-				let imgArray = PEOPLEIMGlinks[famName][personName];
+				let imgArray = PEOPLEIMGs[personName];
 				let imgCount = imgArray.length;
 				
-				let defaultImgTrnsfm = {'x': -30, 'y': 0};
+				let defaultImgConfig = {
+					'transform': {'x': 0, 'y': 0},
+					'width': 200
+				}
 				
 				for (var i=0; i<imgCount; i++){					
-					leafImgArr.push(personImgIconURL[i]);					
+					leafImgArr.push(imgArray[i]);				
 				}
 				
 				const clipPathURL = 'url(#' + thisType +  '_topLeaf_clipPath)';
-				var leafSVGimgArr = [];
+				var leafSVGimgArr = [];				
 				
-				leafImgArr.forEach((arrLeafImg)=> {
-					let imgTrnsfm = arrLeafImg.leafTransform ?? defaultImgTrnsfm;
-					
+				leafImgArr.forEach((arrImgObjs)=> {
+					let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
 					const leafImgSVGobj = new createNewElement('image', { 
 						'class': 'svg_leafImg',
-						'href': arrLeafImg.link,
-						'x': imgTrnsfm.x,
-						//'width': arrLeafImg.leafWidth,
+						'href': arrImgObjs.imgLink,
+						'x': imgConfigInclude.transform.x,
+						'y': imgConfigInclude.transform.y,
+						'width': imgConfigInclude.width,
 						'clip-path': clipPathURL,
 					});	
 					leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);

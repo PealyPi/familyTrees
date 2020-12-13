@@ -12,6 +12,7 @@ function nodeDataStorage(){//collapse lvl 2
 		'isRoot':		true,
 		'isMainLine':	true,	
 		'isMainParent': true,
+		'mainFamily':	'kesby',
 		'familyName': 	'kesby',
 		'spouseFamily': 'hadkiss',
 		'parentMain':	'johnNevilleKesby',
