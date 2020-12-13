@@ -1195,8 +1195,8 @@ class woodInfoTab {
 			});
 			
 			//add svgLeaf imgs		
-			if (personInfo.hasOwnProperty('imgs')){
-				if (personInfo.imgs.length > 1)
+			if (personInfo.hasOwnProperty('imgCount')){
+				if (personInfo.imgCount > 0)
 					addLeafImgs();
 			}
 			
@@ -1204,17 +1204,40 @@ class woodInfoTab {
 				const personImgs = personInfo.imgs; //[{icon}, {url, config}]
 				var leafImgArr = [];
 				
-				personImgs.forEach((img)=> {
-					if (img.hasOwnProperty("leafImg")){
-						leafImgArr.push(img);
+				let personImgIconURL =  '../familyTrees/media/images/icons/' + personName + '.png';
+				let personImgFolder = '../familyTrees/media/images/' + personName + '/';
+				let imgCount = personInfo.imgCount;
+				let imgConfigs = personInfo.imgConfigs ?? false;
+				
+				let defaultImgConfig = {
+					'leafTransform': {'x': -30, 'y': 0},
+					'leafWidth': 200	
+				};
+				
+				for (var i=1; i<=imgCount; i++)	{
+					var currentImgConfig;
+					if (imgConfigs){
+						if (imgConfigs.hasOwnProperty('img'+ i)){
+							currentImgConfig = imgConfigs['img'+ i];
+						} else {
+							currentImgConfig = defaultImgConfig;
+						}
+					} else {
+						currentImgConfig = defaultImgConfig;
 					}
-				});
+					
+					let currentImgURL = personImgFolder + personName + i + '.jpg';
+					let currentImgObj = Object.assign({}, currentImgConfig, {'imgUrl': currentImgURL});
+					
+					leafImgArr.push(currentImgObj);					
+				}
+				
 				const clipPathURL = 'url(#' + thisType +  '_topLeaf_clipPath)';
 				var leafSVGimgArr = [];
 				leafImgArr.forEach((arrLeafImg)=> {
 					const leafImgSVGobj = new createNewElement('image', { 
 						'class': 'svg_leafImg',
-						'href': arrLeafImg.leafImg,
+						'href': arrLeafImg.imgUrl,
 						'x': arrLeafImg.leafTransform.x,
 						'width': arrLeafImg.leafWidth,
 						'clip-path': clipPathURL,
@@ -1249,6 +1272,7 @@ class woodInfoTab {
 				//fade in leaf
 				$(leafSVG).fadeIn(1000);
 			}
+			
 		}
 	}
 
@@ -1434,6 +1458,7 @@ function peopleListSearchExit(){
 	
 }
 
+/* -------------------- */
 
 /* -- tree Div -- */
 class node {
@@ -2015,10 +2040,13 @@ class node {
 	
 	addPersonIconImg(){
 		const iconImg = this.personInfo.imgs[0];
-		const iconUrl = iconImg.icon ?? false;
+		
+		let personIconBool = this.personInfo.imgIcon ?? false;
+		console.log(this.personInfo);
+		let personImgIconURL =  '../familyTrees/media/images/icons/' + this.personTag + '.png';
 		
 		const iconSize = 90;
-		if (iconUrl){
+		if (personIconBool){
 			if (!document.getElementById('def_nodeIconClipPath')){
 				const def = this.svgElem ?? new createNewElement('defs', {
 					'id':'def_nodeIconClipPath',
@@ -2037,7 +2065,7 @@ class node {
 				'class': 'personIcon',
 				'x': -(iconSize/2),	'y': -(iconSize/2),
 				'width': iconSize, 'height': iconSize,	
-				'href': iconUrl,
+				'href': personImgIconURL,
 				'clip-path': 'url(#imgCircleClipPath)'
 			});
 			

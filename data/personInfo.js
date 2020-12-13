@@ -15,27 +15,21 @@ function personInfoStorage(){
 				'marriedAt':	'St Peter and Paul Church, Swanscombe',
 				'marriedTo':	'ronaldHadkiss',				
 			},	
-				
-			'imgs': [
-				{ 'icon': '../familyTrees/media/images/icons/roseKesby.png', 
-					}, 
-					
-				//imgs[1]	
-				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss1.jpg',
-				'leafTransform': {'x': -30, 'y': 0},
-				'leafWidth': 200	},				
-				//imgs[2]
-				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss2.jpg', 
-				'leafTransform': {'x': -20, 'y': 0}, 
-				'leafWidth': 200},				
-				//imgs[3]
-				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss3.jpg', 
-				'leafTransform': {'x': 15, 'y': 8}, 
-				'leafWidth': 110},
-				//imgs[3]
-				{'leafImg': '../familyTrees/media/images/roseHadkiss/roseHadkiss4.jpg', 
-				'leafTransform': {'x': 15, 'y': 8}, 
-				'leafWidth': 110},
+			'imgIcon': true,
+			'imgCount': 4,				
+			'imgConfigs': [
+				{'img1': {	'leafTransform': {'x': -30, 'y': 0},
+							'leafWidth': 200	}
+				},		
+				{'img2': {	'leafTransform': {'x': -20, 'y': 0}, 
+							'leafWidth': 200	}
+				},		
+				{'img3': {	'leafTransform': {'x': 15, 'y': 8}, 
+							'leafWidth': 110	}
+				},		
+				{'img4': {	'leafTransform': {'x': 15, 'y': 8}, 
+							'leafWidth': 110	}
+				},			
 				
 			],
 		},
