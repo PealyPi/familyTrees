@@ -1079,8 +1079,18 @@ class woodInfoTab {
 			if (this.personRelationsData.hasOwnProperty(infoVar)){
 			
 				const relativesList = this.personRelationsData[infoVar];
-				let maxStrLength = (relativesList.length > 8) 
-					? 80 : 50;			
+				
+				var maxStrLength;
+				if (window.innerWidth > 900){
+					maxStrLength = (relativesList.length > 8) 
+					? 80 : 50;		
+				} /*else if (window.innerWidth > 650){
+					maxStrLength = (relativesList.length > 8) 
+					? 50 : 30;		
+				} */else {
+					maxStrLength = (relativesList.length > 8) 
+					? 55 : 50;		
+				}	
 				
 				//store spans in array to access if linecount > 1
 				let currentDiv = infoVariables[infoVar] //eg info_siblings
