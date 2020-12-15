@@ -803,6 +803,10 @@ button,  button:active, button:hover, button:focus{
 .info_name{
 	font-size: 60px;
 	text-align: left;
+	left: -3%;
+}
+.info_name.nameSmallerSizing{
+	font-size: 50px;]
 }
 .info_dates{
 	font-size: 50px;
@@ -814,9 +818,9 @@ button,  button:active, button:hover, button:focus{
 	text-align: right;
 	
 	position: absolute;
-	top: 35%;
-	right: 19%;
-	color: rgb(57,35,35, 0.9);
+	top: 26%;
+	left: 7%;
+	/*color: rgb(57,35,35, 0.9);*/
 	
 }
 .info_neeName{
@@ -954,7 +958,7 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	width: 400px; height: 330px;
 	
 	position: absolute;
-	right: -78px;
+	right: -92px;
 	top: -64px;
 	z-index: var(--woodLeafZ); 
 	display: none;

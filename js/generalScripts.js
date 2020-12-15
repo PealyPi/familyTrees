@@ -788,23 +788,21 @@ class woodInfoTab {
 			document.getElementById('infoDivTree') : 
 			document.getElementById('infoDiv');
 		this.infoDivSec = this.infoDiv.querySelector(".infoDivSec");
-		this.infoDivMain = this.infoDivSec.querySelector(".infoMain");
-		
-		this.leafImgSlideshow = null;
+		this.infoDivMain = this.infoDivSec.querySelector(".infoMain");		
 		
 		this.createInfoDivs(type);
 		
 		this.infoData = this.infoDivSec.querySelectorAll(".infoData");
 		
 		this._fillingInfo = false;
+		
+		this.leafObj = new leafImgs();
 	}
 	
 	createInfoDivs(type){	
 		const navDiv = navObj.navDiv;
 		const activeTabBtn = navObj.activeBtn;
-		const treeTabBtn = navObj.treeBtn;
-		
-		this.createLeafSVG();
+		const treeTabBtn = navObj.treeBtn;		
 		
 		this.divExtended = document.createElement("div");
 		const divExtended = this.divExtended;
@@ -823,7 +821,12 @@ class woodInfoTab {
 		this.nameDiv = nameDiv;
 		nameDiv.classList.add('infoData');
 		nameDiv.classList.add('info_name');
-		containerDiv.appendChild(nameDiv);
+		containerDiv.appendChild(nameDiv);			
+		
+			const nameSpan = document.createElement("span");	
+			const nameSpanText = document.createTextNode(' ');
+			nameDiv.appendChild(nameSpan);
+			nameSpan.appendChild(nameSpanText);
 		
 		const datesDiv = document.createElement("div");
 		this.datesDiv = datesDiv;
@@ -975,6 +978,271 @@ class woodInfoTab {
 			about_diedOnVal.setAttribute('class', 'infoData diedOnVal');
 	}
 	
+	fillPersonInfo(famName, personName) {	
+		this.famInfo = PEOPLEINFO[famName] ?? {};
+		this.personInfo = this.famInfo[personName] ?? {};
+		this.personRelationsData = PEOPLERELATIONS[famName][personName] ?? {};		
+		
+		const infoDivMain = this.infoDivMain;
+		this.nameDiv = infoDivMain.querySelector(".info_name");
+		this.datesDiv = infoDivMain.querySelector(".info_dates");
+		this.genDiv = infoDivMain.querySelector(".info_gen");
+		
+		const leafSVG = this.leafObj.leafSVG;	
+		const thisType = this.type;
+		const thisObj = this;
+		
+		if (!this._fillingInfo){
+			this._fillingInfo = true;
+			
+			if (personName == '')
+				this.clearInfo();	
+				
+			else {		
+				if (this.containerDiv.style.display == "block"){
+					if (leafSVG.style.display != "none"){
+						$(leafSVG).fadeOut(1000);
+					}
+					$([this.containerDiv, this.infoAboutDiv]).fadeOut(1000, function(){
+						thisObj.clearInfo();
+						thisObj.fillInfo(famName, personName);							
+					});	
+					
+					setTimeout(() => {this.extendDivAndShow(this.personInfo.hasOwnProperty('about'), this.personInfo.about ?? '')}, 1200);	
+				} else {
+					//first fill		
+					this.clearInfo();
+					thisObj.fillInfo(famName, personName);	
+					this.extendDivAndShow(this.personInfo.hasOwnProperty('about'), this.personInfo.about ?? '');
+					
+					if (this.type == "info"){
+						$(this.infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
+					} else {
+						$(this.infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
+					}
+				}		
+			}
+			
+			setTimeout(()=>{
+				this._fillingInfo = false
+			}, 2300);
+		}
+	}
+	
+	fillInfo(famName, personName){	
+		//create and set name, dates
+			//name length - reduce size
+		let displayName = this.personInfo.name;
+		
+		const nameSpan = this.nameDiv.childNodes[0];
+		const nameText = document.createTextNode(displayName);
+		nameSpan.appendChild(nameText);
+		
+		if (displayName.length > 15){	
+			nameSpan.classList.add('nameSmallerSizing');
+		} 
+		
+		
+		
+		const datesText = document.createTextNode(this.personInfo.dates);
+		this.datesDiv.appendChild(datesText);
+		
+		const genText = document.createTextNode("Gen " + this.personRelationsData.gen);
+		if (this.personRelationsData.gen !== undefined)
+			this.genDiv.appendChild(genText);
+		
+		
+		//info dependent
+		const bornNameDiv = this.infoDivMain.querySelector(".info_neeName");
+	
+		if (this.personInfo.hasOwnProperty('bornName')){
+			const nameText = document.createTextNode(this.personInfo.bornName);
+			bornNameDiv.appendChild(nameText);
+			
+			bornNameDiv.style.display = "block";
+			
+		} else {
+			bornNameDiv.style.display = "none";			
+		}
+		
+		
+		//lists
+		const infoVariables = { 
+			'siblings': this.infoDivMain.querySelector(".info_siblings"), 
+			'children': this.infoDivMain.querySelector(".info_children")
+		};
+		
+		const infoVariablesKeys = Object.keys(infoVariables);
+		infoVariablesKeys.forEach((infoVar)=>{
+			if (this.personRelationsData.hasOwnProperty(infoVar)){
+			
+				const relativesList = this.personRelationsData[infoVar];
+				let maxStrLength = (relativesList.length > 8) 
+					? 80 : 50;			
+				
+				//store spans in array to access if linecount > 1
+				let currentDiv = infoVariables[infoVar] //eg info_siblings
+				let sectTitle = currentDiv.querySelector("span.aboutBold");
+				var firstLine_spanStore = [];
+				var all_spanStore = [];
+				
+				var relativeNamesListStr = ''; var relativeLinesCount = 0;
+				relativesList.forEach((relative)=>{		
+					const relativeName = this.famInfo[relative].name;
+					
+					const varSpan = document.createElement('span');
+					varSpan.classList.add('personLink');
+					varSpan.setAttribute("id", "relative_" + famName + "_" + relative);
+					const varText = document.createTextNode(relativeName + ", ");
+					
+					if (relativeLinesCount == 0)
+						firstLine_spanStore.push(varSpan);
+					
+					all_spanStore.push(varSpan);
+					
+					//check current line # characters - new line if at max
+					relativeNamesListStr += (relativeName + ", ");
+					const stringLength = relativeNamesListStr.length;
+					if (relativeNamesListStr.length > maxStrLength){
+						
+						relativeLinesCount += 1;
+						relativeNamesListStr = '';
+						const lineBreak = document.createElement('br');
+						infoVariables[infoVar].appendChild(lineBreak);			
+					} 
+					
+					infoVariables[infoVar].appendChild(varSpan);
+					varSpan.appendChild(varText);
+					
+					//add click function
+					varSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
+				});
+				
+				//reduce lineheight if multiple lines
+				if (relativeLinesCount > 0){
+					sectTitle.classList.add('infoLineA');
+					for (let firstLineSpan of firstLine_spanStore){
+						firstLineSpan.classList.add('infoLineA');
+					}
+					if (relativeLinesCount > 2){
+						for (let spanName of all_spanStore){
+							spanName.classList.add('manyRelatives');
+						}
+					}
+				}
+				
+				//const relativeNamesStr = relativeNamesList.join(", ");
+				infoVariables[infoVar].style.display = "block";
+				
+			} else {
+				infoVariables[infoVar].style.display = "none";					
+			}
+		});
+		
+		if (this.personInfo.hasOwnProperty('imgCount')){
+			if (this.personInfo.imgCount > 0)
+				this.leafObj.setLeafImages(famName, personName);
+		}
+			
+			
+	}
+	
+	fillInExtendedTable(personAbout){
+		for (const aboutKey in personAbout){
+			const dataClass = aboutKey + "Val";
+			const relatedDiv = this.divExtended.querySelector('.' + dataClass);		
+
+			if (aboutKey == "marriedTo"){
+				let spouseTag = personAbout[aboutKey];	
+				let spouseFam = findPersonsFamily(spouseTag);				
+				let spouseInfo = PEOPLEINFO[spouseFam][spouseTag] ?? {};		
+				let spouseName = spouseInfo.name
+				
+				const marriedToSpan = document.createElement('span');
+				marriedToSpan.classList.add('personLink');
+				marriedToSpan.setAttribute("id", "relative_" + spouseFam + "_" + spouseTag);
+				const marriedToText = document.createTextNode(spouseName);
+				marriedToSpan.appendChild(marriedToText);
+				relatedDiv.appendChild(marriedToSpan);
+
+				//add click function
+				marriedToSpan.classList.add('personLink');
+				marriedToSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
+
+			} else {
+				relatedDiv.innerHTML = personAbout[aboutKey];				
+			}			
+		}
+	}
+	
+	extendDivAndShow (bool, about = false){
+		switch (bool){
+			case true:
+				this.fillInExtendedTable(about);
+				$(this.divExtended).fadeIn(1000);		
+				$([this.containerDiv, this.infoAboutDiv]).fadeIn(700);
+			break;
+			
+			case false:
+				$(this.divExtended).fadeOut(500);	
+				setTimeout(()=>{
+					$([this.containerDiv, this.infoAboutDiv]).fadeIn(700);
+				}, 100);				
+			break;
+		}
+		
+	}
+	
+	clearInfo () {		
+		for (const slot of this.infoData){
+			const childNode = slot.childNodes[0] ?? {'tagName': ''};
+			//has more than text
+			if (childNode.tagName == 'TABLE'){
+				slot.innerHTML = '';
+				//clear table
+				const dataCells = childNode.querySelectorAll(".infoData");
+				dataCells.forEach((dataCell) => {
+					dataCell.innerHTML = '';
+				});
+				slot.appendChild(childNode);	
+				
+			} else if (childNode.tagName == 'SPAN'){
+				if (slot.classList.contains("info_name")){		
+					if (childNode.classList.contains('nameSmallerSizing'))
+						childNode.classList.remove('nameSmallerSizing');
+					childNode.innerHTML = ' ';
+				} else {			
+					slot.innerHTML = '';		
+					if (!slot.classList.contains("marriedToVal")){	
+						slot.appendChild(childNode);									
+					}
+				}
+				
+			} else {
+				//console.log(slot);	
+				slot.innerHTML = '';	
+			}
+		}
+		
+		this.leafObj.clearLeafImages();
+	}
+	
+	
+}
+
+class leafImgs {
+	constructor(type){
+		this.type = type;
+		this.infoDiv = (type == 'tree') ? 
+			document.getElementById('infoDivTree') : 
+			document.getElementById('infoDiv');
+		
+		this.imageObjsArray = [];
+		this.leafImgSlideshow = null;
+		
+		this.createLeafSVG();
+	}
+	
 	createLeafSVG() {
 		const leafSVG = (this.type == 'tree') ? 
 			document.getElementById("leafSVGTree") : 
@@ -1034,7 +1302,92 @@ class woodInfoTab {
 		topLeafGRP.appendChild(topLeaf_outer);
 		
 	}
-
+	
+	setLeafImages(famName, personName){
+		//add svgLeaf imgs		
+		const famInfo = PEOPLEINFO[famName] ?? {};
+		const personInfo = famInfo[personName] ?? {};		
+		
+		//let personImgIconURL =  '../familyTrees/media/images/icons/' + personName + '.png';
+		let imgObjsArray = PEOPLEIMGs[personName];
+		let imgCount = imgObjsArray.length;
+		this.leafImgArr = [];
+		let leafSVG = this.leafSVG;
+		
+		let defaultImgConfig = {
+			'transform': {'x': 0, 'y': 0},
+			'width': 200
+		}
+		
+		for (var i=0; i<imgCount; i++){					
+			this.leafImgArr.push(imgObjsArray[i]);				
+		}
+		
+		const clipPathURL = 'url(#' + this.type +  '_topLeaf_clipPath)';
+		var leafSVGimgArr = [];		
+		
+		this.leafImgArr.forEach((arrImgObjs)=> {
+			let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
+			const leafImgSVGobj = new createNewElement('image', { 
+				'class': 'svg_leafImg',
+				'href': arrImgObjs.imgLink,
+				'x': imgConfigInclude.transform.x,
+				'y': imgConfigInclude.transform.y,
+				'width': imgConfigInclude.width,
+				'clip-path': clipPathURL,
+			});	
+			leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
+			arrImgObjs.imgDOMelem = leafImgSVGobj;
+		});
+		
+		shuffle(this.leafImgArr);
+		setTimeout(() => { 
+			this.leafImgArr[0].imgDOMelem.classList.add("activeImg");
+		}, 1400);
+		
+		this.imgIndex = 0;		
+		
+		this.addImgDebugFnsToBtn();
+		
+		//fade in leaf
+		$(leafSVG).fadeIn(1000);
+		
+		/*
+		setTimeout( () => {
+			console.log(infoOrTree);
+			this.leafImgSlides('start', leafImgSlideFn);
+		}, 500);
+		*/		
+	
+	}
+	
+	leafImgSlideFn(){
+		if (this.imgIndex == (this.leafImgArr.length-1)){ //last img
+			this.leafImgArr[this.imgIndex].imgDOMelem.classList.remove("activeImg");
+			this.leafImgArr[0].imgDOMelem.classList.add("activeImg");
+			this.imgIndex = 0;
+			
+		} else {		
+			this.leafImgArr[this.imgIndex].imgDOMelem.classList.remove("activeImg");
+			this.leafImgArr[this.imgIndex+1].imgDOMelem.classList.add("activeImg");		
+			this.imgIndex++;
+		}
+	}
+	
+	clearLeafImages(){
+		this.leafImgSlides('stop');
+		
+		const leafGrp = this.leafSVG.querySelector("#topLeaf_GRP")
+		const allOldImgs = this.leafSVG.getElementsByTagName("image");
+		
+		if (allOldImgs.length > 0){
+			for (var i = 0; i < allOldImgs.length; i++){
+				leafGrp.removeChild(allOldImgs[i]);
+			}
+		}
+		this.leafImgArr = [];
+	}
+	
 	leafImgSlides(startStop, fn = false){
 		switch (startStop){
 			case 'start':					
@@ -1049,261 +1402,33 @@ class woodInfoTab {
 		}
 	}
 	
-	fillPersonInfo(famName, personName) {
-		const famInfo = PEOPLEINFO[famName] ?? {};
-		const personInfo = famInfo[personName] ?? {};
-		const personRelationsData = PEOPLERELATIONS[famName][personName] ?? {};		
-		
-		const infoDivMain = this.infoDivMain;
-		const nameDiv = infoDivMain.querySelector(".info_name");
-		const datesDiv = infoDivMain.querySelector(".info_dates");
-		const genDiv = infoDivMain.querySelector(".info_gen");
-		
-		const leafSVG = this.leafSVG;	
-		const thisType = this.type;
-		const thisObj = this;
-		
-		if (!this._fillingInfo){
-			this._fillingInfo = true;
-			
-			if (personName == '')
-				this.clearInfo();	
-				
-			else {		
-				if (this.containerDiv.style.display == "block"){
-					if (leafSVG.style.display != "none"){
-						$(leafSVG).fadeOut(1000);
-					}
-					$([this.containerDiv, this.infoAboutDiv]).fadeOut(1000, function(){
-						thisObj.clearInfo();
-						fillInfo(thisObj);							
-					});	
-					
-					setTimeout(() => {this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '')}, 1200);	
-				} else {
-					//first fill		
-					this.clearInfo();
-					fillInfo(thisObj);	
-					this.extendDivAndShow(personInfo.hasOwnProperty('about'), personInfo.about ?? '');
-					
-					if (this.type == "info"){
-						$(this.infoDiv.querySelector("#infoTreeLinkBTN")).fadeIn(500);
-					} else {
-						$(this.infoDiv.querySelector("#treeInfoLinkBTN")).fadeIn(500);
-					}
-				}		
-			}
-			
-			setTimeout(()=>{
-				this._fillingInfo = false
-			}, 2300);
-		}
-		
-		function fillInfo(infoOrTree){
-			//create and set name, dates
-			const nameText = document.createTextNode(personInfo.name);
-			nameDiv.appendChild(nameText);
-			
-			const datesText = document.createTextNode(personInfo.dates);
-			datesDiv.appendChild(datesText);
-			
-			const genText = document.createTextNode("Gen " + personRelationsData.gen);
-			if (personRelationsData.gen !== undefined)
-				genDiv.appendChild(genText);
-			
-			
-			//info dependent
-			const bornNameDiv = infoDivMain.querySelector(".info_neeName");
-		
-			if (personInfo.hasOwnProperty('bornName')){
-				const nameText = document.createTextNode(personInfo.bornName);
-				bornNameDiv.appendChild(nameText);
-				
-				bornNameDiv.style.display = "block";
-				
-			} else {
-				bornNameDiv.style.display = "none";			
-			}
-			
-			
-			//lists
-			const infoVariables = { 
-				'siblings': infoDivMain.querySelector(".info_siblings"), 
-				'children': infoDivMain.querySelector(".info_children")
-			};
-			
-			const infoVariablesKeys = Object.keys(infoVariables);
-			infoVariablesKeys.forEach((infoVar)=>{
-				if (personRelationsData.hasOwnProperty(infoVar)){
-				
-					const relativesList = personRelationsData[infoVar];
-					let maxStrLength = (relativesList.length > 8) 
-						? 80 : 50;			
-					
-					//store spans in array to access if linecount > 1
-					let currentDiv = infoVariables[infoVar] //eg info_siblings
-					let sectTitle = currentDiv.querySelector("span.aboutBold");
-					var firstLine_spanStore = [];
-					var all_spanStore = [];
-					
-					var relativeNamesListStr = ''; var relativeLinesCount = 0;
-					relativesList.forEach((relative)=>{		
-						const relativeName = famInfo[relative].name;
-						
-						const varSpan = document.createElement('span');
-						varSpan.classList.add('personLink');
-						varSpan.setAttribute("id", "relative_" + famName + "_" + relative);
-						const varText = document.createTextNode(relativeName + ", ");
-						
-						if (relativeLinesCount == 0)
-							firstLine_spanStore.push(varSpan);
-						
-						all_spanStore.push(varSpan);
-						
-						//check current line # characters - new line if at max
-						relativeNamesListStr += (relativeName + ", ");
-						const stringLength = relativeNamesListStr.length;
-						if (relativeNamesListStr.length > maxStrLength){
-							
-							relativeLinesCount += 1;
-							relativeNamesListStr = '';
-							const lineBreak = document.createElement('br');
-							infoVariables[infoVar].appendChild(lineBreak);			
-						} 
-						
-						infoVariables[infoVar].appendChild(varSpan);
-						varSpan.appendChild(varText);
-						
-						//add click function
-						varSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
-					});
-					
-					//reduce lineheight if multiple lines
-					if (relativeLinesCount > 0){
-						sectTitle.classList.add('infoLineA');
-						for (let firstLineSpan of firstLine_spanStore){
-							firstLineSpan.classList.add('infoLineA');
-						}
-						if (relativeLinesCount > 2){
-							for (let spanName of all_spanStore){
-								spanName.classList.add('manyRelatives');
-							}
-						}
-					}
-					
-					//const relativeNamesStr = relativeNamesList.join(", ");
-					infoVariables[infoVar].style.display = "block";
-					
-				} else {
-					infoVariables[infoVar].style.display = "none";					
-				}
-			});
-			
-			//add svgLeaf imgs		
-			if (personInfo.hasOwnProperty('imgCount')){
-				if (personInfo.imgCount > 0)
-					addLeafImgs();
-			}
-			
-			function addLeafImgs(){
-				const personImgs = personInfo.imgs; //[{icon}, {url, config}]
-				var leafImgArr = [];
-				let personImgIconURL =  '../familyTrees/media/images/icons/' + personName + '.png';
-				let imgArray = PEOPLEIMGs[personName];
-				let imgCount = imgArray.length;
-				
-				let defaultImgConfig = {
-					'transform': {'x': 0, 'y': 0},
-					'width': 200
-				}
-				
-				for (var i=0; i<imgCount; i++){					
-					leafImgArr.push(imgArray[i]);				
-				}
-				
-				const clipPathURL = 'url(#' + thisType +  '_topLeaf_clipPath)';
-				var leafSVGimgArr = [];		
-				
-				leafImgArr.forEach((arrImgObjs)=> {
-					let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
-					const leafImgSVGobj = new createNewElement('image', { 
-						'class': 'svg_leafImg',
-						'href': arrImgObjs.imgLink,
-						'x': imgConfigInclude.transform.x,
-						'y': imgConfigInclude.transform.y,
-						'width': imgConfigInclude.width,
-						'clip-path': clipPathURL,
-					});	
-					leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
-					arrImgObjs.imgDOMelem = leafImgSVGobj;
-				});
-				
-				shuffle(leafImgArr);
-				setTimeout(() => { 
-					leafImgArr[0].imgDOMelem.classList.add("activeImg");
-				}, 1400);
-				
-				var imgIndex = 0;
-				var leafImgFades = function(){
-					//console.log(imgIndex);
-					if (imgIndex == (leafImgArr.length-1)){ //last img
-						leafImgArr[imgIndex].imgDOMelem.classList.remove("activeImg");
-						leafImgArr[0].imgDOMelem.classList.add("activeImg");
-						imgIndex = 0;
-						
-					} else {		
-						leafImgArr[imgIndex].imgDOMelem.classList.remove("activeImg");
-						leafImgArr[imgIndex+1].imgDOMelem.classList.add("activeImg");		
-						imgIndex++;
-					}
-				}
-				
-				infoOrTree.imgObjsArray = leafImgArr;
-				
-				infoOrTree.imgSlideshowFn = leafImgFades;
-				if (infoOrTree == treeInfoTab){
-					infoOrTree.addImgDebugControls();
-				}
-				
-				setTimeout( () => {
-					infoOrTree.leafImgSlides('start', leafImgFades);
-				}, 500);
-				
-				//fade in leaf
-				$(leafSVG).fadeIn(1000);
-			}
-			
-			
-		}		
-	}
-	
-	addImgDebugControls(){
+	addImgDebugFnsToBtn(){ 
 		let debugButtonDiv = document.querySelector("#imgDebugControlsDIV");
 		
 		let pauseBtn = debugButtonDiv.querySelector("#imgDebugPause");
 		let nextBtn  = debugButtonDiv.querySelector("#imgDebugNext");
-		pauseBtn.addEventListener("click", (evnt) => {treeInfoTab.leafImgSlides('stop')});
-		nextBtn.addEventListener("click", (evnt) => {treeInfoTab.nextSlideshowImg()});
+		pauseBtn.addEventListener("click", (evnt) => {this.leafImgSlides('stop')});
+		nextBtn.addEventListener( "click", (evnt) => {this.nextSlideshowImg()});
 	}
 	
-	nextSlideshowImg(){ //infoTab ONLY
-		let imgArrayCount = treeInfoTab.imgObjsArray.length;
+	nextSlideshowImg(){ 
+		let imgArrayCount = this.imgObjsArray.length;
+		//console.log(treeInfoTab.leafImgSlideshow);
 		if (imgArrayCount > 1){
 			var imgIndex;
 			for (var i=0; i< imgArrayCount; i++){
-				console.log(treeInfoTab.imgObjsArray[i].imgDOMelem);
 				if (treeInfoTab.imgObjsArray[i].imgDOMelem.classList.contains("activeImg"))
 					imgIndex = i;				
 			}
 			
 			if (imgIndex == (imgArrayCount-1)){ //last img
-				treeInfoTab.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-				treeInfoTab.imgObjsArray[0].imgDOMelem.classList.add("activeImg");		
-				currentSlideImgTags(treeInfoTab.imgObjsArray[0]);		
+				this.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
+				this.imgObjsArray[0].imgDOMelem.classList.add("activeImg");		
+				this.currentSlideImgTags(this.imgObjsArray[0]);		
 			} else {		
-				treeInfoTab.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-				treeInfoTab.imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
-				currentSlideImgTags(treeInfoTab.imgObjsArray[imgIndex+1]);	
+				this.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
+				this.imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
+				this.currentSlideImgTags(this.imgObjsArray[imgIndex+1]);	
 			}	
 		}	
 	}
@@ -1312,90 +1437,7 @@ class woodInfoTab {
 		console.log(currentImgObj);
 	}
 
-	fillInExtendedTable(personAbout){
-		for (const aboutKey in personAbout){
-			const dataClass = aboutKey + "Val";
-			const relatedDiv = this.divExtended.querySelector('.' + dataClass);		
-
-			if (aboutKey == "marriedTo"){
-				let spouseTag = personAbout[aboutKey];	
-				let spouseFam = findPersonsFamily(spouseTag);				
-				let spouseInfo = PEOPLEINFO[spouseFam][spouseTag] ?? {};		
-				let spouseName = spouseInfo.name
-				
-				const marriedToSpan = document.createElement('span');
-				marriedToSpan.classList.add('personLink');
-				marriedToSpan.setAttribute("id", "relative_" + spouseFam + "_" + spouseTag);
-				const marriedToText = document.createTextNode(spouseName);
-				marriedToSpan.appendChild(marriedToText);
-				relatedDiv.appendChild(marriedToSpan);
-
-				//add click function
-				marriedToSpan.classList.add('personLink');
-				marriedToSpan.addEventListener("click", (evnt) => pplTab.openPerson(evnt, true));
-
-			} else {
-				relatedDiv.innerHTML = personAbout[aboutKey];				
-			}			
-		}
-	}
-	
-	extendDivAndShow (bool, about = false){
-		switch (bool){
-			case true:
-				this.fillInExtendedTable(about);
-				$(this.divExtended).fadeIn(1000);		
-				$([this.containerDiv, this.infoAboutDiv]).fadeIn(700);
-			break;
-			
-			case false:
-				$(this.divExtended).fadeOut(500);	
-				setTimeout(()=>{
-					$([this.containerDiv, this.infoAboutDiv]).fadeIn(700);
-				}, 100);				
-			break;
-		}
-		
-	}
-	
-	clearInfo () {		
-		for (const slot of this.infoData){
-			const childNode = slot.childNodes[0] ?? {'tagName': ''};
-			//has more than text
-			if (childNode.tagName == 'TABLE'){
-				slot.innerHTML = '';
-				//clear table
-				const dataCells = childNode.querySelectorAll(".infoData");
-				dataCells.forEach((dataCell) => {
-					dataCell.innerHTML = '';
-				});
-				slot.appendChild(childNode);			
-			} else if (childNode.tagName == 'SPAN'){
-				slot.innerHTML = '';					
-				if (!slot.classList.contains("marriedToVal")){
-					slot.appendChild(childNode);					
-				}
-			} else {
-				slot.innerHTML = '';				
-			}
-		}		
-		
-		//clear svgleaf imgs	
-		this.leafImgSlides('stop');				
-		
-		const leafGrp = this.leafSVG.querySelector("#topLeaf_GRP")
-		const allOldImgs = this.leafSVG.getElementsByTagName("image");
-		
-		if (allOldImgs.length > 0){
-			for (var i = 0; i < allOldImgs.length; i++){
-				leafGrp.removeChild(allOldImgs[i]);
-			}
-		}
-	}
-	
-	
 }
-
 
 /* -------------------- */
 
