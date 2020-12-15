@@ -489,12 +489,14 @@ class navBar {
 					
 					//start img slideshow
 					treeInfoTab.startStopImgSlideshow('start');
+					//console.log(treeInfoTab.leafObj.leafImgSlideshow);
 				break;
 				case 'infoTab':	
 					this.hideAllSects(this.infoDiv);
 					this.showSect(this.infoDiv);
 					
-					infoTab.startStopImgSlideshow('start');					
+					infoTab.startStopImgSlideshow('start');		
+					//console.log(infoTab.leafObj.leafImgSlideshow);			
 				break;
 				case 'imgsTab':
 					this.hideAllSects(this.imgsDiv);
@@ -1381,7 +1383,8 @@ class leafImgs {
 		
 		this.imgIndex = 0;		
 		
-		this.addImgDebugFnsToBtn();
+		if (this.type == 'tree')
+			this.addImgDebugFnsToBtn();
 		
 		//fade in leaf
 		$(leafSVG).fadeIn(1000);
@@ -1397,7 +1400,6 @@ class leafImgs {
 	
 	leafImgSlideFn(type){
 		console.log("slide running...");
-		
 		let imgIndex = (type == 'tree') ? treeInfoTab.leafObj.imgIndex : infoTab.leafObj.imgIndex ;
 		let leafImgArr = (type == 'tree') ? treeInfoTab.leafObj.leafImgArr : infoTab.leafObj.leafImgArr ;
 		
@@ -1454,34 +1456,34 @@ class leafImgs {
 		
 		let pauseBtn = debugButtonDiv.querySelector("#imgDebugPause");
 		let nextBtn  = debugButtonDiv.querySelector("#imgDebugNext");
-		pauseBtn.addEventListener("click", (evnt) => {this.leafImgSlides('stop')});
-		nextBtn.addEventListener( "click", (evnt) => {this.nextSlideshowImg()});
+		pauseBtn.addEventListener("click", (evnt) => {treeInfoTab.leafObj.leafImgSlides('stop')});
+		nextBtn.addEventListener( "click", (evnt) => {treeInfoTab.leafObj.nextSlideshowImg()});
 	}
 	
 	nextSlideshowImg(){ 
-		let imgArrayCount = this.imgObjsArray.length;
-		console.log(treeInfoTab.leafImgSlideshow);
+		let imgObjsArray = treeInfoTab.leafObj.imgObjsArray;
+		let imgArrayCount = imgObjsArray.length;
 		if (imgArrayCount > 1){
 			var imgIndex;
 			for (var i=0; i < imgArrayCount; i++){
-				if (treeInfoTab.imgObjsArray[i].imgDOMelem.classList.contains("activeImg"))
-					imgIndex = i;				
+				if (imgObjsArray[i].imgDOMelem.classList.contains("activeImg"))
+					imgIndex = i;
 			}
 			
 			if (imgIndex == (imgArrayCount-1)){ //last img
-				this.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-				this.imgObjsArray[0].imgDOMelem.classList.add("activeImg");		
-				this.currentSlideImgTags(this.imgObjsArray[0]);		
+				imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
+				imgObjsArray[0].imgDOMelem.classList.add("activeImg");		
+				treeInfoTab.leafObj.currentSlideImgTags(imgObjsArray[0]);		
 			} else {		
-				this.imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-				this.imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
-				this.currentSlideImgTags(this.imgObjsArray[imgIndex+1]);	
+				imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
+				imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
+				treeInfoTab.leafObj.currentSlideImgTags(imgObjsArray[imgIndex+1]);	
 			}	
 		}	
 	}
 	
 	currentSlideImgTags(currentImgObj){
-		console.log(currentImgObj);
+		//console.log(currentImgObj);
 	}
 
 }
