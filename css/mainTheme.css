@@ -740,10 +740,30 @@ button,  button:active, button:hover, button:focus{
 	background-repeat: no-repeat;	
 }
 
-@media only screen and (max-width: 900px) {
-	#infoDiv{
-		width: 90%;
+@media only screen and (max-width: 890px) {
+	.infoDivSec{
+		width: 100%;
+		margin: 0 auto;
 	}
+	#infoDivTree {
+		width: 100vw;
+	}
+	.infoData {
+		font-size: 10%;
+	}
+	.info_name, .info_dates{
+		font-size: 6.5vw !important;
+	}
+	.info_gen{
+		font-size: 3.75vw !important;
+	}
+	.info_neeName .aboutBold, .info_siblings .aboutBold, .info_children .aboutBold{
+		font-size: 4vw !important;
+	}
+	.info_neeName, .info_siblings, .info_children{
+		font-size: 2.5vw !important;
+	}
+	
 }
 
 .mainContainerDiv{
