@@ -805,7 +805,7 @@ button,  button:active, button:hover, button:focus{
 	text-align: left;
 	left: -3%;
 }
-.info_name.nameSmallerSizing{
+.nameSmallerSizing{
 	font-size: 50px;]
 }
 .info_dates{
