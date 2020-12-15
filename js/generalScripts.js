@@ -796,7 +796,7 @@ class woodInfoTab {
 		
 		this._fillingInfo = false;
 		
-		this.leafObj = new leafImgs();
+		this.leafObj = new leafImgs(type);
 	}
 	
 	createInfoDivs(type){	
@@ -1008,7 +1008,9 @@ class woodInfoTab {
 						thisObj.fillInfo(famName, personName);							
 					});	
 					
-					setTimeout(() => {this.extendDivAndShow(this.personInfo.hasOwnProperty('about'), this.personInfo.about ?? '')}, 1200);	
+					setTimeout(() => {
+						this.extendDivAndShow(this.personInfo.hasOwnProperty('about'), this.personInfo.about ?? '')
+					}, 1200);	
 				} else {
 					//first fill		
 					this.clearInfo();
@@ -1141,10 +1143,11 @@ class woodInfoTab {
 		
 		if (this.personInfo.hasOwnProperty('imgCount')){
 			if (this.personInfo.imgCount > 0)
-				this.leafObj.setLeafImages(famName, personName);
+				this.leafObj.setLeafImages(famName, personName);			
+		} else { 			
+			$(this.leafObj.leafSVG).fadeIn(1000);
 		}
-			
-			
+		
 	}
 	
 	fillInExtendedTable(personAbout){

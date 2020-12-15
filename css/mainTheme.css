@@ -739,6 +739,13 @@ button,  button:active, button:hover, button:focus{
 	background-image: url('../media/colouredWood.svg'); 
 	background-repeat: no-repeat;	
 }
+
+@media only screen and (max-width: 900px) {
+	#infoDiv{
+		width: 90%;
+	}
+}
+
 .mainContainerDiv{
 	display:none;
 }
