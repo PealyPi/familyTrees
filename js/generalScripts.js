@@ -489,14 +489,12 @@ class navBar {
 					
 					//start img slideshow
 					treeInfoTab.startStopImgSlideshow('start');
-					//console.log(treeInfoTab.leafObj.leafImgSlideshow);
 				break;
 				case 'infoTab':	
 					this.hideAllSects(this.infoDiv);
 					this.showSect(this.infoDiv);
 					
-					infoTab.startStopImgSlideshow('start');		
-					//console.log(infoTab.leafObj.leafImgSlideshow);			
+					infoTab.startStopImgSlideshow('start');				
 				break;
 				case 'imgsTab':
 					this.hideAllSects(this.imgsDiv);
@@ -796,7 +794,7 @@ class woodInfoTab {
 		this.type = type;
 		this.infoDiv = (type == 'tree') ? 
 			document.getElementById('infoDivTree') : 
-			document.getElementById('infoDiv');
+			document.getElementById('infoDivInfo');
 		this.infoDivSec = this.infoDiv.querySelector(".infoDivSec");
 		this.infoDivMain = this.infoDivSec.querySelector(".infoMain");		
 		
@@ -1162,8 +1160,9 @@ class woodInfoTab {
 		});
 		
 		if (this.personInfo.hasOwnProperty('imgCount')){
-			if (this.personInfo.imgCount > 0)
-				this.leafObj.setLeafImages(famName, personName);			
+			if (this.personInfo.imgCount > 0){
+				this.leafObj.setLeafImages(famName, personName);	
+			}				
 		} else { 			
 			$(this.leafObj.leafSVG).fadeIn(1000);
 		}
@@ -1268,7 +1267,7 @@ class leafImgs {
 		this.type = type;
 		this.infoDiv = (type == 'tree') ? 
 			document.getElementById('infoDivTree') : 
-			document.getElementById('infoDiv');
+			document.getElementById('infoDivInfo');
 		
 		this.imageObjsArray = [];
 		this.leafImgSlideshow = null;
@@ -1350,6 +1349,9 @@ class leafImgs {
 		this.imgCount = imgCount;
 		let leafSVG = this.leafSVG;
 		
+		console.log(this.infoDiv);
+		console.log(this.leafSVG);
+		
 		let defaultImgConfig = {
 			'transform': {'x': 0, 'y': 0},
 			'width': 200
@@ -1362,7 +1364,7 @@ class leafImgs {
 		const clipPathURL = 'url(#' + this.type +  '_topLeaf_clipPath)';
 		var leafSVGimgArr = [];		
 		
-		this.leafImgArr.forEach((arrImgObjs)=> {
+		this.leafImgArr.forEach((arrImgObjs, i)=> {
 			let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
 			const leafImgSVGobj = new createNewElement('image', { 
 				'class': 'svg_leafImg',
@@ -1373,11 +1375,13 @@ class leafImgs {
 				'clip-path': clipPathURL,
 			});	
 			leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
-			arrImgObjs.imgDOMelem = leafImgSVGobj;
+			this.leafImgArr[i].imgDOMelem = leafImgSVGobj;
 		});
 		
-		shuffle(this.leafImgArr);
+		shuffle(this.leafImgArr[0].imgDOMelem);
 		setTimeout(() => { 
+			console.log(leafSVG);
+			console.log(this.leafImgArr[0]);
 			this.leafImgArr[0].imgDOMelem.classList.add("activeImg");
 		}, 1400);
 		
