@@ -717,10 +717,14 @@ button,  button:active, button:hover, button:focus{
 	top: -160px;
 	position: relative;
 }
+#infoDivInfo{
+	top: 30px;
+	position: relative;
+}
 
 #infoDiv{
 	position: absolute;
-	top: calc(var(--navBarHeight) + 100px);	
+	top: calc(var(--navBarHeight) + 50px);	
 	left:0; right: 0;
 	display:none;
 }
@@ -861,14 +865,21 @@ button,  button:active, button:hover, button:focus{
 
 @media only screen and (max-width: 890px) {
 	.infoDivSec{
-		width: 100%;
-		margin: 0 auto;
+		width: 100vw;
+		margin: 0;
+	}
+	#infoDiv {
+		width: 100vw;
+		top: calc(var(--navBarHeight) + 6vw) !important;	
 	}
 	#infoDivTree {
 		width: 100vw;
 	}
 	.infoMain {
 		height: calc(50vw - 100px);
+	}
+	#infoDiv .infoMain {
+		margin-top: -10px;
 	}
 	.infoData {
 		font-size: 10%;
@@ -921,6 +932,9 @@ button,  button:active, button:hover, button:focus{
 	
 	.leafSVG{
 		width: 50vw !important;
+		
+	}
+	.leafSVG{
 		right: -12vw !important;
 	}
 	
