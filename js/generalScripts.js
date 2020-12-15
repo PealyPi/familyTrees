@@ -473,6 +473,9 @@ class navBar {
 			
 			const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
 			
+			treeInfoTab.startStopImgSlideshow('stop');
+			infoTab.startStopImgSlideshow('stop');
+			
 			//hide all				
 			switch (newActiveID){
 				case 'homeTab':		
@@ -482,11 +485,16 @@ class navBar {
 					this.hideAllSects(this.svgDiv);
 					this.showSect(this.svgDiv);
 					if ((!famViewBool) && (NODEdetails.currentFocus != ''))
-						treeChange.newFocus(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);	
+						treeChange.newFocus(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);
+					
+					//start img slideshow
+					treeInfoTab.startStopImgSlideshow('start');
 				break;
 				case 'infoTab':	
 					this.hideAllSects(this.infoDiv);
 					this.showSect(this.infoDiv);
+					
+					infoTab.startStopImgSlideshow('start');					
 				break;
 				case 'imgsTab':
 					this.hideAllSects(this.imgsDiv);
@@ -1240,7 +1248,17 @@ class woodInfoTab {
 		this.leafObj.clearLeafImages();
 	}
 	
-	
+	startStopImgSlideshow(startStop){
+		if (startStop == 'start'){
+			if (this.leafObj.imgCount > 0){
+				this.leafObj.leafImgSlides('start', this.leafObj.leafImgSlideFn(this.type));
+			}
+		} else if (startStop == 'stop'){
+			if (this.leafObj.leafImgSlideshow != null)
+				this.leafObj.leafImgSlides('stop');
+		}		
+		
+	}
 }
 
 class leafImgs {
@@ -1325,6 +1343,9 @@ class leafImgs {
 		let imgObjsArray = PEOPLEIMGs[personName];
 		let imgCount = imgObjsArray.length;
 		this.leafImgArr = [];
+		
+		this.imgObjsArray = imgObjsArray;
+		this.imgCount = imgCount;
 		let leafSVG = this.leafSVG;
 		
 		let defaultImgConfig = {
@@ -1374,21 +1395,31 @@ class leafImgs {
 	
 	}
 	
-	leafImgSlideFn(){
-		if (this.imgIndex == (this.leafImgArr.length-1)){ //last img
-			this.leafImgArr[this.imgIndex].imgDOMelem.classList.remove("activeImg");
-			this.leafImgArr[0].imgDOMelem.classList.add("activeImg");
-			this.imgIndex = 0;
+	leafImgSlideFn(type){
+		console.log("slide running...");
+		
+		let imgIndex = (type == 'tree') ? treeInfoTab.leafObj.imgIndex : infoTab.leafObj.imgIndex ;
+		let leafImgArr = (type == 'tree') ? treeInfoTab.leafObj.leafImgArr : infoTab.leafObj.leafImgArr ;
+		
+		console.log(imgIndex);
+		console.log(leafImgArr);
+		
+		if (imgIndex == (leafImgArr.length-1)){ //last img
+			leafImgArr[imgIndex].imgDOMelem.classList.remove("activeImg");
+			leafImgArr[0].imgDOMelem.classList.add("activeImg");
+			treeInfoTab.leafObj.imgIndex = 0;
 			
 		} else {		
-			this.leafImgArr[this.imgIndex].imgDOMelem.classList.remove("activeImg");
-			this.leafImgArr[this.imgIndex+1].imgDOMelem.classList.add("activeImg");		
-			this.imgIndex++;
+			leafImgArr[imgIndex].imgDOMelem.classList.remove("activeImg");
+			leafImgArr[imgIndex+1].imgDOMelem.classList.add("activeImg");		
+			treeInfoTab.leafObj.imgIndex++;
 		}
 	}
 	
 	clearLeafImages(){
-		this.leafImgSlides('stop');
+		if (this.leafImgSlideshow){
+			this.leafImgSlides('stop');
+		}
 		
 		const leafGrp = this.leafSVG.querySelector("#topLeaf_GRP")
 		const allOldImgs = this.leafSVG.getElementsByTagName("image");
@@ -1409,8 +1440,11 @@ class leafImgs {
 			break;
 			
 			case 'stop':
-				if (this.leafImgSlideshow)
+				console.log("STOP SLIDES");
+				if (this.leafImgSlideshow){
 					clearInterval(this.leafImgSlideshow);
+					this.leafImgSlideshow = null;
+				}
 			break;
 		}
 	}
@@ -1426,10 +1460,10 @@ class leafImgs {
 	
 	nextSlideshowImg(){ 
 		let imgArrayCount = this.imgObjsArray.length;
-		//console.log(treeInfoTab.leafImgSlideshow);
+		console.log(treeInfoTab.leafImgSlideshow);
 		if (imgArrayCount > 1){
 			var imgIndex;
-			for (var i=0; i< imgArrayCount; i++){
+			for (var i=0; i < imgArrayCount; i++){
 				if (treeInfoTab.imgObjsArray[i].imgDOMelem.classList.contains("activeImg"))
 					imgIndex = i;				
 			}
@@ -2535,7 +2569,7 @@ class treeSVG {
 		this.svgCenterPt = svgCenterPt;
 		
 		if (!famView){
-			const mainLineGrp = this.createLines(this.svgElem, 'mainLine', ['m', -50, (svgCenterPt.y - 70), 'h', (pageWidth+50)]);
+			const mainLineGrp = this.createLines(this.svgElem, 'mainLine', ['m', -50, (svgCenterPt.y - 70), 'h', (pageWidth+80)]);
 			this.mainLineGrp = mainLineGrp;	
 			
 			this.svgElem.style.opacity = 0; 
