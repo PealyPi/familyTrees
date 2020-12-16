@@ -863,110 +863,6 @@ button,  button:active, button:hover, button:focus{
 	color:#E7DCDC;
 }
 
-@media only screen and (max-width: 890px) {
-	.infoDivSec{
-		width: 100vw;
-		margin: 0;
-	}
-	#infoDiv {
-		width: 100vw;
-		top: calc(var(--navBarHeight) + 6vw) !important;	
-	}
-	#infoDivTree {
-		width: 100vw;
-	}
-	.infoMain {
-		height: calc(50vw - 100px);
-	}
-	#infoDiv .infoMain {
-		margin-top: -10px;
-	}
-	.infoMain .infoData {
-		font-size: 10%;
-	}
-	.info_name, .info_dates{
-		font-size: 6.5vw !important;
-	}
-	.info_name .nameSmallerSizing{
-		font-size: 5vw !important;
-	}
-	.info_dates{
-		width: 80% !important;
-		line-height: 5vw !important;
-	}
-	.info_gen {
-		font-size: 3.75vw !important;
-		top: 30% !important;
-	}
-	.info_neeName .aboutBold, .info_siblings .aboutBold, .info_children .aboutBold{
-		font-size: 3.25vw !important;
-	}
-	.info_neeName{
-		font-size: 2.75vw !important;
-		height: 5vw;
-		margin-top: -1vw !important;
-		left: -5vw !important;
-	}
-	.info_siblings{
-		font-size: 2.4vw !important;
-		height: 8vw;
-		line-height: 4vw !important;
-		left: -5vw !important;
-	}
-	.info_children{
-		font-size: 2.4vw !important;
-		height: 5vw;
-		line-height: 4vw !important;
-		left: -5vw !important;
-		top: 2vw;
-	}
-	.infoDivSec .manyRelatives {
-		font-size: 2vw !important;
-	}
-	
-	button#treeInfoLinkBTN, button#infoTreeLinkBTN{
-		height: 50px !important;
-		width: 50px !important;
-		top: 10vw !important;
-	}
-	
-	.leafSVG{
-		width: 50vw !important;
-		
-	}
-	.leafSVG{
-		right: -12vw !important;
-	}
-	
-	
-	
-	
-	.infoMain_extended{
-		background-size: 34vw, 34vw, auto !important;
-		height: 38vw;
-		top: -12vw !important;
-		padding-top: 19vw !important;
-	}
-	.infoAboutTable{
-		font-size: 2.4vw !important;
-	}
-	.infoAboutTable .aboutBold, .infoAboutTable .aboutSubBold{
-		font-size: 3.25vw !important;
-		line-height: 6vw;
-	}
-	/*.infoAboutTable table, .infoAboutTable th, .infoAboutTable td {
-		border: 1px solid black;
-	}	*/
-	.infoMain_extended .infoData {
-		font-size: 2vw;
-	}
-
-	
-	
-	
-	
-}
-
 button#infoTreeLinkBTN, button#treeInfoLinkBTN{
 	display: none;
 	position: absolute;
@@ -1078,6 +974,22 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 .svg_leafImg.activeImg{
 	opacity: 1;
 }
+
+
+/* --- imgs Tab --- */
+#imgsDiv{
+	width: 75%;
+	position: relative;
+	margin: auto;
+	height: 200px;
+	padding: 60px 100px;
+	z-index: var(--woodBackZ); 
+	
+	background-image: url('../media/colouredWood3.svg'); 
+	background-repeat: no-repeat;	
+}
+
+
 
 /* --- Ppl Tab --- */
 #peopleDiv {
@@ -1288,6 +1200,111 @@ ul#peopleList{
 }
 
 /* -----------    ------------- */
+
+/* -- smaller screen 1 --- */ 
+@media only screen and (max-width: 890px) {
+	.infoDivSec{
+		width: 100vw;
+		margin: 0;
+	}
+	#infoDiv {
+		width: 100vw;
+		top: calc(var(--navBarHeight) + 6vw) !important;	
+	}
+	#infoDivTree {
+		width: 100vw;
+	}
+	.infoMain {
+		height: calc(50vw - 100px);
+	}
+	#infoDiv .infoMain {
+		margin-top: -10px;
+	}
+	.infoMain .infoData {
+		font-size: 10%;
+	}
+	.info_name, .info_dates{
+		font-size: 6.5vw !important;
+	}
+	.info_name .nameSmallerSizing{
+		font-size: 5vw !important;
+	}
+	.info_dates{
+		width: 80% !important;
+		line-height: 5vw !important;
+	}
+	.info_gen {
+		font-size: 3.75vw !important;
+		top: 30% !important;
+	}
+	.info_neeName .aboutBold, .info_siblings .aboutBold, .info_children .aboutBold{
+		font-size: 3.25vw !important;
+	}
+	.info_neeName{
+		font-size: 2.75vw !important;
+		height: 5vw;
+		margin-top: -1vw !important;
+		left: -5vw !important;
+	}
+	.info_siblings{
+		font-size: 2.4vw !important;
+		height: 8vw;
+		line-height: 4vw !important;
+		left: -5vw !important;
+	}
+	.info_children{
+		font-size: 2.4vw !important;
+		height: 5vw;
+		line-height: 4vw !important;
+		left: -5vw !important;
+		top: 2vw;
+	}
+	.infoDivSec .manyRelatives {
+		font-size: 2vw !important;
+	}
+	
+	button#treeInfoLinkBTN, button#infoTreeLinkBTN{
+		height: 50px !important;
+		width: 50px !important;
+		top: 10vw !important;
+	}
+	
+	.leafSVG{
+		width: 50vw !important;
+		
+	}
+	.leafSVG{
+		right: -12vw !important;
+	}
+	
+	
+	
+	
+	.infoMain_extended{
+		background-size: 34vw, 34vw, auto !important;
+		height: 38vw;
+		top: -12vw !important;
+		padding-top: 19vw !important;
+	}
+	.infoAboutTable{
+		font-size: 2.4vw !important;
+	}
+	.infoAboutTable .aboutBold, .infoAboutTable .aboutSubBold{
+		font-size: 3.25vw !important;
+		line-height: 6vw;
+	}
+	/*.infoAboutTable table, .infoAboutTable th, .infoAboutTable td {
+		border: 1px solid black;
+	}	*/
+	.infoMain_extended .infoData {
+		font-size: 2vw;
+	}
+
+	
+	
+	
+	
+}
 
 
 /* -------------------- */
