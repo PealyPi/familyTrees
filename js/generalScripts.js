@@ -387,8 +387,7 @@ class navBar {
 		this.allNavBtns = this.navDiv.querySelectorAll(".navTab");	
 		this.activeBtn = this.leftNavDiv.querySelector(".navTab.active");	
 		this.activeDiv = this.leftNavDiv.querySelector(".navTabDiv.active");	
-		this.activeColour = this.activeBtn.id + "Colour";	
-
+		this.activeColour = this.activeBtn.id + "Colour";
 		
 		this.isPageTransitioning = false;
 		
@@ -494,7 +493,7 @@ class navBar {
 					this.hideAllSects(this.infoDiv);
 					this.showSect(this.infoDiv);
 					
-					infoTab.startStopImgSlideshow('start');				
+					infoTab.startStopImgSlideshow('start');		
 				break;
 				case 'imgsTab':
 					this.hideAllSects(this.imgsDiv);
@@ -696,6 +695,9 @@ class peopleTab {
 				
 			}
 			
+			treeInfoTab.startStopImgSlideshow('stop');
+			infoTab.startStopImgSlideshow('stop');
+			
 			infoTab.fillPersonInfo(famName, personTag);
 			treeInfoTab.fillPersonInfo(famName, personTag);
 			NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
@@ -711,18 +713,28 @@ class peopleTab {
 				if ((currentActive.id == "treeTab")){
 					tree.famView_backToTree();
 					
+					treeInfoTab.startStopImgSlideshow('start');
+					
 				} else if ((currentActive.id == "infoTab")){
 					tree.famView_backToTree();	
 					treeChange.newFocus(personTag, famName);
 					
+					infoTab.startStopImgSlideshow('start');
+					
 				} else {
 					tree.famView_backToTree();	
-					navObj.openPage(treeBtn);	
+					navObj.openPage(treeBtn);
 				}
 				
 			} else {
 				if ((currentActive.id == "treeTab") || (currentActive.id == "infoTab")){
 					treeChange.newFocus(personTag, famName);	
+					
+					if ((currentActive.id == "treeTab"))
+						treeInfoTab.startStopImgSlideshow('start');
+					else if ((currentActive.id == "infoTab"))
+						infoTab.startStopImgSlideshow('start');
+					
 				} else {
 					navObj.openPage(treeBtn);					
 				}
@@ -1251,9 +1263,9 @@ class woodInfoTab {
 	
 	startStopImgSlideshow(startStop){
 		if (startStop == 'start'){
-			if (this.leafObj.imgCount > 0){
+			if (this.leafObj.imgCount > 0)
 				this.leafObj.leafImgSlides('start');
-			}
+			
 		} else if (startStop == 'stop'){
 			if (this.leafObj.leafImgSlideshow != null)
 				this.leafObj.leafImgSlides('stop');
@@ -1347,14 +1359,10 @@ class leafImgs {
 		
 		this.imgObjsArray = imgObjsArray;
 		this.imgCount = imgCount;
-		let leafSVG = this.leafSVG;
-		
-		console.log(this.infoDiv);
-		console.log(this.leafSVG);
 		
 		let defaultImgConfig = {
 			'transform': {'x': 0, 'y': 0},
-			'width': 200
+			'width': 120
 		}
 		
 		for (var i=0; i<imgCount; i++){					
@@ -1362,7 +1370,6 @@ class leafImgs {
 		}
 		
 		const clipPathURL = 'url(#' + this.type +  '_topLeaf_clipPath)';
-		var leafSVGimgArr = [];		
 		
 		this.leafImgArr.forEach((arrImgObjs, i)=> {
 			let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
@@ -1374,15 +1381,17 @@ class leafImgs {
 				'width': imgConfigInclude.width,
 				'clip-path': clipPathURL,
 			});	
-			leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
-			this.leafImgArr[i].imgDOMelem = leafImgSVGobj;
+			this.leafSVG.querySelector('#topLeaf_fill').after(leafImgSVGobj);
+			if (!this.leafImgArr[i].hasOwnProperty('imgDOMelems'))
+				this.leafImgArr[i].imgDOMelems = {'tree': '', 'info': ''};
+				
+			this.leafImgArr[i].imgDOMelems[this.type] = leafImgSVGobj;
+			
 		});
 		
-		shuffle(this.leafImgArr[0].imgDOMelem);
+		shuffle(this.leafImgArr[0].imgDOMelems[this.type]);
 		setTimeout(() => { 
-			console.log(leafSVG);
-			console.log(this.leafImgArr[0]);
-			this.leafImgArr[0].imgDOMelem.classList.add("activeImg");
+			this.leafImgArr[0].imgDOMelems[this.type].classList.add("activeImg");
 		}, 1400);
 		
 		this.imgIndex = 0;		
@@ -1391,37 +1400,37 @@ class leafImgs {
 			this.addImgDebugFnsToBtn();
 		
 		//fade in leaf
-		$(leafSVG).fadeIn(1000);		
+		$(this.leafSVG).fadeIn(1000);		
 	
 	}
 	
 	leafImgSlideFn_tree(){
-		console.log("treeinfo slide running...");
+		//console.log("treeinfo slide running...");
 		let imgIndex = treeInfoTab.leafObj.imgIndex;
 		let imgObjsArray =treeInfoTab.leafObj.imgObjsArray;		
 		
 		if (imgIndex == (imgObjsArray.length-1)){ //last img
-			imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-			imgObjsArray[0].imgDOMelem.classList.add("activeImg");
+			imgObjsArray[imgIndex].imgDOMelems.tree.classList.remove("activeImg");
+			imgObjsArray[0].imgDOMelems.tree.classList.add("activeImg");
 			treeInfoTab.leafObj.imgIndex = 0;
 		} else {		
-			imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-			imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
+			imgObjsArray[imgIndex].imgDOMelems.tree.classList.remove("activeImg");
+			imgObjsArray[imgIndex+1].imgDOMelems.tree.classList.add("activeImg");		
 			treeInfoTab.leafObj.imgIndex++;
 		}	
 	}
 	leafImgSlideFn_info(){
-		console.log("info slide running...");
+		//console.log("info slide running...");
 		let imgIndex = infoTab.leafObj.imgIndex ;
 		let imgObjsArray = infoTab.leafObj.imgObjsArray ;		
 		
 		if (imgIndex == (imgObjsArray.length-1)){ //last img
-			imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-			imgObjsArray[0].imgDOMelem.classList.add("activeImg");			
+			imgObjsArray[imgIndex].imgDOMelems.info.classList.remove("activeImg");
+			imgObjsArray[0].imgDOMelems.info.classList.add("activeImg");			
 			infoTab.leafObj.imgIndex = 0;
 		} else {		
-			imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-			imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");	
+			imgObjsArray[imgIndex].imgDOMelems.info.classList.remove("activeImg");
+			imgObjsArray[imgIndex+1].imgDOMelems.info.classList.add("activeImg");	
 			infoTab.leafObj.imgIndex++;
 		}
 		
@@ -1447,6 +1456,7 @@ class leafImgs {
 		switch (startStop){
 			case 'start':					
 				if (!this.leafImgSlideshow){
+					//console.log("Start a Slideshow");
 					if (this.type == 'tree')
 						this.leafImgSlideshow = setInterval( this.leafImgSlideFn_tree, 10000);	
 					else
@@ -1455,7 +1465,7 @@ class leafImgs {
 			break;
 			
 			case 'stop':
-				console.log("STOP SLIDES");
+				//console.log("STOP SLIDES");
 				if (this.leafImgSlideshow){
 					clearInterval(this.leafImgSlideshow);
 					this.leafImgSlideshow = null;
@@ -1479,17 +1489,17 @@ class leafImgs {
 		if (imgArrayCount > 1){
 			var imgIndex;
 			for (var i=0; i < imgArrayCount; i++){
-				if (imgObjsArray[i].imgDOMelem.classList.contains("activeImg"))
+				if (imgObjsArray[i].imgDOMelems.tree.classList.contains("activeImg"))
 					imgIndex = i;
 			}
 			
 			if (imgIndex == (imgArrayCount-1)){ //last img
-				imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-				imgObjsArray[0].imgDOMelem.classList.add("activeImg");		
+				imgObjsArray[imgIndex].imgDOMelems.tree.classList.remove("activeImg");
+				imgObjsArray[0].imgDOMelems.tree.classList.add("activeImg");		
 				treeInfoTab.leafObj.currentSlideImgTags(imgObjsArray[0]);		
 			} else {		
-				imgObjsArray[imgIndex].imgDOMelem.classList.remove("activeImg");
-				imgObjsArray[imgIndex+1].imgDOMelem.classList.add("activeImg");		
+				imgObjsArray[imgIndex].imgDOMelems.tree.classList.remove("activeImg");
+				imgObjsArray[imgIndex+1].imgDOMelems.tree.classList.add("activeImg");		
 				treeInfoTab.leafObj.currentSlideImgTags(imgObjsArray[imgIndex+1]);	
 			}	
 		}	
