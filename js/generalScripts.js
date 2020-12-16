@@ -1171,8 +1171,8 @@ class woodInfoTab {
 			}
 		});
 		
-		if (this.personInfo.hasOwnProperty('imgCount')){
-			if (this.personInfo.imgCount > 0){
+		if (PEOPLEIMGs.hasOwnProperty(personName)){
+			if (PEOPLEIMGs[personName].length > 0){
 				this.leafObj.setLeafImages(famName, personName);	
 			}				
 		} else { 			

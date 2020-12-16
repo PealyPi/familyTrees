@@ -88,7 +88,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 			allPeoplesImgs[person].push(img);
 		}
 	}
-	console.log(allPeoplesImgs);
+	//console.log(allPeoplesImgs);
 	
 	
 	if (imgArray)
