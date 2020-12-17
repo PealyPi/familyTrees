@@ -1609,7 +1609,44 @@ function peopleListSearchExit(){
 }
 
 /* -------------------- */
+/* --- image tab --- */
+class imgTab {
+	constructor(){
+		
+	}
+	
+	setImage(selectedImage){
+		let imageInfo = {};
+		this.fillWoodInfo(imageInfo);
+	}
+	
+	fillWoodInfo(imageInfo){
+		
+	}
+}
 
+class imgGallery{
+	constructor(){
+		
+	}
+	
+	setPerson(personTag){
+		//PEOPLEIMGs[personTag]
+		//for each image from person, create div in grid,
+		//if portrait, add class to span 2/3 rows (depending on size)
+		//if landscape, add class to span columns?
+		
+		let imgArray = [];
+		this.addImagesTogrid(imgArray);
+	}
+	
+	addImagesToGrid(imgArray){
+		
+	}
+}
+
+
+/* -------------------- */
 /* -- tree Div -- */
 class node {
 	constructor(svg, tagType){
