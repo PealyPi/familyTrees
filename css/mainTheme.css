@@ -466,6 +466,96 @@ button,  button:active, button:hover, button:focus{
 	color: #eae;
 }
 
+
+/* -- buttons -- */
+button#infoTreeLinkBTN, button#treeInfoLinkBTN, 
+button#imgInfoLinkBTN, button#imgTreeLinkBTN, 
+button#galleryBtn{
+	display: none;
+	position: absolute;
+	height: 60px;
+	width: 60px;	
+	top: 90px;	
+	
+	z-index: calc(var(--woodBackZ) + 10); 
+	
+	font-size: 36px;
+	cursor:pointer;	
+	background-color: rgb(0, 0, 0, 0);	
+	color: white;	
+	
+	border: none;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	
+	-webkit-transition: box-shadow 0.2s, font-size 0.5s ease, background-size 0.5s ease;	
+	-moz-transition: box-shadow 0.2s, font-size 0.5s ease, background-size 0.5s ease;	
+	transition: box-shadow 0.2s, font-size 0.5s ease, background-size 0.5s ease;
+}
+button#infoTreeLinkBTN, button#imgTreeLinkBTN{
+	background: url('../media/treeIcon.svg') center no-repeat; 
+	background-size: 40px;	
+	top: 40px;
+}
+
+button#infoTreeLinkBTN:after, button#treeInfoLinkBTN:after, 
+button#imgInfoLinkBTN:after, button#imgTreeLinkBTN:after,
+button#galleryBtn:after{
+	position: absolute;
+	width: 100%; 
+	height: 100%;
+	content: '';	
+	top: 0;	left: 0;	
+	padding: 0;	
+	
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	box-shadow: 0 0 0 2px var(--colourPink);	
+	
+	-webkit-transition: -webkit-transform 0.2s, opacity 0.2s;	
+	-moz-transition: -moz-transform 0.2s, opacity 0.2s;	
+	transition: transform 0.2s, opacity 0.2s;
+}
+button#infoTreeLinkBTN:after, button#imgTreeLinkBTN:after{
+	box-shadow: 0 0 0 2px var(--colourPink);
+}
+button#treeInfoLinkBTN:after, button#imgInfoLinkBTN:after{
+	box-shadow: 0 0 0 2px var(--colourPeach);
+}
+button#galleryBtn:after{
+	box-shadow: 0 0 0 2px var(--colourGreen);
+}
+
+button#infoTreeLinkBTN:hover, button#treeInfoLinkBTN:hover, 
+button#imgInfoLinkBTN:hover, button#imgTreeLinkBTN:hover,
+button#galleryBtn:hover{
+	font-size: 28px;
+	background-size:30px;
+}
+button#infoTreeLinkBTN:hover, button#imgTreeLinkBTN:hover{
+	box-shadow: 0 0 0 6px var(--colourPink);
+}
+button#treeInfoLinkBTN:hover, button#imgInfoLinkBTN:hover{
+	box-shadow: 0 0 0 6px var(--colourPeach);	
+}
+button#galleryBtn:hover{
+	box-shadow: 0 0 0 6px var(--colourGreen);	
+}
+
+button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after, 
+button#imgTreeLinkBTN:hover:after, button#imgInfoLinkBTN:hover:after,
+button#galleryBtn:hover:after {
+	-webkit-transform: scale(0.85);	
+	-moz-transform: scale(0.85);	
+	-ms-transform: scale(0.85);	
+	transform: scale(0.85);	
+	opacity: 0.5;
+}
+
+
+
 /* --- tree Tab -- */
 #svgDiv{
 	display: none;
@@ -863,70 +953,6 @@ button,  button:active, button:hover, button:focus{
 	color:#E7DCDC;
 }
 
-button#infoTreeLinkBTN, button#treeInfoLinkBTN{
-	display: none;
-	position: absolute;
-	height: 60px;
-	width: 60px;	
-	top: 90px;	
-	
-	z-index: calc(var(--woodBackZ) + 10); 
-	
-	font-size: 36px;
-	cursor:pointer;	
-	background-color: rgb(0, 0, 0, 0);	
-	color: white;	
-	
-	border: none;
-	border-radius: 50%;
-	-moz-border-radius: 50%;
-	-webkit-border-radius: 50%;
-	
-	-webkit-transition: box-shadow 0.2s;	
-	-moz-transition: box-shadow 0.2s;	
-	transition: box-shadow 0.2s;
-}
-button#infoTreeLinkBTN{
-	background: url('../media/treeIcon.svg') center no-repeat; 
-	background-size: 40px;	
-	top: 40px;
-}
-button#infoTreeLinkBTN:after, button#treeInfoLinkBTN:after{
-	position: absolute;
-	width: 100%; 
-	height: 100%;
-	content: '';	
-	top: 0;	left: 0;	
-	padding: 0;	
-	
-	border-radius: 50%;
-	-moz-border-radius: 50%;
-	-webkit-border-radius: 50%;
-	box-shadow: 0 0 0 2px var(--colourPink);	
-	
-	-webkit-transition: -webkit-transform 0.2s, opacity 0.2s;	
-	-moz-transition: -moz-transform 0.2s, opacity 0.2s;	
-	transition: transform 0.2s, opacity 0.2s;
-}
-button#infoTreeLinkBTN:after{
-	box-shadow: 0 0 0 2px var(--colourPink);
-}
-button#treeInfoLinkBTN:after{
-	box-shadow: 0 0 0 2px var(--colourPeach);
-}
-button#infoTreeLinkBTN:hover{
-	box-shadow: 0 0 0 6px var(--colourPink);
-}
-button#treeInfoLinkBTN:hover{
-	box-shadow: 0 0 0 6px var(--colourPeach);	
-}
-button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
-	-webkit-transform: scale(0.85);	
-	-moz-transform: scale(0.85);	
-	-ms-transform: scale(0.85);	
-	transform: scale(0.85);	
-	opacity: 0.5;
-}
 
 
 .nodeCircleGrp{
@@ -987,29 +1013,48 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	/*background-color: var(--colourDarkPurple_RGB_Transparent);*/
 	
 }
+/*
+#imgsDiv .tabBtns{
+	/* for hover effects, see above with info tab 
+	position: absolute;
+	top: 200px;
+	left: 200px;
+	height: 300px;
+}
+#imgsDiv .tabBtns button#imgInfoLinkBTN, #imgsDiv .tabBtns button#imgTreeLinkBTN{
+	display: block;
+	position: absolute;
+}
+#imgsDiv .tabBtns button#imgInfoLinkBTN{
+	top: -35px;
+}
+#imgsDiv .tabBtns button#imgTreeLinkBTN{
+	bottom: 0px;
+}*/
+button#galleryBtn{
+	display: block;
+	right: 10%;
+	top: 30px;
+}
 
 #imgsDiv .imgArea{
 	position: relative;
 	z-index: calc(var(--woodBackZ)+10);
 	background-color: var(--colourGreen);
 	/* 8 x 10*/
-	width: 40vw;
-	height: calc((40vw/8)*10);
+	width: calc((445px/10)*8);
+	height: 445px;
 	
 	margin: 100px auto 0 auto;
 	
 	box-shadow: 2px 2px 5px 4px rgba(0, 0, 0, 0.4);
 	
 }
-#imgsDiv .imgArea.landscape{
-	
-}
-
 
 #imgsDiv .imgDivWood{
-	width: 50%;
+	width: 450px;
 	position: relative;
-	margin: calc( calc((-1)*((40vw/8)*10) ) + 40vw) auto;
+	margin: -70px auto;
 	height: 230px;
 	padding: 60px 100px;
 	z-index: calc(var(--woodBackZ)+0); 
@@ -1025,16 +1070,62 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	top:-20vw;
+	top:-160px;
 	left: 0;
-	right: -4vw;
+	right: -64px;
 	margin: 0 auto;
 
 	background-image: url('../media/ivy5_rotated.svg'), url('../media/ivy1_rotated.svg'); 
 	background-position: left top, right top;
-	background-size: 20vw, 20vw;
+	background-size: 200px, 200px;
 	background-repeat: no-repeat;
 	
+}
+#imgsDiv .imgDisplay.landscape .imgArea{
+	width: 445px;
+	height: calc((445px/10)*8);
+	
+}
+#imgsDiv .imgDisplay.landscape .imgDivVines{
+	width: 110%;
+	background-size: 200px, 190px;
+}
+
+
+@media only screen and (max-width: 800px) {
+	#imgsDiv .imgArea{
+		width: calc((55vw/10)*8);
+		height: 55vw;
+		
+	}
+
+	#imgsDiv .imgDivWood{
+		height: 27vw;
+		width: 58%;
+		margin: calc( calc((-1)*((44vw/8)*10) ) + 46vw) auto;
+		
+	}
+	#imgsDiv .imgDivVines{	
+		width: 98%;
+		top:-20vw;
+		right: -9vw;
+		background-size: 25vw, 23vw;
+		
+	}
+	#imgsDiv .imgDisplay.landscape .imgArea{
+		width: 55vw;
+		height: calc((55vw/10)*8);
+		
+	}
+	#imgsDiv  .imgDisplay.landscape .imgArea{
+		width: 445px;
+		height: calc((445px/10)*8);
+		
+	}
+	#imgsDiv .imgDisplay.landscape .imgDivVines{
+		width: 110%;
+		
+	}
 }
 
 .imgGalleryGrid{
@@ -1044,7 +1135,6 @@ button#infoTreeLinkBTN:hover:after, button#treeInfoLinkBTN:hover:after{
 	grid-auto-rows: 250px; 
 
 }
-
 
 /* --- Ppl Tab --- */
 #peopleDiv {
