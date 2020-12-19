@@ -32,7 +32,7 @@
   
 	/* Brown */
 	--colourBrown: #AB7878; 
-	--colourBrownLIGHT_RGB_Transparent: rgb(171,120,120, 0.5); 
+	--colourBrownLIGHT_RGB_Transparent: rgb(171,120,120, 0.7); 
 	
 	/* Purple */
 	--colourPurple: #ADAADF; 
@@ -1040,31 +1040,38 @@ button#galleryBtn{
 	top: 30px;
 }
 
-.imgGallery{
+#imgGallery{
 	position: fixed;
 	top: calc(var(--navBarHeight) + 20px);
 	left: 5%;
 	width: 90vw;
 	height: 85vh;
-	overflow-y: scroll;
 	background-color: var(--colourBrownLIGHT_RGB_Transparent);
+	border: 3px solid var(--colourBrown);
 	
 	z-index: var(--galleryZ);
 }
-.imgGallery .vineLine{
+#imgGallery .vineLine{
 	height: 50px;
 	top: -12px;
 	left: -5vw;
 	width: 100vw;
 }
 
-.imgGalleryGrid{
+#imgGallery .imgGalleryGrid{
+	position: absolute;
+	width: 100%;
 	overflow-y:scroll;
-	display: grid;
-	grid-gap: 2em;
-	grid-template-columns: repeat( auto-fill, minmax( 200px, 1fr ) ); 
-	grid-auto-rows: 250px; 
+	display: block;
 
+}
+
+#imgGallery .imgGalleryGrid .galleryGridImgDIV{
+	float: left;
+}
+#imgGallery .imgGalleryGrid .galleryGridImgDIV img{
+  display: block;
+  max-width: 100%;
 }
 
 

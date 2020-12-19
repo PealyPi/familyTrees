@@ -1627,21 +1627,104 @@ class imgTab {
 
 class imgGallery{
 	constructor(){
+		this.imageGalleryDIV = document.getElementById('imgGallery');
+		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
 		
+		var grid = document.querySelector('.imgGalleryGrid');
+		this.msnry = new Masonry( grid, {
+			// options...
+			itemSelector: '.grid-item',
+			columnWidth: 200
+		});
+		
+		this.setPerson('roseHadkiss');
+	}
+	
+	clearGallery(){
+		let galleryChildren = this.galleryGridDIV.children;
+		for (const galleryChild of galleryChildren){
+			galleryChild.remove();
+		}
 	}
 	
 	setPerson(personTag){
-		//PEOPLEIMGs[personTag]
+		this.clearGallery();
+		
 		//for each image from person, create div in grid,
 		//if portrait, add class to span 2/3 rows (depending on size)
 		//if landscape, add class to span columns?
 		
-		let imgArray = [];
-		this.addImagesTogrid(imgArray);
+		let imgArray = PEOPLEIMGs[personTag];
+		shuffle(imgArray);
+		this.addImagesToGrid(imgArray);
+		
+		this.msnry.layout();
 	}
 	
 	addImagesToGrid(imgArray){
+		/*let defaultImgConfig = {
+			'transform': {'x': 0, 'y': 0},
+			'width': 120
+		}*/
 		
+		for (const img of imgArray){
+			const gridImg = new createNewElement('image', { 
+				'class': 'galleryGridImg',
+				'href': img.imgLink,
+			});	
+			const gridImgDiv = new createNewElement('div', {
+				'class': 'galleryGridImgDIV',
+			});
+			this.galleryGridDIV.appendChild(gridImgDiv);
+			gridImgDiv.appendChild(gridImg);
+			
+			//console.log(gridImg.width());
+			
+		}
+	}
+	
+	resizeMasonryItem(item){
+		/* Get the grid object, its row-gap, and the size of its implicit rows */
+		var grid = document.getElementsByClassName('imgGalleryGrid')[0],
+			rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
+			rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+
+		/*
+		* Spanning for any brick = S
+		* Grid's row-gap = G
+		* Size of grid's implicitly create row-track = R
+		* Height of item content = H
+		* Net height of the item = H1 = H + G
+		* Net height of the implicit row-track = T = G + R
+		* S = H1 / T
+		*/
+		var rowSpan = Math.ceil((item.querySelector('.gallery-content').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
+
+		/* Set the spanning as calculated above (S) */
+		item.style.gridRowEnd = 'span '+rowSpan;
+	}
+	
+	resizeAllMasonryItems(){
+		// Get all item class objects in one list
+		var allItems = document.getElementsByClassName('masonry-brick');
+
+		/*
+		* Loop through the above list and execute the spanning function to
+		* each list-item (i.e. each masonry item)
+		*/
+		for(var i=0;i<allItems.length;i++){
+			resizeMasonryItem(allItems[i]);
+		}
+	}
+
+	waitForImages() {
+		var allItems = document.getElementsByClassName('');
+		for(var i=0;i<allItems.length;i++){
+			imagesLoaded( allItems[i], function(instance) {
+				var item = instance.elements[0];
+				resizeMasonryItem(item);
+			} );
+		}
 	}
 }
 
@@ -3763,6 +3846,7 @@ const treeInfoTab 	= new woodInfoTab('tree');
 const treeChange 	= new treeChangeEvents(document.getElementById('svgDiv'));
 const tree 		= new treeSVG(document.getElementById('mainSVG'));
 const famView 	= new treeSVG(document.getElementById('famViewSVG'));
+const imgGalleryObj	= new imgGallery();
 
 /* ------ Run on Page Load -------- */
 $(document).ready(function(){	
