@@ -32,6 +32,7 @@
   
 	/* Brown */
 	--colourBrown: #AB7878; 
+	--colourBrownLIGHT_RGB_Transparent: rgb(171,120,120, 0.5); 
 	
 	/* Purple */
 	--colourPurple: #ADAADF; 
@@ -63,6 +64,8 @@
 	
 	--vineLineZ: 11;
 	--woodBackZ: 10; --woodLeafZ: 12;
+	
+	--galleryZ: 27;
 }
 
 body,html{
@@ -1037,6 +1040,34 @@ button#galleryBtn{
 	top: 30px;
 }
 
+.imgGallery{
+	position: fixed;
+	top: calc(var(--navBarHeight) + 20px);
+	left: 5%;
+	width: 90vw;
+	height: 85vh;
+	overflow-y: scroll;
+	background-color: var(--colourBrownLIGHT_RGB_Transparent);
+	
+	z-index: var(--galleryZ);
+}
+.imgGallery .vineLine{
+	height: 50px;
+	top: -12px;
+	left: -5vw;
+	width: 100vw;
+}
+
+.imgGalleryGrid{
+	overflow-y:scroll;
+	display: grid;
+	grid-gap: 2em;
+	grid-template-columns: repeat( auto-fill, minmax( 200px, 1fr ) ); 
+	grid-auto-rows: 250px; 
+
+}
+
+
 #imgsDiv .imgArea{
 	position: relative;
 	z-index: calc(var(--woodBackZ)+10);
@@ -1128,13 +1159,6 @@ button#galleryBtn{
 	}
 }
 
-.imgGalleryGrid{
-	display: grid;
-	grid-gap: 2em;
-	grid-template-columns: repeat( auto-fill, minmax( 200px, 1fr ) ); 
-	grid-auto-rows: 250px; 
-
-}
 
 /* --- Ppl Tab --- */
 #peopleDiv {
