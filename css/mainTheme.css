@@ -1080,19 +1080,20 @@ button#galleryBtn{
 	width: 180px;
 	height: 180px;
 	float: left;
-	margin-bottom: 2px;
 	cursor: pointer;
 	
+	
+	margin-bottom: 2px;
 	/*
-	border: 2px solid #333;
-	background: var(--colourBrownDarker);
+	border: 2px solid #333;background: var(--colourBrownDarker);
 	border-radius:5px;
 	border-color: hsla(0, 0%, 0%, 0.5);*/
 }
 #imgGallery .imgGalleryGrid .grid-item img{
 	border-radius:5px;
-	height: 98%;
-	width: 98%;
+	max-height: 100%;
+	max-width: 100%;
+	position: absolute;
 	margin: auto;
 	top:0; left:0; bottom: 0 ; right:0;
 	
@@ -1105,17 +1106,17 @@ button#galleryBtn{
 }
 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2{
-	height: 200px;
+	height: 270px;
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height3{
-	height: 260px;
+	height: 360px;
 }
 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width2{
-	width: 200px;
+	width: 270px;
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width3{
-	width: 260px;
+	width: 360px;
 }
 
 

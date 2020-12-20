@@ -1661,7 +1661,7 @@ class imgGallery{
 			itemSelector: '.grid-item',
 			columnWidth: 185,
 			isFitWidth: true,
-			gutter: 1,
+			//gutter: 1,
 		});
 		this.msnry = msnry;
 		
@@ -1698,18 +1698,18 @@ class imgGallery{
 			let dimDivide = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
 			let roundedDivide = Math.round(dimDivide * (10 ^ 2)) / (10 ^ 2);			
 			
-			if (roundedDivide > 1.1){
+			if (roundedDivide > 1.3){
 				if (imgWidth > imgHeight){
 					//landscape
-					if (roundedDivide > 1.3)
+					if (roundedDivide > 1.5)
 						gridImgDiv.classList.add("grid-item--width3");
 					else 
 						gridImgDiv.classList.add("grid-item--width2");
 					
 				} else if (imgHeight > imgWidth){
 					//portrait
-					if (roundedDivide > 1.3)
-						gridImgDiv.classList.add("grid-item--height3");
+					if (roundedDivide > 1.5)
+						gridImgDiv.classList.add("grid-item--width3");
 					else 
 						gridImgDiv.classList.add("grid-item--height2");
 				}
