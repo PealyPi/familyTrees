@@ -1663,7 +1663,7 @@ class imgGallery{
 		
 		let msnry = new Masonry( grid, {
 			itemSelector: '.grid-item',
-			columnWidth: 180,
+			columnWidth: 182,
 			isFitWidth: true,
 			gutter: 2,
 		});
@@ -1686,19 +1686,35 @@ class imgGallery{
 			
 			//get img orig size
 			const regexpNum = /width=([0-9]+)&height=([0-9]+)/g;
-			let widthHeightMatch = regexpNum.exec(srcString);
-			let imgWidth = ${widthHeightMatch[1]};
-			let imgHeight = ${widthHeightMatch[2]};
+			let widthHeightMatch = regexpNum.exec(img.imgLink);
+			let imgWidth = `${widthHeightMatch[1]}`;
+			let imgHeight = `${widthHeightMatch[2]}`;
 			
-			if (imgWidth > imgHeight){
-				//landscape
-			} else if  (imgHeight > imgWidth){
-				//portrait
+			let dimDiv = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
+			let roundedDivide = Math.round(dimDiv * (10 ^ 2)) / (10 ^ 2);			
+			var imageDimType = '';
+			
+			if (roundedDivide < 1.2){
+				imageDimType = 'square';
 			} else {
-				//square
+				if (imgWidth > imgHeight){
+					imageDimType = 'landscape';
+				} else if (imgHeight > imgWidth){
+					imageDimType = 'portrait';				
+				}
 			}
-
-			gridImg.classList = gridImg;
+			
+			switch (imageDimType){
+				case 'landscape':
+					gridImg.classList.add("grid-item--width2");
+					
+				break;
+				case 'portrait':
+					gridImg.classList.add("grid-item--height2");
+					
+				break;
+			}
+			
 			
 			const gridImgDiv = document.createElement('div');
 			gridImgDiv.classList.add('grid-item');

@@ -1078,17 +1078,33 @@ button#galleryBtn{
 
 #imgGallery .imgGalleryGrid .grid-item{
 	width: 180px;
-	height: 120px;
+	height: 180px;
 	float: left;
 	margin-bottom: 2px;
+	
 	background: var(--colourBrownDarker);
 	border: 2px solid #333;
 	border-radius:5px;
 	border-color: hsla(0, 0%, 0%, 0.5);
 }
 #imgGallery .imgGalleryGrid .grid-item img{
-	/*width: 100%;*/
+	border-radius:5px;
+	height: 180px;
+	
 }
+#imgGallery .imgGalleryGrid .grid-item grid-item--height2, #imgGallery .imgGalleryGrid .grid-item grid-item--height2 img{
+	height: 200px;
+}
+#imgGallery .imgGalleryGrid .grid-item grid-item--height3, #imgGallery .imgGalleryGrid .grid-item grid-item--height3 img{
+	height: 260px;
+}
+
+#imgGallery .imgGalleryGrid .grid-item grid-item--width2, #imgGallery .imgGalleryGrid .grid-item grid-item--width2 img{
+	width: 260px;
+}
+
+
+
 
 /*scroll*/
 .imgGalleryGrid::-webkit-scrollbar{
