@@ -1630,6 +1630,8 @@ class imgGallery{
 		this.imageGalleryDIV = document.getElementById('imgGallery');
 		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
 		
+		this.imageObjsArray = [];
+		
 		
 		this.setPerson('roseHadkiss');
 		
@@ -1640,11 +1642,7 @@ class imgGallery{
 		for (const galleryChild of galleryChildren){
 			galleryChild.remove();
 		}
-		/*const gridSizer = new createNewElement('div', {
-			'class': 'galleryGrid-sizer',
-		});
-		this.galleryGridDIV.appendChild(gridSizer);*/
-		
+		this.imageObjsArray = [];		
 	}
 	
 	setPerson(personTag){
@@ -1656,18 +1654,19 @@ class imgGallery{
 		
 		let imgArray = PEOPLEIMGs[personTag];
 		shuffle(imgArray);
-		
 		var grid = document.querySelector('.imgGalleryGrid');
 		this.grid = grid;
-		this.addImagesToGrid(imgArray, grid);
 		
 		let msnry = new Masonry( grid, {
 			itemSelector: '.grid-item',
-			columnWidth: 178,
+			columnWidth: 185,
 			isFitWidth: true,
-			gutter: 2,
+			gutter: 1,
 		});
 		this.msnry = msnry;
+		
+		this.addImagesToGrid(imgArray, grid);
+		
 		
 		msnry.layout();
 		
@@ -1675,15 +1674,20 @@ class imgGallery{
 	}
 	
 	addImagesToGrid(imgArray, grid){
-		/*let defaultImgConfig = {
-			'transform': {'x': 0, 'y': 0},
-			'width': 120
-		}*/
-		
+		var imgCount = 1;
 		for (const img of imgArray){
 			const gridImg = new Image();
 			const gridImgDiv = document.createElement('div');
 			gridImg.src = img.imgLink;
+			
+			//unique tags
+			this.imageObjsArray.push({
+				'data': img,
+				'imgDOM': gridImg,
+				'imgDivDOM': gridImgDiv,
+				'id': 'imgDiv' + imgCount,
+			});
+			gridImgDiv.id = 'imgDiv' + imgCount;
 			
 			//get img orig size
 			const regexpNum = /width=([0-9]+)&height=([0-9]+)/g;
@@ -1691,8 +1695,8 @@ class imgGallery{
 			let imgWidth = `${widthHeightMatch[1]}`;
 			let imgHeight = `${widthHeightMatch[2]}`;
 			
-			let dimDiv = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
-			let roundedDivide = Math.round(dimDiv * (10 ^ 2)) / (10 ^ 2);			
+			let dimDivide = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
+			let roundedDivide = Math.round(dimDivide * (10 ^ 2)) / (10 ^ 2);			
 			
 			if (roundedDivide > 1.1){
 				if (imgWidth > imgHeight){
@@ -1715,7 +1719,21 @@ class imgGallery{
 			grid.appendChild(gridImgDiv);
 			gridImgDiv.appendChild(gridImg);
 			
+			this.msnry.prepended( gridImgDiv );
+			
+			this.addClickEvent(gridImgDiv);
+			
+			imgCount++;
 		}
+	}
+	
+	addClickEvent(gridItem){
+		gridItem.addEventListener("click", (evnt) => this.openImageFromGallery(evnt));	
+	}
+	
+	openImageFromGallery(event){
+		const clickedImDiv = event.target;
+		
 	}
 	
 }
