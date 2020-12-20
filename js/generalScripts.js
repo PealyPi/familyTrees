@@ -739,7 +739,9 @@ class peopleTab {
 						infoTab.startStopImgSlideshow('start');
 					
 				}  else if ((currentActive.id == "imgsTab")){
-					imgGalleryObj.openGallery();
+					if (!imgGalleryObj.imageGalleryDIV.classList.contains("galleryOpen")){
+						imgGalleryObj.openGallery();
+					}
 				} else {
 					navObj.openPage(treeBtn);					
 				}
@@ -3844,38 +3846,30 @@ function VIVIFY_animateElems(elem, type, enterExit){
 		case 'imgGallery':
 			switch (enterExit){
 				case 'enter':
-					if (elem.style.opacity == 0){
-						elem.classList.add("galleryOpen");
-						setTimeout(()=>{
-							elem.classList.add("vivify");
-							elem.classList.add("duration-1500");
-							elem.classList.add("driveInRight");
-							setTimeout(()=>{
-								elem.style.opacity = 1;
-							}, 300);
-							setTimeout(()=>{
-								elem.classList.remove("vivify");
-								elem.classList.remove("duration-1500");
-								elem.classList.remove("driveInRight");
-							}, 1600);
-						}, 0);
-					} 
+					elem.classList.add("galleryOpen");
+					elem.style.opacity = 1;
+					elem.classList.add("vivify");
+					elem.classList.add("duration-1500");
+					elem.classList.add("popInRight");
+					setTimeout(()=>{
+						elem.classList.remove("vivify");
+						elem.classList.remove("duration-1500");
+						elem.classList.remove("popInRight");
+					}, 1600);
+				
 				break;
 				case 'exit':
-					if (elem.style.opacity == 1){
-						elem.classList.add("vivify");
-						elem.classList.add("duration-1500");
-						elem.classList.add("driveOutRight");
-						setTimeout(()=>{
-							elem.style.opacity = 0;
-							elem.classList.remove("galleryOpen");
-						}, 1600);
-						setTimeout(()=>{
-							elem.classList.remove("vivify");
-							elem.classList.remove("duration-1500");
-							elem.classList.remove("driveOutRight");
-						}, 1600);
-					}
+					elem.classList.add("vivify");
+					elem.classList.add("duration-1000");
+					elem.classList.add("driveOutRight");
+					setTimeout(()=>{
+						elem.classList.remove("galleryOpen");
+						elem.style.opacity = 0;
+						elem.classList.remove("vivify");
+						elem.classList.remove("duration-1000");
+						elem.classList.remove("driveOutRight");
+					}, 1600);
+					
 				break;
 			}
 		break;
