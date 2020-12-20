@@ -1681,17 +1681,31 @@ class imgGallery{
 		}*/
 		
 		for (const img of imgArray){
-			const gridImg = new createNewElement('image', { 
-				'class': 'gridImg',
-				'href': img.imgLink,
-				'width': '180px',
-			});	
+			const gridImg = new Image();
+			gridImg.src = img.imgLink;
+			
+			//get img orig size
+			const regexpNum = /width=([0-9]+)&height=([0-9]+)/g;
+			let widthHeightMatch = regexpNum.exec(srcString);
+			let imgWidth = ${widthHeightMatch[1]};
+			let imgHeight = ${widthHeightMatch[2]};
+			
+			if (imgWidth > imgHeight){
+				//landscape
+			} else if  (imgHeight > imgWidth){
+				//portrait
+			} else {
+				//square
+			}
+
+			gridImg.classList = gridImg;
+			
 			const gridImgDiv = document.createElement('div');
 			gridImgDiv.classList.add('grid-item');
 			grid.appendChild(gridImgDiv);
 			gridImgDiv.appendChild(gridImg);
 			
-			//console.log(gridImg.width());
+			
 			
 		}
 	}
