@@ -98,7 +98,19 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'people': ['roseHadkiss'],
 			}
 		},
-		
+		{	'imgRef':	'roseRon Wedding, roseHadkiss/roseHadkiss8.jpg',
+			'imgLink': linkStartString + 'y4mVAqGqxCAm5xEvO3ggg8W1O1-BLLRv3JBSU74KhKKbOznZa5h-AJALErr22PJOIc6rXHEufAAw641BY8u2hPlVcYgtggHa6Nbmup73Ld8MjMUxUfH_yymQZAxPExlU5pVaRoJp3YsTMIVG5HgKx-9_86Qi0NnyFLPeGS4rjRa22i3IKmBCM5VkAaytVBbb2tw?width=3719&height=2412&cropmode=none',
+			'imgConfig': {
+				'transform': {'x': 0, 'y': 0},
+				'width': 160,
+			},
+			'tags': {
+				'year': '1950',
+				//'place': '',
+				//'title': '',
+				'people': ['roseHadkiss', 'ronHadkiss'],
+			}
+		},
 		
 	]
 	

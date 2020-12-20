@@ -1619,15 +1619,64 @@ function peopleListSearchExit(){
 /* --- image tab --- */
 class imgTab {
 	constructor(){
+		this.imageDiv = document.getElementById('imgsDiv');
+		this.imgDisplay 	= this.imageDiv.querySelector(".imgDisplay");
+		this.imgContainer = this.imgDisplay.querySelector(".imgContainer");
+		this.imageArea 		= this.imgDisplay.querySelector(".imgArea");
+		this.imageDivWood 	= this.imgDisplay.querySelector(".imageDivWood");
+		
+		this.currentImageObj = {};
+	}
+	
+	setImage(imageObj){		
+		this.clearImg();
+		this.currentImageObj = imageObj;
+		
+		let imgAreaChildren = this.imageArea.children;
+		
+		if (imgAreaChildren.length == 0){
+			
+			const createdImg = new Image();
+			createdImg.src = imageObj.data.imgLink;
+			this.imageArea.appendChild(createdImg);
+			
+			let imgOrientation = imageObj.orientation;
+			console.log(imageObj);
+			console.log(imgOrientation);
+			if (imgOrientation == 'landscape'){
+				if (!this.imgDisplay.classList.contains("landscape"))
+					this.imgDisplay.classList.add("landscape");
+				if (this.imgDisplay.classList.contains("square"))
+					this.imgDisplay.classList.remove("square");		
+			} else if (imgOrientation == 'portrait'){
+				if (this.imgDisplay.classList.contains("landscape"))
+					this.imgDisplay.classList.remove("landscape");
+				if (this.imgDisplay.classList.contains("square"))
+					this.imgDisplay.classList.remove("square");	
+			} else if (imgOrientation == 'square'){
+				if (this.imgDisplay.classList.contains("landscape"))
+					this.imgDisplay.classList.remove("landscape");	
+				if (!this.imgDisplay.classList.contains("square"))
+					this.imgDisplay.classList.add("square");			
+			}
+			
+		} else {
+			
+		}
+		
+		this.fillWoodInfo(imageObj);
+	}
+	
+	clearImg(){
+		let areaChildren = this.imageArea.children;
+		for (const areaChild of areaChildren){
+			areaChild.remove();
+		}
+		this.currentImageObj = {};
 		
 	}
 	
-	setImage(selectedImage){
-		let imageInfo = {};
-		this.fillWoodInfo(imageInfo);
-	}
-	
-	fillWoodInfo(imageInfo){
+	fillWoodInfo(imageObj){
 		
 	}
 	
@@ -1705,16 +1754,7 @@ class imgGallery{
 		for (const img of imgArray){
 			const gridImg = new Image();
 			const gridImgDiv = document.createElement('div');
-			gridImg.src = img.imgLink;
-			
-			//unique tags
-			this.imageObjsArray.push({
-				'data': img,
-				'imgDOM': gridImg,
-				'imgDivDOM': gridImgDiv,
-				'id': 'imgDiv' + imgCount,
-			});
-			gridImgDiv.id = 'imgDiv' + imgCount;
+			gridImg.src = img.imgLink;			
 			
 			//get img orig size
 			const regexpNum = /width=([0-9]+)&height=([0-9]+)/g;
@@ -1722,25 +1762,44 @@ class imgGallery{
 			let imgWidth = `${widthHeightMatch[1]}`;
 			let imgHeight = `${widthHeightMatch[2]}`;
 			
-			let dimDivide = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
-			let roundedDivide = Math.round(dimDivide * (10 ^ 2)) / (10 ^ 2);			
 			
+			let dimDivide = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
+			let roundedDivide = Math.round(dimDivide * (10 ^ 2)) / (10 ^ 2);	
+			
+			var imgOrientation = '';
 			if (roundedDivide > 1.3){
 				if (imgWidth > imgHeight){
 					//landscape
+					imgOrientation = 'landscape';
 					if (roundedDivide > 1.5)
 						gridImgDiv.classList.add("grid-item--width3");
 					else 
 						gridImgDiv.classList.add("grid-item--width2");
 					
 				} else if (imgHeight > imgWidth){
+					imgOrientation = 'portrait';
 					//portrait
 					if (roundedDivide > 1.5)
 						gridImgDiv.classList.add("grid-item--width3");
 					else 
 						gridImgDiv.classList.add("grid-item--height2");
+				} else {
+					imgOrientation = 'square';					
 				}
 			} 	
+			
+			//unique tags
+			this.imageObjsArray.push({
+				'data': img,
+				'imgDOM': gridImg,
+				'imgDivDOM': gridImgDiv,
+				'id': 'imgDiv' + imgCount,
+				'orientation': imgOrientation,
+				'origWidth': imgWidth,
+				'origHeight': imgHeight,
+			});
+			gridImgDiv.id = 'imgDiv' + imgCount;
+			
 			
 			gridImgDiv.classList.add('grid-item');
 			grid.appendChild(gridImgDiv);
@@ -1764,7 +1823,7 @@ class imgGallery{
 		
 		for (const imgObj of this.imageObjsArray){
 			if (imgObj.id == divId){
-				console.log(imgObj.data);
+				imgOpenTab.setImage(imgObj);
 			}
 		}
 	}
@@ -3920,6 +3979,7 @@ const treeInfoTab 	= new woodInfoTab('tree');
 const treeChange 	= new treeChangeEvents(document.getElementById('svgDiv'));
 const tree 		= new treeSVG(document.getElementById('mainSVG'));
 const famView 	= new treeSVG(document.getElementById('famViewSVG'));
+const imgOpenTab	= new imgTab();
 const imgGalleryObj	= new imgGallery();
 
 /* ------ Run on Page Load -------- */
