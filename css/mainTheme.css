@@ -1081,17 +1081,27 @@ button#galleryBtn{
 	height: 180px;
 	float: left;
 	margin-bottom: 5px;
+	cursor: pointer;
 	
-	/*border: 2px solid #333;
+	/*
+	border: 2px solid #333;
 	background: var(--colourBrownDarker);
 	border-radius:5px;
 	border-color: hsla(0, 0%, 0%, 0.5);*/
 }
 #imgGallery .imgGalleryGrid .grid-item img{
 	border-radius:5px;
-	height: 180px;
-	width: 180px;
+	height: 100%;
+	width: 100%;
+	
+	border: 0px solid transparent;
+	transition: border-color 0.5s ease, border-width 0.7s ease;
 }
+#imgGallery .imgGalleryGrid .grid-item:hover img{
+	border-width: 5px;
+	border-color: var(--colourPeach_RGB_Transparent);
+}
+
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2, #imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img{
 	height: 200px;
 }

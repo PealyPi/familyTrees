@@ -1663,7 +1663,7 @@ class imgGallery{
 		
 		let msnry = new Masonry( grid, {
 			itemSelector: '.grid-item',
-			columnWidth: 182,
+			columnWidth: 178,
 			isFitWidth: true,
 			gutter: 2,
 		});
@@ -1715,8 +1715,6 @@ class imgGallery{
 			grid.appendChild(gridImgDiv);
 			gridImgDiv.appendChild(gridImg);
 			
-			console.log(img);
-			console.log(roundedDivide);
 		}
 	}
 	
