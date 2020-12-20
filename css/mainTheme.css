@@ -17,6 +17,8 @@
 	--colourPeach_RGB: rgb(254, 195, 166); 
 	--colourPeach_R: 254; --colourPeach_G: 195; --colourPeach_B: 166;
 	--colourPeach_RGB_Transparent: rgb(254, 195, 166, 0.6); 
+	--colourPeachLighter_RGB: rgb(254,212,191, 1);
+	--colourPeachLighter_RGB_Transparent: rgb(254,212,191, 0.6);
   
 	/* Green */
 	--colourGreen: #EFE9AE; 
@@ -1017,40 +1019,50 @@ button#galleryBtn:hover:after {
 	/*background-color: var(--colourDarkPurple_RGB_Transparent);*/
 	
 }
-/*
-#imgsDiv .tabBtns{
-	/* for hover effects, see above with info tab 
-	position: absolute;
-	top: 200px;
-	left: 200px;
-	height: 300px;
-}
-#imgsDiv .tabBtns button#imgInfoLinkBTN, #imgsDiv .tabBtns button#imgTreeLinkBTN{
-	display: block;
-	position: absolute;
-}
-#imgsDiv .tabBtns button#imgInfoLinkBTN{
-	top: -35px;
-}
-#imgsDiv .tabBtns button#imgTreeLinkBTN{
-	bottom: 0px;
-}*/
 button#galleryBtn{
 	display: block;
 	right: 10%;
 	top: 30px;
+	
 }
+button#galleryExitBtn{
+	position: absolute;
+	display: block;	
+	height: 40px;
+	width: 40px;
+	right: 4px;
+	top: 27px;	
+	
+	font-size: 40px;
+	cursor:pointer;	
+	background-color: rgb(0, 0, 0, 0);	
+	color: var(--colourPeachLighter_RGB_Transparent);
+	transition: color 0.6s ease;
+	z-index: calc(var(--galleryZ) + 10);
+	
+}
+button#galleryExitBtn:hover{
+	color: var(--colourPeachLighter_RGB);
+}
+
 
 #imgGallery{
 	position: fixed;
 	top: calc(var(--navBarHeight) + 20px);
 	left: 5%;
-	width: 90vw;
-	height: 85vh;
 	background-color: var(--colourBrownLIGHT_RGB_Transparent);
 	border: 3px solid var(--colourBrown);
 	
 	z-index: var(--galleryZ);
+	
+	opacity:0;
+	width: 90vw;
+	height: 85vh;
+	transition: transform 1s ease;
+	pointer-events: none;
+}
+#imgGallery.galleryOpen{
+	pointer-events: auto;
 }
 #imgGallery .vineLine{
 	height: 50px;

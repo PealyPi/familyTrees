@@ -722,7 +722,9 @@ class peopleTab {
 					
 					infoTab.startStopImgSlideshow('start');
 					
-				}else {
+				}  else if ((currentActive.id == "imgsTab")){
+					imgGalleryObj.openGallery();
+				} else {
 					tree.famView_backToTree();	
 					navObj.openPage(treeBtn);
 				}
@@ -737,7 +739,7 @@ class peopleTab {
 						infoTab.startStopImgSlideshow('start');
 					
 				}  else if ((currentActive.id == "imgsTab")){
-					console.log("Here");
+					imgGalleryObj.openGallery();
 				} else {
 					navObj.openPage(treeBtn);					
 				}
@@ -1626,6 +1628,8 @@ class imgTab {
 	fillWoodInfo(imageInfo){
 		
 	}
+	
+	
 }
 
 class imgGallery{
@@ -1635,17 +1639,27 @@ class imgGallery{
 		
 		this.imageObjsArray = [];
 		
-		
+		this.transitioning = false;
 		
 	}
 	
 	openGallery(){
-		this.imageGalleryDIV.classList.add("galleryOpen");
-		
+		if (!this.transitioning){
+			this.transitioning = true;
+			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'enter');
+			setTimeout(()=>{
+				this.transitioning = false;
+			}, 2000);
+		}
 	}
 	closeGallery(){
-		this.imageGalleryDIV.classList.remove("galleryOpen");
-		
+		if (!this.transitioning){
+			this.transitioning = true;
+			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'exit');
+			setTimeout(()=>{
+				this.transitioning = false;
+			}, 2000);
+		}
 	}
 	
 	clearGallery(){
@@ -3822,6 +3836,45 @@ function VIVIFY_animateElems(elem, type, enterExit){
 							elem.classList.remove("duration-1000");
 							elem.classList.remove("flipOutX");
 						}, 1000);
+					}
+				break;
+			}
+		break;
+		
+		case 'imgGallery':
+			switch (enterExit){
+				case 'enter':
+					if (elem.style.opacity == 0){
+						elem.classList.add("galleryOpen");
+						setTimeout(()=>{
+							elem.classList.add("vivify");
+							elem.classList.add("duration-1500");
+							elem.classList.add("driveInRight");
+							setTimeout(()=>{
+								elem.style.opacity = 1;
+							}, 300);
+							setTimeout(()=>{
+								elem.classList.remove("vivify");
+								elem.classList.remove("duration-1500");
+								elem.classList.remove("driveInRight");
+							}, 1600);
+						}, 0);
+					} 
+				break;
+				case 'exit':
+					if (elem.style.opacity == 1){
+						elem.classList.add("vivify");
+						elem.classList.add("duration-1500");
+						elem.classList.add("driveOutRight");
+						setTimeout(()=>{
+							elem.style.opacity = 0;
+							elem.classList.remove("galleryOpen");
+						}, 1600);
+						setTimeout(()=>{
+							elem.classList.remove("vivify");
+							elem.classList.remove("duration-1500");
+							elem.classList.remove("driveOutRight");
+						}, 1600);
 					}
 				break;
 			}
