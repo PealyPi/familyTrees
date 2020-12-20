@@ -701,6 +701,7 @@ class peopleTab {
 			infoTab.fillPersonInfo(famName, personTag);
 			treeInfoTab.fillPersonInfo(famName, personTag);
 			NODEdetails.updateFocus({'personTag': personTag, 'famName': famName});
+			imgGalleryObj.setPerson(personTag);
 			
 			//if page != info/tree, go to tree...		
 			const navDiv = document.querySelector('.top_navbar');		
@@ -721,7 +722,7 @@ class peopleTab {
 					
 					infoTab.startStopImgSlideshow('start');
 					
-				} else {
+				}else {
 					tree.famView_backToTree();	
 					navObj.openPage(treeBtn);
 				}
@@ -735,6 +736,8 @@ class peopleTab {
 					else if ((currentActive.id == "infoTab"))
 						infoTab.startStopImgSlideshow('start');
 					
+				}  else if ((currentActive.id == "imgsTab")){
+					console.log("Here");
 				} else {
 					navObj.openPage(treeBtn);					
 				}
@@ -1633,7 +1636,15 @@ class imgGallery{
 		this.imageObjsArray = [];
 		
 		
-		this.setPerson('roseHadkiss');
+		
+	}
+	
+	openGallery(){
+		this.imageGalleryDIV.classList.add("galleryOpen");
+		
+	}
+	closeGallery(){
+		this.imageGalleryDIV.classList.remove("galleryOpen");
 		
 	}
 	
@@ -1733,7 +1744,13 @@ class imgGallery{
 	
 	openImageFromGallery(event){
 		const clickedImDiv = event.target;
+		let divId = clickedImDiv.parentElement.id;
 		
+		for (const imgObj of this.imageObjsArray){
+			if (imgObj.id == divId){
+				console.log(imgObj.data);
+			}
+		}
 	}
 	
 }
