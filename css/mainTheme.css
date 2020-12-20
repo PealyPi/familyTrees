@@ -1080,27 +1080,30 @@ button#galleryBtn{
 	width: 180px;
 	height: 180px;
 	float: left;
-	margin-bottom: 2px;
+	margin-bottom: 5px;
 	
+	/*border: 2px solid #333;
 	background: var(--colourBrownDarker);
-	border: 2px solid #333;
 	border-radius:5px;
-	border-color: hsla(0, 0%, 0%, 0.5);
+	border-color: hsla(0, 0%, 0%, 0.5);*/
 }
 #imgGallery .imgGalleryGrid .grid-item img{
 	border-radius:5px;
 	height: 180px;
-	
+	width: 180px;
 }
-#imgGallery .imgGalleryGrid .grid-item grid-item--height2, #imgGallery .imgGalleryGrid .grid-item grid-item--height2 img{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height2, #imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img{
 	height: 200px;
 }
-#imgGallery .imgGalleryGrid .grid-item grid-item--height3, #imgGallery .imgGalleryGrid .grid-item grid-item--height3 img{
-	height: 260px;
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height3, #imgGallery .imgGalleryGrid .grid-item.grid-item--height3 img{
+	height: 250px;
 }
 
-#imgGallery .imgGalleryGrid .grid-item grid-item--width2, #imgGallery .imgGalleryGrid .grid-item grid-item--width2 img{
-	width: 260px;
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width2, #imgGallery .imgGalleryGrid .grid-item.grid-item--width2 img{
+	width: 200px;
+}
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width3, #imgGallery .imgGalleryGrid .grid-item.grid-item--width3 img{
+	width: 250px;
 }
 
 

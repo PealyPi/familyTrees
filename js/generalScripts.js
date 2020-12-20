@@ -1669,7 +1669,7 @@ class imgGallery{
 		});
 		this.msnry = msnry;
 		
-		//msnry.layout();
+		msnry.layout();
 		
 		
 	}
@@ -1682,6 +1682,7 @@ class imgGallery{
 		
 		for (const img of imgArray){
 			const gridImg = new Image();
+			const gridImgDiv = document.createElement('div');
 			gridImg.src = img.imgLink;
 			
 			//get img orig size
@@ -1692,37 +1693,30 @@ class imgGallery{
 			
 			let dimDiv = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
 			let roundedDivide = Math.round(dimDiv * (10 ^ 2)) / (10 ^ 2);			
-			var imageDimType = '';
 			
-			if (roundedDivide < 1.2){
-				imageDimType = 'square';
-			} else {
+			if (roundedDivide > 1.1){
 				if (imgWidth > imgHeight){
-					imageDimType = 'landscape';
+					//landscape
+					if (roundedDivide > 1.3)
+						gridImgDiv.classList.add("grid-item--width3");
+					else 
+						gridImgDiv.classList.add("grid-item--width2");
+					
 				} else if (imgHeight > imgWidth){
-					imageDimType = 'portrait';				
+					//portrait
+					if (roundedDivide > 1.3)
+						gridImgDiv.classList.add("grid-item--height3");
+					else 
+						gridImgDiv.classList.add("grid-item--height2");
 				}
-			}
+			} 	
 			
-			switch (imageDimType){
-				case 'landscape':
-					gridImg.classList.add("grid-item--width2");
-					
-				break;
-				case 'portrait':
-					gridImg.classList.add("grid-item--height2");
-					
-				break;
-			}
-			
-			
-			const gridImgDiv = document.createElement('div');
 			gridImgDiv.classList.add('grid-item');
 			grid.appendChild(gridImgDiv);
 			gridImgDiv.appendChild(gridImg);
 			
-			
-			
+			console.log(img);
+			console.log(roundedDivide);
 		}
 	}
 	
