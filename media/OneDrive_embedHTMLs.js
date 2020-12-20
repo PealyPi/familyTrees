@@ -14,8 +14,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 120,
 			},
 			'tags': {
-				//'year': ''
-				//'place': 
+				//'year': '',
+				//'place': '',
 				//'title': '',
 				'people': [''],
 			}
@@ -70,6 +70,32 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': 
 				//'title': '',
 				'people': ['roseHadkiss', 'ronHadkiss'],
+			}
+		},
+		{	'imgRef':	'rose devon ship, roseHadkiss/roseHadkiss6.jpg',
+			'imgLink': linkStartString + 'y4maxrzHLIuKipQ7Q1LuJPLhmulYjPaV8dt6su3wciZLGPUNtQ1xiuGWMSPmoKyMvgHIF9ni28gbZqrXgc1E-PckHLm5ODULSTxxwG_B8Ci5DRTTYYvcx_SotrLeZ3hqIeRL5rlgvfPWC0m2ENCgXfVWJzpcmFlp1YKgyukEQUte5wyX1tsEI6v9pye6_BdtJAz?width=1466&height=1469&cropmode=none',
+			'imgConfig': {
+				'transform': {'x': 0, 'y': 0},
+				'width': 160,
+			},
+			'tags': {
+				'year': '1951',
+				//'place': '',
+				//'title': '',
+				'people': ['roseHadkiss'],
+			}
+		},
+		{	'imgRef':	'rose hightor, roseHadkiss/roseHadkiss7.jpg',
+			'imgLink': linkStartString + 'y4mCZglS38eYVce5cLUMwMRKMzfteEFXu1NJKh6rWv40g_JcxpCN_hGJ0gSVQh7r1wX7GSKsY66p8ZboHgAo-JZBxFDDmktLNxZu_XaHAhAaA80hLIzwapI_k0mF_DamGhX5PxnB6jEx6VUP7VXuKbTLEHIyy-Kt8NZ34E373pJvPhUr70lTysObmsHmqRWu9Kd?width=1446&height=1539&cropmode=none',
+			'imgConfig': {
+				'transform': {'x': 0, 'y': 0},
+				'width': 160,
+			},
+			'tags': {
+				'year': '1951',
+				//'place': '',
+				//'title': '',
+				'people': ['roseHadkiss'],
 			}
 		},
 		

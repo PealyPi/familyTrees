@@ -1630,14 +1630,9 @@ class imgGallery{
 		this.imageGalleryDIV = document.getElementById('imgGallery');
 		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
 		
-		var grid = document.querySelector('.imgGalleryGrid');
-		this.msnry = new Masonry( grid, {
-			// options...
-			itemSelector: '.grid-item',
-			columnWidth: 200
-		});
 		
 		this.setPerson('roseHadkiss');
+		
 	}
 	
 	clearGallery(){
@@ -1645,6 +1640,11 @@ class imgGallery{
 		for (const galleryChild of galleryChildren){
 			galleryChild.remove();
 		}
+		/*const gridSizer = new createNewElement('div', {
+			'class': 'galleryGrid-sizer',
+		});
+		this.galleryGridDIV.appendChild(gridSizer);*/
+		
 	}
 	
 	setPerson(personTag){
@@ -1656,12 +1656,25 @@ class imgGallery{
 		
 		let imgArray = PEOPLEIMGs[personTag];
 		shuffle(imgArray);
-		this.addImagesToGrid(imgArray);
 		
-		this.msnry.layout();
+		var grid = document.querySelector('.imgGalleryGrid');
+		this.grid = grid;
+		this.addImagesToGrid(imgArray, grid);
+		
+		let msnry = new Masonry( grid, {
+			itemSelector: '.grid-item',
+			columnWidth: 180,
+			isFitWidth: true,
+			gutter: 2,
+		});
+		this.msnry = msnry;
+		
+		//msnry.layout();
+		
+		
 	}
 	
-	addImagesToGrid(imgArray){
+	addImagesToGrid(imgArray, grid){
 		/*let defaultImgConfig = {
 			'transform': {'x': 0, 'y': 0},
 			'width': 120
@@ -1669,13 +1682,13 @@ class imgGallery{
 		
 		for (const img of imgArray){
 			const gridImg = new createNewElement('image', { 
-				'class': 'galleryGridImg',
+				'class': 'gridImg',
 				'href': img.imgLink,
+				'width': '180px',
 			});	
-			const gridImgDiv = new createNewElement('div', {
-				'class': 'galleryGridImgDIV',
-			});
-			this.galleryGridDIV.appendChild(gridImgDiv);
+			const gridImgDiv = document.createElement('div');
+			gridImgDiv.classList.add('grid-item');
+			grid.appendChild(gridImgDiv);
 			gridImgDiv.appendChild(gridImg);
 			
 			//console.log(gridImg.width());
@@ -1683,49 +1696,6 @@ class imgGallery{
 		}
 	}
 	
-	resizeMasonryItem(item){
-		/* Get the grid object, its row-gap, and the size of its implicit rows */
-		var grid = document.getElementsByClassName('imgGalleryGrid')[0],
-			rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
-			rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-
-		/*
-		* Spanning for any brick = S
-		* Grid's row-gap = G
-		* Size of grid's implicitly create row-track = R
-		* Height of item content = H
-		* Net height of the item = H1 = H + G
-		* Net height of the implicit row-track = T = G + R
-		* S = H1 / T
-		*/
-		var rowSpan = Math.ceil((item.querySelector('.gallery-content').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
-
-		/* Set the spanning as calculated above (S) */
-		item.style.gridRowEnd = 'span '+rowSpan;
-	}
-	
-	resizeAllMasonryItems(){
-		// Get all item class objects in one list
-		var allItems = document.getElementsByClassName('masonry-brick');
-
-		/*
-		* Loop through the above list and execute the spanning function to
-		* each list-item (i.e. each masonry item)
-		*/
-		for(var i=0;i<allItems.length;i++){
-			resizeMasonryItem(allItems[i]);
-		}
-	}
-
-	waitForImages() {
-		var allItems = document.getElementsByClassName('');
-		for(var i=0;i<allItems.length;i++){
-			imagesLoaded( allItems[i], function(instance) {
-				var item = instance.elements[0];
-				resizeMasonryItem(item);
-			} );
-		}
-	}
 }
 
 
