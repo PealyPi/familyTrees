@@ -1194,23 +1194,22 @@ button#galleryExitBtn:hover{
     background: none;
 }
 
-#imgsDiv .imgContainer{
-	
-}
+
 #imgsDiv .imgArea{
 	position: relative;
 	z-index: calc(var(--woodBackZ)+10);
 	/*background-color: var(--colourGreen);*/
 	/* 8 x 10*/
-	width: calc((445px/10)*8);
-	height: 445px;
+	min-height: 330px;
+	min-width:335px;
 	
 	margin: 100px auto 0 auto;
 	
 	/*box-shadow: 2px 2px 5px 4px rgba(0, 0, 0, 0.4);*/
-	
+	transition: width 1s ease;
 }
 #imgsDiv .imgArea img{
+	display: none;
 	width: 100%;
 	margin: auto;
 	top:0; left:0; bottom: 0 ; right:0;
@@ -1298,15 +1297,15 @@ button#galleryExitBtn:hover{
 	
 }
 #imgsDiv .imgDisplay.landscape .imgArea{
-	width: 445px;
-	height: calc((445px/10)*8);
-	
+	width: 445px;	
+}
+#imgsDiv .imgDisplay.portrait .imgArea{
+	width: 345px;	
 }
 #imgsDiv .imgDisplay.square .imgArea{
-	width: 445px;
-	height: 445px;
-	
+	width: 355px;
 }
+
 #imgsDiv .imgDisplay.landscape .imgDivVines{
 	width: 110%;
 	background-size: 200px, 190px;

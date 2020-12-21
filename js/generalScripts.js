@@ -1639,7 +1639,7 @@ class imgTab {
 		this.transitioning = false;
 	}
 	
-	setImage(imageObj){		
+	setImageDelayed(imageObj){
 		this.clearImg();
 		this.currentImageObj = imageObj;
 		
@@ -1649,24 +1649,22 @@ class imgTab {
 		createdImg.src = imageObj.data.imgLink;
 		this.imageArea.appendChild(createdImg);
 		
+		VIVIFY_animateElems(createdImg, 'imgArea', 'enter');
+		
 		let imgOrientation = imageObj.orientation;
 		//console.log(imageObj);
 		
-		if (imgOrientation == 'landscape'){
-			if (!this.imgDisplay.classList.contains("landscape"))
-				this.imgDisplay.classList.add("landscape");
-			if (this.imgDisplay.classList.contains("square"))
-				this.imgDisplay.classList.remove("square");		
-		} else if (imgOrientation == 'portrait'){
-			if (this.imgDisplay.classList.contains("landscape"))
-				this.imgDisplay.classList.remove("landscape");
-			if (this.imgDisplay.classList.contains("square"))
-				this.imgDisplay.classList.remove("square");	
-		} else if (imgOrientation == 'square'){
-			if (this.imgDisplay.classList.contains("landscape"))
-				this.imgDisplay.classList.remove("landscape");	
-			if (!this.imgDisplay.classList.contains("square"))
-				this.imgDisplay.classList.add("square");			
+		let orientationList = ["square", "portrait", "landscape"];
+		
+		if (!this.imgDisplay.classList.contains(imgOrientation)){
+			for (const ori of orientationList){
+				if (this.imgDisplay.classList.contains(ori));
+					this.imgDisplay.classList.remove(ori);		
+			}
+			this.imgDisplay.classList.add(imgOrientation);
+			
+			console.log(imgOrientation);
+			
 		}
 		
 		//people in img circles
@@ -1700,6 +1698,17 @@ class imgTab {
 		
 		
 		this.fillWoodInfo(imageObj);
+		
+	}
+	
+	setImage(imageObj){	
+	console.log(this.imageArea.querySelector("image"));
+		VIVIFY_animateElems(this.imageArea.querySelector("image"), 'imgArea', 'exit');
+		
+		setTimeout(()=> {
+			imgOpenTab.setImageDelayed(imageObj);
+		}, 1000);
+		
 	}
 	
 	circleClickEvnt(evnt){	
@@ -1718,9 +1727,7 @@ class imgTab {
 		console.log("Change Focus " + clickedPerson);
 	}
 	
-	clearImg(){
-		let emptyArray = [];
-		
+	clearImg(){	
 		let areaChildren = Array.from(this.imageArea.childNodes);
 		
 		for (const areaChild of areaChildren){
@@ -1891,7 +1898,9 @@ class imgGallery{
 				} else {
 					imgOrientation = 'square';					
 				}
-			} 	
+			} else {
+					imgOrientation = 'square';					
+				}
 			
 			//unique tags
 			this.imageObjsArray.push({
@@ -1904,7 +1913,6 @@ class imgGallery{
 				'origHeight': imgHeight,
 			});
 			gridImgDiv.id = 'imgDiv' + imgCount;
-			
 			
 			gridImgDiv.classList.add('grid-item');
 			grid.appendChild(gridImgDiv);
@@ -4052,6 +4060,35 @@ function VIVIFY_animateElems(elem, type, enterExit){
 						elem.classList.remove("vivify");
 						elem.classList.remove("duration-1000");
 						elem.classList.remove("driveOutRight");
+					}, 1600);
+					
+				break;
+			}
+		break;
+		
+		case 'imgArea':
+			switch (enterExit){
+				case 'enter':
+					elem.style.opacity = 1;
+					elem.classList.add("vivify");
+					elem.classList.add("duration-1000");
+					elem.classList.add("spinIn");
+					setTimeout(()=>{
+						elem.classList.remove("vivify");
+						elem.classList.remove("duration-1000");
+						elem.classList.remove("spinIn");
+					}, 1600);
+				
+				break;
+				case 'exit':
+					elem.classList.add("vivify");
+					elem.classList.add("duration-1000");
+					elem.classList.add("spinOut");
+					setTimeout(()=>{
+						elem.style.opacity = 0;
+						elem.classList.remove("vivify");
+						elem.classList.remove("duration-1000");
+						elem.classList.remove("spinOut");
 					}, 1600);
 					
 				break;
