@@ -1074,7 +1074,7 @@ button#galleryExitBtn:hover{
 	width: 100vw;
 }
 
-#imgGallery  .galleryPersonFocus, #imgGallery  .galleryShowAll{
+#imgGallery  .galleryPersonFocus, #imgGallery  .galleryShowAll, #imgGallery .galleryNoImgs{
 	position: absolute;
 	top: 0;
 	
@@ -1100,6 +1100,13 @@ button#galleryExitBtn:hover{
 }
 #imgGallery  .galleryShowAll:hover{
 	color: var(--colourPeach);  
+}
+#imgGallery .galleryNoImgs{
+	display: none;
+	top: 60px;
+	left:60px;
+	font-size: 40px;
+	color: var(--colourMint);
 }
 
 #imgGallery .imgGalleryGrid *{

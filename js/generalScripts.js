@@ -498,6 +498,9 @@ class navBar {
 				case 'imgsTab':
 					this.hideAllSects(this.imgsDiv);
 					this.showSect(this.imgsDiv);
+					if (imgOpenTab.currentImgObj = {}){
+						setTimeout(function(){imgGalleryObj.openGallery();}, 2000);
+					}
 				break;
 				
 			}
@@ -1727,6 +1730,8 @@ class imgGallery{
 		this.galleryPersonFocus = this.imageGalleryDIV.querySelector(".galleryPersonFocus");
 		
 		this.imageObjsArray = [];
+		this.allImgsObjsArray = pplImageLinks(true);
+		shuffle(this.allImgsObjsArray);
 		
 		this.transitioning = false;
 		
@@ -1754,18 +1759,23 @@ class imgGallery{
 	}
 	
 	clearGallery(){
-		let galleryChildren = this.galleryGridDIV.children;
-		for (const galleryChild of Array.from(galleryChildren)){
-			galleryChild.remove();
-		}
-		this.imageObjsArray = [];
+		if (!this.transitioning){
+			let noImgDivCheck = this.imageGalleryDIV.querySelector(".galleryNoImgs");
+			if (noImgDivCheck != null){
+				$(noImgDivCheck).fadeOut(500);
+				setTimeout(function(){ noImgDivCheck.remove();}, 1000);
+			}
+			
+			let galleryChildren = this.galleryGridDIV.children;
+			for (const galleryChild of Array.from(galleryChildren)){
+				galleryChild.remove();
+			}
+			this.imageObjsArray = [];
+	}
 	}
 	
 	initialGallery(){
-		//allImgs
-		let allImgsArray = pplImageLinks(true);
-		shuffle(allImgsArray);
-		
+		//allImgs		
 		var grid = document.querySelector('.imgGalleryGrid');
 		this.grid = grid;
 		
@@ -1777,7 +1787,7 @@ class imgGallery{
 		});
 		this.msnry = msnry;
 		
-		this.addImagesToGrid(allImgsArray, grid);		
+		this.addImagesToGrid(this.allImgsObjsArray, grid);		
 		
 		msnry.layout();
 		
@@ -1793,21 +1803,25 @@ class imgGallery{
 		
 		var imgArray;
 		if (personTag == 'All'){
-			imgArray = pplImageLinks(true);
-			//console.log($('#imgGallery .galleryShowAll'));
+			imgArray = this.allImgsObjsArray;
 			$('#imgGallery .galleryShowAll').fadeOut(500);
 		} else {
 			imgArray = PEOPLEIMGs[personTag] ?? 'none';
+			shuffle(imgArray);	
 			$('#imgGallery .galleryShowAll').fadeIn(500);
 		}
 		
-		if (imgArray != 'none'){
-			shuffle(imgArray);			
+		if (imgArray != 'none'){		
 			this.addImagesToGrid(imgArray, this.grid);					
 			this.msnry.layout();
 			
 		} else {
-			console.log("No imgs");
+			let noImgDiv = document.createElement("div");
+			this.imageGalleryDIV.appendChild(noImgDiv);
+			noImgDiv.innerHTML = "No Images for this Person";
+			noImgDiv.classList.add("galleryNoImgs");
+			
+			$(noImgDiv).fadeIn(500);
 		}
 		
 		
