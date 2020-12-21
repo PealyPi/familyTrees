@@ -1251,6 +1251,18 @@ button#galleryExitBtn:hover{
 	transition: opacity 1s ease;
 	pointer-events: none;
 }
+#imgsDiv .img_circleTagLABEL.small{
+	top: 65px;
+	left: 15px;	
+}
+#imgsDiv .img_circleTagLABEL.smaller{
+	top: 41px;
+	left: 15px;	
+}
+#imgsDiv .img_circleTagLABEL.large{
+	top: 125px;
+	left: 55px;	
+}
 #imgsDiv .img_circleTag:hover .img_circleTagLABEL{
 	opacity: 1;
 }

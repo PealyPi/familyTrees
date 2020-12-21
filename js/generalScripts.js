@@ -1629,6 +1629,14 @@ class imgTab {
 		this.imageDivWood 	= this.imgDisplay.querySelector(".imageDivWood");
 		
 		this.currentImageObj = {};
+		
+		this.circleSizes = {
+			'large': '120px',
+			'small': '60px',
+			'smaller': '40px',
+		}
+		
+		this.transitioning = false;
 	}
 	
 	setImage(imageObj){		
@@ -1676,27 +1684,38 @@ class imgTab {
 			personCircle.style.left = personObj[personTag].left + "px";
 			personCircle.style.top = personObj[personTag].top + "px";
 			if (personObj[personTag].hasOwnProperty("size")){
-				const circleSizes = {
-					'large': '120px',
-					'small': '50px',
-				}
 				let circleSizing = personObj[personTag].size;
-				personCircle.style.width = circleSizes[circleSizing];
-				personCircle.style.height = circleSizes[circleSizing];
-			}
-			
+				personCircle.style.width = this.circleSizes[circleSizing];
+				personCircle.style.height = this.circleSizes[circleSizing];
+				
+				personCircleLabel.classList.add(circleSizing);
+			}		
 			
 			personCircleLabel.classList.add("img_circleTagLABEL");
 			personCircleLabel.innerHTML = personTag;
+			
+			personCircle.addEventListener("click", (evnt) => this.circleClickEvnt(evnt));
+			
 		}
 		
 		
 		this.fillWoodInfo(imageObj);
 	}
 	
+	circleClickEvnt(evnt){	
+		if (!this.transitioning){
+			const clickedCircleDiv = event.target;
+			let circleId = clickedCircleDiv.id;
+			const personClicked = circleId.replace("_circleTag", "");
+		
+			this.changeFocus(personClicked);
+			
+		}
+	}
+	
 	changeFocus(clickedPerson){
 		imgGalleryObj.setPerson(clickedPerson);
-		
+		console.log("Change Focus " + clickedPerson);
 	}
 	
 	clearImg(){
@@ -1710,6 +1729,7 @@ class imgTab {
 					areaGchild.remove();
 				}
 			}
+			areaChild.removeEventListener("click", (evnt) => this.circleClickEvnt(evnt));
 			areaChild.remove();
 		}
 		this.currentImageObj = {};
@@ -1717,7 +1737,13 @@ class imgTab {
 	}
 	
 	fillWoodInfo(imageObj){
-		
+		if (!this.transitioning){
+			this.transitioning = true;
+			
+			setTimeout(()=> {
+				this.transitioning = false;
+			}, 1000)
+		}
 	}
 	
 	
