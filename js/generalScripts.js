@@ -1794,9 +1794,11 @@ class imgGallery{
 		var imgArray;
 		if (personTag == 'All'){
 			imgArray = pplImageLinks(true);
-			
+			//console.log($('#imgGallery .galleryShowAll'));
+			$('#imgGallery .galleryShowAll').fadeOut(500);
 		} else {
 			imgArray = PEOPLEIMGs[personTag] ?? 'none';
+			$('#imgGallery .galleryShowAll').fadeIn(500);
 		}
 		
 		if (imgArray != 'none'){
