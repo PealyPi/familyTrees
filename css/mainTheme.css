@@ -19,6 +19,8 @@
 	--colourPeach_RGB_Transparent: rgb(254, 195, 166, 0.6); 
 	--colourPeachLighter_RGB: rgb(254,212,191, 1);
 	--colourPeachLighter_RGB_Transparent: rgb(254,212,191, 0.6);
+	
+	--colourPeach_purpleComp: #C3A6FE;
   
 	/* Green */
 	--colourGreen: #EFE9AE; 
@@ -450,7 +452,7 @@ button,  button:active, button:hover, button:focus{
 /*img debug*/
 #imgDebugControlsDIV {
 	position: fixed;
-	right: 0;
+	left: 20px;
 	top: 10%;
 	z-index: 40;
 	/*display: none;*/
@@ -1030,19 +1032,20 @@ button#galleryExitBtn{
 	display: block;	
 	height: 40px;
 	width: 40px;
-	right: 4px;
-	top: 27px;	
+	right: 0px;
+	top: 0px;	
 	
 	font-size: 40px;
 	cursor:pointer;	
 	background-color: rgb(0, 0, 0, 0);	
-	color: var(--colourPeachLighter_RGB_Transparent);
+	color: var(--colourPeachLighter_RGB);
+	text-shadow: 0px 0px 4px #000;
 	transition: color 0.6s ease;
 	z-index: calc(var(--galleryZ) + 10);
 	
 }
 button#galleryExitBtn:hover{
-	color: var(--colourPeachLighter_RGB);
+	color: var(--colourPeach_purpleComp);
 }
 
 

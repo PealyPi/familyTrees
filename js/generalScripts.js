@@ -1693,12 +1693,20 @@ class imgTab {
 	
 	changeFocus(clickedPerson){
 		imgGalleryObj.setPerson(clickedPerson);
-		console.log("Changing img focus to " + clickedPerson);
+		
 	}
 	
 	clearImg(){
-		let areaChildren = this.imageArea.children;
+		let emptyArray = [];
+		
+		let areaChildren = Array.from(this.imageArea.childNodes);
+		console.log(areaChildren);
 		for (const areaChild of areaChildren){
+			if (Array.from(areaChild.childNodes).length != 0){
+				for (const areaGchild of Array.from(areaChild.childNodes)){
+					areaGchild.remove();
+				}
+			}
 			areaChild.remove();
 		}
 		this.currentImageObj = {};
@@ -1720,6 +1728,8 @@ class imgGallery{
 		this.imageObjsArray = [];
 		
 		this.transitioning = false;
+		
+		this.initialGallery();
 		
 	}
 	
@@ -1750,6 +1760,28 @@ class imgGallery{
 		this.imageObjsArray = [];		
 	}
 	
+	initialGallery(){
+		//allImgs
+		let allImgsArray = pplImageLinks(true);
+		shuffle(allImgsArray);
+		
+		var grid = document.querySelector('.imgGalleryGrid');
+		this.grid = grid;
+		
+		let msnry = new Masonry( grid, {
+			itemSelector: '.grid-item',
+			columnWidth: 185,
+			isFitWidth: true,
+			//gutter: 1,
+		});
+		this.msnry = msnry;
+		
+		this.addImagesToGrid(allImgsArray, grid);		
+		
+		msnry.layout();
+		
+	}
+	
 	setPerson(personTag){
 		this.clearGallery();
 		
@@ -1763,18 +1795,9 @@ class imgGallery{
 			var grid = document.querySelector('.imgGalleryGrid');
 			this.grid = grid;
 			
-			let msnry = new Masonry( grid, {
-				itemSelector: '.grid-item',
-				columnWidth: 185,
-				isFitWidth: true,
-				//gutter: 1,
-			});
-			this.msnry = msnry;
+			this.addImagesToGrid(imgArray, grid);		
 			
-			this.addImagesToGrid(imgArray, grid);
-			
-			
-			msnry.layout();
+			this.msnry.layout();
 		}
 		
 	}
@@ -3732,17 +3755,17 @@ class treeChangeEvents {
 }
 
 function changeGlobalFocus(personFam, personName, source = false){	
-	console.log(personFam + ", " + personName );
+	//console.log(personFam + ", " + personName );
 	if (source == "treeSVG"){
-		console.log("changing global focus1 to " + personName);
+		//console.log("changing global focus1 to " + personName);
 		NODEdetails.updateFocus({'personTag': personName, 'famName': personFam});		
 		imgOpenTab.changeFocus(personName);
 		
 	} else if (source == "imgsOnly"){
-		console.log("changing global focus2 to " + personName);
+		//console.log("changing global focus2 to " + personName);
 		imgOpenTab.changeFocus(personName);
 	} else {
-		console.log("changing global focus3 to " + personName);
+		//console.log("changing global focus3 to " + personName);
 		NODEdetails.updateFocus({'personTag': personName, 'famName': personFam});
 		
 		infoTab.fillPersonInfo(personFam, personName);
