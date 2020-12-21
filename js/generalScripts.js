@@ -475,6 +475,8 @@ class navBar {
 			treeInfoTab.startStopImgSlideshow('stop');
 			infoTab.startStopImgSlideshow('stop');
 			
+			imgGalleryObj.closeGallery();
+			
 			//hide all				
 			switch (newActiveID){
 				case 'homeTab':		
