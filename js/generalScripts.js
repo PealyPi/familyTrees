@@ -1379,7 +1379,7 @@ class leafImgs {
 		const clipPathURL = 'url(#' + this.type +  '_topLeaf_clipPath)';
 		
 		this.leafImgArr.forEach((arrImgObjs, i)=> {
-			let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgConfig);
+			let imgConfigInclude = Object.assign(defaultImgConfig, arrImgObjs.imgLeafConfig);
 			const leafImgSVGobj = new createNewElement('image', { 
 				'class': 'svg_leafImg',
 				'href': arrImgObjs.imgLink,
@@ -1670,8 +1670,8 @@ class imgTab {
 			
 			personCircle.classList.add("img_circleTag");
 			personCircle.id = personTag + "_circleTag";
-			personCircle.style.left = personObj[personTag].x + "px";
-			personCircle.style.top = personObj[personTag].y + "px";
+			personCircle.style.left = personObj[personTag].left + "px";
+			personCircle.style.top = personObj[personTag].top + "px";
 			if (personObj[personTag].hasOwnProperty("size")){
 				const circleSizes = {
 					'large': '120px',
@@ -1689,6 +1689,11 @@ class imgTab {
 		
 		
 		this.fillWoodInfo(imageObj);
+	}
+	
+	changeFocus(clickedPerson){
+		imgGalleryObj.setPerson(clickedPerson);
+		console.log("Changing img focus to " + clickedPerson);
 	}
 	
 	clearImg(){
@@ -1752,24 +1757,25 @@ class imgGallery{
 		//if portrait, add class to span 2/3 rows (depending on size)
 		//if landscape, add class to span columns?
 		
-		let imgArray = PEOPLEIMGs[personTag];
-		shuffle(imgArray);
-		var grid = document.querySelector('.imgGalleryGrid');
-		this.grid = grid;
-		
-		let msnry = new Masonry( grid, {
-			itemSelector: '.grid-item',
-			columnWidth: 185,
-			isFitWidth: true,
-			//gutter: 1,
-		});
-		this.msnry = msnry;
-		
-		this.addImagesToGrid(imgArray, grid);
-		
-		
-		msnry.layout();
-		
+		let imgArray = PEOPLEIMGs[personTag] ?? 'none';
+		if (imgArray != 'none'){
+			shuffle(imgArray);
+			var grid = document.querySelector('.imgGalleryGrid');
+			this.grid = grid;
+			
+			let msnry = new Masonry( grid, {
+				itemSelector: '.grid-item',
+				columnWidth: 185,
+				isFitWidth: true,
+				//gutter: 1,
+			});
+			this.msnry = msnry;
+			
+			this.addImagesToGrid(imgArray, grid);
+			
+			
+			msnry.layout();
+		}
 		
 	}
 	
@@ -1842,13 +1848,16 @@ class imgGallery{
 	}
 	
 	openImageFromGallery(event){
-		const clickedImDiv = event.target;
-		let divId = clickedImDiv.parentElement.id;
+		if (!this.transitioning){
+			const clickedImDiv = event.target;
+			let divId = clickedImDiv.parentElement.id;
 		
-		for (const imgObj of this.imageObjsArray){
-			if (imgObj.id == divId){
-				imgOpenTab.setImage(imgObj);
+			for (const imgObj of this.imageObjsArray){
+				if (imgObj.id == divId){
+					imgOpenTab.setImage(imgObj);
+				}
 			}
+			this.closeGallery();
 		}
 	}
 	
@@ -2512,9 +2521,7 @@ class node {
 		switch (first){
 			case 'focusChild': //=> direction left
 				//this becomes focus
-				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
-				infoTab.fillPersonInfo(this.famName, this.personTag);
-				treeInfoTab.fillPersonInfo(this.famName, this.personTag);
+				changeGlobalFocus(this.famName, this.personTag);
 				
 				const getGchildLetter = NODEdetails.nodeLetterTags['focusGchild'];
 				NODEdetails.nodeList[getGchildLetter].nodeGrpContainer.style.opacity = 1;
@@ -2556,9 +2563,7 @@ class node {
 			break;		
 			case 'focusParent': //=> direction right		
 				//this becomes focus
-				NODEdetails.updateFocus({'personTag': this.personTag, 'famName': this.famName});
-				infoTab.fillPersonInfo(this.famName, this.personTag);
-				treeInfoTab.fillPersonInfo(this.famName, this.personTag);
+				changeGlobalFocus(this.famName, this.personTag);
 				
 				//set visibility of gParent and gChildren
 				const getGparentLetter = NODEdetails.nodeLetterTags['focusGparent'];
@@ -2600,6 +2605,7 @@ class node {
 			break;				
 			case 'focusParentS': 
 				this.shiftMainLine();
+				changeGlobalFocus(this.famName, this.personTag, 'imgsOnly');
 			break;	
 		}		
 	}
@@ -3670,11 +3676,9 @@ class treeChangeEvents {
 
 		clickedContainer.querySelector(".focusHighlightGrp").classList.add("focusHLT");
 		
-		NODEdetails.updateFocus({'personTag': clickedPerson, 'famName': clickedPersonFam});
-		//update info
 		
-		infoTab.fillPersonInfo(clickedPersonFam, clickedPerson);
-		treeInfoTab.fillPersonInfo(clickedPersonFam, clickedPerson);
+		
+		changeGlobalFocus(clickedPersonFam, clickedPerson);		
 	}
 	
 	arrowFocus(direction){
@@ -3693,7 +3697,8 @@ class treeChangeEvents {
 	
 	newFocus(personName, famName){
 		//from person click
-		NODEdetails.updateFocus({'personTag': personName, 'famName':famName});	
+		//NODEdetails.updateFocus({'personTag': personName, 'famName':famName});	
+		changeGlobalFocus(famName, personName, "treeSVG");
 		
 		const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
 		
@@ -3726,6 +3731,27 @@ class treeChangeEvents {
 	
 }
 
+function changeGlobalFocus(personFam, personName, source = false){	
+	console.log(personFam + ", " + personName );
+	if (source == "treeSVG"){
+		console.log("changing global focus1 to " + personName);
+		NODEdetails.updateFocus({'personTag': personName, 'famName': personFam});		
+		imgOpenTab.changeFocus(personName);
+		
+	} else if (source == "imgsOnly"){
+		console.log("changing global focus2 to " + personName);
+		imgOpenTab.changeFocus(personName);
+	} else {
+		console.log("changing global focus3 to " + personName);
+		NODEdetails.updateFocus({'personTag': personName, 'famName': personFam});
+		
+		infoTab.fillPersonInfo(personFam, personName);
+		treeInfoTab.fillPersonInfo(personFam, personName);
+		
+		imgOpenTab.changeFocus(personName);
+	}
+	
+}
 /* -------------------- */
 
 function svgAnimate(type, enterExit, elemNodeObj, config){

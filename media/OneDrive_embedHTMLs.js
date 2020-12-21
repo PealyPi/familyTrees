@@ -18,12 +18,12 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': '',
 				//'title': '',
 				'people': [''],
-				'peoplePositions': [{'personTag': {'x': 0, 'y': 0}}],
+				'peoplePositions': [{'personTag': {'left': 0, 'top': 0}}],
 			}
 		},*/		
 		{	'imgRef':	'ron & rose hadkiss, roseHadkiss/roseHadkiss4.jpg',
 			'imgLink': linkStartString + 'y4mcpObZD09Lfdb76aVA0h_kUcXmIthWy9JSd0L_AI9EoFivjP2yKf8UcFJEJwAoYnGstst-koEKnR5DaTf8V-8pzVGOmk7bLt3e_duF74L5O8IJz_Dm279-FrtCyv5MPi8OYj04u7SV9O6oqH5MUZpNKj2kFoKIfuLJjdoXh4TPVKhRT-duylXCZC47iQQSVvG?width=965&height=842&cropmode=none',
-			'imgConfig': {
+			'imgLeafConfig': {
 				'transform': {'x': 10, 'y': 10},
 				'width': 120,
 			},
@@ -32,8 +32,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': 
 				//'title': '',
 				'people': [
-					{'roseHadkiss': {'x': 0, 'y': 0}},
-					{'ronHadkiss': {'x': 0, 'y': 0}},
+					{'roseHadkiss': {'left': 0, 'top': 0}},
+					{'ronHadkiss': {'left': 0, 'top': 0}},
 				],
 			}
 		},
@@ -48,9 +48,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': 
 				'title': 'Kesby Beach Family Photo',
 				'people': [
-					{'roseHadkiss': {'x': 40, 'y': 160}},
-					{'johnNevilleKesby': {'x': 100, 'y': 100}},
-					{'jackKesby': {'x': 152, 'y': 225}},
+					{'roseHadkiss': {'left': 40, 'top': 160}},
+					{'johnNevilleKesby': {'left': 100, 'top': 100}},
+					{'jackKesby': {'left': 225, 'top': 152}},
 				],
 			}
 		},
@@ -64,7 +64,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': ''
 				//'place': 
 				'title': 'Rose Kesby at the Factory',
-				'people': [{'roseHadkiss': {'x': 0, 'y': 0}}],
+				'people': [{'roseHadkiss': {'left': 0, 'top': 0}}],
 			}
 		},
 		{	'imgRef':	'rose&ron 1951 beach trip, roseHadkiss/roseHadkiss2.jpg',
@@ -78,8 +78,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': 
 				//'title': '',
 				'people': [
-					{'roseHadkiss': {'x': 0, 'y': 0}},
-					{'ronHadkiss': {'x': 0, 'y': 0}},
+					{'roseHadkiss': {'left': 0, 'top': 0}},
+					{'ronHadkiss': {'left': 0, 'top': 0}},
 				],
 			}
 		},
@@ -93,7 +93,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': [{'roseHadkiss': {'x': 0, 'y': 0}}],
+				'people': [{'roseHadkiss': {'left': 0, 'top': 0}}],
 			}
 		},
 		{	'imgRef':	'rose hightor, roseHadkiss/roseHadkiss7.jpg',
@@ -106,7 +106,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': [{'roseHadkiss': {'x': 0, 'y': 0}}],
+				'people': [{'roseHadkiss': {'left': 0, 'top': 0}}],
 			}
 		},
 		{	'imgRef':	'roseRon Wedding, roseHadkiss/roseHadkiss8.jpg',
@@ -120,8 +120,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': '',
 				//'title': '',
 				'people': [
-					{'roseHadkiss': {'x': 0, 'y': 0}},
-					{'ronHadkiss': {'x': 0, 'y': 0}},
+					{'roseHadkiss': {'left': 0, 'top': 0}},
+					{'ronHadkiss': {'left': 0, 'top': 0}},
 				],
 			}
 		},
