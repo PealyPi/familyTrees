@@ -1755,10 +1755,10 @@ class imgGallery{
 	
 	clearGallery(){
 		let galleryChildren = this.galleryGridDIV.children;
-		for (const galleryChild of galleryChildren){
+		for (const galleryChild of Array.from(galleryChildren)){
 			galleryChild.remove();
 		}
-		this.imageObjsArray = [];		
+		this.imageObjsArray = [];
 	}
 	
 	initialGallery(){
@@ -1791,17 +1791,23 @@ class imgGallery{
 		//if portrait, add class to span 2/3 rows (depending on size)
 		//if landscape, add class to span columns?
 		
-		let imgArray = PEOPLEIMGs[personTag] ?? 'none';
+		var imgArray;
+		if (personTag == 'All'){
+			imgArray = pplImageLinks(true);
+			
+		} else {
+			imgArray = PEOPLEIMGs[personTag] ?? 'none';
+		}
+		
 		if (imgArray != 'none'){
-			shuffle(imgArray);
-			var grid = document.querySelector('.imgGalleryGrid');
-			this.grid = grid;
-			
-			this.addImagesToGrid(imgArray, grid);		
-			
+			shuffle(imgArray);			
+			this.addImagesToGrid(imgArray, this.grid);					
 			this.msnry.layout();
 			
+		} else {
+			console.log("No imgs");
 		}
+		
 		
 		
 	}
