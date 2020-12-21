@@ -1198,13 +1198,11 @@ button#galleryExitBtn:hover{
 #imgsDiv .imgArea{
 	position: relative;
 	z-index: calc(var(--woodBackZ)+10);
-	/*background-color: var(--colourGreen);*/
 	/* 8 x 10*/
 	min-height: 330px;
 	
 	margin: 100px auto 0 auto;
 	
-	/*box-shadow: 2px 2px 5px 4px rgba(0, 0, 0, 0.4);*/
 	transition: height 1s ease;
 }
 #imgsDiv .imgArea img{
