@@ -1201,17 +1201,17 @@ button#galleryExitBtn:hover{
 	/*background-color: var(--colourGreen);*/
 	/* 8 x 10*/
 	min-height: 330px;
-	min-width:335px;
 	
 	margin: 100px auto 0 auto;
 	
 	/*box-shadow: 2px 2px 5px 4px rgba(0, 0, 0, 0.4);*/
-	transition: width 1s ease;
+	transition: height 1s ease;
 }
 #imgsDiv .imgArea img{
+	position: absolute;
 	opacity: 0;
-	width: 100%;
-	margin: auto;
+	width: 445px;
+	margin: 0 auto;
 	top:0; left:0; bottom: 0 ; right:0;
 	
 	box-shadow: 2px 2px 5px 4px rgba(0, 0, 0, 0.4);
@@ -1293,16 +1293,19 @@ button#galleryExitBtn:hover{
 	background-image: url('../media/ivy5_rotated.svg'), url('../media/ivy1_rotated.svg'); 
 	background-position: left top, right top;
 	background-size: 200px, 200px;
-	background-repeat: no-repeat;
+	background-repeat: no-repeat;	
 	
+	transition: background-size 1s ease, width 1s ease;
 }
-#imgsDiv .imgDisplay.landscape .imgArea{
+
+
+#imgsDiv .imgDisplay.landscape .imgArea img{
 	width: 445px;	
 }
-#imgsDiv .imgDisplay.portrait .imgArea{
+#imgsDiv .imgDisplay.portrait .imgArea img{
 	width: 345px;	
 }
-#imgsDiv .imgDisplay.square .imgArea{
+#imgsDiv .imgDisplay.square .imgArea img{
 	width: 355px;
 }
 

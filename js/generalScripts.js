@@ -1624,7 +1624,6 @@ class imgTab {
 	constructor(){
 		this.imageDiv = document.getElementById('imgsDiv');
 		this.imgDisplay 	= this.imageDiv.querySelector(".imgDisplay");
-		this.imgContainer = this.imgDisplay.querySelector(".imgContainer");
 		this.imageArea 		= this.imgDisplay.querySelector(".imgArea");
 		this.imageDivWood 	= this.imgDisplay.querySelector(".imageDivWood");
 		
@@ -1641,17 +1640,25 @@ class imgTab {
 	}
 	
 	setImage(imageObj){	
-		if (this.createdImg != null)
-			VIVIFY_animateElems(this.createdImg, 'imgArea', 'exit');
+		if (this.createdImg != null){
+			let oldImg = this.createdImg;
+			VIVIFY_animateElems(oldImg, 'imgArea', 'exit');
+			
+			setTimeout(()=> {		
+				this.setImageCreate(imageObj);	
+			}, 1100);
+			setTimeout(()=> {	
+				VIVIFY_animateElems(this.createdImg , 'imgArea', 'enter');
+			}, 1100);
+		} else {		
+			//this.clearImg();
+			this.setImageCreate(imageObj);
+			VIVIFY_animateElems(this.createdImg , 'imgArea', 'enter');
+		}
 		
-		setTimeout(()=> {
-			this.setImageDelayed(imageObj);
-		}, 1000);
 		
 	}
-	
-	setImageDelayed(imageObj){
-		this.clearImg();
+	setImageCreate(imageObj){
 		this.currentImageObj = imageObj;
 		
 		let imgAreaChildren = this.imageArea.children;
@@ -1659,25 +1666,24 @@ class imgTab {
 		const createdImg = new Image();
 		createdImg.src = imageObj.data.imgLink;
 		this.imageArea.appendChild(createdImg);
-		this.createdImg = createdImg;
-		
-		VIVIFY_animateElems(createdImg, 'imgArea', 'enter');
+		this.createdImg = createdImg;		
 		
 		let imgOrientation = imageObj.orientation;
 		//console.log(imageObj);
 		
 		let orientationList = ["square", "portrait", "landscape"];
+		orientationList.splice( orientationList.indexOf(imgOrientation), 1);
 		
 		if (!this.imgDisplay.classList.contains(imgOrientation)){
+			this.imgDisplay.classList.add(imgOrientation);
 			for (const ori of orientationList){
 				if (this.imgDisplay.classList.contains(ori));
 					this.imgDisplay.classList.remove(ori);		
 			}
-			this.imgDisplay.classList.add(imgOrientation);
-			
-			console.log(imgOrientation);
-			
 		}
+		//this.imageArea change height to match photo height
+		this.imageArea.style.height = createdImg.height + "px";
+		
 		
 		//people in img circles
 		let peopleObjsArray = imageObj.data.tags.people;
@@ -1730,7 +1736,8 @@ class imgTab {
 		console.log("Change Focus " + clickedPerson);
 	}
 	
-	clearImg(){	
+	clearImg(){			
+				this.clearImg();
 		let areaChildren = Array.from(this.imageArea.childNodes);
 		
 		for (const areaChild of areaChildren){
@@ -1742,7 +1749,7 @@ class imgTab {
 			areaChild.removeEventListener("click", (evnt) => this.circleClickEvnt(evnt));
 			areaChild.remove();
 		}
-		this.currentImageObj = {};
+		this.currentImageObj = {};			
 		
 	}
 	
@@ -4075,23 +4082,23 @@ function VIVIFY_animateElems(elem, type, enterExit){
 					elem.style.opacity = 1;
 					elem.classList.add("vivify");
 					elem.classList.add("duration-1500");
-					elem.classList.add("spinIn");
+					elem.classList.add("jumpInRight");
 					setTimeout(()=>{
 						elem.classList.remove("vivify");
 						elem.classList.remove("duration-1500");
-						elem.classList.remove("spinIn");
+						elem.classList.remove("jumpInRight");
 					}, 1600);
 				
 				break;
 				case 'exit':
 					elem.classList.add("vivify");
-					elem.classList.add("duration-1500");
-					elem.classList.add("spinOut");
+					elem.classList.add("duration-1000");
+					elem.classList.add("jumpOutRight");
 					setTimeout(()=>{
 						elem.style.opacity = 0;
 						elem.classList.remove("vivify");
-						elem.classList.remove("duration-1500");
-						elem.classList.remove("spinOut");
+						elem.classList.remove("duration-1000");
+						elem.classList.remove("jumpOutRight");
 					}, 1600);
 					
 				break;
