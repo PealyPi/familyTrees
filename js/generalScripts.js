@@ -1362,7 +1362,6 @@ class leafImgs {
 		const famInfo = PEOPLEINFO[famName] ?? {};
 		const personInfo = famInfo[personName] ?? {};		
 		
-		//let personImgIconURL =  '../familyTrees/media/images/icons/' + personName + '.png';
 		let imgObjsArray = PEOPLEIMGs[personName];
 		let imgCount = imgObjsArray.length;
 		this.leafImgArr = [];
@@ -2219,10 +2218,9 @@ class node {
 		}
 		
 	
-		
-		if ( (this.personInfo.imgs) && (this.personInfo.imgs[0].icon) ){
+		if ( this.personInfo.imgIcon ){
 			if (this.iconImg)			
-				this.iconImg.setAttribute('href', this.personInfo.imgs[0].icon);
+				this.iconImg.setAttribute('href', ('../familyTrees/media/images/icons/' + this.personTag + '.png'));
 			else 
 				this.addPersonIconImg();						
 		} else {
@@ -2250,7 +2248,7 @@ class node {
 		
 		this.nodeGrpContainer = this.createInitialNode(personTag, personInfo, this.getNodeTypePosition(this.tagType));
 		
-		if (personInfo.hasOwnProperty("imgs"))
+		if (this.personInfo.imgIcon)
 			this.addPersonIconImg();
 		
 		//console.log(this.tagType + ", " + this.personTag);
@@ -2537,10 +2535,7 @@ class node {
 	}
 	
 	addPersonIconImg(){
-		const iconImg = this.personInfo.imgs[0];
-		
 		let personIconBool = this.personInfo.imgIcon ?? false;
-		console.log(this.personInfo);
 		let personImgIconURL =  '../familyTrees/media/images/icons/' + this.personTag + '.png';
 		
 		const iconSize = 90;
@@ -2567,7 +2562,7 @@ class node {
 				'clip-path': 'url(#imgCircleClipPath)'
 			});
 			
-			this.iconImg = icon;
+			this.iconImg = icon;			
 			const circleGrp = this.nodeGrpContainer.querySelector(".nodeCircleGrp");
 			circleGrp.appendChild(icon);
 		}

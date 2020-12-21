@@ -16,22 +16,6 @@ function personInfoStorage(){
 				'marriedTo':	'ronaldHadkiss',				
 			},	
 			'imgIcon': true,
-			'imgCount': 4,				
-			'imgConfigs': [
-				{'img1': {	'leafTransform': {'x': -30, 'y': 0},
-							'leafWidth': 200	}
-				},		
-				{'img2': {	'leafTransform': {'x': -20, 'y': 0}, 
-							'leafWidth': 200	}
-				},		
-				{'img3': {	'leafTransform': {'x': 15, 'y': 8}, 
-							'leafWidth': 110	}
-				},		
-				{'img4': {	'leafTransform': {'x': 15, 'y': 8}, 
-							'leafWidth': 110	}
-				},			
-				
-			],
 		},
 		'jackKesby': {
 			'name':		'Jack Kesby',
@@ -629,29 +613,7 @@ function personInfoStorage(){
 				'marriedAt':	'St Peter and Paul Church, Swanscombe',
 				'marriedTo':	'Rose Hadkiss',				
 			},	
-				
-			'imgs': [
-				{ 'icon': '../familyTrees/media/images/icons/ronHadkiss.png', 
-					}, 
-					
-				//imgs[1]	
-				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss1.jpg',
-				'leafTransform': {'x': -30, 'y': 0},
-				'leafWidth': 200	},
-				//imgs[2]	
-				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss2.jpg',
-				'leafTransform': {'x': -30, 'y': 0},
-				'leafWidth': 200	},
-				//imgs[3]	
-				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss3.jpg',
-				'leafTransform': {'x': -30, 'y': 0},
-				'leafWidth': 200	},
-				//imgs[4]	
-				{'leafImg': '../familyTrees/media/images/ronHadkiss/ronHadkiss4.jpg',
-				'leafTransform': {'x': -30, 'y': 0},
-				'leafWidth': 200	},
-				
-			],
+			//'imgIcon': true,			
 		},	
 	};
 	
