@@ -1700,7 +1700,7 @@ class imgTab {
 		let emptyArray = [];
 		
 		let areaChildren = Array.from(this.imageArea.childNodes);
-		console.log(areaChildren);
+		
 		for (const areaChild of areaChildren){
 			if (Array.from(areaChild.childNodes).length != 0){
 				for (const areaGchild of Array.from(areaChild.childNodes)){
@@ -1724,6 +1724,7 @@ class imgGallery{
 	constructor(){
 		this.imageGalleryDIV = document.getElementById('imgGallery');
 		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
+		this.galleryPersonFocus = this.imageGalleryDIV.querySelector(".galleryPersonFocus");
 		
 		this.imageObjsArray = [];
 		
@@ -1784,6 +1785,7 @@ class imgGallery{
 	
 	setPerson(personTag){
 		this.clearGallery();
+		this.galleryPersonFocus.innerHTML = personTag;
 		
 		//for each image from person, create div in grid,
 		//if portrait, add class to span 2/3 rows (depending on size)
@@ -1798,7 +1800,9 @@ class imgGallery{
 			this.addImagesToGrid(imgArray, grid);		
 			
 			this.msnry.layout();
+			
 		}
+		
 		
 	}
 	

@@ -1074,6 +1074,21 @@ button#galleryExitBtn:hover{
 	width: 100vw;
 }
 
+#imgGallery  .galleryPersonFocus{
+	position: absolute;
+	top: 0;
+	right: 10%;
+	
+	font-size: 30px;
+	text-align: right;
+	font-family: var(--mainInfoFont);
+	color: white;  
+	text-shadow: 1px 1px 4px #000;
+	
+	z-index: calc(var(--galleryZ) + 11);
+}
+
+
 #imgGallery .imgGalleryGrid *{
 	box-sizing: border-box;
 }
