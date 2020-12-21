@@ -1209,7 +1209,7 @@ button#galleryExitBtn:hover{
 	transition: width 1s ease;
 }
 #imgsDiv .imgArea img{
-	display: none;
+	opacity: 0;
 	width: 100%;
 	margin: auto;
 	top:0; left:0; bottom: 0 ; right:0;

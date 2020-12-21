@@ -1629,6 +1629,7 @@ class imgTab {
 		this.imageDivWood 	= this.imgDisplay.querySelector(".imageDivWood");
 		
 		this.currentImageObj = {};
+		this.createdImg = null;
 		
 		this.circleSizes = {
 			'large': '120px',
@@ -1637,6 +1638,16 @@ class imgTab {
 		}
 		
 		this.transitioning = false;
+	}
+	
+	setImage(imageObj){	
+		if (this.createdImg != null)
+			VIVIFY_animateElems(this.createdImg, 'imgArea', 'exit');
+		
+		setTimeout(()=> {
+			this.setImageDelayed(imageObj);
+		}, 1000);
+		
 	}
 	
 	setImageDelayed(imageObj){
@@ -1648,6 +1659,7 @@ class imgTab {
 		const createdImg = new Image();
 		createdImg.src = imageObj.data.imgLink;
 		this.imageArea.appendChild(createdImg);
+		this.createdImg = createdImg;
 		
 		VIVIFY_animateElems(createdImg, 'imgArea', 'enter');
 		
@@ -1701,15 +1713,6 @@ class imgTab {
 		
 	}
 	
-	setImage(imageObj){	
-	console.log(this.imageArea.querySelector("image"));
-		VIVIFY_animateElems(this.imageArea.querySelector("image"), 'imgArea', 'exit');
-		
-		setTimeout(()=> {
-			imgOpenTab.setImageDelayed(imageObj);
-		}, 1000);
-		
-	}
 	
 	circleClickEvnt(evnt){	
 		if (!this.transitioning){
@@ -4071,23 +4074,23 @@ function VIVIFY_animateElems(elem, type, enterExit){
 				case 'enter':
 					elem.style.opacity = 1;
 					elem.classList.add("vivify");
-					elem.classList.add("duration-1000");
+					elem.classList.add("duration-1500");
 					elem.classList.add("spinIn");
 					setTimeout(()=>{
 						elem.classList.remove("vivify");
-						elem.classList.remove("duration-1000");
+						elem.classList.remove("duration-1500");
 						elem.classList.remove("spinIn");
 					}, 1600);
 				
 				break;
 				case 'exit':
 					elem.classList.add("vivify");
-					elem.classList.add("duration-1000");
+					elem.classList.add("duration-1500");
 					elem.classList.add("spinOut");
 					setTimeout(()=>{
 						elem.style.opacity = 0;
 						elem.classList.remove("vivify");
-						elem.classList.remove("duration-1000");
+						elem.classList.remove("duration-1500");
 						elem.classList.remove("spinOut");
 					}, 1600);
 					
