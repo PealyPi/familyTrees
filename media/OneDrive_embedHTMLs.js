@@ -18,6 +18,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': '',
 				//'title': '',
 				'people': [''],
+				'peoplePositions': [{'personTag': {'x': 0, 'y': 0}}],
 			}
 		},*/		
 		{	'imgRef':	'ron & rose hadkiss, roseHadkiss/roseHadkiss4.jpg',
@@ -30,7 +31,10 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': ''
 				//'place': 
 				//'title': '',
-				'people': ['roseHadkiss', 'ronHadkiss'],
+				'people': [
+					{'roseHadkiss': {'x': 0, 'y': 0}},
+					{'ronHadkiss': {'x': 0, 'y': 0}},
+				],
 			}
 		},
 		{	'imgRef':	'beachFamilyPhoto, roseHadkiss/roseHadkiss5.jpg',
@@ -43,7 +47,11 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': ''
 				//'place': 
 				'title': 'Kesby Beach Family Photo',
-				'people': ['roseHadkiss', 'johnNevilleKesby', 'jackKesby'],
+				'people': [
+					{'roseHadkiss': {'x': 40, 'y': 160}},
+					{'johnNevilleKesby': {'x': 100, 'y': 100}},
+					{'jackKesby': {'x': 152, 'y': 225}},
+				],
 			}
 		},
 		{	'imgRef':	'roseWork factory, roseHadkiss/roseHadkiss3.jpg',
@@ -56,7 +64,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': ''
 				//'place': 
 				'title': 'Rose Kesby at the Factory',
-				'people': ['roseHadkiss'],
+				'people': [{'roseHadkiss': {'x': 0, 'y': 0}}],
 			}
 		},
 		{	'imgRef':	'rose&ron 1951 beach trip, roseHadkiss/roseHadkiss2.jpg',
@@ -69,7 +77,10 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': ''
 				//'place': 
 				//'title': '',
-				'people': ['roseHadkiss', 'ronHadkiss'],
+				'people': [
+					{'roseHadkiss': {'x': 0, 'y': 0}},
+					{'ronHadkiss': {'x': 0, 'y': 0}},
+				],
 			}
 		},
 		{	'imgRef':	'rose devon ship, roseHadkiss/roseHadkiss6.jpg',
@@ -82,7 +93,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': ['roseHadkiss'],
+				'people': [{'roseHadkiss': {'x': 0, 'y': 0}}],
 			}
 		},
 		{	'imgRef':	'rose hightor, roseHadkiss/roseHadkiss7.jpg',
@@ -95,7 +106,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': ['roseHadkiss'],
+				'people': [{'roseHadkiss': {'x': 0, 'y': 0}}],
 			}
 		},
 		{	'imgRef':	'roseRon Wedding, roseHadkiss/roseHadkiss8.jpg',
@@ -108,7 +119,10 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1950',
 				//'place': '',
 				//'title': '',
-				'people': ['roseHadkiss', 'ronHadkiss'],
+				'people': [
+					{'roseHadkiss': {'x': 0, 'y': 0}},
+					{'ronHadkiss': {'x': 0, 'y': 0}},
+				],
 			}
 		},
 		
@@ -117,8 +131,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 	var allPeoplesImgs = {};
 	
 	for (const img of allImgs){
-		let peopleArray = img.tags.people;
-		for (const person of peopleArray){
+		let peopleArray = img.tags.people; //={'personTag': {'x':, 'y':}}
+		for (const personObj of peopleArray){
+			let person = Object.keys(personObj);
 			let personObjBool = allPeoplesImgs.hasOwnProperty(person);
 			if (!personObjBool)
 				allPeoplesImgs[person] = [];

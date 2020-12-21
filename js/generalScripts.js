@@ -1634,35 +1634,59 @@ class imgTab {
 		
 		let imgAreaChildren = this.imageArea.children;
 		
-		if (imgAreaChildren.length == 0){
+		const createdImg = new Image();
+		createdImg.src = imageObj.data.imgLink;
+		this.imageArea.appendChild(createdImg);
+		
+		let imgOrientation = imageObj.orientation;
+		//console.log(imageObj);
+		
+		if (imgOrientation == 'landscape'){
+			if (!this.imgDisplay.classList.contains("landscape"))
+				this.imgDisplay.classList.add("landscape");
+			if (this.imgDisplay.classList.contains("square"))
+				this.imgDisplay.classList.remove("square");		
+		} else if (imgOrientation == 'portrait'){
+			if (this.imgDisplay.classList.contains("landscape"))
+				this.imgDisplay.classList.remove("landscape");
+			if (this.imgDisplay.classList.contains("square"))
+				this.imgDisplay.classList.remove("square");	
+		} else if (imgOrientation == 'square'){
+			if (this.imgDisplay.classList.contains("landscape"))
+				this.imgDisplay.classList.remove("landscape");	
+			if (!this.imgDisplay.classList.contains("square"))
+				this.imgDisplay.classList.add("square");			
+		}
+		
+		//people in img circles
+		let peopleObjsArray = imageObj.data.tags.people;
+		for (const personObj of peopleObjsArray){
+			let personTag = Object.keys(personObj);
 			
-			const createdImg = new Image();
-			createdImg.src = imageObj.data.imgLink;
-			this.imageArea.appendChild(createdImg);
+			let personCircle = document.createElement("div");
+			let personCircleLabel = document.createElement("div");
+			this.imageArea.appendChild(personCircle);
+			personCircle.appendChild(personCircleLabel);
 			
-			let imgOrientation = imageObj.orientation;
-			console.log(imageObj);
-			console.log(imgOrientation);
-			if (imgOrientation == 'landscape'){
-				if (!this.imgDisplay.classList.contains("landscape"))
-					this.imgDisplay.classList.add("landscape");
-				if (this.imgDisplay.classList.contains("square"))
-					this.imgDisplay.classList.remove("square");		
-			} else if (imgOrientation == 'portrait'){
-				if (this.imgDisplay.classList.contains("landscape"))
-					this.imgDisplay.classList.remove("landscape");
-				if (this.imgDisplay.classList.contains("square"))
-					this.imgDisplay.classList.remove("square");	
-			} else if (imgOrientation == 'square'){
-				if (this.imgDisplay.classList.contains("landscape"))
-					this.imgDisplay.classList.remove("landscape");	
-				if (!this.imgDisplay.classList.contains("square"))
-					this.imgDisplay.classList.add("square");			
+			personCircle.classList.add("img_circleTag");
+			personCircle.id = personTag + "_circleTag";
+			personCircle.style.left = personObj[personTag].x + "px";
+			personCircle.style.top = personObj[personTag].y + "px";
+			if (personObj[personTag].hasOwnProperty("size")){
+				const circleSizes = {
+					'large': '120px',
+					'small': '50px',
+				}
+				let circleSizing = personObj[personTag].size;
+				personCircle.style.width = circleSizes[circleSizing];
+				personCircle.style.height = circleSizes[circleSizing];
 			}
 			
-		} else {
 			
+			personCircleLabel.classList.add("img_circleTagLABEL");
+			personCircleLabel.innerHTML = personTag;
 		}
+		
 		
 		this.fillWoodInfo(imageObj);
 	}
