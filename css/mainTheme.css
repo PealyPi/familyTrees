@@ -1219,12 +1219,20 @@ button#galleryExitBtn:hover{
 #imgsDiv .imgArea figure.imgContainer{
 	position: absolute;
 	margin: 0 auto;
-	width: 445px;
+	width: 455px;
 	top:0; left:0; bottom: 0 ; right:0;
 }
 
+#imgsDiv .circlesContainer{
+	display:inline-block;
+	width: 455px;
+	postion: absolute;
+	margin: 0 auto;
+	left:0; right: 0; top: 0; bottom: 0;	
+}
+
 #imgsDiv .img_circleTag{
-	position: absolute;
+	position: relative;
 	cursor: pointer;
 	width: 80px;
 	height: 80px;
@@ -1307,28 +1315,38 @@ button#galleryExitBtn:hover{
 #imgsDiv .imgDisplay.landscape .imgArea img{
 	width: 445px;	
 }
-#imgsDiv .imgDisplay.portrait .imgArea img{
-	width: 345px;	
-}
-#imgsDiv .imgDisplay.square .imgArea img{
-	width: 355px;
-}
-
 #imgsDiv .imgDisplay.landscape .imgDivVines{
 	width: 110%;
 	background-size: 200px, 190px;
+	
+}
+#imgsDiv .imgDisplay.portrait .imgArea img,
+#imgsDiv .imgDisplay.square .imgArea img {
+	width: 345px;	
 }
 
+#imgsDiv .imgDisplay.portrait .circlesContainer, 
+#imgsDiv .imgDisplay.portrait .imgArea figure.imgContainer,
+#imgsDiv .imgDisplay.square .circlesContainer, 
+#imgsDiv .imgDisplay.square .imgArea figure.imgContainer{
+	width: 355px;
+}
 
 @media only screen and (max-width: 800px) {
 	#imgsDiv .imgArea{
-		width: 350px;
-		height: 340px;		
+		width: 355px;
+		height: 355px;		
+	}
+	#imgsDiv .circlesContainer{
+		width: 310px !important;		
 	}
 	#imgsDiv .imgDivWood{
 		height: 150px;
 		width: 395px;
-		margin: -75px auto;		
+		margin: -40px auto;		
+	}
+	#imgsDiv .imgArea figure.imgContainer{
+		width: 310px !important;
 	}
 	#imgsDiv .imgDivVines, #imgsDiv .imgDisplay.landscape .imgDivVines{	
 		width: 93%;
@@ -1346,18 +1364,18 @@ button#galleryExitBtn:hover{
 	#imgsDiv .imgDisplay.landscape .imgDivWood{
 		margin-top: -115px;	
 	}
+	#imgsDiv .imgDisplay.landscape .imgArea figure.imgContainer{
+		width: 360px !important;
+	}
+	#imgsDiv .imgDisplay.landscape .imgArea img{
+		width: 350px !important;
+	}
 	#imgsDiv .imgDisplay.portrait .imgDivWood{
 		margin-top: -20px;	
 	}
-	#imgsDiv .imgArea figure.imgContainer{
-		width: 300px;
-		height: 55vw;
-	} #imgsDiv .imgArea img, #imgsDiv .imgDisplay.square img {
+	#imgsDiv .imgArea img, #imgsDiv .imgDisplay.square img {
 		width: 300px !important;
 	}	
-	#imgsDiv .imgDisplay.landscape .imgArea figure.imgContainer, #imgsDiv .imgDisplay.landscape .imgArea img{
-		width: 350px !important;
-	}
 }
 
 

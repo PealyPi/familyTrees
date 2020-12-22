@@ -1631,16 +1631,29 @@ class imgTab {
 		this.currentImageObj = {};
 		this.createdImg = null;
 		
+		//detect window size
+		this.oldWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
+		
 		window.addEventListener("resize", ()=>{
 			if (this.createdImg != null)
 				this.imageArea.style.height = (this.createdImg.height) + "px";
-		});
+			
+			this.newWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
+			if (this.newWindowSize != this.oldWindowSize){
+				//console.log("Window size change");
+				this.oldWindowSize = this.newWindowSize;
+				this.updateCircleSizes(this.newWindowSize);
+			}
+		});	
 		
+		this.circlesArray = [];
 		this.circleSizes = {
-			'large': '120px',
-			'small': '60px',
-			'smaller': '40px',
+			'normal': '80',
+			'large': '120',
+			'small': '60',
+			'smaller': '40',
 		}
+		this.updateCircleSizes(this.oldWindowSize);
 		
 		this.transitioning = false;
 	}
@@ -1677,6 +1690,7 @@ class imgTab {
 		imgFigure.classList.add("imgContainer");
 		imgFigure.appendChild(createdImg);
 		this.imageArea.appendChild(imgFigure);
+		this.imgFigure = imgFigure;
 		
 		let imgOrientation = imageObj.orientation;
 		//console.log(imageObj);
@@ -1693,28 +1707,39 @@ class imgTab {
 		}
 		//this.imageArea change height to match photo height
 		this.imageArea.style.height = (createdImg.height) + "px";
+		imgFigure.style.height = (createdImg.height) + "px";
 		
 		
 		//people in img circles
 		let peopleObjsArray = imageObj.data.tags.people;
+		
+		let personCircleContainer = document.createElement("div");
+		imgFigure.appendChild(personCircleContainer);
+		personCircleContainer.classList.add("circlesContainer");
+		
 		for (const personObj of peopleObjsArray){
 			let personTag = Object.keys(personObj);
 			
 			let personCircle = document.createElement("div");
 			let personCircleLabel = document.createElement("div");
-			imgFigure.appendChild(personCircle);
+			personCircleContainer.appendChild(personCircle);
 			personCircle.appendChild(personCircleLabel);
 			
+			var circleSize, circleSizing;
 			personCircle.classList.add("img_circleTag");
 			personCircle.id = personTag + "_circleTag";
 			personCircle.style.left = personObj[personTag].left + "px";
 			personCircle.style.top = personObj[personTag].top + "px";
 			if (personObj[personTag].hasOwnProperty("size")){
-				let circleSizing = personObj[personTag].size;
-				personCircle.style.width = this.circleSizes[circleSizing];
-				personCircle.style.height = this.circleSizes[circleSizing];
+				circleSizing = personObj[personTag].size;
+				personCircle.style.width = this.circleSizes[circleSizing] + "px";
+				personCircle.style.height = this.circleSizes[circleSizing] + "px";
 				
 				personCircleLabel.classList.add(circleSizing);
+				circleSize = this.circleSizes[circleSizing];
+			} else {
+				circleSize = this.circleSizes['normal'];
+				
 			}
 			
 			personCircleLabel.classList.add("img_circleTagLABEL");
@@ -1722,6 +1747,13 @@ class imgTab {
 			
 			personCircle.addEventListener("click", (evnt) => this.circleClickEvnt(evnt));
 			
+			this.circlesArray.push({
+				'circle': personCircle,
+				'label': personCircleLabel,
+				'position': {'left': personObj[personTag].left, 'top': personObj[personTag].top},
+				'sizing': circleSize,
+				'sizingLabel': circleSizing,
+			});
 		}
 		
 		
@@ -1741,6 +1773,52 @@ class imgTab {
 		}
 	}
 	
+	updateCircleSizes(windowSize){
+		console.log(windowSize);
+		for (const circObj of this.circlesArray){
+			let circ = circObj.circle, label = circObj.label, labelSize = circObj.sizingLabel, 
+				sizing = circObj.sizing, pos = circObj.position;
+				
+			let labelClasses = Array.from(label.classList);
+			
+			let labelSizeClasses = (labelClasses.length > 1) ? labelClasses.splice(labelClasses.indexOf("img_circleTagLABEL"), 1) : [];
+			
+			for (const labelSizeClass of labelSizeClasses){
+				label.classList.remove(labelSizeClass);
+			}
+			
+			switch (windowSize){
+				case 'normal':
+					circ.style.width = sizing + "px";
+					circ.style.height = sizing + "px";						
+					
+					//circ.style.left = (pos.left) + "px";
+					//circ.style.top = (pos.top) + "px";
+				break;
+				case 'smaller': 
+					circ.style.width = (sizing - 10) + "px";
+					circ.style.height = (sizing - 10) + "px";
+					
+					//circ.style.left = (pos.left - 74) + "px";
+					//circ.style.top = (pos.top - 21) + "px";
+					
+					label.classList.add('small');
+					
+				break;
+				case 'smallest': 
+					circ.style.width = (sizing - 40) + "px";
+					circ.style.height = (sizing - 40) + "px";
+					
+					//circ.style.left = (pos.left - 60) + "px";
+					//circ.style.top = (pos.top - 60) + "px";
+					
+					label.classList.add('smallest');
+				break;
+			}
+			
+		}
+	}
+	
 	changeFocus(clickedPerson){
 		imgGalleryObj.setPerson(clickedPerson);
 		console.log("Change Focus " + clickedPerson);
@@ -1753,6 +1831,10 @@ class imgTab {
 		for (const areaChild of areaChildren){
 			if (Array.from(areaChild.childNodes).length != 0){
 				for (const areaGchild of Array.from(areaChild.childNodes)){
+					let areaGGchild = Array.from(areaGchild.childNodes)
+					if (areaGGchild.length != 0){
+						areaGGchild.remove();
+					}
 					areaGchild.remove();
 				}
 			}
@@ -1760,7 +1842,8 @@ class imgTab {
 			areaChild.remove();
 		}
 		imgFigure.remove();
-		this.currentImageObj = {};			
+		this.currentImageObj = {};
+		this.circlesArray = [];			
 		
 	}
 	
