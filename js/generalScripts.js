@@ -1631,6 +1631,11 @@ class imgTab {
 		this.currentImageObj = {};
 		this.createdImg = null;
 		
+		window.addEventListener("resize", ()=>{
+			if (this.createdImg != null)
+				this.imageArea.style.height = (this.createdImg.height) + "px";
+		});
+		
 		this.circleSizes = {
 			'large': '120px',
 			'small': '60px',
@@ -1710,7 +1715,7 @@ class imgTab {
 				personCircle.style.height = this.circleSizes[circleSizing];
 				
 				personCircleLabel.classList.add(circleSizing);
-			}		
+			}
 			
 			personCircleLabel.classList.add("img_circleTagLABEL");
 			personCircleLabel.innerHTML = personTag;
