@@ -1338,55 +1338,17 @@ button#galleryExitBtn:hover{
 		transform: scale(0.8);
 		margin-top: -80px;
 	}
-}
-
-	/*
-	#imgsDiv .imgArea{
-		width: 355px;
-		height: 355px;		
-	}
-	/*
-	#imgsDiv .circlesContainer{
-		width: 310px !important;
-		/*transform: scale(0.9);	
-	}
-	#imgsDiv .imgDivWood{
-		height: 150px;
-		width: 395px;
-		margin: -40px auto;		
-	}
-	#imgsDiv .imgArea figure.imgContainer{
-		width: 310px !important;
-		transform: scale(0.9);
-	}
-	#imgsDiv .imgDivVines, #imgsDiv .imgDisplay.landscape .imgDivVines{	
-		width: 93%;
-		top: -130px;
-		right: -40px;
-		background-size: 150px, 150px;		
-	}
-	#imgsDiv .imgDisplay.landscape .imgArea{
-		width: 445px;
-	}
-	#imgsDiv .imgDisplay.landscape .imgDivVines{
-		width: 100%;		
-		right: -64px;
-	}
 	#imgsDiv .imgDisplay.landscape .imgDivWood{
-		margin-top: -115px;	
+		margin-top: -105px;
 	}
-	#imgsDiv .imgDisplay.landscape .imgArea figure.imgContainer{
-		width: 360px !important;
-	}
-	/*#imgsDiv .imgDisplay.landscape .imgArea img{
-		width: 350px !important;
+	#imgsDiv .imgDisplay.square .imgDivWood{
+		margin-top: -100px;
 	}
 	#imgsDiv .imgDisplay.portrait .imgDivWood{
-		margin-top: -20px;	
+		margin-top: -80px;
 	}
-	#imgsDiv .imgArea img, #imgsDiv .imgDisplay.square img {
-		width: 300px !important;
-	}	*/
+}
+
 
 
 
