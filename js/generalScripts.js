@@ -1639,8 +1639,8 @@ class imgTab {
 		window.addEventListener("resize", ()=>{
 			if (this.createdImg != null){
 				this.imageArea.style.height = (this.createdImg.height + 10) + "px";
-				this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
-				this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
+				//this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
+				//this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
 			}
 			/*this.newWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
 			if (this.newWindowSize != this.oldWindowSize){
@@ -1707,8 +1707,8 @@ class imgTab {
 		}
 		//this.imageArea change height to match photo height
 		this.imageArea.style.height = (createdImg.height + 10) + "px";
-		this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
-		this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
+		//this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
+		//this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
 		
 		
 		//people in img circles
