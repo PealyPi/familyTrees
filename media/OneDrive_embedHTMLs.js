@@ -49,8 +49,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'title': 'Kesby Beach Family Photo',
 				'people': [
 					{'roseHadkiss': {'left': 36, 'top': 148}},
-					{'johnNevilleKesby': {'left': 96, 'top': 17}},
-					{'jackKesby': {'left': 216, 'top': -23}},
+					{'johnNevilleKesby': {'left': 97, 'top': 95}},
+					{'jackKesby': {'left': 215, 'top': 138}},
 				],
 			}
 		},

@@ -1626,6 +1626,8 @@ class imgTab {
 		this.imageDiv = document.getElementById('imgsDiv');
 		this.imgDisplay 	= this.imageDiv.querySelector(".imgDisplay");
 		this.imageArea 		= this.imgDisplay.querySelector(".imgArea");
+		this.imgFigure		= this.imageArea.querySelector("figure.imgContainer");
+		this.circlesContainer	= this.imgFigure.querySelector(".circlesContainer");
 		this.imageDivWood 	= this.imgDisplay.querySelector(".imageDivWood");
 		
 		this.currentImageObj = {};
@@ -1635,15 +1637,17 @@ class imgTab {
 		this.oldWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
 		
 		window.addEventListener("resize", ()=>{
-			if (this.createdImg != null)
-				this.imageArea.style.height = (this.createdImg.height) + "px";
-			
-			this.newWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
+			if (this.createdImg != null){
+				this.imageArea.style.height = (this.createdImg.height + 10) + "px";
+				this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
+				this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
+			}
+			/*this.newWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
 			if (this.newWindowSize != this.oldWindowSize){
 				//console.log("Window size change");
 				this.oldWindowSize = this.newWindowSize;
-				this.updateCircleSizes(this.newWindowSize);
-			}
+				//this.updateCircleSizes(this.newWindowSize);
+			}*/
 		});	
 		
 		this.circlesArray = [];
@@ -1653,7 +1657,6 @@ class imgTab {
 			'small': '60',
 			'smaller': '40',
 		}
-		this.updateCircleSizes(this.oldWindowSize);
 		
 		this.transitioning = false;
 	}
@@ -1686,11 +1689,8 @@ class imgTab {
 		this.createdImg = createdImg;		
 		createdImg.src = imageObj.data.imgLink;
 		
-		const imgFigure = document.createElement("figure");
-		imgFigure.classList.add("imgContainer");
-		imgFigure.appendChild(createdImg);
-		this.imageArea.appendChild(imgFigure);
-		this.imgFigure = imgFigure;
+		const imgFigure = this.imgFigure;
+		imgFigure.prepend(createdImg);
 		
 		let imgOrientation = imageObj.orientation;
 		//console.log(imageObj);
@@ -1706,16 +1706,15 @@ class imgTab {
 			}
 		}
 		//this.imageArea change height to match photo height
-		this.imageArea.style.height = (createdImg.height) + "px";
-		imgFigure.style.height = (createdImg.height) + "px";
+		this.imageArea.style.height = (createdImg.height + 10) + "px";
+		this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
+		this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
 		
 		
 		//people in img circles
 		let peopleObjsArray = imageObj.data.tags.people;
 		
-		let personCircleContainer = document.createElement("div");
-		imgFigure.appendChild(personCircleContainer);
-		personCircleContainer.classList.add("circlesContainer");
+		let personCircleContainer = this.circlesContainer;
 		
 		for (const personObj of peopleObjsArray){
 			let personTag = Object.keys(personObj);
@@ -1747,13 +1746,6 @@ class imgTab {
 			
 			personCircle.addEventListener("click", (evnt) => this.circleClickEvnt(evnt));
 			
-			this.circlesArray.push({
-				'circle': personCircle,
-				'label': personCircleLabel,
-				'position': {'left': personObj[personTag].left, 'top': personObj[personTag].top},
-				'sizing': circleSize,
-				'sizingLabel': circleSizing,
-			});
 		}
 		
 		
@@ -1773,75 +1765,27 @@ class imgTab {
 		}
 	}
 	
-	updateCircleSizes(windowSize){
-		console.log(windowSize);
-		for (const circObj of this.circlesArray){
-			let circ = circObj.circle, label = circObj.label, labelSize = circObj.sizingLabel, 
-				sizing = circObj.sizing, pos = circObj.position;
-				
-			let labelClasses = Array.from(label.classList);
-			
-			let labelSizeClasses = (labelClasses.length > 1) ? labelClasses.splice(labelClasses.indexOf("img_circleTagLABEL"), 1) : [];
-			
-			for (const labelSizeClass of labelSizeClasses){
-				label.classList.remove(labelSizeClass);
-			}
-			
-			switch (windowSize){
-				case 'normal':
-					circ.style.width = sizing + "px";
-					circ.style.height = sizing + "px";						
-					
-					//circ.style.left = (pos.left) + "px";
-					//circ.style.top = (pos.top) + "px";
-				break;
-				case 'smaller': 
-					circ.style.width = (sizing - 10) + "px";
-					circ.style.height = (sizing - 10) + "px";
-					
-					//circ.style.left = (pos.left - 74) + "px";
-					//circ.style.top = (pos.top - 21) + "px";
-					
-					label.classList.add('small');
-					
-				break;
-				case 'smallest': 
-					circ.style.width = (sizing - 40) + "px";
-					circ.style.height = (sizing - 40) + "px";
-					
-					//circ.style.left = (pos.left - 60) + "px";
-					//circ.style.top = (pos.top - 60) + "px";
-					
-					label.classList.add('smallest');
-				break;
-			}
-			
-		}
-	}
-	
 	changeFocus(clickedPerson){
 		imgGalleryObj.setPerson(clickedPerson);
 		console.log("Change Focus " + clickedPerson);
 	}
 	
 	clearImg(){			
-		let imgFigure = Array.from(this.imageArea.childNodes)[0];
-		let areaChildren = Array.from(imgFigure.childNodes);
+		let areaImg = this.imgFigure.querySelector("img");
+		if (areaImg != null)
+			areaImg.remove();
 		
-		for (const areaChild of areaChildren){
-			if (Array.from(areaChild.childNodes).length != 0){
-				for (const areaGchild of Array.from(areaChild.childNodes)){
-					let areaGGchild = Array.from(areaGchild.childNodes)
-					if (areaGGchild.length != 0){
-						areaGGchild.remove();
-					}
-					areaGchild.remove();
+		let areaCircleChildren = Array.from(this.circlesContainer.childNodes);
+		
+		for (const circleChild of areaCircleChildren){
+			if (Array.from(circleChild.childNodes).length != 0){
+				for (const circleLabel of Array.from(circleChild.childNodes)){
+					circleLabel.remove();
 				}
 			}
-			areaChild.removeEventListener("click", (evnt) => this.circleClickEvnt(evnt));
-			areaChild.remove();
+			circleChild.removeEventListener("click", (evnt) => this.circleClickEvnt(evnt));
+			circleChild.remove();
 		}
-		imgFigure.remove();
 		this.currentImageObj = {};
 		this.circlesArray = [];			
 		
