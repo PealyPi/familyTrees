@@ -93,7 +93,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': [{'roseHadkiss': {'left': 180, 'top': 130}}],
+				'people': [{'roseHadkiss': {'left': 220, 'top': 130}}],
 			}
 		},
 		{	'imgRef':	'rose hightor, roseHadkiss/roseHadkiss7.jpg',

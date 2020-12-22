@@ -1645,14 +1645,14 @@ class imgTab {
 			let oldImg = this.createdImg;
 			VIVIFY_animateElems(oldImg, 'imgArea', 'exit');
 			
-			setTimeout(()=> {		
+			setTimeout(()=> {
+				this.clearImg();		
 				this.setImageCreate(imageObj);	
 			}, 1100);
 			setTimeout(()=> {	
 				VIVIFY_animateElems(this.createdImg , 'imgArea', 'enter');
 			}, 1100);
 		} else {		
-			//this.clearImg();
 			this.setImageCreate(imageObj);
 			VIVIFY_animateElems(this.createdImg , 'imgArea', 'enter');
 		}
@@ -1665,9 +1665,13 @@ class imgTab {
 		let imgAreaChildren = this.imageArea.children;
 		
 		const createdImg = new Image();
-		createdImg.src = imageObj.data.imgLink;
-		this.imageArea.appendChild(createdImg);
 		this.createdImg = createdImg;		
+		createdImg.src = imageObj.data.imgLink;
+		
+		const imgFigure = document.createElement("figure");
+		imgFigure.classList.add("imgContainer");
+		imgFigure.appendChild(createdImg);
+		this.imageArea.appendChild(imgFigure);
 		
 		let imgOrientation = imageObj.orientation;
 		//console.log(imageObj);
@@ -1683,7 +1687,7 @@ class imgTab {
 			}
 		}
 		//this.imageArea change height to match photo height
-		this.imageArea.style.height = createdImg.height + "px";
+		this.imageArea.style.height = (createdImg.height) + "px";
 		
 		
 		//people in img circles
@@ -1693,7 +1697,7 @@ class imgTab {
 			
 			let personCircle = document.createElement("div");
 			let personCircleLabel = document.createElement("div");
-			this.imageArea.appendChild(personCircle);
+			imgFigure.appendChild(personCircle);
 			personCircle.appendChild(personCircleLabel);
 			
 			personCircle.classList.add("img_circleTag");
@@ -1738,8 +1742,8 @@ class imgTab {
 	}
 	
 	clearImg(){			
-				this.clearImg();
-		let areaChildren = Array.from(this.imageArea.childNodes);
+		let imgFigure = Array.from(this.imageArea.childNodes)[0];
+		let areaChildren = Array.from(imgFigure.childNodes);
 		
 		for (const areaChild of areaChildren){
 			if (Array.from(areaChild.childNodes).length != 0){
@@ -1750,6 +1754,7 @@ class imgTab {
 			areaChild.removeEventListener("click", (evnt) => this.circleClickEvnt(evnt));
 			areaChild.remove();
 		}
+		imgFigure.remove();
 		this.currentImageObj = {};			
 		
 	}

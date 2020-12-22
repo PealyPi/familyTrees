@@ -1216,6 +1216,13 @@ button#galleryExitBtn:hover{
 	border:5px solid var(--colourGreen);
 }
 
+#imgsDiv .imgArea figure.imgContainer{
+	position: absolute;
+	margin: 0 auto;
+	width: 445px;
+	top:0; left:0; bottom: 0 ; right:0;
+}
+
 #imgsDiv .img_circleTag{
 	position: absolute;
 	cursor: pointer;
@@ -1315,37 +1322,41 @@ button#galleryExitBtn:hover{
 
 @media only screen and (max-width: 800px) {
 	#imgsDiv .imgArea{
-		width: calc((55vw/10)*8);
-		height: 55vw;
-		
+		width: 350px;
+		height: 340px;		
 	}
-
 	#imgsDiv .imgDivWood{
-		height: 27vw;
-		width: 58%;
-		margin: calc( calc((-1)*((44vw/8)*10) ) + 46vw) auto;
-		
+		height: 150px;
+		width: 395px;
+		margin: -75px auto;		
 	}
-	#imgsDiv .imgDivVines{	
-		width: 98%;
-		top:-20vw;
-		right: -9vw;
-		background-size: 25vw, 23vw;
-		
+	#imgsDiv .imgDivVines, #imgsDiv .imgDisplay.landscape .imgDivVines{	
+		width: 93%;
+		top: -130px;
+		right: -40px;
+		background-size: 150px, 150px;		
 	}
 	#imgsDiv .imgDisplay.landscape .imgArea{
-		width: 55vw;
-		height: calc((55vw/10)*8);
-		
-	}
-	#imgsDiv  .imgDisplay.landscape .imgArea{
 		width: 445px;
-		height: calc((445px/10)*8);
-		
 	}
 	#imgsDiv .imgDisplay.landscape .imgDivVines{
-		width: 110%;
-		
+		width: 100%;		
+		right: -64px;
+	}
+	#imgsDiv .imgDisplay.landscape .imgDivWood{
+		margin-top: -115px;	
+	}
+	#imgsDiv .imgDisplay.portrait .imgDivWood{
+		margin-top: -20px;	
+	}
+	#imgsDiv .imgArea figure.imgContainer{
+		width: 300px;
+		height: 55vw;
+	} #imgsDiv .imgArea img, #imgsDiv .imgDisplay.square img {
+		width: 300px !important;
+	}	
+	#imgsDiv .imgDisplay.landscape .imgArea figure.imgContainer, #imgsDiv .imgDisplay.landscape .imgArea img{
+		width: 350px !important;
 	}
 }
 
