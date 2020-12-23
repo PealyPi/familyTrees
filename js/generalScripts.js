@@ -1673,7 +1673,7 @@ class imgTab {
 			}, 1400);
 			setTimeout(()=> {	
 				VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
-			}, 1500);
+			}, 1600);
 		} else {		
 			this.setImageCreate(imageObj);
 			VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
