@@ -1771,6 +1771,8 @@ class imgTab {
 		console.log("Change Focus " + clickedPerson);
 		imgGalleryObj.setPerson(clickedPerson);
 		
+		if (navObj.activeBtn.id != 'imgsTab')
+			this.clearImg();
 	}
 	
 	clearImg(){			
