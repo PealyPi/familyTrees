@@ -1636,21 +1636,7 @@ class imgTab {
 		this.createdImg = null;
 		
 		//detect window size
-		this.oldWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
-		
-		window.addEventListener("resize", ()=>{
-			if (this.createdImg != null){
-				this.imageArea.style.height = (this.createdImg.height + 10) + "px";
-				//this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
-				//this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
-			}
-			/*this.newWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
-			if (this.newWindowSize != this.oldWindowSize){
-				//console.log("Window size change");
-				this.oldWindowSize = this.newWindowSize;
-				//this.updateCircleSizes(this.newWindowSize);
-			}*/
-		});	
+		//this.oldWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
 		
 		this.circlesArray = [];
 		this.circleSizes = {
@@ -1757,6 +1743,7 @@ class imgTab {
 	
 	circleClickEvnt(evnt){	
 		if (!this.transitioning){
+			this.transitioning = true;
 			const clickedCircleDiv = event.target;
 			let circleId = clickedCircleDiv.id;
 			const personClicked = circleId.replace("_circleTag", "");
@@ -1764,6 +1751,9 @@ class imgTab {
 			let personFam = findPersonsFamily(personClicked);
 			changeGlobalFocus(personFam, personClicked);
 			
+			setTimeout(()=> {
+				this.transitioning = false;
+			}, 1000)
 		}
 	}
 	
@@ -1773,6 +1763,7 @@ class imgTab {
 		
 		if (navObj.activeBtn.id != 'imgsTab')
 			this.clearImg();
+			
 	}
 	
 	clearImg(){			
@@ -1796,14 +1787,11 @@ class imgTab {
 		
 	}
 	
-	fillWoodInfo(imageObj){
-		if (!this.transitioning){
-			this.transitioning = true;
-			
-			setTimeout(()=> {
-				this.transitioning = false;
-			}, 1000)
-		}
+	fillWoodInfo(imgObj){
+		console.log(imgObj);
+		
+		let imgTags = imgObj.data.tags;
+		
 	}
 	
 	
