@@ -1665,19 +1665,18 @@ class imgTab {
 	
 	setImage(imageObj){	
 		if (this.createdImg != null){
-			let oldImg = this.createdImg;
-			VIVIFY_animateElems(oldImg, 'imgArea', 'exit');
+			VIVIFY_animateElems(this.imgFigure, 'imgArea', 'exit');
 			
 			setTimeout(()=> {
 				this.clearImg();		
 				this.setImageCreate(imageObj);	
-			}, 1100);
+			}, 1400);
 			setTimeout(()=> {	
-				VIVIFY_animateElems(this.createdImg , 'imgArea', 'enter');
-			}, 1100);
+				VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
+			}, 1500);
 		} else {		
 			this.setImageCreate(imageObj);
-			VIVIFY_animateElems(this.createdImg , 'imgArea', 'enter');
+			VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
 		}
 		
 		

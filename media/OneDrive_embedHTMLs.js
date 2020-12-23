@@ -33,7 +33,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'title': '',
 				'people': [
 					{'roseHadkiss': {'left': 166, 'top': 30, 'size': 'large'}},
-					{'ronHadkiss': {'left': 63, 'top': 4, 'size': 'large'}},
+					{'ronHadkiss': {'left': 58, 'top': 4, 'size': 'large'}},
 				],
 			}
 		},
@@ -64,7 +64,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': ''
 				//'place': 
 				'title': 'Rose Kesby at the Factory',
-				'people': [{'roseHadkiss': {'left': 115, 'top': 40}}],
+				'people': [{'roseHadkiss': {'left': 110, 'top': 40}}],
 			}
 		},
 		{	'imgRef':	'rose&ron 1951 beach trip, roseHadkiss/roseHadkiss2.jpg',
@@ -78,8 +78,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'place': 
 				//'title': '',
 				'people': [
-					{'roseHadkiss': {'left': 175, 'top': 55, 'size': 'small'}},
-					{'ronHadkiss': {'left': 123, 'top': 31, 'size': 'small'}},
+					{'roseHadkiss': {'left': 169, 'top': 55, 'size': 'small'}},
+					{'ronHadkiss': {'left': 118, 'top': 31, 'size': 'small'}},
 				],
 			}
 		},
@@ -93,7 +93,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': [{'roseHadkiss': {'left': 220, 'top': 130}}],
+				'people': [{'roseHadkiss': {'left': 171, 'top': 130}}],
 			}
 		},
 		{	'imgRef':	'rose hightor, roseHadkiss/roseHadkiss7.jpg',
