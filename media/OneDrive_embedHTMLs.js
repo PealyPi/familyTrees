@@ -106,7 +106,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': '1951',
 				//'place': '',
 				//'title': '',
-				'people': [{'roseHadkiss': {'left': 236, 'top': 110}}],
+				'people': [{'roseHadkiss': {'left': 225, 'top': 110}}],
 			}
 		},
 		{	'imgRef':	'roseRon Wedding, roseHadkiss/roseHadkiss8.jpg',

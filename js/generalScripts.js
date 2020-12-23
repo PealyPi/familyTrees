@@ -318,7 +318,6 @@ class nodeLetterTag_info {
 	
 	updateFocus(newFocus){
 		this.currentFocus = newFocus;
-		//console.log("newFocus: " + newFocus.personTag + ", " +  newFocus.famName);
 	}
 	
 	getNodeObj(nodeTag){
@@ -475,7 +474,9 @@ class navBar {
 			treeInfoTab.startStopImgSlideshow('stop');
 			infoTab.startStopImgSlideshow('stop');
 			
-			imgGalleryObj.closeGallery();
+			if (imgGalleryObj.isOpen){
+				imgGalleryObj.closeGallery();
+			}
 			
 			//hide all				
 			switch (newActiveID){
@@ -485,8 +486,9 @@ class navBar {
 				case 'treeTab':		
 					this.hideAllSects(this.svgDiv);
 					this.showSect(this.svgDiv);
-					if ((!famViewBool) && (NODEdetails.currentFocus != ''))
-						treeChange.newFocus(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName);
+					if ((!famViewBool) && (NODEdetails.currentFocus != '')){
+						treeChange.newFocus(NODEdetails.currentFocus.personTag, NODEdetails.currentFocus.famName, true);
+					}
 					
 					//start img slideshow
 					treeInfoTab.startStopImgSlideshow('start');
@@ -1760,14 +1762,16 @@ class imgTab {
 			let circleId = clickedCircleDiv.id;
 			const personClicked = circleId.replace("_circleTag", "");
 		
-			this.changeFocus(personClicked);
+			let personFam = findPersonsFamily(personClicked);
+			changeGlobalFocus(personFam, personClicked);
 			
 		}
 	}
 	
 	changeFocus(clickedPerson){
-		imgGalleryObj.setPerson(clickedPerson);
 		console.log("Change Focus " + clickedPerson);
+		imgGalleryObj.setPerson(clickedPerson);
+		
 	}
 	
 	clearImg(){			
@@ -1816,6 +1820,7 @@ class imgGallery{
 		
 		this.transitioning = false;
 		
+		this.isOpen = false;
 		this.initialGallery();
 		
 	}
@@ -1823,6 +1828,7 @@ class imgGallery{
 	openGallery(){
 		if (!this.transitioning){
 			this.transitioning = true;
+			this.isOpen = true;
 			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'enter');
 			setTimeout(()=>{
 				this.transitioning = false;
@@ -1832,6 +1838,7 @@ class imgGallery{
 	closeGallery(){
 		if (!this.transitioning){
 			this.transitioning = true;
+			this.isOpen = false;
 			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'exit');
 			setTimeout(()=>{
 				this.transitioning = false;
@@ -3822,10 +3829,11 @@ class treeChangeEvents {
 		newFocusObj.nodeShift(direction, newFocusObj.tagType);		
 	}
 	
-	newFocus(personName, famName){
+	newFocus(personName, famName, tabChange = false){
 		//from person click
-		//NODEdetails.updateFocus({'personTag': personName, 'famName':famName});	
-		changeGlobalFocus(famName, personName, "treeSVG");
+		if (!tabChange)
+			changeGlobalFocus(famName, personName, "treeSVG");
+		
 		
 		const famViewBool = (document.getElementById("famViewSVG").children.length == 0) ? false : true;
 		
@@ -3859,7 +3867,7 @@ class treeChangeEvents {
 }
 
 function changeGlobalFocus(personFam, personName, source = false){	
-	//console.log(personFam + ", " + personName );
+	console.log("New Global Focus: " + personFam + ", " + personName );
 	if (source == "treeSVG"){
 		//console.log("changing global focus1 to " + personName);
 		NODEdetails.updateFocus({'personTag': personName, 'famName': personFam});		
