@@ -1638,9 +1638,6 @@ class imgTab {
 		this.imgOpen = false;
 		this.createdImg = null;
 		
-		//detect window size
-		//this.oldWindowSize = (window.innerWidth < 800) ? (window.innerWidth < 600) ? 'smallest' : 'smaller': 'normal';
-		
 		this.circlesArray = [];
 		this.circleSizes = {
 			'normal': '80',
@@ -1787,6 +1784,8 @@ class imgTab {
 		this.currentImageObj = {};
 		this.circlesArray = [];		
 		
+		this.clearWoodInfo();
+		
 		this.imgOpen = false;
 	}
 	
@@ -1800,10 +1799,40 @@ class imgTab {
 		
 		
 		const titleDiv = document.createElement("div");
-		this.titleDiv = titleDiv;
-		titleDiv.classList.add('infoData');
-		titleDiv.classList.add('titleData');
-		infoContainer.appendChild(titleDiv);		
+		titleDiv.classList.add('imgData');
+		titleDiv.classList.add('img_titleData');
+		infoContainer.appendChild(titleDiv);	
+		
+			const titleSpan = document.createElement('span');
+			this.titleSpan = titleSpan;
+			titleSpan.classList.add('imgData_span');
+			titleDiv.appendChild(titleSpan);	
+		
+		const yrDiv = document.createElement("div");
+		yrDiv.classList.add('imgData');
+		yrDiv.classList.add('img_yearData');
+		infoContainer.appendChild(yrDiv);
+		
+			const yrSpan = document.createElement('span');
+			this.yrSpan = yrSpan;
+			yrSpan.classList.add('imgData_span');
+			yrDiv.appendChild(yrSpan);	
+		
+		const locDiv = document.createElement("div");
+		locDiv.classList.add('imgData');
+		locDiv.classList.add('img_locData');
+		infoContainer.appendChild(locDiv);	
+		
+			const locSpan = document.createElement('span');
+			this.locSpan = locSpan;
+			locSpan.classList.add('imgData_span');
+			locDiv.appendChild(locSpan);	
+		
+		const pplDiv = document.createElement("div");
+		this.pplDiv = pplDiv;
+		pplDiv.classList.add('imgData');
+		pplDiv.classList.add('img_pplData');
+		infoContainer.appendChild(pplDiv);	
 		
 	}
 	
@@ -1811,16 +1840,67 @@ class imgTab {
 		//console.log(imgObj);
 		
 		let imgTags 	= imgObj.data.tags;
-		let imgTitle 	= imgTags.title ?? '';
-		let imgYr 		= imgTags.year ?? '';
-		let imgLocation = imgTags.place ?? '';
+		let imgTagsArray = [
+			{'div': this.titleSpan,	'tag': imgTags.title ?? ''}, 
+			{'div': this.yrSpan, 	'tag': imgTags.year ?? ''}, 
+			{'div': this.locSpan,	'tag': imgTags.place ?? ''}, 
+		];
 		let imgPpl 		= imgTags.people ?? [];
 		
+		//let imgTitle 	= imgTags.title ?? '';
+		//let imgYr 		= imgTags.year ?? '';
+		//let imgLocation = imgTags.place ?? '';
 		
-		/*const nameSpan = document.createElement("span");	
-		const nameSpanText = document.createTextNode(' ');
-		nameDiv.appendChild(nameSpan);
-		nameSpan.appendChild(nameSpanText);*/
+		
+		for (const tagObj of imgTagsArray){
+			if (tagObj.tag != ''){
+				tagObj.div.innerHTML = tagObj.tag;
+			}
+		}
+		
+		if (imgPpl != []){
+			for (const personObj of imgPpl){
+				let person =  Object.keys(personObj);
+				const pplSpan = document.createElement('span');
+				pplSpan.id = "imgPplTags_" + person;
+				pplSpan.classList.add('img_pplTag');
+				pplSpan.innerHTML = ('#' + person);
+				this.pplDiv.appendChild(pplSpan);	
+				
+				//add click event
+				pplSpan.addEventListener("click", (evnt) => this.pplTagClickEvent(evnt));	
+			}
+		}
+	}
+	
+	pplTagClickEvent(event){
+		if (!this.transitioning){
+			this.transitioning = true;
+			const clickedPersonDiv = event.target;
+			let clickedId = clickedPersonDiv.id;
+			const personClicked = clickedId.replace("imgPplTags_", "");
+		
+			let personFam = findPersonsFamily(personClicked);
+			changeGlobalFocus(personFam, personClicked);
+			
+			setTimeout(()=> {
+				this.transitioning = false;
+			}, 1000)
+		}
+	}
+	
+	clearWoodInfo(){
+		let imgTagDivs = [this.titleSpan, this.yrSpan,  this.locSpan];
+		
+		for (const tagDiv of imgTagDivs){
+			tagDiv.innerHTML = '';
+		}
+		
+		for (const pplTags of Array.from(this.pplDiv.childNodes)){
+			pplSpan.removeEventListener("click", (evnt) => this.pplTagClickEvent(evnt));
+		}
+		
+		
 	}
 	
 	

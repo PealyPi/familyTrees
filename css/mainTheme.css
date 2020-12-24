@@ -1017,6 +1017,7 @@ button#galleryBtn:hover:after {
 	position: absolute;
 	top: calc(var(--navBarHeight));
 	height: 90vh;
+	pointer-events: none;
 	
 	/*background-color: var(--colourDarkPurple_RGB_Transparent);*/
 	
@@ -1047,7 +1048,6 @@ button#galleryExitBtn{
 button#galleryExitBtn:hover{
 	color: var(--colourPeach_purpleComp);
 }
-
 
 #imgGallery{
 	position: fixed;
@@ -1198,7 +1198,7 @@ button#galleryExitBtn:hover{
 #imgsDiv .imgArea{
 	position: relative;
 	z-index: calc(var(--woodBackZ)+10);
-	/* 8 x 10*/
+	pointer-events: auto;
 	min-height: 330px;
 	
 	margin: 100px auto 0 auto;
@@ -1282,13 +1282,13 @@ button#galleryExitBtn:hover{
 }
 
 #imgsDiv .imgDivWood{
-	width: 450px;
+	width: 500px;
 	position: relative;
 	margin: -70px auto;
-	height: 230px;
-	padding: 60px 100px;
+	height: 265px;
+	pointer-events: auto;
+	padding: 90px 80px 0 80px;
 	z-index: calc(var(--woodBackZ)+0); 
-	
 	
 	background-image: url('../media/colouredWood3.svg'); 
 	background-position: center bottom;
@@ -1304,6 +1304,7 @@ button#galleryExitBtn:hover{
 	left: 0;
 	right: -46px;
 	margin: 0 auto;
+	pointer-events: none;
 
 	background-image: url('../media/ivy5_rotated.svg'), url('../media/ivy1_rotated.svg'); 
 	background-position: left top, right top;
@@ -1351,6 +1352,38 @@ button#galleryExitBtn:hover{
 }
 
 
+#imgsDiv .woodInfoContainer .imgData{	
+	font-size: 30px;
+	font-family: var(--mainInfoFont);
+    color: rgb(57,35,35, 0.9);
+    text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	
+	position: relative;
+}
+#imgsDiv .woodInfoContainer .imgData.img_titleData{
+	font-size: 40px;
+}
+#imgsDiv .woodInfoContainer .imgData.img_yearData{	
+	font-size: 40px;
+}
+#imgsDiv .woodInfoContainer .imgData.img_locData{	
+	font-size: 30px;
+}
+#imgsDiv .woodInfoContainer .imgData .img_pplTag{	
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	color: #CFBABA;
+	margin: 10px 0;
+	font-size: 24px;
+	padding-right: 16px;	
+	transition: all 0.5s ease;	
+}
+#imgsDiv .woodInfoContainer .imgData .img_pplTag:hover{
+	letter-spacing: 1.2px;
+	color:#E7DCDC;
+	padding-right: 8px;	
+}
 
 
 /* --- Ppl Tab --- */
