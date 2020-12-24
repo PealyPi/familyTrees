@@ -1023,9 +1023,10 @@ button#galleryBtn:hover:after {
 	
 }
 button#galleryBtn{
+	position: fixed;
 	display: block;
 	right: 10%;
-	top: 30px;
+	top: 100px;
 	pointer-events: auto;
 	
 }
