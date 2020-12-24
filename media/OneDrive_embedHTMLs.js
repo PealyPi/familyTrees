@@ -14,9 +14,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 120,
 			},
 			'tags': {
+				//'title': '',
 				//'year': '',
 				//'place': '',
-				//'title': '',
 				'people': [''],
 				'peoplePositions': [{'personTag': {'left': 0, 'top': 0}}],
 			}
@@ -28,9 +28,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 120,
 			},
 			'tags': {
+				//'title': '',
 				//'year': ''
 				//'place': 
-				//'title': '',
 				'people': [
 					{'roseHadkiss': {'left': 166, 'top': 30, 'size': 'large'}},
 					{'ronHadkiss': {'left': 58, 'top': 4, 'size': 'large'}},
@@ -44,9 +44,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 120,
 			},
 			'tags': {
+				'title': 'Kesby Beach Family Photo',
 				//'year': ''
 				//'place': 
-				'title': 'Kesby Beach Family Photo',
 				'people': [
 					{'roseHadkiss': {'left': 36, 'top': 148}},
 					{'johnNevilleKesby': {'left': 97, 'top': 95}},
@@ -61,9 +61,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 140,
 			},
 			'tags': {
+				'title': 'Rose Kesby at the Factory',
 				//'year': ''
 				//'place': 
-				'title': 'Rose Kesby at the Factory',
 				'people': [{'roseHadkiss': {'left': 110, 'top': 40}}],
 			}
 		},
@@ -74,9 +74,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 160,
 			},
 			'tags': {
+				//'title': '',
 				//'year': ''
 				//'place': 
-				//'title': '',
 				'people': [
 					{'roseHadkiss': {'left': 169, 'top': 55, 'size': 'small'}},
 					{'ronHadkiss': {'left': 118, 'top': 31, 'size': 'small'}},
@@ -90,9 +90,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 150,
 			},
 			'tags': {
+				//'title': '',
 				'year': '1951',
 				//'place': '',
-				//'title': '',
 				'people': [{'roseHadkiss': {'left': 171, 'top': 130}}],
 			}
 		},
@@ -103,9 +103,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 150,
 			},
 			'tags': {
+				//'title': '',
 				'year': '1951',
 				//'place': '',
-				//'title': '',
 				'people': [{'roseHadkiss': {'left': 225, 'top': 110}}],
 			}
 		},
@@ -116,9 +116,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 130,
 			},
 			'tags': {
+				//'title': '',
 				'year': '1950',
 				//'place': '',
-				//'title': '',
 				'people': [
 					{'roseHadkiss': {'left': 237, 'top': 46, 'size': 'smaller'}},
 					{'ronHadkiss': {'left': 190, 'top': 37, 'size': 'smaller'}},

@@ -502,7 +502,7 @@ class navBar {
 				case 'imgsTab':
 					this.hideAllSects(this.imgsDiv);
 					this.showSect(this.imgsDiv);
-					if (imgOpenTab.currentImgObj = {}){
+					if (!imgOpenTab.imgOpen){
 						setTimeout(function(){imgGalleryObj.openGallery();}, 2000);
 					}
 				break;
@@ -1632,7 +1632,10 @@ class imgTab {
 		this.circlesContainer	= this.imgFigure.querySelector(".circlesContainer");
 		this.imageDivWood 	= this.imgDisplay.querySelector(".imageDivWood");
 		
+		this.initialWoodInfoDivs();
+		
 		this.currentImageObj = {};
+		this.imgOpen = false;
 		this.createdImg = null;
 		
 		//detect window size
@@ -1656,15 +1659,16 @@ class imgTab {
 			setTimeout(()=> {
 				this.clearImg();		
 				this.setImageCreate(imageObj);	
+				this.imgOpen = true;
 			}, 1400);
 			setTimeout(()=> {	
 				VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
 			}, 1600);
 		} else {		
 			this.setImageCreate(imageObj);
+			this.imgOpen = true;
 			VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
-		}
-		
+		}		
 		
 	}
 	setImageCreate(imageObj){
@@ -1694,8 +1698,6 @@ class imgTab {
 		}
 		//this.imageArea change height to match photo height
 		this.imageArea.style.height = (createdImg.height + 10) + "px";
-		//this.imgFigure.style.height = (this.createdImg.height + 10) + "px";
-		//this.circlesContainer.style.height = (this.createdImg.height + 10) + "px";
 		
 		
 		//people in img circles
@@ -1783,15 +1785,42 @@ class imgTab {
 			circleChild.remove();
 		}
 		this.currentImageObj = {};
-		this.circlesArray = [];			
+		this.circlesArray = [];		
+		
+		this.imgOpen = false;
+	}
+	
+	initialWoodInfoDivs(){
+		this.woodInfoDiv = this.imgDisplay.querySelector(".imgDivWood");
+		
+		const infoContainer = document.createElement("div");
+		this.infoContainer = infoContainer;
+		infoContainer.classList.add('woodInfoContainer');
+		this.woodInfoDiv.prepend(infoContainer);		
+		
+		
+		const titleDiv = document.createElement("div");
+		this.titleDiv = titleDiv;
+		titleDiv.classList.add('infoData');
+		titleDiv.classList.add('titleData');
+		infoContainer.appendChild(titleDiv);		
 		
 	}
 	
 	fillWoodInfo(imgObj){
-		console.log(imgObj);
+		//console.log(imgObj);
 		
-		let imgTags = imgObj.data.tags;
+		let imgTags 	= imgObj.data.tags;
+		let imgTitle 	= imgTags.title ?? '';
+		let imgYr 		= imgTags.year ?? '';
+		let imgLocation = imgTags.place ?? '';
+		let imgPpl 		= imgTags.people ?? [];
 		
+		
+		/*const nameSpan = document.createElement("span");	
+		const nameSpanText = document.createTextNode(' ');
+		nameDiv.appendChild(nameSpan);
+		nameSpan.appendChild(nameSpanText);*/
 	}
 	
 	
