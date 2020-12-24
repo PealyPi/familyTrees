@@ -1762,6 +1762,8 @@ class imgTab {
 		
 		if (navObj.activeBtn.id != 'imgsTab')
 			this.clearImg();
+		else 
+			console.log("Here");
 			
 	}
 	
@@ -1890,14 +1892,16 @@ class imgTab {
 	}
 	
 	clearWoodInfo(){
-		let imgTagDivs = [this.titleSpan, this.yrSpan,  this.locSpan];
+		let imgTagDivs = [this.titleSpan, this.yrSpan, this.locSpan];
 		
 		for (const tagDiv of imgTagDivs){
 			tagDiv.innerHTML = '';
 		}
 		
 		for (const pplTags of Array.from(this.pplDiv.childNodes)){
-			pplSpan.removeEventListener("click", (evnt) => this.pplTagClickEvent(evnt));
+			console.log(pplTags);
+			pplTags.removeEventListener("click", (evnt) => this.pplTagClickEvent(evnt));
+			pplTags.remove();
 		}
 		
 		

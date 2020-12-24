@@ -1026,6 +1026,7 @@ button#galleryBtn{
 	display: block;
 	right: 10%;
 	top: 30px;
+	pointer-events: auto;
 	
 }
 button#galleryExitBtn{
@@ -1369,6 +1370,9 @@ button#galleryExitBtn:hover{
 #imgsDiv .woodInfoContainer .imgData.img_locData{	
 	font-size: 30px;
 }
+#imgsDiv .woodInfoContainer .imgData.img_pplData{	
+	width: 110%;
+}
 #imgsDiv .woodInfoContainer .imgData .img_pplTag{	
 	position: relative;
 	display: inline-block;
@@ -1376,7 +1380,7 @@ button#galleryExitBtn:hover{
 	color: #CFBABA;
 	margin: 10px 0;
 	font-size: 24px;
-	padding-right: 16px;	
+	padding-right: 22px;	
 	transition: all 0.5s ease;	
 }
 #imgsDiv .woodInfoContainer .imgData .img_pplTag:hover{
