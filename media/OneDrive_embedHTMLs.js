@@ -116,9 +116,9 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'width': 130,
 			},
 			'tags': {
-				//'title': '',
-				'year': '1950',
-				//'place': '',
+				'title': 'Ron&Rose Wedding',
+				'year': 'March 26th 1949',
+				'place': 'St Peter and Paul Church, Swanscombe',
 				'people': [
 					{'roseHadkiss': {'left': 237, 'top': 46, 'size': 'smaller'}},
 					{'ronHadkiss': {'left': 190, 'top': 37, 'size': 'smaller'}},

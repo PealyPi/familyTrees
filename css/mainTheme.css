@@ -1158,17 +1158,17 @@ button#galleryExitBtn:hover{
 }
 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2{
-	height: 270px;
+	height: 240px;
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height3{
-	height: 360px;
+	height: 320px;
 }
 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width2{
-	width: 270px;
+	width: 240px;
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width3{
-	width: 360px;
+	width: 320px;
 }
 
 
@@ -1367,18 +1367,23 @@ button#galleryExitBtn:hover{
 	font-family: var(--mainInfoFont);
     color: rgb(57,35,35, 0.9);
     text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	line-height: 32px;
 	
 	position: relative;
 }
 
 #imgsDiv .woodInfoContainer .imgData.img_titleData{
 	font-size: 40px;
+	padding-left:10px;
 }
 #imgsDiv .woodInfoContainer .imgData.img_yearData{	
 	font-size: 40px;
+	text-align:right;
+	line-height: 50px;
 }
 #imgsDiv .woodInfoContainer .imgData.img_locData{	
-	font-size: 30px;
+	font-size: 24px;
+	text-align:right;
 }
 #imgsDiv .woodInfoContainer .imgData.img_pplData{	
 	width: 110%;
@@ -1387,10 +1392,14 @@ button#galleryExitBtn:hover{
 	position: relative;
 	display: inline-block;
 	cursor: pointer;
+	
 	color: #CFBABA;
-	margin: 10px 0;
 	font-size: 24px;
+	line-height: 10px;
+	
+	margin: 10px 0;
 	padding-right: 22px;	
+	
 	transition: all 0.5s ease;	
 }
 #imgsDiv .woodInfoContainer .imgData .img_pplTag:hover{
