@@ -1353,7 +1353,15 @@ button#galleryExitBtn:hover{
 }
 
 
-#imgsDiv .woodInfoContainer .imgData{	
+#imgsDiv .woodInfoContainer {
+	opacity: 0;
+	transition: opacity 1s ease;
+}
+#imgsDiv .woodInfoContainer.fadeIn{
+	opacity: 1;
+}
+
+#imgsDiv .woodInfoContainer .imgData{		
 	font-size: 30px;
 	font-family: var(--mainInfoFont);
     color: rgb(57,35,35, 0.9);
@@ -1361,6 +1369,7 @@ button#galleryExitBtn:hover{
 	
 	position: relative;
 }
+
 #imgsDiv .woodInfoContainer .imgData.img_titleData{
 	font-size: 40px;
 }

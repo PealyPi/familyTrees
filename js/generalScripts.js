@@ -1652,6 +1652,7 @@ class imgTab {
 	setImage(imageObj){	
 		if (this.createdImg != null){
 			VIVIFY_animateElems(this.imgFigure, 'imgArea', 'exit');
+			this.imageInfo.classList.remove('fadeIn');
 			
 			setTimeout(()=> {
 				this.clearImg();		
@@ -1660,11 +1661,13 @@ class imgTab {
 			}, 1400);
 			setTimeout(()=> {	
 				VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
+				this.imageInfo.classList.add('fadeIn');
 			}, 1600);
 		} else {		
 			this.setImageCreate(imageObj);
 			this.imgOpen = true;
 			VIVIFY_animateElems(this.imgFigure , 'imgArea', 'enter');
+			this.imageInfo.classList.add('fadeIn');
 		}		
 		
 	}
@@ -1795,10 +1798,9 @@ class imgTab {
 		this.woodInfoDiv = this.imgDisplay.querySelector(".imgDivWood");
 		
 		const infoContainer = document.createElement("div");
-		this.infoContainer = infoContainer;
+		this.imageInfo = infoContainer;
 		infoContainer.classList.add('woodInfoContainer');
-		this.woodInfoDiv.prepend(infoContainer);		
-		
+		this.woodInfoDiv.prepend(infoContainer);				
 		
 		const titleDiv = document.createElement("div");
 		titleDiv.classList.add('imgData');
@@ -1847,12 +1849,7 @@ class imgTab {
 			{'div': this.yrSpan, 	'tag': imgTags.year ?? ''}, 
 			{'div': this.locSpan,	'tag': imgTags.place ?? ''}, 
 		];
-		let imgPpl 		= imgTags.people ?? [];
-		
-		//let imgTitle 	= imgTags.title ?? '';
-		//let imgYr 		= imgTags.year ?? '';
-		//let imgLocation = imgTags.place ?? '';
-		
+		let imgPpl 		= imgTags.people ?? [];		
 		
 		for (const tagObj of imgTagsArray){
 			if (tagObj.tag != ''){
@@ -1899,7 +1896,6 @@ class imgTab {
 		}
 		
 		for (const pplTags of Array.from(this.pplDiv.childNodes)){
-			console.log(pplTags);
 			pplTags.removeEventListener("click", (evnt) => this.pplTagClickEvent(evnt));
 			pplTags.remove();
 		}
