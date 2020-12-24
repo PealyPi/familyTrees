@@ -1765,8 +1765,6 @@ class imgTab {
 		
 		if (navObj.activeBtn.id != 'imgsTab')
 			this.clearImg();
-		else 
-			console.log("Here");
 			
 	}
 	
@@ -1967,7 +1965,7 @@ class imgGallery{
 		
 		let msnry = new Masonry( grid, {
 			itemSelector: '.grid-item',
-			columnWidth: 185,
+			columnWidth: 165,
 			isFitWidth: true,
 			//gutter: 1,
 		});
