@@ -1,177 +1,130 @@
-<!doctype html>
-<html>
-<head>			
-   <title id="treeTitle">Family Trees</title>
-   <a hidden href="https://www.vecteezy.com/free-vector/vector">Vector Vectors by Vecteezy</a>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet"> 
-	<link href="https://fonts.googleapis.com/css2?family=Galada&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Pealy Family</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<style>
+
+body {
+
+	background-image: url('peachyTree.png');
+	background-attachment: fixed;
+	color: #241F26; 
+}
+
+.box {
+	border-radius: 3px;
+	background: rgba(101, 101, 101, 0.7); margin: auto; padding: 12px;
+}
+
+.lightbox {
+	zoom: 1.5;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(10, 10, 10, 0.8);
+	text-align: center;
+	margin: auto;
+
+}
+
+div.horizontal {
+	display: flex;
+	justify-content: center;
+	height: 100%;
+}
+
+div.vertical {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+}
+
+::-webkit-input-placeholder {
+   color: #955;
+   text-align: center;
+}
+
+::-moz-placeholder {
+   color: #955;
+   text-align: center;
+}
+
+:-ms-input-placeholder {
+   color: #955;
+   text-align: center;
+}
+
+</style>
+
+<body>
+
+	<div id="loginbox" class="lightbox" >
+		<div class="horizontal">
+			<div class="vertical">
+				<div class="box">
+					<input style="margin: 16px; text-align: center;" id="password" type="password" placeholder="password" /> <br />
+					<button id="loginbutton" type="button">Enter</button>
+					<p id="wrongPassword" style="display: none">wrong password</p>
+				</div>
+			</div>
+		</div>
+	</div>
 	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-	
-	<link href="css/mainTheme.css" media="screen and (min-width: 650px)" rel="stylesheet" type="text/css"/>
-	<link href="css/mainTheme_small.css" media="screen and (max-width: 650px)" rel="stylesheet" type="text/css"/>
-	<link href="css/vivify.min.css" rel="stylesheet" type="text/css"/>
- 
-</head>
-  
-<body>	
-	<div class="loading-mask">
-		<div class="loading-mask_topBar"></div>
-		<div class="loading-spinner">
-			<i class="fa fa-spinner" aria-hidden="true"></i>
-		</div>
-		<div class="loading-mask_bottomBar"></div>
-	</div>
-	<div class="header">
-		<div class="top_navbar homeTabColour">
-			<div class="left_navbar">
-				<button id="homeTab" class="navTab active">
-					<i class="fas fa-home"></i>
-				</button>
-				<div id="homeTab_div" class="navTabDiv active">Home</div>
-				
-				<button id="treeTab" class="navTab"></button>
-				<div id="treeTab_div" class="navTabDiv">Tree</div>
-				
-				<button id="infoTab" class="navTab">
-					<i class="fas fa-info-circle"></i>
-				</button>				
-				<div id="infoTab_div" class="navTabDiv">Info</div>
-				
-				<button id="imgsTab" class="navTab">
-					<i class="far fa-images"></i>
-				</button>
-				<div id="imgsTab_div" class="navTabDiv">Images</div>
-			</div>
-			
-			<div class="right_navbar">
-				<button id="pplTab" class="navTab">
-					<i class="fas fa-user"></i>
-				</button>	
-			</div>
-		</div>		
-	</div>
-	
-	<div id="mainDiv">
-		<div id="imgDebugControlsDIV">	
-			<button class = "imgDebugControls" id = "imgDebugPause"><i class="fas fa-pause"></i>
-			</button>	
-			<button class = "imgDebugControls" id = "imgDebugNext"><i class="fas fa-step-forward"></i>
-			</button>
-		</div>
-		<div class="peachyTree"></div>
-		<div class="pageSection" id="svgDiv">
-			<svg id="mainSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
-			</svg>
-			<svg id="famViewSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
-			</svg>
-			<div class="svg_topLeftArea">
-				<span class="tree_familyText">Choose a Person to View</span>
-				<button class="famView_treeIcon famIcon"><div class="iconPulse"></div></button>
-				
-			</div>
-			
-			<div class="arrowButtonsDiv">
-				<button class="arrowBtn active leftArrow_button"><i class="fas fa-chevron-left"></i><div class="iconPulse"></div></button>
-				<button class="famIcon active siblingIcon_button"><div class="iconPulse"></div><div id="siblingsIconText" class="famIconText">Siblings</div></button>
-				<button class="famIcon active childrenIcon_button"><div class="iconPulse"></div><div id="childrenIconText" class="famIconText">Children</div></button>
-				<button class="arrowBtn active rightArrow_button"><i class="fas fa-chevron-right"></i><div class="iconPulse"></div></button>
-			</div>
-			
-			<div class="vineLine"></div>
-			
-			<div id="infoDivTree">
-				<div class="infoDivSec">
-					<button id="treeInfoLinkBTN"><i class="fas fa-info-circle"></i></button>
-					<div class="infoMain"></div>
-				</div>
-				<svg class="leafSVG" id="leafSVGTree" viewbox="0 0 160 132" xmlns = "http://www.w3.org/2000/svg">	
-				</svg>
-			</div>
-		</div>
-		
-		<div class="pageSection" id="infoDiv">
-			<div id="infoDivInfo">
-				<div class="infoDivSec">
-					<button id="infoTreeLinkBTN"></button>
-					<div class="infoMain"></div>					
-				</div>
-				<svg class="leafSVG" id="leafSVGInfo" viewbox="0 0 160 132" xmlns = "http://www.w3.org/2000/svg" style="display: none">	
-				</svg>		
-			</div>
-		</div>
-		<div class="pageSection" id="imgsDiv">
-			<!--<div class="tabBtns">
-					<button id="imgInfoLinkBTN"><i class="fas fa-info-circle"></i></button>
-					<button id="imgTreeLinkBTN"></button>
-			</div>-->
-			<div class="imgDisplay">
-				<div class="imgArea"><figure class="imgContainer"><div class="circlesContainer"></div></figure></div>
-				<div class="imgDivWood" >
-					<div class="imgDivVines" ></div>
-				</div>
-			</div>
-			<button id="galleryBtn" onClick="imgGalleryObj.openGallery();"><i class="fas fa-images"></i></button>
-			<div id="imgGallery">			
-				<button id="galleryExitBtn" onClick="imgGalleryObj.closeGallery();"><i class="fas fa-times"></i></button>
-				<div class="vineLine"></div>
-				<div class="galleryPersonFocus">All</div>
-				<div class="galleryShowAll" onClick="imgGalleryObj.setPerson('All')">See All</div>
-				<div class="imgGalleryGrid">  
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="peopleDiv">
-		<button id="peopleDivExit"><i class="fas fa-times"></i></button>
-		<div class = "searchDiv">
-			<input type="text" id="peopleSearching" placeholder="Search for Person"
-				onkeyup="peopleListSearch(this);" >
-			<svg width="271px" height="54px" viewBox="0 0 271 54" class="searchBorder">
-				<polyline points="270,1 270,53 1,53 1,1 270,1" class="searchBg-line" />
-			</svg>
-			<button id="peopleSearchIcon" onClick="peopleListSearchExit();"><i class="fas fa-search"></i></button>
-		</div>
-		
-		<ul id="peopleList">
-			<button id="kesbyDropdownBtn" class="ppl_dropdownBtn">Kesby <i class="fa fa-caret-down"></i></button>
-			<div id="kesbyDropdownDiv" class="ppl_dropdownContainer"></div>
-			
-			<button id="hadkissDropdownBtn" class="ppl_dropdownBtn">Hadkiss <i class="fa fa-caret-down"></i></button>
-			<div id="hadkissDropdownDiv" class="ppl_dropdownContainer"></div>
-			
-			<button id="pealDropdownBtn" class="ppl_dropdownBtn">Peal <i class="fa fa-caret-down"></i></button>
-			<div id="pealDropdownDiv" class="ppl_dropdownContainer"></div>
-			
-			<button id="mckenzieDropdownBtn" class="ppl_dropdownBtn">McKenzie <i class="fa fa-caret-down"></i></button>
-			<div id="mckenzieDropdownDiv" class="ppl_dropdownContainer"></div>
-			
-			<button id="nonMainDropdownBtn" class="ppl_dropdownBtn">Non-main <i class="fa fa-caret-down"></i></button>
-			<div id="nonMainDropdownDiv" class="ppl_dropdownContainer nonMainDrop"></div>
-		</ul>
-	</div>
-	<div class="maskTransitionSection">
-		<div id="transitionMask1" class="transitionMask"></div>
-		<div id="transitionMask2" class="transitionMask"></div>
-		<div id="transitionMask3" class="transitionMask"></div>
-		<div id="transitionMask4" class="transitionMask"></div>
-		<div id="transitionMask5" class="transitionMask"></div>
-	</div>
+	<script type="text/javascript">
+	"use strict";
 
-	<div class="footer"></div>	
-	
-	<script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
-	<script src="data/personInfo.js"></script>
-	<script src="data/pathData.js"></script>
-	<script src="data/relationsData.js"></script>	
-	<script src="media/OneDrive_embedHTMLs.js"></script>
-	<script src="js/generalScripts.js" async="defer"></script>
-	
-	<script src="https://kit.fontawesome.com/99d7e29f41.js" crossorigin="anonymous" onerror="FAiconFail()"></script>
-	
-	
+
+	function loadPage(pwd) {
+
+		var hash= pwd;var hash = 
+		hash = CryptoJS.SHA1(pwd);
+		var url = hash + "/index.html";
+
+		$.ajax({
+			url : url,
+			dataType : "html",
+			success : function(data) {
+
+				window.location= url;
+
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+
+
+				parent.location.hash= hash;
+
+				//$("#wrongPassword").show();
+				$("#password").attr("placeholder","wrong password");
+				$("#password").val("");
+			}
+		});
+	}
+
+
+	$("#loginbutton").on("click", function() {
+		loadPage($("#password").val());
+	});
+	$("#password").keypress(function(e) {
+		if (e.which == 13) {
+
+			loadPage($("#password").val());
+		}
+	});
+	$("#password").focus();
+
+	</script>
+
 </body>
 </html>
