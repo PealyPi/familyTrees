@@ -1967,7 +1967,7 @@ class imgGallery{
 			itemSelector: '.grid-item',
 			columnWidth: 165,
 			isFitWidth: true,
-			//gutter: 1,
+			gutter: 2,
 		});
 		this.msnry = msnry;
 		
@@ -1991,7 +1991,7 @@ class imgGallery{
 			$('#imgGallery .galleryShowAll').fadeOut(500);
 		} else {
 			imgArray = PEOPLEIMGs[personTag] ?? 'none';
-			shuffle(imgArray);	
+			this.galleryOrder(imgArray);
 			$('#imgGallery .galleryShowAll').fadeIn(500);
 		}
 		
@@ -2034,7 +2034,7 @@ class imgGallery{
 				if (imgWidth > imgHeight){
 					//landscape
 					imgOrientation = 'landscape';
-					if (roundedDivide > 1.5)
+					if (roundedDivide > 1.6)
 						gridImgDiv.classList.add("grid-item--width3");
 					else 
 						gridImgDiv.classList.add("grid-item--width2");
@@ -2042,7 +2042,7 @@ class imgGallery{
 				} else if (imgHeight > imgWidth){
 					imgOrientation = 'portrait';
 					//portrait
-					if (roundedDivide > 1.5)
+					if (roundedDivide > 1.6)
 						gridImgDiv.classList.add("grid-item--width3");
 					else 
 						gridImgDiv.classList.add("grid-item--height2");
@@ -2075,7 +2075,38 @@ class imgGallery{
 			
 			imgCount++;
 		}
+		
+		this.galleryOrder(this.imageObjsArray);
 	}
+	
+	galleryOrder(imageObjsArray){
+		
+		for (const imgObj of imageObjsArray){
+			//check orientation, and if fits in row...
+			
+			//add orientation tag to obj
+			//imag = {'imgRef': ..., 'tags': {...}}
+			
+			
+		}
+	}
+	
+	shuffleGallery(){
+		var gridItemArray = [];
+		for (const gridItem of Array.from(this.grid.childNodes)){
+			gridItemArray.push(gridItem);
+			gridItem.remove();	
+		}
+		
+		shuffle(gridItemArray);
+		for (const dupGridItem of gridItemArray){
+			this.grid.appendChild(dupGridItem);
+			this.msnry.prepended(dupGridItem);
+		}		
+		this.msnry.layout();
+		
+	}
+	
 	
 	addClickEvent(gridItem){
 		gridItem.addEventListener("click", (evnt) => this.openImageFromGallery(evnt));	
