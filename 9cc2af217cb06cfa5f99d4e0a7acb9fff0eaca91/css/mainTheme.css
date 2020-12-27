@@ -11,6 +11,7 @@
   
 	--colourPink: #FF928B; 
 	--colourPink_RGB: rgb(255, 146, 139); 
+	--colourPink_RGB_Transparent: rgb(255, 146, 139, 0.5); 
   
 	/* Peach */
 	--colourPeach: #FEC3A6; 
@@ -1058,6 +1059,9 @@ button#galleryExitBtn:hover{
 	background-color: var(--colourBrownLIGHT_RGB_Transparent);
 	border: 3px solid var(--colourBrown);
 	
+	overflow-y:scroll;
+	overflow-x: hidden;
+	
 	z-index: var(--galleryZ);
 	
 	opacity:0;
@@ -1118,8 +1122,6 @@ button#galleryExitBtn:hover{
 	/*position: absolute;*/
 	
 	width: 100%;
-	overflow-y:scroll;
-	overflow-x: hidden;
 	margin: 0 auto;
 }
 #imgGallery .imgGalleryGrid:after{
@@ -1175,24 +1177,25 @@ button#galleryExitBtn:hover{
 
 
 /*scroll*/
-.imgGalleryGrid::-webkit-scrollbar{
-  width: 0px;
+#imgGallery::-webkit-scrollbar{
+  width: 5px;
   background: rgb(0, 0, 0, 0); 
 }
-.imgGalleryGrid::-webkit-scrollbar * {
-    background:transparent !important;
+#imgGallery::-webkit-scrollbar * {
+    background: rgb(0, 0, 0, 0) !important;
 }	
-.imgGalleryGrid::-webkit-scrollbar-track{
+#imgGallery::-webkit-scrollbar-track{
+    -webkit-box-shadow: none;
+	margin-top: 50px;
+}
+#imgGallery::-webkit-scrollbar-thumb{
+    background: var(--colourPink_RGB_Transparent);
     -webkit-box-shadow: none;
 }
-.imgGalleryGrid::-webkit-scrollbar-thumb{
-    background: white;
-    -webkit-box-shadow: none;
+#imgGallery::-webkit-scrollbar-thumb:hover {
+  background: var(--colourPink_RGB_Transparent);
 }
-.imgGalleryGrid::-webkit-scrollbar-thumb:hover {
-  background: rgb(0, 0, 0, 0);
-}
-.imgGalleryGrid::-webkit-scrollbar-thumb:window-inactive {
+#imgGallery::-webkit-scrollbar-thumb:window-inactive {
     background: none;
 }
 
