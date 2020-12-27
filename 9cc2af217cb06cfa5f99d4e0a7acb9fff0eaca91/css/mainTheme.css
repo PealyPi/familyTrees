@@ -1124,7 +1124,7 @@ button#galleryExitBtn:hover{
 #imgGallery .imgGalleryGrid{
 	/*position: absolute;*/
 	
-	width: 100%;
+	width: 90%;
 	margin: 0 auto;
 }
 #imgGallery .imgGalleryGrid:after{
@@ -1164,16 +1164,16 @@ button#galleryExitBtn:hover{
 }
 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2{
-	height: calc(1.5*var(--galleryTileSize));
+	height: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height3{
-	height: calc(2*var(--galleryTileSize));
+	height:  calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width2{
-	width: calc(1.5*var(--galleryTileSize));
+	width: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width3{
-	width: calc(2*var(--galleryTileSize));
+	width: calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
 }
 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img, 

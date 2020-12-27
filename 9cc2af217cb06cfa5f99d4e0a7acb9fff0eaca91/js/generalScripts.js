@@ -1929,6 +1929,7 @@ class imgGallery{
 	openGallery(){
 		if (!this.transitioning){
 			this.transitioning = true;
+		this.msnry.layout();
 			this.isOpen = true;
 			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'enter');
 			setTimeout(()=>{
@@ -1967,30 +1968,16 @@ class imgGallery{
 		//allImgs		
 		var grid = document.querySelector('.imgGalleryGrid');
 		this.grid = grid;
+		this.addImagesToGrid(this.allImgsObjsArray, grid);	
 		
-		let iso = new Isotope( grid, {
+		let msnry = new Isotope( grid, {
 			itemSelector: '.grid-item',
-			//layoutMode: 'masonry',
+			sortBy: 'random',
 			masonry: {
-				gutter: 2,
 				columnWidth: 160,
-				//horizontalOrder: true,
-				//isFitWidth: true,
-			},
-		});
-		/*iso.arrange({
-			// item element provided as argument
-			filter: function() {
-				let itemId = this.id;
-				//console.log(itemId);
-				//this.allImgsInGridIndex[itemId]
 			}
-		});*/
-		this.msnry = iso;
-		
-		this.addImagesToGrid(this.allImgsObjsArray, grid);		
-		
-		iso.layout();
+		});
+		this.msnry = msnry;
 
 	}
 	
@@ -1998,6 +1985,7 @@ class imgGallery{
 		//allImgs		
 		var grid = document.querySelector('.imgGalleryGrid');
 		this.grid = grid;
+		this.addImagesToGrid(this.allImgsObjsArray, grid);	
 		
 		let msnry = new Masonry( grid, {
 			itemSelector: '.grid-item',
@@ -2007,7 +1995,6 @@ class imgGallery{
 		});
 		this.msnry = msnry;
 		
-		this.addImagesToGrid(this.allImgsObjsArray, grid);		
 		
 		msnry.layout();
 		
@@ -2034,7 +2021,7 @@ class imgGallery{
 		
 		if (imgArray != 'none'){		
 			this.addImagesToGrid(imgArray, this.grid);					
-			this.msnry.layout();
+			//this.msnry.layout();
 			
 		} else {
 			let noImgDiv = document.createElement("div");
@@ -2104,9 +2091,7 @@ class imgGallery{
 			
 			gridImgDiv.classList.add('grid-item');
 			grid.appendChild(gridImgDiv);
-			gridImgDiv.appendChild(gridImg);
-			
-			this.msnry.insert( gridImgDiv );
+			gridImgDiv.appendChild(gridImg);			
 			
 			this.addClickEvent(gridImgDiv);
 			
