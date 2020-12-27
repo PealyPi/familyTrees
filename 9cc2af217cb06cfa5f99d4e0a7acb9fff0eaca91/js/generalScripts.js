@@ -1929,7 +1929,7 @@ class imgGallery{
 	openGallery(){
 		if (!this.transitioning){
 			this.transitioning = true;
-		this.msnry.layout();
+			this.msnry.layout();
 			this.isOpen = true;
 			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'enter');
 			setTimeout(()=>{
@@ -1968,38 +1968,36 @@ class imgGallery{
 		//allImgs		
 		var grid = document.querySelector('.imgGalleryGrid');
 		this.grid = grid;
-		this.addImagesToGrid(this.allImgsObjsArray, grid);	
+		this.addImagesToGrid(this.allImgsObjsArray, grid);
+		
+		let gridIndices = this.allImgsInGridIndex;
 		
 		let msnry = new Isotope( grid, {
 			itemSelector: '.grid-item',
 			sortBy: 'random',
 			masonry: {
 				columnWidth: 160,
-			}
+				gutter:4,
+			},
+			getSortData: {
+				year: function(itemElem ) {
+					console.log(itemElem );
+					let divId = itemElem.id;
+					let imgData = gridIndices[divId].data;
+					console.log(imgData);
+					if (imgData.tags.hasOwnProperty("year")){
+						console.log(imgData.tags.year);
+						return imgData.tags.year;
+					}
+					
+				}
+			},
+			sortBy: ['year'],
 		});
 		this.msnry = msnry;
 
 	}
 	
-	initialGalleryOLD(){
-		//allImgs		
-		var grid = document.querySelector('.imgGalleryGrid');
-		this.grid = grid;
-		this.addImagesToGrid(this.allImgsObjsArray, grid);	
-		
-		let msnry = new Masonry( grid, {
-			itemSelector: '.grid-item',
-			columnWidth: 170,
-			isFitWidth: true,
-			gutter: 2,
-		});
-		this.msnry = msnry;
-		
-		
-		msnry.layout();
-		
-		
-	}
 	
 	setPerson(personTag){
 		this.clearGallery();
@@ -2134,7 +2132,6 @@ class imgGallery{
 		this.msnry.layout();
 		
 	}
-	
 	
 	addClickEvent(gridItem){
 		gridItem.addEventListener("click", (evnt) => this.openImageFromGallery(evnt));	
