@@ -1735,6 +1735,10 @@ class imgTab {
 			
 			personCircle.addEventListener("click", (evnt) => this.circleClickEvnt(evnt));
 			
+			if ( (personObj[personTag].left == 0) && (personObj[personTag].top == 0) ){
+				personCircle.classList.add("todo");
+			}
+			
 		}
 		
 		
@@ -1911,6 +1915,7 @@ class imgGallery{
 		this.galleryPersonFocus = this.imageGalleryDIV.querySelector(".galleryPersonFocus");
 		
 		this.imageObjsArray = [];
+		this.allImgsInGridIndex = {};
 		this.allImgsObjsArray = pplImageLinks(true);
 		shuffle(this.allImgsObjsArray);
 		
@@ -1963,9 +1968,40 @@ class imgGallery{
 		var grid = document.querySelector('.imgGalleryGrid');
 		this.grid = grid;
 		
+		let iso = new Isotope( grid, {
+			itemSelector: '.grid-item',
+			//layoutMode: 'masonry',
+			masonry: {
+				gutter: 2,
+				columnWidth: 160,
+				//horizontalOrder: true,
+				//isFitWidth: true,
+			},
+		});
+		/*iso.arrange({
+			// item element provided as argument
+			filter: function() {
+				let itemId = this.id;
+				//console.log(itemId);
+				//this.allImgsInGridIndex[itemId]
+			}
+		});*/
+		this.msnry = iso;
+		
+		this.addImagesToGrid(this.allImgsObjsArray, grid);		
+		
+		iso.layout();
+
+	}
+	
+	initialGalleryOLD(){
+		//allImgs		
+		var grid = document.querySelector('.imgGalleryGrid');
+		this.grid = grid;
+		
 		let msnry = new Masonry( grid, {
 			itemSelector: '.grid-item',
-			columnWidth: 165,
+			columnWidth: 170,
 			isFitWidth: true,
 			gutter: 2,
 		});
@@ -1974,6 +2010,7 @@ class imgGallery{
 		this.addImagesToGrid(this.allImgsObjsArray, grid);		
 		
 		msnry.layout();
+		
 		
 	}
 	
@@ -2069,9 +2106,15 @@ class imgGallery{
 			grid.appendChild(gridImgDiv);
 			gridImgDiv.appendChild(gridImg);
 			
-			this.msnry.prepended( gridImgDiv );
+			this.msnry.insert( gridImgDiv );
 			
 			this.addClickEvent(gridImgDiv);
+			
+			let currentImgIndex = (this.imageObjsArray.length-1);
+			this.allImgsInGridIndex[gridImgDiv.id] = {
+				'index': currentImgIndex,
+				'data': img,
+			};
 			
 			imgCount++;
 		}

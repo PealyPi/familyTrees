@@ -74,8 +74,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'year': '',
 				//'place': '',
 				'people': [
-					{'roseHadkiss': {'left': 0, 'top': 0}},
-					{'jackKesby': {'left': 0, 'top': 0}},
+					{'roseHadkiss': {'left': 89, 'top': 25}},
+					{'jackKesby': {'left': 42, 'top': 153}},
 				],
 			}
 		},
@@ -228,8 +228,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': 'March 26th 1949',
 				'place': 'St Peter and Paul Church, Swanscombe',
 				'people': [
-					{'roseHadkiss': {'todo': true, 'left': 0, 'top': 0}},
-					{'johnNevilleKesby': {'todo': true, 'left': 0, 'top': 0}},
+					{'roseHadkiss': {'left': 0, 'top': 0}},
+					{'johnNevilleKesby': {'left': 0, 'top': 0}},
 				],
 			}
 		},
@@ -244,8 +244,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': 'March 26th 1949',
 				'place': 'St Peter and Paul Church, Swanscombe',
 				'people': [
-					{'roseHadkiss': {'todo': true, 'left': 0, 'top': 0}},
-					{'ronHadkiss': {'todo': true, 'left': 0, 'top': 0}},
+					{'roseHadkiss': {'left': 0, 'top': 0}},
+					{'ronHadkiss': {'left': 0, 'top': 0}},
 				],
 			}
 		},
@@ -278,8 +278,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': 'March 26th 1949',
 				'place': 'St Peter and Paul Church, Swanscombe',
 				'people': [
-					{'roseHadkiss': {'todo': true, 'left': 0, 'top': 0}},
-					{'ronHadkiss': {'todo': true, 'left': 0, 'top': 0}},
+					{'roseHadkiss': {'left': 0, 'top': 0}},
+					{'ronHadkiss': {'left': 0, 'top': 0}},
 				],
 			}
 		},
@@ -293,7 +293,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'title': 'Ron&Rose Wedding',
 				'year': 'March 26th 1949',
 				'place': 'St Peter and Paul Church, Swanscombe',
-				'people': [	{'roseHadkiss': {'todo': true, 'left': 0, 'top': 0}} ],
+				'people': [	{'roseHadkiss': {'left': 0, 'top': 0}} ],
 			}
 		},
 		
@@ -308,7 +308,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				//'title': '',
 				//'year': '',
 				//'place': '',
-				'people': [{'roseHadkiss': {'todo': true, 'left': 0, 'top': 0}}],
+				'people': [{'roseHadkiss': {'left': 0, 'top': 0}}],
 			}
 		},
 	]
