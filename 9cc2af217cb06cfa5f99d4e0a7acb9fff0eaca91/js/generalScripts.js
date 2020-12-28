@@ -1924,6 +1924,7 @@ class imgGallery{
 		this.isOpen = false;
 		this.initialGallery();
 		
+		
 	}
 	
 	openGallery(){
@@ -1981,21 +1982,82 @@ class imgGallery{
 			},
 			getSortData: {
 				year: function(itemElem ) {
-					console.log(itemElem );
+					//console.log(itemElem );
 					let divId = itemElem.id;
 					let imgData = gridIndices[divId].data;
-					console.log(imgData);
 					if (imgData.tags.hasOwnProperty("year")){
-						console.log(imgData.tags.year);
 						return imgData.tags.year;
-					}
-					
+					}					
 				}
+			},
+			filter: function() {
+				//get filter value from focus
+				console.log(NODEdetails.currentFocus);
+				var divId = this.id;
+				let imgData = gridIndices[divId].data;	
+				let pplArray = imgData.tags.people;
+				var personBool = false;
+				for (const ppl of pplArray){
+					if (ppl.hasOwnProperty(NODEdetails.currentFocus))
+						personBool = true;
+				}
+				if (NODEdetails.currentFocus == ''){
+					personBool = true;
+				}
+				
+				return (personBool);
 			},
 			sortBy: ['year'],
 		});
 		this.msnry = msnry;
-
+		
+		
+		
+		/*
+		msnry.arrange({ filter: function() {
+			//get filter value from focus
+			console.log(NODEdetails.currentFocus);
+			var divId = this.id;
+			let imgData = gridIndices[divId].data;	
+			let pplArray = imgData.tags.people;
+			var personBool = false;
+			for (const ppl of pplArray){
+				if (ppl.hasOwnProperty(NODEdetails.currentFocus))
+					personBool = true;
+			}
+			if (NODEdetails.currentFocus == ''){
+				personBool = true;
+			}
+			
+			return (personBool);
+		}*/
+		
+		
+		
+		//grid filter		
+		this.filterFns = {
+		  // show if person selected
+		  personFilter: function() {
+			var divId = this.id;
+			let pplArray = gridIndices[divId].data.tags.people;
+			
+			var personBool = false;
+			for (const ppl of pplArray){
+				if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
+					personBool = true;
+			}
+			if (NODEdetails.currentFocus == ''){
+				personBool = true;
+			}
+			console.log(personBool);
+			return personBool;
+		  },
+		  // show if year selected
+		/* 	yearFilter: function(  ) {
+			var name = this.querySelector('.name').textContent;
+			return name.match( /ium$/ );
+		  }*/
+		};
 	}
 	
 	
@@ -2031,6 +2093,23 @@ class imgGallery{
 		}
 		
 		
+		//grid filter
+		let gridIndices = this.allImgsInGridIndex;
+		this.msnry.arrange({filter: function(){
+			var divId = this.id;
+			let pplArray = gridIndices[divId].data.tags.people;
+			
+			var personBool = false;
+			for (const ppl of pplArray){
+				if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
+					personBool = true;
+			}
+			if (NODEdetails.currentFocus == ''){
+				personBool = true;
+			}
+			console.log(personBool);
+			return personBool;
+		} });
 		
 	}
 	

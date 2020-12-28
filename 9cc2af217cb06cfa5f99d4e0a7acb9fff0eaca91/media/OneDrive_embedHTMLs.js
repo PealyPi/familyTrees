@@ -263,7 +263,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 					{'roseHadkiss': {'left': 237, 'top': 46, 'size': 'smaller'}},
 					{'ronHadkiss': {'left': 190, 'top': 37, 'size': 'smaller'}},
 					{'johnNevilleKesby': {'left': 274, 'top': 31, 'size': 'smaller'}},
-					{'maryKesby': {'left': 321, 'top': 44, 'size': 'smaller'}},
+					{'maryBobby': {'left': 321, 'top': 44, 'size': 'smaller'}},
 				],
 			}
 		},
