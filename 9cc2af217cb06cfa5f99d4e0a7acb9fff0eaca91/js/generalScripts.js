@@ -1990,15 +1990,20 @@ class imgGallery{
 					}					
 				}
 			},
-			filter: function() {
+			
+			sortBy: ['year'],
+		});
+		this.msnry = msnry;
+		
+		this.galleryFilterPpl = {
+			pplFilter: function() {
 				//get filter value from focus
-				console.log(NODEdetails.currentFocus);
 				var divId = this.id;
 				let imgData = gridIndices[divId].data;	
 				let pplArray = imgData.tags.people;
 				var personBool = false;
 				for (const ppl of pplArray){
-					if (ppl.hasOwnProperty(NODEdetails.currentFocus))
+					if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
 						personBool = true;
 				}
 				if (NODEdetails.currentFocus == ''){
@@ -2006,58 +2011,10 @@ class imgGallery{
 				}
 				
 				return (personBool);
-			},
-			sortBy: ['year'],
-		});
-		this.msnry = msnry;
+			}		  
+		}; 
 		
-		
-		
-		/*
-		msnry.arrange({ filter: function() {
-			//get filter value from focus
-			console.log(NODEdetails.currentFocus);
-			var divId = this.id;
-			let imgData = gridIndices[divId].data;	
-			let pplArray = imgData.tags.people;
-			var personBool = false;
-			for (const ppl of pplArray){
-				if (ppl.hasOwnProperty(NODEdetails.currentFocus))
-					personBool = true;
-			}
-			if (NODEdetails.currentFocus == ''){
-				personBool = true;
-			}
-			
-			return (personBool);
-		}*/
-		
-		
-		
-		//grid filter		
-		this.filterFns = {
-		  // show if person selected
-		  personFilter: function() {
-			var divId = this.id;
-			let pplArray = gridIndices[divId].data.tags.people;
-			
-			var personBool = false;
-			for (const ppl of pplArray){
-				if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
-					personBool = true;
-			}
-			if (NODEdetails.currentFocus == ''){
-				personBool = true;
-			}
-			console.log(personBool);
-			return personBool;
-		  },
-		  // show if year selected
-		/* 	yearFilter: function(  ) {
-			var name = this.querySelector('.name').textContent;
-			return name.match( /ium$/ );
-		  }*/
-		};
+		this.msnry.arrange({ filter: this.galleryFilterPpl.pplFilter });
 	}
 	
 	
@@ -2095,20 +2052,17 @@ class imgGallery{
 		
 		//grid filter
 		let gridIndices = this.allImgsInGridIndex;
-		this.msnry.arrange({filter: function(){
+		this.msnry.arrange({ filter: function() {
+			//get filter value from focus
 			var divId = this.id;
-			let pplArray = gridIndices[divId].data.tags.people;
-			
+			let imgData = gridIndices[divId].data;	
+			let pplArray = imgData.tags.people;
 			var personBool = false;
 			for (const ppl of pplArray){
 				if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
 					personBool = true;
 			}
-			if (NODEdetails.currentFocus == ''){
-				personBool = true;
-			}
-			console.log(personBool);
-			return personBool;
+			return (personBool);
 		} });
 		
 	}
