@@ -1973,6 +1973,28 @@ class imgGallery{
 		
 		let gridIndices = this.allImgsInGridIndex;
 		
+		this.galleryFilterPpl = {
+			pplFilter: function() {
+				//get filter value from focus
+				var divId = this.id;
+				let imgData = gridIndices[divId].data;	
+				let pplArray = imgData.tags.people;
+				var personBool = false;
+				for (const ppl of pplArray){
+					if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
+						personBool = true;
+				}
+				if (NODEdetails.currentFocus == ''){
+					personBool = true;
+				}
+				
+				return (personBool);
+			},
+			clearFilters: function() {	
+				return true;
+			}
+		}; 
+		
 		let msnry = new Isotope( grid, {
 			itemSelector: '.grid-item',
 			sortBy: 'random',
@@ -1990,55 +2012,40 @@ class imgGallery{
 					}					
 				}
 			},
-			
-			sortBy: ['year'],
+			filter: this.galleryFilterPpl.pplFilter ,
 		});
-		this.msnry = msnry;
-		
-		this.galleryFilterPpl = {
-			pplFilter: function() {
-				//get filter value from focus
-				var divId = this.id;
-				let imgData = gridIndices[divId].data;	
-				let pplArray = imgData.tags.people;
-				var personBool = false;
-				for (const ppl of pplArray){
-					if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
-						personBool = true;
-				}
-				if (NODEdetails.currentFocus == ''){
-					personBool = true;
-				}
-				
-				return (personBool);
-			}		  
-		}; 
-		
-		this.msnry.arrange({ filter: this.galleryFilterPpl.pplFilter });
+		this.msnry = msnry;		
+		console.log(this.msnry.options.filter);
 	}
 	
 	
 	setPerson(personTag){
 		this.clearGallery();
-		this.galleryPersonFocus.innerHTML = personTag;
-		
-		//for each image from person, create div in grid,
-		//if portrait, add class to span 2/3 rows (depending on size)
-		//if landscape, add class to span columns?
+		this.galleryPersonFocus.innerHTML = personTag;		
 		
 		var imgArray;
 		if (personTag == 'All'){
 			imgArray = this.allImgsObjsArray;
+			this.msnry.arrange({ filter: this.galleryFilterPpl.clearFilters});
+			
+			//this.msnry.layout();
 			$('#imgGallery .galleryShowAll').fadeOut(500);
 		} else {
 			imgArray = PEOPLEIMGs[personTag] ?? 'none';
-			this.galleryOrder(imgArray);
+			//this.galleryOrder(imgArray);		
+			this.msnry.arrange({ filter: this.galleryFilterPpl.pplFilter });	
+			
+			//this.msnry.layout();
 			$('#imgGallery .galleryShowAll').fadeIn(500);
 		}
 		
+		this.msnry.arrange();
+		//console.log(this.msnry.getFilteredItemElements());
+		
+		
 		if (imgArray != 'none'){		
-			this.addImagesToGrid(imgArray, this.grid);					
-			//this.msnry.layout();
+			this.addImagesToGrid(imgArray, this.grid);		
+			
 			
 		} else {
 			let noImgDiv = document.createElement("div");
@@ -2048,22 +2055,6 @@ class imgGallery{
 			
 			$(noImgDiv).fadeIn(500);
 		}
-		
-		
-		//grid filter
-		let gridIndices = this.allImgsInGridIndex;
-		this.msnry.arrange({ filter: function() {
-			//get filter value from focus
-			var divId = this.id;
-			let imgData = gridIndices[divId].data;	
-			let pplArray = imgData.tags.people;
-			var personBool = false;
-			for (const ppl of pplArray){
-				if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
-					personBool = true;
-			}
-			return (personBool);
-		} });
 		
 	}
 	
