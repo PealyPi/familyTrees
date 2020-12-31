@@ -1149,9 +1149,9 @@ button#galleryExitBtn:hover{
 }
 #imgGallery .imgGalleryGrid .grid-item img{
 	border-radius:5px;
-	max-height: 160px;
-	max-width: 160px;
-	position: absolute;
+	max-height: var(--galleryTileSize);
+	max-width: var(--galleryTileSize);
+	position: relative;
 	margin: auto;
 	top:0; left:0; bottom: 0 ; right:0;
 	
@@ -1163,32 +1163,40 @@ button#galleryExitBtn:hover{
 	border-color: var(--colourPeach_RGB_Transparent);
 }
 
-#imgGallery .imgGalleryGrid .grid-item.grid-item--height2{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height2, 
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img{
 	height: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
-	max-width: 160px;
+	max-height: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
+	max-width: var(--galleryTileSize);
 }
-#imgGallery .imgGalleryGrid .grid-item.grid-item--height3{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height3, 
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height3 img{
 	height:  calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
-	max-width: 160px;
+	max-height:  calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
+	max-width: var(--galleryTileSize);
 }
-#imgGallery .imgGalleryGrid .grid-item.grid-item--width2{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width2, 
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width2 img{
 	width: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
-	max-height: 160px;
+	max-width: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
+	max-height: var(--galleryTileSize);
 }
-#imgGallery .imgGalleryGrid .grid-item.grid-item--width3{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width3, 
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width3 img{
 	width: calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
-	max-height: 160px;
+	max-width: calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
+	max-height: var(--galleryTileSize);
 }
-
+/*
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img, 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height3 img{
-	width: 100%;
+	width: var(--galleryTileSize);
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width2 img,
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width3 img {
-	height: 100%;
+	height: var(--galleryTileSize);
 }
-
+*/
 
 
 

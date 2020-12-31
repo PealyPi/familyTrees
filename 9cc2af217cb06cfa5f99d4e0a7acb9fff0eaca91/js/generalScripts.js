@@ -2028,7 +2028,6 @@ class imgGallery{
 			imgArray = this.allImgsObjsArray;
 			this.msnry.arrange({ filter: this.galleryFilterPpl.clearFilters});
 			
-			//this.msnry.layout();
 			$('#imgGallery .galleryShowAll').fadeOut(500);
 		} else {
 			imgArray = PEOPLEIMGs[personTag] ?? 'none';
@@ -2039,7 +2038,8 @@ class imgGallery{
 			$('#imgGallery .galleryShowAll').fadeIn(500);
 		}
 		
-		this.msnry.arrange();
+		//this.msnry.arrange();
+			this.msnry.layout();
 		//console.log(this.msnry.getFilteredItemElements());
 		
 		
