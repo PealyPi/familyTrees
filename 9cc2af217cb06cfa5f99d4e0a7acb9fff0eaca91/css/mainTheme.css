@@ -1149,9 +1149,9 @@ button#galleryExitBtn:hover{
 }
 #imgGallery .imgGalleryGrid .grid-item img{
 	border-radius:5px;
-	max-height: var(--galleryTileSize);
-	max-width: var(--galleryTileSize);
-	position: relative;
+	max-height: 98%;
+	max-width: 98%;
+	position: absolute;
 	margin: auto;
 	top:0; left:0; bottom: 0 ; right:0;
 	
@@ -1163,40 +1163,28 @@ button#galleryExitBtn:hover{
 	border-color: var(--colourPeach_RGB_Transparent);
 }
 
-#imgGallery .imgGalleryGrid .grid-item.grid-item--height2, 
-#imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height2{
 	height: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
-	max-height: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
-	max-width: var(--galleryTileSize);
 }
-#imgGallery .imgGalleryGrid .grid-item.grid-item--height3, 
-#imgGallery .imgGalleryGrid .grid-item.grid-item--height3 img{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--height3{
 	height:  calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
-	max-height:  calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
-	max-width: var(--galleryTileSize);
 }
-#imgGallery .imgGalleryGrid .grid-item.grid-item--width2, 
-#imgGallery .imgGalleryGrid .grid-item.grid-item--width2 img{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width2{
 	width: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
-	max-width: calc( 1.5*var(--galleryTileSize) + (var(--galleryGridSpacing)/2) );
-	max-height: var(--galleryTileSize);
 }
-#imgGallery .imgGalleryGrid .grid-item.grid-item--width3, 
-#imgGallery .imgGalleryGrid .grid-item.grid-item--width3 img{
+#imgGallery .imgGalleryGrid .grid-item.grid-item--width3{
 	width: calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
-	max-width: calc( 1.5*var(--galleryTileSize) + var(--galleryGridSpacing) );
-	max-height: var(--galleryTileSize);
 }
-/*
+
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height2 img, 
 #imgGallery .imgGalleryGrid .grid-item.grid-item--height3 img{
-	width: var(--galleryTileSize);
+	width: 100%;
 }
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width2 img,
 #imgGallery .imgGalleryGrid .grid-item.grid-item--width3 img {
-	height: var(--galleryTileSize);
+	height: 100%;
 }
-*/
+
 
 
 

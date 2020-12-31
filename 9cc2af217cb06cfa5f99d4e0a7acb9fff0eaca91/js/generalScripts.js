@@ -1905,10 +1905,234 @@ class imgTab {
 		
 	}
 	
+}
+
+
+class imgGallery{
+	constructor(){
+		this.imageGalleryDIV = document.getElementById('imgGallery');
+		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
+		this.galleryPersonFocus = this.imageGalleryDIV.querySelector(".galleryPersonFocus");
+		
+		this.imageObjsArray = [];
+		this.allImgsObjsArray = pplImageLinks(true);
+		shuffle(this.allImgsObjsArray);
+		
+		this.transitioning = false;
+		
+		this.isOpen = false;
+		this.initialGallery();
+		
+	}
+	
+	openGallery(){
+		if (!this.transitioning){
+			this.transitioning = true;
+			this.isOpen = true;
+			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'enter');
+			setTimeout(()=>{
+				this.transitioning = false;
+			}, 2000);
+		}
+	}
+	closeGallery(){
+		if (!this.transitioning){
+			this.transitioning = true;
+			this.isOpen = false;
+			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'exit');
+			setTimeout(()=>{
+				this.transitioning = false;
+			}, 2000);
+		}
+	}
+	
+	clearGallery(){
+		if (!this.transitioning){
+			let noImgDivCheck = this.imageGalleryDIV.querySelector(".galleryNoImgs");
+			if (noImgDivCheck != null){
+				$(noImgDivCheck).fadeOut(500);
+				setTimeout(function(){ noImgDivCheck.remove();}, 1000);
+			}
+			
+			let galleryChildren = this.galleryGridDIV.children;
+			for (const galleryChild of Array.from(galleryChildren)){
+				galleryChild.remove();
+			}
+			this.imageObjsArray = [];
+	}
+	}
+	
+	initialGallery(){
+		//allImgs		
+		var grid = document.querySelector('.imgGalleryGrid');
+		this.grid = grid;
+		
+		let msnry = new Masonry( grid, {
+			itemSelector: '.grid-item',
+			columnWidth: 165,
+			isFitWidth: true,
+			gutter: 2,
+		});
+		this.msnry = msnry;
+		
+		this.addImagesToGrid(this.allImgsObjsArray, grid);		
+		
+		msnry.layout();
+		
+	}
+	
+	setPerson(personTag){
+		this.clearGallery();
+		this.galleryPersonFocus.innerHTML = personTag;
+		
+		//for each image from person, create div in grid,
+		//if portrait, add class to span 2/3 rows (depending on size)
+		//if landscape, add class to span columns?
+		
+		var imgArray;
+		if (personTag == 'All'){
+			imgArray = this.allImgsObjsArray;
+			$('#imgGallery .galleryShowAll').fadeOut(500);
+		} else {
+			imgArray = PEOPLEIMGs[personTag] ?? 'none';
+			this.galleryOrder(imgArray);
+			$('#imgGallery .galleryShowAll').fadeIn(500);
+		}
+		
+		if (imgArray != 'none'){		
+			this.addImagesToGrid(imgArray, this.grid);					
+			this.msnry.layout();
+			
+		} else {
+			let noImgDiv = document.createElement("div");
+			this.imageGalleryDIV.appendChild(noImgDiv);
+			noImgDiv.innerHTML = "No Images for this Person";
+			noImgDiv.classList.add("galleryNoImgs");
+			
+			$(noImgDiv).fadeIn(500);
+		}
+		
+		
+		
+	}
+	
+	addImagesToGrid(imgArray, grid){
+		var imgCount = 1;
+		for (const img of imgArray){
+			const gridImg = new Image();
+			const gridImgDiv = document.createElement('div');
+			gridImg.src = img.imgLink;			
+			
+			//get img orig size
+			const regexpNum = /width=([0-9]+)&height=([0-9]+)/g;
+			let widthHeightMatch = regexpNum.exec(img.imgLink);
+			let imgWidth = `${widthHeightMatch[1]}`;
+			let imgHeight = `${widthHeightMatch[2]}`;
+			
+			
+			let dimDivide = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
+			let roundedDivide = Math.round(dimDivide * (10 ^ 2)) / (10 ^ 2);	
+			
+			var imgOrientation = '';
+			if (roundedDivide > 1.3){
+				if (imgWidth > imgHeight){
+					//landscape
+					imgOrientation = 'landscape';
+					if (roundedDivide > 1.6)
+						gridImgDiv.classList.add("grid-item--width3");
+					else 
+						gridImgDiv.classList.add("grid-item--width2");
+					
+				} else if (imgHeight > imgWidth){
+					imgOrientation = 'portrait';
+					//portrait
+					if (roundedDivide > 1.6)
+						gridImgDiv.classList.add("grid-item--width3");
+					else 
+						gridImgDiv.classList.add("grid-item--height2");
+				} else {
+					imgOrientation = 'square';					
+				}
+			} else {
+					imgOrientation = 'square';					
+				}
+			
+			//unique tags
+			this.imageObjsArray.push({
+				'data': img,
+				'imgDOM': gridImg,
+				'imgDivDOM': gridImgDiv,
+				'id': 'imgDiv' + imgCount,
+				'orientation': imgOrientation,
+				'origWidth': imgWidth,
+				'origHeight': imgHeight,
+			});
+			gridImgDiv.id = 'imgDiv' + imgCount;
+			
+			gridImgDiv.classList.add('grid-item');
+			grid.appendChild(gridImgDiv);
+			gridImgDiv.appendChild(gridImg);
+			
+			this.msnry.prepended( gridImgDiv );
+			
+			this.addClickEvent(gridImgDiv);
+			
+			imgCount++;
+		}
+		
+		this.galleryOrder(this.imageObjsArray);
+	}
+	
+	galleryOrder(imageObjsArray){
+		
+		for (const imgObj of imageObjsArray){
+			//check orientation, and if fits in row...
+			
+			//add orientation tag to obj
+			//imag = {'imgRef': ..., 'tags': {...}}
+			
+			
+		}
+	}
+	
+	shuffleGallery(){
+		var gridItemArray = [];
+		for (const gridItem of Array.from(this.grid.childNodes)){
+			gridItemArray.push(gridItem);
+			gridItem.remove();	
+		}
+		
+		shuffle(gridItemArray);
+		for (const dupGridItem of gridItemArray){
+			this.grid.appendChild(dupGridItem);
+			this.msnry.prepended(dupGridItem);
+		}		
+		this.msnry.layout();
+		
+	}
+	
+	
+	addClickEvent(gridItem){
+		gridItem.addEventListener("click", (evnt) => this.openImageFromGallery(evnt));	
+	}
+	
+	openImageFromGallery(event){
+		if (!this.transitioning){
+			const clickedImDiv = event.target;
+			let divId = clickedImDiv.parentElement.id;
+		
+			for (const imgObj of this.imageObjsArray){
+				if (imgObj.id == divId){
+					imgOpenTab.setImage(imgObj);
+				}
+			}
+			this.closeGallery();
+		}
+	}
 	
 }
 
-class imgGallery{
+/*class imgGallery{
 	constructor(){
 		this.imageGalleryDIV = document.getElementById('imgGallery');
 		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
@@ -2038,8 +2262,7 @@ class imgGallery{
 			$('#imgGallery .galleryShowAll').fadeIn(500);
 		}
 		
-		//this.msnry.arrange();
-			this.msnry.layout();
+		this.msnry.layout();
 		//console.log(this.msnry.getFilteredItemElements());
 		
 		
@@ -2176,7 +2399,7 @@ class imgGallery{
 	}
 	
 }
-
+*/
 
 /* -------------------- */
 /* -- tree Div -- */
