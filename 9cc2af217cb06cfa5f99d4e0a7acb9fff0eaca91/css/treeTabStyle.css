@@ -1,0 +1,445 @@
+/* --- tree Tab Style -- */
+
+#svgDiv{
+	display: none;
+	width: 100%;
+	position: absolute;
+	top: var(--navBarHeight);
+	margin-bottom: -80px;
+	
+	background-color: var(--colourDarkPurple_RGB_Transparent);
+}
+
+@media only screen and (max-width: 1322px) {
+	#mainSVG{
+		left:0 !important;
+		right: 0 !important;
+	}
+}
+#mainSVG{
+	max-height: 570px;
+	width:100%;
+	position: relative;
+	left:1%;
+	right:0;
+}
+#famViewSVG{
+	position:absolute;
+	top:0; left: 0;
+	display:none;
+}
+
+.personCircle{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;	
+	
+	background-color:#FFAC81;
+	border-width: 3px;
+	border-style: solid;
+	border-left-color: #FFFFCB;
+	border-bottom-color: #FFC997;
+	border-right-color: #FFDFA7;
+	border-top-color: #FFE7AD;
+	
+	box-shadow: 
+		0 0 0 1px #BF6A3E,
+		2px 2px 5px 1px rgb(0, 0, 0, 0.6);
+}
+
+.svgTxt{
+	cursor: default;
+}
+
+
+.iconPulse{
+	position: absolute;
+	top: 38%; left: 38%;
+	border-radius: 50%;
+	background-color: transparent;
+	width: 25%; height: 25%;
+}
+.tree_familyText{
+	font-size: 38px;
+}
+.svg_topLeftArea{
+	position: absolute;
+	top: 40px; left: 100px;
+	height: 100px;
+	
+}
+.svg_topLeftBtns{
+	display: none;
+}
+.zoomBtn{
+	display:block;
+	position: absolute;
+	bottom: 0; left: 0;
+	cursor: pointer;
+	height: 56px;
+	width: 48px;
+	background:none;
+	
+	font-size: 36px;
+	color: white;
+	opacity: 0.6;
+	/*transition: all 0.7s;	*/
+	transition: all .4s ease;
+}
+.btnPulse:hover{
+	opacity: 1;
+	animation: pulsate 2s infinite;	
+}
+.zoomPlus{
+	display:none;
+}
+
+  
+.arrowButtonsDiv{
+	width: 50%;
+	margin: auto;
+	position: relative;
+	bottom: 100px;
+	text-align: center;
+	height: 72px;
+}
+.arrowBtn{
+	cursor: pointer;
+	height: 56px;
+	width: 0px;
+	position: relative;
+	top: 10px;
+	display:inline-block;	
+	
+	font-size: 48px;
+	background:none;
+	color: white;
+	opacity: 0.8;
+	transition: all 0.7s, width 1s;	
+	pointer-events: none;
+}
+.arrowBtn.active{
+	width: 48px;
+	pointer-events: auto;
+	
+}
+
+.leftArrow_button{	
+	float: left;
+}
+.rightArrow_button{		
+	float: right;
+}
+.leftArrow_button .iconPulse, .rightArrow_button .iconPulse{
+	width: 5%; height: 5%;
+	top: 46%; left: 48%;
+}
+.leftArrow_button:hover, .rightArrow_button:hover{
+	opacity: 1;
+}
+.leftArrow_button:hover .iconPulse, .rightArrow_button:hover .iconPulse{
+	animation: pulseIconSmaller 2s infinite;
+}
+
+
+.famIcon {
+	position: relative;
+	top: 0px;
+	width: 0px; height: 70px;
+	cursor: pointer;
+	display: inline-block;
+	margin: 0px;
+	opacity: 0.8;
+	transition: all 0.7s, width 1s;
+	pointer-events: none;
+}
+.famIcon.active {
+	width: 70px;
+	margin: auto 20px;
+	pointer-events: auto;
+}
+.siblingIcon_button{
+	background: url(../media/siblingsIcon.png);
+	background: url(../media/siblingsIcon.svg) no-repeat center;
+	
+}
+.childrenIcon_button{
+	background: url(../media/childrenIcon.png);
+	background: url(../media/childrenIcon.svg) no-repeat center;
+}
+.siblingIcon_button:hover, .childrenIcon_button:hover{
+	opacity: 1;
+	transform: scale(1.1);
+}
+.siblingIcon_button:hover .iconPulse, .childrenIcon_button:hover .iconPulse{
+	animation: pulseIcon 2s infinite;
+}
+
+.famIconText{
+	position: absolute;
+	top: 0;
+	font-size: 20px;
+	font-family: var(--mainInfoFont);
+	color: white;
+	opacity: 0;
+	transition: opacity 1s ease;
+}
+#siblingsIconText{
+	right: 100%;
+}
+#childrenIconText{
+	left: 78%;
+}
+.siblingIcon_button:hover #siblingsIconText{
+	opacity: 1;
+}
+.childrenIcon_button:hover #childrenIconText{
+	opacity: 1;
+}
+
+.arrowButtonsDiv button{
+	opacity: 0;
+}
+
+.famView_treeIcon{
+	position: absolute;
+	display: none;
+	opacity: 0;
+	left:0; top: 50px;
+	
+	background: url('../media/treeIcon.svg') center no-repeat; 
+	background-size: 70px;	
+}
+.famView_treeIcon:hover{
+	opacity: 1;
+	transform: scale(1.1);
+}
+.famView_treeIcon:hover .iconPulse{
+	animation: pulseIcon 2s infinite;
+}
+.focusHighlightGrp{
+	opacity: 0;
+	transform: scale(0.8);
+	transition: all 1s, transform 0.7s;
+}
+.focusHLT{
+	opacity: 1;
+	transform: scale(1);
+}
+
+
+.vineLine{
+	width: 100%;
+	height: 107.4px;
+	margin: auto;
+	position: relative;
+	top: -95px;
+	z-index: var(--vineLineZ);
+	
+	background-image: url('../media/vineLine.svg'); 
+	background-repeat: repeat-x;	
+}
+
+/* --- info Tab --- */
+#infoDiv, #infoDivTree{
+	width: 900px;
+	height:450px;
+	margin: auto;
+}
+#infoDivTree{
+	top: -160px;
+	position: relative;
+}
+#infoDivInfo{
+	top: 30px;
+	position: relative;
+}
+
+#infoDiv{
+	position: absolute;
+	top: calc(var(--navBarHeight) + 50px);	
+	left:0; right: 0;
+	display:none;
+}
+.infoDivSec{
+	width: 900px;
+	height:450px;	
+}
+.infoMain{
+	width: 75%;
+	position: relative;
+	margin: auto;
+	height: calc(450px - 100px);
+	padding: 60px 100px;
+	z-index: var(--woodBackZ); 
+	
+	background-image: url('../media/colouredWood.svg'); 
+	background-repeat: no-repeat;	
+}
+
+.mainContainerDiv{
+	display:none;
+}
+.infoMain_extended{
+	width: 75%;
+	position: relative;
+	margin: auto;
+	height: 335px;
+	padding: 175px 100px 50px 100px;
+	z-index: var(--woodBackZ); 
+	top: -110px;
+	display:none;
+	
+	background-image: url('../media/ivy1.svg'), url('../media/ivy5.svg'), url('../media/colouredWood2.svg'); 
+	background-position: left top, right top, center bottom;
+	background-repeat: no-repeat, no-repeat, no-repeat;		
+	background-size: 300px, 300px, auto;
+}
+
+.infoDivSec .infoLineA{
+	line-height: 10px !important;
+}
+.infoDivSec .manyRelatives {
+	font-size: 18px;
+}
+.infoDivSec .aboutBold{
+	font-size: 30px;
+	font-family: var(--mainInfoFont);
+    color: rgb(57,35,35, 0.9);
+    text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	font-weight: bold;
+	line-height: 50px;
+	letter-spacing: 4px;
+}
+.infoDivSec .aboutSubBold{
+	font-size: 30px;
+	font-family: var(--mainInfoFont);
+    color: rgb(175, 127, 127, 0.8);
+    text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	font-weight: bold;
+	line-height: 50px;
+	letter-spacing: 4px;
+	
+}
+
+
+.infoData {
+	position: relative;
+	cursor: default;
+	margin: 10px 0;
+	font-size: 18px;	
+	color:#CFBABA;
+}
+.info_name, .info_dates{
+	font-family: var(--mainInfoFont);
+    color: rgb(57,35,35, 0.9);
+    text-shadow: 0px 1px 0px rgba(207,186,186,.3), 0px -1px 0px rgba(0, 0, 0,.7);
+	font-weight: bold;
+	line-height: 50px;
+	letter-spacing: 4px;
+}
+.info_name{
+	font-size: 60px;
+	text-align: left;
+	left: -3%;
+}
+.nameSmallerSizing{
+	font-size: 50px;
+}
+.info_dates{
+	font-size: 50px;
+	text-align: center;	
+	letter-spacing: 1px;
+}
+.info_gen{
+	font-size: 30px;
+	text-align: right;
+	
+	position: absolute;
+	top: 26%;
+	left: 7%;
+	/*color: rgb(57,35,35, 0.9);*/
+	
+}
+.info_neeName{
+	display: none;
+	font-size: 24px;
+}
+.info_siblings, .info_children {
+	display: none;
+	font-size: 22px;
+	width: 110%;
+	line-height: 38px;
+}
+.info_about{
+	font-size: 24px;
+}
+.infoAboutSect{
+	display:none;
+}
+.infoAboutTable th {
+	vertical-align: top;
+	text-align: left;	
+}
+.infoAboutTable td{
+	vertical-align: middle;
+	text-align: left;
+	padding-left: 20px;
+}
+.infoDivSec .personLink{
+	cursor: pointer;
+	padding-right: 8px;	
+	transition: all 0.5s ease;
+}
+.infoDivSec .personLink:hover{
+	letter-spacing: 1.2px;
+	color:#E7DCDC;
+}
+
+
+
+.nodeCircleGrp{
+	cursor: pointer;
+	
+}
+
+.popInBottom_slower {
+	-webkit-animation-name: popInBottom;
+	animation-name: popInBottom;
+	-webkit-animation-duration: 10s;
+	animation-duration: 10s; 
+ }
+.spouseLineDraw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 3s linear forwards;
+  /*animation-iteration-count: infinite;*/
+}
+
+@keyframes dash {
+	from {
+		stroke-dashoffset: 350;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+
+.leafSVG{
+	/*width: 320px; height: 264px;*/
+	width: 400px; height: 330px;
+	
+	position: absolute;
+	right: -92px;
+	top: -64px;
+	z-index: var(--woodLeafZ); 
+	display: none;
+}
+.svg_leafImg{
+	opacity: 0;
+	transition: opacity 1s ease;
+}
+.svg_leafImg.activeImg{
+	opacity: 1;
+}

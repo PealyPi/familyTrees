@@ -1,0 +1,208 @@
+/* --- Ppl Tab Style --- */
+
+#peopleDiv {
+	position: fixed;
+	height: 80%;
+	width: 300px;
+	top: var(--navBarHeight);
+	right: 0;
+	bottom: 0;
+	left: 100%;
+	padding: 45px 10px;
+	overflow-y: scroll;
+	
+	z-index: var(--pplDivZ); 
+	
+	transition: transform 0.5s ease;
+	
+	background-color: var(--colourGreenDarker_RGB_Transparent);
+	border-left: 6px solid var(--colourMint);
+	border-top: 6px solid var(--colourMint);
+	border-bottom: 6px solid var(--colourMint);
+}
+#peopleDiv button{	
+	background: none;
+}
+
+#peopleDiv.sliding {
+	transform: translate(-100%);	
+}
+#peopleDivExit{
+	position: absolute;
+	top: 0; left: 0px;
+	color: white;
+	font-size:24px;
+	cursor: pointer;
+}
+
+ul#peopleList li{
+	cursor: pointer;	
+	overflow: hidden;
+	width: 235px; 
+	margin: 20px 10px;
+	padding: 10px;
+	
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none;
+	
+	transition: all 0.7s;
+	transition: width 0.7s;
+	
+	border-top: 1px solid rgba(255,255,255,0);
+	border-bottom: 1px solid rgba(255,255,255,0);
+    background-color: rgba(255,255,255,0.1);	
+}
+ul#peopleList li span{
+	transition: all 0.7s;
+}
+ul#peopleList button.ppl_dropdownBtn{
+	margin: 10px;
+	cursor: pointer;
+	
+	font-family: var(--mainFontFamily);
+	font-size:24px;
+	color:white;
+}
+ul#peopleList button.ppl_dropdownBtn i{
+	margin-left: 30px;
+}
+ul#peopleList .ppl_dropdownContainer li i{
+	margin-right: 23px;
+}
+ul#peopleList .dropdownActive{
+	display: block !important;
+}
+
+ul#peopleList .ppl_dropdownContainer{
+	display:none;
+	max-height: 400px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+ul#peopleList li:hover{
+	width: 250px; 
+    background-color: rgba(255,255,255,0);
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	
+    transform: scale(1, 1.1); 	
+	transition: width 0.7s;
+	transition: all 0.7s;
+}
+ul#peopleList li:hover span{
+	letter-spacing: 1.6px;
+}
+
+ul#peopleList #nonMainDropdownBtn{
+	font-size: 18px;
+	color: #ddd;
+}
+
+
+/*--searchbox --*/
+#peopleDiv .searchDiv{
+	position: relative;
+	width: 280px; 
+	height: 55px;
+	top: 0; left: 0;
+	padding-left: 10px;
+}
+#peopleDiv input{
+	width: 216px; 
+	height: 51px;
+	
+	font-family: var(--mainFontFamily);
+	font-size: 24px;
+	color: white;
+	/*border: 1px solid #ddd;*/
+	border-width: 1px; border-style: solid;
+	border-color: #ccc #ddd #ddd #ccc;
+	
+	
+	background: transparent;
+	transition: 1s ease-in-out;
+	
+}
+#peopleDiv svg.searchBorder{
+	position: absolute;
+	left: 10px;
+	top: 0;
+	fill: none;
+	stroke: #fff;
+	stroke-dasharray: 180 650;
+	stroke-dashoffset: 180;
+	transition: 1s ease-in-out;
+	
+	pointer-events: none;
+}
+#peopleDiv input::placeholder{
+	color: #ddd;
+	padding-bottom: -3px;
+}
+#peopleDiv input[type="text" i]{
+	padding: 0 43px 0 10px;
+}
+#peopleDiv .searchDiv:hover input, #peopleDiv input:focus {
+	transition: 1s ease-in-out;
+	background: rgb(255, 255, 255, 0.1);
+}
+#peopleDiv .searchDiv:hover svg.searchBorder, #peopleDiv .input:focus ~ svg.searchBorder{
+	stroke-dashoffset: -650;	
+}
+
+#peopleDiv input:focus, #peopleDiv input:active{
+	outline: none;
+}
+#peopleDiv #peopleSearchIcon{
+	position: absolute;
+	left: 240px;
+	top: 15px;
+	width: 20px;
+	height: 20px;
+	color: white;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+
+
+ol,ul{
+	list-style:none;
+	padding-inline-start: 0;
+	margin-block-start: 0;
+    margin-block-end: 0;
+	margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+ul#peopleList{
+	cursor: default;
+	width: 290px; 
+	margin: 12px 0;
+	padding-top: 10px;
+	
+	font-size: 16px; 
+	border-top: 3px solid #fff;
+	
+	/*list-style:  square inside url('../media/chevron-left-solid.svg');*/
+	
+}
+
+/*scroll*/
+#peopleDiv::-webkit-scrollbar, .ppl_dropdownContainer::-webkit-scrollbar {
+  width: 10px;
+  background: var(--colourGreenDarker_RGB_Transparent); 
+}
+#peopleDiv::-webkit-scrollbar-track{
+  border-radius: 3px;
+}
+#peopleDiv::-webkit-scrollbar-thumb{
+  background: var(--colourMint); 
+  border-radius: 10px;
+}
+#peopleDiv::-webkit-scrollbar-thumb:hover {
+  background: var(--colourMint); 
+}
+.ppl_dropdownContainer::-webkit-scrollbar {
+	display: none;
+}
