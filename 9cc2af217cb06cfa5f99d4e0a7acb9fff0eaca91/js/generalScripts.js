@@ -2981,7 +2981,8 @@ class node {
 	
 	addPersonIconImg(){
 		let personIconBool = this.personInfo.imgIcon ?? false;
-		let personImgIconURL =  '../familyTrees/media/images/icons/' + this.personTag + '.png';
+		let folderHashNm = '9cc2af217cb06cfa5f99d4e0a7acb9fff0eaca91';
+		let personImgIconURL =  '../' + folderHashNm + '/media/images/icons/' + this.personTag + '.png';
 		
 		const iconSize = 90;
 		if (personIconBool){

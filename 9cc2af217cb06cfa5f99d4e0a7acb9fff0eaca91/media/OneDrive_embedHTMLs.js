@@ -27,7 +27,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'youngRose infront of factory with doll, roseHadkiss/roseHadkiss_young1.jpg',
 			'imgLink': linkStartString + 'y4memW6TYWx6EZo2cqcal17VDaWv9-cBj-mjFmMYr3LTKV97CehKztdsdj4Ng3QKsFnjyT7DDgfuDzChqyZbC5zQSNEwl2xqFxN0PUwEJOz-Os42PuMbiNb-5WAX9gQGuScfB6BmYD9D1JkIHz2Q98HgzigClEBAMY1AeT0cYm8H-qhGhBrffKGcRA0z52dpxBs?width=1364&height=1971&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
+				'transform': {'x': 10, 'y': 10},
 				'width': 120,
 			},
 			'tags': {
@@ -40,8 +40,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'youngRose portrait, roseHadkiss/roseHadkiss_young2.jpg',
 			'imgLink': linkStartString + 'y4mCtGrbVmSg2lDPxM8bbBj7yDbFNdvm3AcWzkt8G0ZNHVaYNbxpcnFGHhmuJ_gOmykFTlpEmitnUxJEQNZ5puU1sN42H4_wS3o2NELCJisExwYBTagKgeRdUyU5Oq7uVx8BWaTjnHBvZD8cmsl9eJCCBIZZgji872sJ7cH7Yj94c7HyiCEp39hN5crZd6ZkpBu?width=1187&height=1647&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
-				'width': 120,
+				'transform': {'x': 10, 'y': -10},
+				'width': 110,
 			},
 			'tags': {
 				//'title': '',
@@ -53,7 +53,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'youngRose sea, roseHadkiss/roseHadkiss_young3.jpg',
 			'imgLink': linkStartString + 'y4mzGrzXDWrzX2_sNOg5pYc90XaOlo9lkD9OBbVcLIXxcRevt91D44ONgwt81j2cdzAAIzMeoTdS2SepSDt-adUkyC-vMni7bEdZWqQj87CXus-6Xm6Xbz52Fy_9z73sjWuwrA8GJ5MGhF5mbSWy5kPC_FTGXa4kFQJoUW0aXcm60_XF3Kq3ED6-dpRhjOMvwJ_?width=1357&height=2014&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
+				'transform': {'x': 15, 'y': -5},
 				'width': 120,
 			},
 			'tags': {
@@ -66,7 +66,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'youngRose & Jack beach, roseHadkiss/roseHadkiss_young4.jpg',
 			'imgLink': linkStartString + 'y4mAwMddPY0kX0bbHgHbmV1HMBOTbchrGQhDUsjsEXVkMnQxh8YVSNnxULlvZS0gM0Kd6gcYlCcSNL1cSe_BF9_vtjoOUz-c96Gbx36HRpiJSYuoTwT_wNQlJL-kP2dFYw0v3EWwENIMyr9iSADnMb05N3OGBtzxkJ3NzY-J6xSDhOrCVtbLsHK66EJgKPrml52?width=1341&height=1914&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
+				'transform': {'x': 15, 'y': 0},
 				'width': 120,
 			},
 			'tags': {
@@ -82,8 +82,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'youngRose & Parents at the beach, roseHadkiss/roseHadkiss_young5.jpg',
 			'imgLink': linkStartString + 'y4mrTa6803ktZrmYpkw6f4gRzfkZV3e7aBwOy5r8Az663ewh9pt8LostbEdRc4MKpqb4hoNWYiNBrc1VEzIUGpVqPQOGfb0ISPqtceZXtPhFro-CEsRfKrO_HrY7utWB8rEIGbp20rS2IzrUBFpPWUhUxUkItBTqQVSdZucaWTDxGl8sGWwnX1jgh29fGRdslL3?width=3269&height=2062&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
-				'width': 120,
+				'transform': {'x': 0, 'y': 7},
+				'width': 140,
 			},
 			'tags': {
 				//'title': '',
@@ -99,7 +99,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'youngRose & Parents at the beach 2, roseHadkiss/roseHadkiss_young6.jpg',
 			'imgLink': linkStartString + 'y4mK7GmPVAE2c8PHi6r8wGqWQPdj9qdpOsQU-gy4ao4tYJQtMQzTj79D7H3vWzetnUyLH4RuL63TfZZrDfk-_axVujqZ2ZUPX8_90kq3xGJ67jWo8I8sCCTQWf0-NAmTtYRL73WqHenIu2UdIU3QP5AZEJUZvg9QNIIOdpeet8KDpJOD0Quh2HQKbdYeQEAkOFo?width=2176&height=3062&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
+				'transform': {'x': 0, 'y': -25},
 				'width': 120,
 			},
 			'tags': {
@@ -116,7 +116,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'teenRose portrait, roseHadkiss/roseHadkiss_teen1.jpg',
 			'imgLink': linkStartString + 'y4mAAosFFegbL3_fad-dKw0nk18la9J0et1WpJaMSnivc9S5pqdYoC7aSahy6ppkEhO_JTR67xO01qQbH0Kzyy5JvY7wEvpplT0KT5exNtXxp-B-9oOTB0hdc9DQ794_mr_wK7VsTdipjkiOJLoqtRhMBYk1OSAXTmZn1cyh3elsQQetBM-sy272dGvhNmofS3K?width=3961&height=5144&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
+				'transform': {'x': 10, 'y': -5},
 				'width': 120,
 			},
 			'tags': {
@@ -228,8 +228,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 				'year': 'March 26th 1949',
 				'place': 'St Peter and Paul Church, Swanscombe',
 				'people': [
-					{'roseHadkiss': {'left': 0, 'top': 0}},
-					{'johnNevilleKesby': {'left': 0, 'top': 0}},
+					{'roseHadkiss': {'left': 77, 'top': 35}},
+					{'johnNevilleKesby': {'left': 154, 'top': 17}},
 				],
 			}
 		},
@@ -286,8 +286,8 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'roseRon Wedding roseDress, roseHadkiss/roseHadkiss_wedding5.jpg',
 			'imgLink': linkStartString + 'y4myZv3Xk4Ov_jTcwsuUK5oO6HcOwG0eAM0bsxIS9a9-dPbNACezf9zABS6G3Q2eDWWAE7zJU1fY15RPyWDP2QX_B7piYQtV5IeeCZOtuQoJ2dWxgED4zfa2JoflUdOJGTvTDU4bYsDQWyW3_EJY9F1_PHCSkwb9yZs-CDgNz64qQBWh-BMWJlkfTqneqwmlVDj?width=1443&height=1465&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 10, 'y': 10},
-				'width': 130,
+				'transform': {'x': 5, 'y': -10},
+				'width': 120,
 			},
 			'tags': {
 				'title': 'Ron&Rose Wedding',
@@ -301,7 +301,7 @@ function pplImageLinks(imgArray = false){//collapse lvl 2
 		{	'imgRef':	'rose boat 2, roseHadkiss/roseHadkiss9.jpg',
 			'imgLink': linkStartString + 'y4mxUFQ5IJSXLIxrkre-NrITYzbqUcWgrd2GC2lGRQhwGlf83mr7AR8zFda3iasbv_JDKLBGs1Pqf0zQDEpf-b_lqFyAHYTk4GwrdgtO859QHFY8k3MTzIUjyW6W0kU-5iQz6XU6O9R5S-B-h9ff4qODqtEBNxnbBnp_6VSIips7m-vr4NEc_1IURs8vMeQJDEK?width=1430&height=2100&cropmode=none',
 			'imgLeafConfig': {
-				'transform': {'x': 0, 'y': 0},
+				'transform': {'x': 15, 'y': 0},
 				'width': 120,
 			},
 			'tags': {
