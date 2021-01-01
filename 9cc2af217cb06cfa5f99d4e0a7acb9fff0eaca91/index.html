@@ -98,7 +98,15 @@
 			</div>
 		</div>
 		
-		<div id="fullTreeDiv"></div>
+		<div class="pageSection" id="fullTreeDiv">
+			<div class="panzoomContainer">		
+				<div class="panzoom" id="fullTreePanzoom">
+					<svg id="fullTreeSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
+					</svg></div>	
+					<button class="resetTree reset"><i class="fas fa-redo-alt"></i></button><!-- reset must be inside tree section -->
+				
+			</div>	
+		</div>
 		
 		<div class="pageSection" id="infoDiv">
 			<div id="infoDivInfo">
@@ -172,6 +180,8 @@
 	
 	<script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
 	<script src="https://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+	<script src="js/panzoom.js"></script>
+	
 	<script src="data/personInfo.js"></script>
 	<script src="data/pathData.js"></script>
 	<script src="data/relationsData.js"></script>	
@@ -180,6 +190,7 @@
 	
 	<script src="js/generalScripts.js"></script>
 	<script src="js/treeDivScripts.js"></script>
+	<script src="js/fullTreeScripts.js"></script>
 	<script src="js/imgsScripts.js"></script>
 	
 	<script src="https://kit.fontawesome.com/99d7e29f41.js" crossorigin="anonymous" onerror="FAiconFail()"></script>
