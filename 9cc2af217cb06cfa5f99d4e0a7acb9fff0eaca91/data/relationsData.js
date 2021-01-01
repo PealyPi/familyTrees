@@ -22,6 +22,7 @@ function nodeDataStorage(){//collapse lvl 2
 		//'childMain': 	['lesleyPeal'],
 		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};
+	//Object.freeze(kesby.roseHadkiss);
 	
 	kesby.jackKesby = {			
 		'spouse': 		'juneKesby',	

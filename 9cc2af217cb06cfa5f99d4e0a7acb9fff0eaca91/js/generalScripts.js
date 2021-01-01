@@ -9,6 +9,7 @@ var PEOPLENAMEfromTAG = storePeopleTagNames('nameFromTag', PEOPLEINFO, PEOPLEREL
 var PEOPLEIMGs = pplImageLinks();
 //console.log(PEOPLERELATIONS.kesby);
 
+
 function generateRelationsData(data) {
 	
 	var finalData = {'kesby': {}, 'hadkiss': {}, 'peal': {}, 'mckenzie': {}};
@@ -2132,274 +2133,6 @@ class imgGallery{
 	
 }
 
-/*class imgGallery{
-	constructor(){
-		this.imageGalleryDIV = document.getElementById('imgGallery');
-		this.galleryGridDIV = this.imageGalleryDIV.querySelector(".imgGalleryGrid");
-		this.galleryPersonFocus = this.imageGalleryDIV.querySelector(".galleryPersonFocus");
-		
-		this.imageObjsArray = [];
-		this.allImgsInGridIndex = {};
-		this.allImgsObjsArray = pplImageLinks(true);
-		shuffle(this.allImgsObjsArray);
-		
-		this.transitioning = false;
-		
-		this.isOpen = false;
-		this.initialGallery();
-		
-		
-	}
-	
-	openGallery(){
-		if (!this.transitioning){
-			this.transitioning = true;
-			this.msnry.layout();
-			this.isOpen = true;
-			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'enter');
-			setTimeout(()=>{
-				this.transitioning = false;
-			}, 2000);
-		}
-	}
-	closeGallery(){
-		if (!this.transitioning){
-			this.transitioning = true;
-			this.isOpen = false;
-			VIVIFY_animateElems(this.imageGalleryDIV, 'imgGallery', 'exit');
-			setTimeout(()=>{
-				this.transitioning = false;
-			}, 2000);
-		}
-	}
-	
-	clearGallery(){
-		if (!this.transitioning){
-			let noImgDivCheck = this.imageGalleryDIV.querySelector(".galleryNoImgs");
-			if (noImgDivCheck != null){
-				$(noImgDivCheck).fadeOut(500);
-				setTimeout(function(){ noImgDivCheck.remove();}, 1000);
-			}
-			
-			let galleryChildren = this.galleryGridDIV.children;
-			for (const galleryChild of Array.from(galleryChildren)){
-				galleryChild.remove();
-			}
-			this.imageObjsArray = [];
-	}
-	}
-	
-	initialGallery(){
-		//allImgs		
-		var grid = document.querySelector('.imgGalleryGrid');
-		this.grid = grid;
-		this.addImagesToGrid(this.allImgsObjsArray, grid);
-		
-		let gridIndices = this.allImgsInGridIndex;
-		
-		this.galleryFilterPpl = {
-			pplFilter: function() {
-				//get filter value from focus
-				var divId = this.id;
-				let imgData = gridIndices[divId].data;	
-				let pplArray = imgData.tags.people;
-				var personBool = false;
-				for (const ppl of pplArray){
-					if (ppl.hasOwnProperty(NODEdetails.currentFocus.personTag))
-						personBool = true;
-				}
-				if (NODEdetails.currentFocus == ''){
-					personBool = true;
-				}
-				
-				return (personBool);
-			},
-			clearFilters: function() {	
-				return true;
-			}
-		}; 
-		
-		let msnry = new Isotope( grid, {
-			itemSelector: '.grid-item',
-			sortBy: 'random',
-			masonry: {
-				columnWidth: 160,
-				gutter:4,
-			},
-			getSortData: {
-				year: function(itemElem ) {
-					//console.log(itemElem );
-					let divId = itemElem.id;
-					let imgData = gridIndices[divId].data;
-					if (imgData.tags.hasOwnProperty("year")){
-						return imgData.tags.year;
-					}					
-				}
-			},
-			filter: this.galleryFilterPpl.pplFilter ,
-		});
-		this.msnry = msnry;		
-		console.log(this.msnry.options.filter);
-	}
-	
-	
-	setPerson(personTag){
-		this.clearGallery();
-		this.galleryPersonFocus.innerHTML = personTag;		
-		
-		var imgArray;
-		if (personTag == 'All'){
-			imgArray = this.allImgsObjsArray;
-			this.msnry.arrange({ filter: this.galleryFilterPpl.clearFilters});
-			
-			$('#imgGallery .galleryShowAll').fadeOut(500);
-		} else {
-			imgArray = PEOPLEIMGs[personTag] ?? 'none';
-			//this.galleryOrder(imgArray);		
-			this.msnry.arrange({ filter: this.galleryFilterPpl.pplFilter });	
-			
-			//this.msnry.layout();
-			$('#imgGallery .galleryShowAll').fadeIn(500);
-		}
-		
-		this.msnry.layout();
-		//console.log(this.msnry.getFilteredItemElements());
-		
-		
-		if (imgArray != 'none'){		
-			this.addImagesToGrid(imgArray, this.grid);		
-			
-			
-		} else {
-			let noImgDiv = document.createElement("div");
-			this.imageGalleryDIV.appendChild(noImgDiv);
-			noImgDiv.innerHTML = "No Images for this Person";
-			noImgDiv.classList.add("galleryNoImgs");
-			
-			$(noImgDiv).fadeIn(500);
-		}
-		
-	}
-	
-	addImagesToGrid(imgArray, grid){
-		var imgCount = 1;
-		for (const img of imgArray){
-			const gridImg = new Image();
-			const gridImgDiv = document.createElement('div');
-			gridImg.src = img.imgLink;			
-			
-			//get img orig size
-			const regexpNum = /width=([0-9]+)&height=([0-9]+)/g;
-			let widthHeightMatch = regexpNum.exec(img.imgLink);
-			let imgWidth = `${widthHeightMatch[1]}`;
-			let imgHeight = `${widthHeightMatch[2]}`;
-			
-			
-			let dimDivide = (imgWidth > imgHeight) ? imgWidth/imgHeight : imgHeight/imgWidth;
-			let roundedDivide = Math.round(dimDivide * (10 ^ 2)) / (10 ^ 2);	
-			
-			var imgOrientation = '';
-			if (roundedDivide > 1.3){
-				if (imgWidth > imgHeight){
-					//landscape
-					imgOrientation = 'landscape';
-					if (roundedDivide > 1.6)
-						gridImgDiv.classList.add("grid-item--width3");
-					else 
-						gridImgDiv.classList.add("grid-item--width2");
-					
-				} else if (imgHeight > imgWidth){
-					imgOrientation = 'portrait';
-					//portrait
-					if (roundedDivide > 1.6)
-						gridImgDiv.classList.add("grid-item--width3");
-					else 
-						gridImgDiv.classList.add("grid-item--height2");
-				} else {
-					imgOrientation = 'square';					
-				}
-			} else {
-					imgOrientation = 'square';					
-				}
-			
-			//unique tags
-			this.imageObjsArray.push({
-				'data': img,
-				'imgDOM': gridImg,
-				'imgDivDOM': gridImgDiv,
-				'id': 'imgDiv' + imgCount,
-				'orientation': imgOrientation,
-				'origWidth': imgWidth,
-				'origHeight': imgHeight,
-			});
-			gridImgDiv.id = 'imgDiv' + imgCount;
-			
-			gridImgDiv.classList.add('grid-item');
-			grid.appendChild(gridImgDiv);
-			gridImgDiv.appendChild(gridImg);			
-			
-			this.addClickEvent(gridImgDiv);
-			
-			let currentImgIndex = (this.imageObjsArray.length-1);
-			this.allImgsInGridIndex[gridImgDiv.id] = {
-				'index': currentImgIndex,
-				'data': img,
-			};
-			
-			imgCount++;
-		}
-		
-		this.galleryOrder(this.imageObjsArray);
-	}
-	
-	galleryOrder(imageObjsArray){
-		
-		for (const imgObj of imageObjsArray){
-			//check orientation, and if fits in row...
-			
-			//add orientation tag to obj
-			//imag = {'imgRef': ..., 'tags': {...}}
-			
-			
-		}
-	}
-	
-	shuffleGallery(){
-		var gridItemArray = [];
-		for (const gridItem of Array.from(this.grid.childNodes)){
-			gridItemArray.push(gridItem);
-			gridItem.remove();	
-		}
-		
-		shuffle(gridItemArray);
-		for (const dupGridItem of gridItemArray){
-			this.grid.appendChild(dupGridItem);
-			this.msnry.prepended(dupGridItem);
-		}		
-		this.msnry.layout();
-		
-	}
-	
-	addClickEvent(gridItem){
-		gridItem.addEventListener("click", (evnt) => this.openImageFromGallery(evnt));	
-	}
-	
-	openImageFromGallery(event){
-		if (!this.transitioning){
-			const clickedImDiv = event.target;
-			let divId = clickedImDiv.parentElement.id;
-		
-			for (const imgObj of this.imageObjsArray){
-				if (imgObj.id == divId){
-					imgOpenTab.setImage(imgObj);
-				}
-			}
-			this.closeGallery();
-		}
-	}
-	
-}
-*/
 
 /* -------------------- */
 /* -- tree Div -- */
@@ -3190,7 +2923,6 @@ class node {
 		if (oldTag =='focus') Velocity.hook(nodeGrp, "scale", 2); 
 		else Velocity.hook(nodeGrp, "scale", 1); 		
 		
-		
 		Velocity(this.nodeGrpContainer, { 
 			translateX: [newPosition.x , oldPosition.x], 
 			translateY: [newPosition.y , oldPosition.y], 
@@ -3738,8 +3470,7 @@ class treeSVG {
 		
 	}
 	
-	animateToFamView(focusObj, type){		
-		
+	animateToFamView(focusObj, type){			 
 		let svg = this.svgElem;
 		
 		const clonedFocusContainer = cloningFocus(focusObj);
@@ -3761,6 +3492,7 @@ class treeSVG {
 		
 		let lineDownY = (childSpacing.count < 5) ? svgH * 0.55 : svgH * 0.48;
 		var allLines = formLines(famObjs);
+		
 		
 		allLines['childLines'] = eachChildLines(allLines.grp, famObjs);
 		var containersToQueue = animateNodes();
@@ -4021,19 +3753,18 @@ class treeSVG {
 			} else if (focusObj.isSpouse()){
 				
 			} else {
-				useFocusObjData = PEOPLERELATIONS[focusObj.famName][focusObj.personTag];
+				useFocusObjData = PEOPLERELATIONS[focusObj.famName][focusObj.personTag];			
 				
 			}
 			
 			spouse = useFocusObjData.parentSpouse;
 			childList = useFocusObjData.siblings ?? [];		
-			childList.splice (childList.indexOf(focusObj.personTag), 1);
 			childList.unshift(focusObj.personTag);
 			parentMain = useFocusObjData.parentMain;					
 
 			createNode(parentMain, 'parentMain', 'famView_parentNode');				
 			
-		}
+		}	
 		
 		createNode(spouse, 'spouse', 'famView_spouseNode');	
 		
