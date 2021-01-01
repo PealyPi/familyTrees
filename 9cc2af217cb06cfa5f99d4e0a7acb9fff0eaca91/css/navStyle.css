@@ -57,6 +57,7 @@
 	-moz-transition: box-shadow 0.2s;	
 	transition: box-shadow 0.2s;
 }
+
 .top_navbar button#treeTab{
 	background: url('../media/treeIcon.svg') center no-repeat; 
 	background-size: 27px;	
@@ -79,6 +80,7 @@
 	-moz-transition: -moz-transform 0.2s, opacity 0.2s;	
 	transition: transform 0.2s, opacity 0.2s;
 }
+
 .top_navbar button:before{
 	speak: none;
 	display: block;
@@ -88,6 +90,7 @@
 	font-variant: normal;
 	text-transform: none;	
 }
+
 .top_navbar button:hover, .top_navbar button:active, .top_navbar button:focus{
 	border: none;
 	outline: none;
@@ -105,46 +108,72 @@
 .top_navbar button#homeTab:after{
 	box-shadow: 0 0 0 2px var(--colourOrange);	
 }
+
 .top_navbar button#treeTab:after{
 	box-shadow: 0 0 0 2px var(--colourPink);	
 }
+
+.top_navbar button#fullTreeTab:after{
+	box-shadow: 0 0 0 2px var(--colourBrown);	
+}
+
 .top_navbar button#infoTab:after{
 	box-shadow: 0 0 0 2px var(--colourPeach);	
 }
+
 .top_navbar button#imgsTab:after{
 	box-shadow: 0 0 0 2px var(--colourGreen);	
 }
+
 .top_navbar button#pplTab:after{
 	box-shadow: 0 0 0 2px var(--colourMint);	
 }
+
 .top_navbar button#homeTab:hover, .top_navbar button#homeTab.active{
 	box-shadow: 0 0 0 6px var(--colourOrange);	
 }
+
 .top_navbar button#treeTab:hover, .top_navbar button#treeTab.active{
 	box-shadow: 0 0 0 6px var(--colourPink);	
 }
+
+.top_navbar button#fullTreeTab:hover, .top_navbar button#fullTreeTab.active{
+	box-shadow: 0 0 0 6px var(--colourBrown);	
+}
+
 .top_navbar button#infoTab:hover, .top_navbar button#infoTab.active{
 	box-shadow: 0 0 0 6px var(--colourPeach);	
 }
+
 .top_navbar button#imgsTab:hover, .top_navbar button#imgsTab.active{
 	box-shadow: 0 0 0 6px var(--colourGreen);	
 }
+
 .top_navbar button#pplTab:hover, .top_navbar button#pplTab.active{
 	box-shadow: 0 0 0 6px var(--colourMint);	
 }
 
+
 .top_navbar.homeTabColour{
 	border-bottom-color: var(--colourOrange);
 }
+
 .top_navbar.treeTabColour{
 	border-bottom-color: var(--colourPink);
 }
+
+.top_navbar.fullTreeTabColour{
+	border-bottom-color: var(--colourBrown);
+}
+
 .top_navbar.infoTabColour{
 	border-bottom-color: var(--colourPeach);
 }
+
 .top_navbar.imgsTabColour{
 	border-bottom-color: var(--colourGreen);
 }
+
 .top_navbar.pplTabColour{
 	border-bottom-color: var(--colourMint);
 }
@@ -165,6 +194,10 @@
 	opacity: 1;
 	width: 50px;
 	transition: width 0.7s, opacity 0.7s;
+}
+
+#fullTreeTab_div.active {
+	width: 60px;	
 }
 
 .navTabDiv{

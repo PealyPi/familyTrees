@@ -375,11 +375,13 @@ class navBar {
 		this.leftNavDiv = document.querySelector(".left_navbar");
 		this.homeBtn = this.navDiv.querySelector("#homeTab");
 		this.infoBtn = this.navDiv.querySelector("#infoTab");
+		this.fullTreeBtn = this.navDiv.querySelector("#fullTreeTab");
 		this.treeBtn = this.navDiv.querySelector("#treeTab");
 		this.pplBtn = this.navDiv.querySelector("#pplTab");
 		
 		this.mainDiv = document.getElementById('mainDiv');
 		this.svgDiv = document.getElementById('svgDiv');
+		this.fullTreeDiv = document.getElementById('fullTreeDiv');
 		this.infoDiv = document.getElementById('infoDiv');
 		this.imgsDiv = document.getElementById('imgsDiv');
 		this.peopleDiv = document.getElementById('peopleDiv');		
@@ -433,10 +435,10 @@ class navBar {
 	
 	openPage(btn){				
 		this.peachTree = document.querySelector('.peachyTree');	
-		
+
 		const newActive = btn;	const newActiveID = btn.id;			
 		const newActiveDiv = document.getElementById(newActiveID + '_div');
-		const newTabColor = newActiveID + "Colour";		
+		const newTabColor = newActiveID + "Colour";	
 		
 		if ( btn == this.pplBtn){
 			if (this.pplBtn.classList.contains("active"))
@@ -493,6 +495,11 @@ class navBar {
 					
 					//start img slideshow
 					treeInfoTab.startStopImgSlideshow('start');
+				break;
+				case 'fullTreeTab':		
+					this.hideAllSects(this.fullTreeDiv);
+					this.showSect(this.fullTreeDiv);					
+					
 				break;
 				case 'infoTab':	
 					this.hideAllSects(this.infoDiv);
