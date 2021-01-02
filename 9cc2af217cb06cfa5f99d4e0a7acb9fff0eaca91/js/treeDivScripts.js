@@ -583,26 +583,12 @@ class node {
 		
 		const iconSize = 90;
 		if (personIconBool){
-			if (!document.getElementById('def_nodeIconClipPath')){
-				const def = this.svgElem ?? new createNewElement('defs', {
-					'id':'def_nodeIconClipPath',
-				});
-					const clipPath = new createNewElement('clipPath', {
-						'id' : 'imgCircleClipPath',				
-					});
-						const circleClip = new createNewElement('circle', {
-							'cx': 0, 'cy': 0,
-							'r' : iconSize,					
-					});
-				$(this.svgElem).prepend(def);
-			}
 			
 			const icon = new createNewElement('image', {				
 				'class': 'personIcon',
 				'x': -(iconSize/2),	'y': -(iconSize/2),
 				'width': iconSize, 'height': iconSize,	
 				'href': personImgIconURL,
-				'clip-path': 'url(#imgCircleClipPath)'
 			});
 			
 			this.iconImg = icon;			
@@ -890,8 +876,9 @@ class nodeCircle {
 		circleGrp.appendChild(circleBorderLeft);
 		circleGrp.appendChild(circleBorderBot);
 		
-		const circleBorderLength = (document.getElementById("svgDiv").style.display == 'none') ? 313.65
-			: circleBorderRight.getTotalLength();
+		//const circleBorderLength = (document.getElementById("svgDiv").style.display == 'none') ? 313.65
+		//	: circleBorderRight.getTotalLength();
+		const circleBorderLength = 313.65;
 		var offsetLngths = [0, (circleBorderLength/4), (circleBorderLength/2), ((3*circleBorderLength)/4)];
 		
 		offsetLngths = offsetLngths.map(x => (x + 70));

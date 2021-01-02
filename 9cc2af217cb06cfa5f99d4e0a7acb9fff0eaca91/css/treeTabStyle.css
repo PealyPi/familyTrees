@@ -449,6 +449,10 @@
 
 
 /* ---- full tree ----- */
+#fullTreeDiv{
+	height: 600px;
+}
+
 .panzoomContainer button.resetTree{
 	position: absolute;
 	z-index:5;
@@ -474,6 +478,6 @@
     -moz-transition: -moz-opacity ease-out 0.5s, background 0.5s;
     transition: opacity ease-out 0.5s, background 0.5s;
 }
-.panzoomContainer button.resetTree:hover,  .panzoomContainer button.resetTree.dark:hover{
+.panzoomContainer button.resetTree:hover{
 	opacity: 1;
 }
