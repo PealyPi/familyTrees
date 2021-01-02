@@ -61,11 +61,13 @@ class fullTree_node {
 	
 	createCircle(){	
 		this.nodeGrpContainer = new createNewElement('g', {
-			'class': 'nodeGrpContainer',
+			'class': 'fullTree_nodeGrpContainer',
+			'id': this.personTag + '_fullTree_nodeGrpContainer',
 			//'style': 'transform: translateX(' + startXY.x + isPx + ') translateY(' + startXY.y + isPx + '); opacity: '+ nodeOpacity,
 		});	
 		this.nodeGrp = new createNewElement('g', {
-			'class': 'nodeGrp',
+			'class': 'fullTree_nodeGrp',
+			'id': this.personTag + '_fullTree_nodeGrp',
 			//'style': 'transform: scale(' + nodeScale + ')',
 		});
 		this.nodeGrpContainer.appendChild(this.nodeGrp);
@@ -75,10 +77,10 @@ class fullTree_node {
 		if (this.personInfo.imgIcon)
 			this.addNodeImg();
 			
-		this.createDateLabel();
+		this.createLabels();
 	}
 	
-	createDateLabel(){
+	createLabels(){
 		let dateLabelD = fullRoundedRect(-52, 35, 110, 25, 10);
 		const labelGrp = new createNewElement('g', {
 			'class': 'nodeLabelGrp',
@@ -105,6 +107,21 @@ class fullTree_node {
 		this.nodeGrp.appendChild(labelGrp);
 		labelGrp.appendChild(labelDate);
 		labelGrp.appendChild(labelDateText);
+		
+		
+		const labelNameText = new createNewElement('text', {
+			'class': 		'fullTree_nameTxt',
+			'text-anchor': 	'middle',
+			'font-family': 	"'Galada', 'Verdana', serif",
+			'font-size': 	'30',
+			'fill':	'white',
+			'stroke': '#FF928B',
+			'stroke-width': '0.6px',
+			'x': 	0,	
+			'y': 	90,			
+			'textContent': 	(this.personInfo.name ?? ''),			
+		});	
+		labelGrp.appendChild(labelNameText);
 	}
 	
 	addNodeImg(){
