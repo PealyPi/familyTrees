@@ -2,6 +2,38 @@
 /* ===                    Custom Scripts                    === */
 /* ============================================================ */
 /* preload info /relations data */
+class famDataInfo {
+	constructor(){
+		this.rootPeople = {'kesby': 'roseHadkiss', 'hadkiss': 'ronaldHadkiss', 'peal': '', 'mckenzie': ''};
+		this.famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
+	}
+	
+	findPersonsFamily(personName, startFam = false){
+		if (startFam){
+			this.famOptions.splice(this.famOptions.indexOf(startFam), 1);
+			this.famOptions.unshift(startFam);
+		}
+
+		var correctFam = '';
+		for (fam of this.famOptions){
+			const famBool = PEOPLERELATIONS[fam][personName] ?? false;
+			if (famBool){
+				correctFam = fam;
+				return correctFam;
+				break;
+			}
+		}
+		
+		if (!correctFam) {
+			console.log("Error: person not in data"); 
+			return false;
+		}
+		
+	}
+}
+
+const famDataInfoObj = new famDataInfo();
+
 var PEOPLEINFO = personInfoStorage();
 var PEOPLERELATIONS = generateRelationsData(nodeDataStorage());
 var PEOPLETAGfromNAME = storePeopleTagNames('tagFromName', PEOPLEINFO, PEOPLERELATIONS);
@@ -10,10 +42,12 @@ var PEOPLEIMGs = pplImageLinks();
 //console.log(PEOPLERELATIONS.kesby);
 
 
+
+
 function generateRelationsData(data) {
 	
 	var finalData = {'kesby': {}, 'hadkiss': {}, 'peal': {}, 'mckenzie': {}};
-	let rootPeople = {'kesby': 'roseHadkiss', 'hadkiss': 'ronaldHadkiss', 'peal': '', 'mckenzie': ''};
+	let rootPeople = famDataInfoObj.rootPeople;
 	
 	for (let fam in data){
 		if (fam == 'kesby'){
@@ -243,33 +277,6 @@ function checkDataMatches(infoData, relationsData){
 		
 	}
 }
-
-
-function findPersonsFamily(personName, startFam = false){
-	const famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
-	if (startFam){
-		famOptions.splice(famOptions.indexOf(startFam), 1);
-		famOptions.unshift(startFam);
-	}
-
-	var correctFam = '';
-	for (fam of famOptions){
-		const famBool = PEOPLERELATIONS[fam][personName] ?? false;
-		if (famBool){
-			correctFam = fam;
-			return correctFam;
-			break;
-		}
-	}
-	
-	if (!correctFam) {
-		console.log("Error: person not in data"); 
-		return false;
-	}
-	
-}
-
-
 
 class nodeLetterTag_info {
 	constructor(){
@@ -1210,7 +1217,7 @@ class woodInfoTab {
 
 			if (aboutKey == "marriedTo"){
 				let spouseTag = personAbout[aboutKey];	
-				let spouseFam = findPersonsFamily(spouseTag);				
+				let spouseFam = famData.findPersonsFamily(spouseTag);				
 				let spouseInfo = PEOPLEINFO[spouseFam][spouseTag] ?? {};		
 				let spouseName = spouseInfo.name
 				
@@ -1567,7 +1574,7 @@ function peopleListSearch() {
 		} else if (genSearchBool){
 			//get person data, check gen
 			let personTag = PEOPLETAGfromNAME[txtValue];
-			let personFam = findPersonsFamily(personTag);
+			let personFam = famData.findPersonsFamily(personTag);
 			let personData = PEOPLERELATIONS[personFam][personTag];
 			let personGen = personData.gen;
 			

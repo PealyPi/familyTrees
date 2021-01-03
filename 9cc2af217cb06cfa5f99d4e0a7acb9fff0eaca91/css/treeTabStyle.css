@@ -453,6 +453,25 @@
 	height: 600px;
 }
 
+#fullTree_selectFams{
+	position: absolute;
+	height: 50px;
+	font-family: var(--mainInfoFont);
+	font-size:30px;
+	padding-left: 10px;
+	background-color: var(--colourBrown);
+	color: white;
+	text-shadow: 1px 1px 1px var(--colourBrownDarker);
+	cursor: pointer;
+	z-index: calc(var(--transitionZ) - 1);
+}
+
+
+#fullTreeSVG{
+	opacity:0;
+	display: none;
+}
+
 .panzoomContainer button.resetTree{
 	position: absolute;
 	z-index:5;

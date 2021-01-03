@@ -132,7 +132,7 @@ class imgTab {
 			let circleId = clickedCircleDiv.id;
 			const personClicked = circleId.replace("_circleTag", "");
 		
-			let personFam = findPersonsFamily(personClicked);
+			let personFam = famDataInfoObj.findPersonsFamily(personClicked);
 			changeGlobalFocus(personFam, personClicked);
 			
 			setTimeout(()=> {
@@ -259,7 +259,7 @@ class imgTab {
 			let clickedId = clickedPersonDiv.id;
 			const personClicked = clickedId.replace("imgPplTags_", "");
 		
-			let personFam = findPersonsFamily(personClicked);
+			let personFam = famDataInfoObj.findPersonsFamily(personClicked);
 			changeGlobalFocus(personFam, personClicked);
 			
 			setTimeout(()=> {

@@ -9,8 +9,9 @@ class fullTreeSVG {
 		this.resetBtn = this.fullTreeDiv.querySelector('.resetTree');
 		
 		this.createPanzoom();
-		this.createSVG();
-		let personNode = new fullTree_node('roseHadkiss', 'kesby', {'x': 0, 'y': 0});
+		//this.createSVG();
+		
+		this.svgTransition = false;
 	}
 	
 	createPanzoom(){
@@ -37,13 +38,52 @@ class fullTreeSVG {
 		this.svgElem.setAttribute("viewBox", "-500 -300 1000 600");
 	}
 	
-	createSVG(){
+	changeSVG(val){
+		console.log(val);
+		this.removeSVG();
+		if (this.svgTransition == false){
+			if ((val != '0')&&(val == 'Kesby')){
+				this.svgTransition = true;
+				
+				this.createSVG(val);
+				
+				
+				setTimeout(()=> {
+					this.svgTransition = false;
+				}, 4000);
+			} else {
+				//console.log("No SVG for this");
+			}
+		}	
 		
 	}
 	
-	fillPersonNodes(){
-		let personNode = new fullTree_node('roseHadkiss', 'kesby', {'x': 0, 'y': 0});
+	removeSVG(){
+		console.log("Here");
+		if (this.svgElem.style.display != 'none'){
+			animateGrpEnterExit(this.svgElem, 'exit');
+			
+			setTimeout(()=> {this.svgElem.style.display = 'none';}, 2000);
+		}
 	}
+	
+	createSVG(famName){	
+		this.svgElem.style.display = 'block';
+		setTimeout(()=> {
+			
+			let rootPerson = famDataInfoObj.rootPeople[famName];
+			let rootNode = new fullTree_node(rootPerson, famName, {'x': 0, 'y': 0});
+			
+			this.formTreeFromRoot(rootPerson, famName);
+			animateGrpEnterExit(this.svgElem, 'enter');
+			
+		}, 2000);		
+	}
+	
+	formTreeFromRoot(rootPerson, famName){
+		
+	}
+	
 }
 
 class fullTree_node {
@@ -141,6 +181,7 @@ class fullTree_node {
 		this.circleGrp.appendChild(icon);
 		
 	}
+
 }
 
 function fullRoundedRect(x, y, width, height, radius) {

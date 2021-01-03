@@ -98,7 +98,16 @@
 			</div>
 		</div>
 		
-		<div class="pageSection" id="fullTreeDiv">
+		<div class="pageSection" id="fullTreeDiv"> 
+			<div class="famselect">
+				<select name="fams" id="fullTree_selectFams" onChange="fullTreeElem.changeSVG(this.value);">
+					<option class="famSelectOpt" value="0" selected="selected">Select a Family</option>
+					<option class="famSelectOpt" value="Kesby">Kesby</option>
+					<option class="famSelectOpt" value="Hadkiss">Hadkiss</option>
+					<option class="famSelectOpt" value="Peal">Peal</option>
+					<option class="famSelectOpt" value="McKenzie">McKenzie</option>
+				</select>
+			</div>
 			<div class="panzoomContainer">		
 				<div class="panzoom" id="fullTreePanzoom">
 					<svg id="fullTreeSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">

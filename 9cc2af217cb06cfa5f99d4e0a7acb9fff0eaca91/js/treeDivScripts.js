@@ -1658,7 +1658,7 @@ class treeSVG {
 		function createNode(member, memberType, classNm, xyPos=false){
 			var nodeFam = focusObj.famName;
 			if (memberType == 'children'){
-				nodeFam = findPersonsFamily(member, focusObj.famName);	
+				nodeFam = famDataInfoObj.findPersonsFamily(member, focusObj.famName);	
 			}
 			let memberNode = new node(svg, classNm).initialise(member, nodeFam);
 			memberNode.nodeGrpContainer.setAttribute('id', memberNode.tagType + "_" + memberNode.personTag);
@@ -1788,7 +1788,7 @@ class treeChangeEvents {
 			clickedPerson = clickedId.replace("famView_focusNode_", "");
 		else 
 			console.log("Error: famView change focus - famView_Xnode tag not right...");
-		const clickedPersonFam = findPersonsFamily(clickedPerson);
+		const clickedPersonFam = famDataInfoObj.findPersonsFamily(clickedPerson);
 
 		clickedContainer.querySelector(".focusHighlightGrp").classList.add("focusHLT");
 		
