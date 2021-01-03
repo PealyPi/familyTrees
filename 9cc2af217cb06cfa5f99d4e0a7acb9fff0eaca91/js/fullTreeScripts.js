@@ -45,7 +45,7 @@ class fullTreeSVG {
 			if ((val != '0')&&(val == 'Kesby')){
 				this.svgTransition = true;
 				
-				this.createSVG(val);
+				this.createSVG(val.toLowerCase());
 				
 				
 				setTimeout(()=> {
@@ -68,13 +68,13 @@ class fullTreeSVG {
 	}
 	
 	createSVG(famName){	
-		this.svgElem.style.display = 'block';
 		setTimeout(()=> {
 			
 			let rootPerson = famDataInfoObj.rootPeople[famName];
 			let rootNode = new fullTree_node(rootPerson, famName, {'x': 0, 'y': 0});
 			
 			this.formTreeFromRoot(rootPerson, famName);
+			this.svgElem.style.display = 'block';
 			animateGrpEnterExit(this.svgElem, 'enter');
 			
 		}, 2000);		
