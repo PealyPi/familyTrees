@@ -100,7 +100,7 @@
 		
 		<div class="pageSection" id="fullTreeDiv"> 
 			<div class="famselect">
-				<select name="fams" id="fullTree_selectFams" onChange="fullTreeElem.changeSVG(this.value);">
+				<select name="fams" id="fullTree_selectFams" onChange="fullTreesObj.changeSVG(this.value);">
 					<option class="famSelectOpt" value="0" selected="selected">Select a Family</option>
 					<option class="famSelectOpt" value="Kesby">Kesby</option>
 					<option class="famSelectOpt" value="Hadkiss">Hadkiss</option>
@@ -110,9 +110,12 @@
 			</div>
 			<div class="panzoomContainer">		
 				<div class="panzoom" id="fullTreePanzoom">
-					<svg id="fullTreeSVG" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
-					</svg></div>	
-					<button class="resetTree reset"><i class="fas fa-redo-alt"></i></button><!-- reset must be inside tree section -->
+					<svg class="fullTreeSVG" id="fullTree_kesby" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
+					</svg>
+					<svg class="fullTreeSVG" id="fullTree_hadkiss" viewbox="0 0 1000 600" xmlns = "http://www.w3.org/2000/svg">
+					</svg>
+				</div>	
+				<button class="resetTree reset"><i class="fas fa-redo-alt"></i></button><!-- reset must be inside tree section -->
 				
 			</div>	
 		</div>

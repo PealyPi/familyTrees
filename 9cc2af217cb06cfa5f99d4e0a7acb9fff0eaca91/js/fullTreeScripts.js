@@ -1,17 +1,85 @@
 
 /* -------------------- */
 /* --- full tree tab --- */
-class fullTreeSVG {
+class fullTrees {
 	constructor(){
+		this.svgTransition = false;
+		
+		this.fullTreeArray = {};
+		this.currentActiveTree = 'none';
+	}
+	
+	changeSVG(val){
+		if (this.svgTransition == false){
+			
+			var timeoutVal = 0;
+			//hide current active svg
+			if (this.currentActiveTree != 'none'){
+				animateGrpEnterExit(this.currentActiveTree, 'exit');
+				setTimeout(()=> {
+					this.currentActiveTree.style.display = 'none';
+				}, 2000);
+				timeoutVal = 2000;
+			}
+			
+			//show new svg
+			if (val != 0){
+				setTimeout(()=> {
+					let selectedSVGobj = this.fullTreeArray[val.toLowerCase()];
+					let showTreeSVG = selectedSVGobj.svgElem;
+					if (!selectedSVGobj.isConstructed){
+						selectedSVGobj.initialiseTree();
+					}
+					
+					//reset panzoom
+					
+					
+					selectedSVGobj.svgElem.style.display = 'block';
+					animateGrpEnterExit(showTreeSVG, 'enter');
+					this.currentActiveTree = showTreeSVG;					
+				}, timeoutVal);		
+				
+			} else {
+				this.currentActiveTree = 'none';
+			}
+			
+			
+			
+			
+			setTimeout(()=> {
+				this.svgTransition = false;
+			}, 4000);			
+		}	
+		
+	}
+	switchSVG(oldSVG, newSVG){
+		this.removeSVG();
+		
+	}
+	removeSVG(){
+		console.log("Here");
+		if (this.svgElem.style.display != 'none'){
+			
+			
+			setTimeout(()=> {this.svgElem.style.display = 'none';}, 2000);
+		}
+	}
+}
+
+class fullTreeSVG {
+	constructor(whichFam){
 		this.fullTreeDiv = document.getElementById('fullTreeDiv');
-		this.svgElem = document.getElementById('fullTreeSVG');
+		this.svgElem = document.getElementById('fullTree_' + whichFam);
 		this.panzoomDiv = document.getElementById('fullTreePanzoom');
 		this.resetBtn = this.fullTreeDiv.querySelector('.resetTree');
+		this.fam = whichFam;
+		
+		fullTreesObj.fullTreeArray[whichFam] = this;
 		
 		this.createPanzoom();
 		//this.createSVG();
 		
-		this.svgTransition = false;
+		this.isConstructed = false;
 	}
 	
 	createPanzoom(){
@@ -38,44 +106,16 @@ class fullTreeSVG {
 		this.svgElem.setAttribute("viewBox", "-500 -300 1000 600");
 	}
 	
-	changeSVG(val){
-		console.log(val);
-		this.removeSVG();
-		if (this.svgTransition == false){
-			if ((val != '0')&&(val == 'Kesby')){
-				this.svgTransition = true;
-				
-				this.createSVG(val.toLowerCase());
-				
-				
-				setTimeout(()=> {
-					this.svgTransition = false;
-				}, 4000);
-			} else {
-				//console.log("No SVG for this");
-			}
-		}	
+	initialiseTree(){
+		let rootPerson = famDataInfoObj.rootPeople[this.fam];
+		let rootNode = new fullTree_node(this.svgElem, rootPerson, this.fam, {'x': 0, 'y': 0});
+		
+		this.formTreeFromRoot(rootPerson, this.fam);
 		
 	}
 	
-	removeSVG(){
-		console.log("Here");
-		if (this.svgElem.style.display != 'none'){
-			animateGrpEnterExit(this.svgElem, 'exit');
-			
-			setTimeout(()=> {this.svgElem.style.display = 'none';}, 2000);
-		}
-	}
-	
-	createSVG(famName){	
+	createSVG(){	
 		setTimeout(()=> {
-			
-			let rootPerson = famDataInfoObj.rootPeople[famName];
-			let rootNode = new fullTree_node(rootPerson, famName, {'x': 0, 'y': 0});
-			
-			this.formTreeFromRoot(rootPerson, famName);
-			this.svgElem.style.display = 'block';
-			animateGrpEnterExit(this.svgElem, 'enter');
 			
 		}, 2000);		
 	}
@@ -87,11 +127,11 @@ class fullTreeSVG {
 }
 
 class fullTree_node {
-	constructor( personTag, familyName, position){
+	constructor(svgElem, personTag, familyName, position){
 		this.personTag = personTag;
 		this.familyName = familyName;
 		this.position = position;
-		this.svgElem = document.getElementById('fullTreeSVG');
+		this.svgElem = svgElem;
 		
 		this.personInfo = PEOPLEINFO[this.familyName][this.personTag] ?? {};		
 		this.personData = PEOPLERELATIONS[this.familyName][this.personTag] ?? {};
@@ -184,6 +224,10 @@ class fullTree_node {
 
 }
 
+function changeFullTreeSVG(val){
+	
+}
+
 function fullRoundedRect(x, y, width, height, radius) {
   return "M" + x + "," + y
        + "h" + (width - radius)
@@ -198,6 +242,8 @@ function fullRoundedRect(x, y, width, height, radius) {
 }
 
 /* -------------------- */
-const fullTreeElem	= new fullTreeSVG();
+const fullTreesObj	= new fullTrees();
+const fullTreeElem_kesby	= new fullTreeSVG('kesby');
+const fullTreeElem_hadkiss	= new fullTreeSVG('hadkiss');
 
 /* -------------------- */

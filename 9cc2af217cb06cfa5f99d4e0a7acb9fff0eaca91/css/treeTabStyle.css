@@ -455,7 +455,7 @@
 
 #fullTree_selectFams{
 	position: absolute;
-	height: 50px;
+	height: 45px;
 	font-family: var(--mainInfoFont);
 	font-size:30px;
 	padding-left: 10px;
@@ -467,7 +467,7 @@
 }
 
 
-#fullTreeSVG{
+.fullTreeSVG{
 	opacity:0;
 	display: none;
 }
