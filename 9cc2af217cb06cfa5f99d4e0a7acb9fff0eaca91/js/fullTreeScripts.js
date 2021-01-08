@@ -118,7 +118,7 @@ class fullTreeSVG {
 	
 	formTreeFromRoot(rootNode){	
 		let siblingNodeData = this.generateSiblingNodes(rootNode, 'left');
-		console.log(siblingNodeData);
+		
 		this.generateParentNode(rootNode, 'main', {'x': siblingNodeData.parentLpos, 'y': -1*(this.parentLineHeight + 50)});
 		this.generateParentNode(rootNode, 'spouse', {'x': siblingNodeData.parentRpos, 'y': -1*(this.parentLineHeight + 50)});
 	}
@@ -128,12 +128,13 @@ class fullTreeSVG {
 		
 		let siblingDirection = (leftRight == 'left') ? -1 : 1;
 		
-		var lastSiblingPos = personNode.position;
+		var lastSiblingPos = {'x': 0,'y': 0};
 		var siblingNodesArray = [];
 		for (let sibling of siblingList){
 			let newSibPos = {
 				'x': lastSiblingPos.x + (siblingDirection * (this.siblingSpacing + this.nodeWidth)),
-				'y': lastSiblingPos.y
+				//'y': lastSiblingPos.y
+				'y': 0
 			};
 			let sibNode = new fullTree_node(personNode.nodeGrpContainer, sibling, this.fam, newSibPos);
 			siblingNodesArray.push({
@@ -150,7 +151,7 @@ class fullTreeSVG {
 			'nodeArray': siblingNodesArray,
 			
 			'direction': siblingDirection,
-			'firstPos': personNode.position,
+			'firstPos': {'x': 0, 'y': 0},
 			'lastPos': lastSiblingPos,
 		};
 		
@@ -188,11 +189,11 @@ class fullTreeSVG {
 		}
 		//lineAcross
 		let lineAcrossDist = siblingNodeData.lastPos.x - siblingNodeData.firstPos.x;
-		let lineAcrossPts = ['M', siblingNodeData.firstPos.x, (siblingNodeData.firstPos.y - this.relativeLineHeight), 'H', lineAcrossDist];
+		let lineAcrossPts = ['M', 0, (-1*this.relativeLineHeight), 'H', lineAcrossDist];
 		this.createLines(linesGrp, lineAcrossPts, 'siblingAcross');
 		
 		//individual lines
-		let personLinePoints = ['M', personNode.position.x, personNode.position.y, 'V', (-1 * this.relativeLineHeight)];			
+		let personLinePoints = ['M', 0, 0, 'v', (-1 * this.relativeLineHeight)];			
 		this.createLines(linesGrp, personLinePoints, 'sibling');
 		
 		for (const sibNode of siblingNodes){
@@ -201,7 +202,8 @@ class fullTreeSVG {
 		}	
 		
 		//parentLineAcross
-		let sibMidPointX = personNode.position.x - (siblingNodeData.direction * (lineAcrossDist/2));
+		console.log(siblingNodeData);
+		let sibMidPointX = (lineAcrossDist/2);
 		let parentLpoint = sibMidPointX - (this.siblingSpacing + this.nodeWidth)/2;
 		
 		let parentLineAcrossPoints = ['M', parentLpoint, (-1 * this.parentLineHeight), 'h', (this.siblingSpacing + this.nodeWidth)];			
@@ -211,7 +213,7 @@ class fullTreeSVG {
 		let lineUpPoints = ['M', sibMidPointX, (-1 * this.relativeLineHeight), 'V', (-1 * this.parentLineHeight)];			
 		this.createLines(linesGrp, lineUpPoints, 'parentUp');
 		
-		
+		siblingNodeData.midPoint = sibMidPointX;
 		siblingNodeData.parentLpos = parentLpoint; 
 		siblingNodeData.parentRpos = (parentLpoint + (this.siblingSpacing + this.nodeWidth));
 	}
@@ -263,15 +265,18 @@ class fullTreeSVG {
 	}
 	
 	generateParentNode(personNode, type, position){
-		console.log(position);
 		let parentDirection = (type == 'main') ? 'left' : 'right';
 		
-		let parentTag = (type == 'main') ? this.famData[personNode.personTag].parentMain : this.famData[personNode.personTag].parentSpouse;
-		let parentNode = new fullTree_node(personNode.nodeGrpContainer, parentTag, this.fam, position);	
+		let parentTag = (type == 'main') ? (this.famData[personNode.personTag].parentMain ?? '') : (this.famData[personNode.personTag].parentSpouse ?? '');
 		
-		let siblingNodeData = this.generateSiblingNodes(parentNode, parentDirection);
-	//	this.generateParentNode(personNode, 'main', siblingNodeData.parentLpos);
-	//	this.generateParentNode(personNode, 'spouse', siblingNodeData.parentRpos);
+		if (parentTag != ''){
+			let parentNode = new fullTree_node(personNode.nodeGrpContainer, parentTag, this.fam, position);	
+			
+			let siblingNodeData = this.generateSiblingNodes(parentNode, parentDirection);
+		//	this.generateParentNode(personNode, 'main', siblingNodeData.parentLpos);
+		//	this.generateParentNode(personNode, 'spouse', siblingNodeData.parentRpos);
+			
+		}
 	}
 	
 }
