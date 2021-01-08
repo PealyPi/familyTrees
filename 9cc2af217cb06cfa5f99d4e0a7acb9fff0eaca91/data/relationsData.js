@@ -18,7 +18,7 @@ function nodeDataStorage(){//collapse lvl 2
 		'parentMain':	'johnNevilleKesby',
 		'parentSpouse': 'maryBobby',	
 		'siblings': 	['jackKesby'],
-		//'spouse': 		'ronaldHadkiss',	
+		//'spouse': 	'ronaldHadkiss',	
 		//'childMain': 	['lesleyPeal'],
 		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};

@@ -118,8 +118,8 @@ class fullTreeSVG {
 	formTreeFromRoot(rootNode){	
 		let siblingNodeData = this.generateSiblingNodes(rootNode, 'left');
 		console.log(siblingNodeData);
-		this.generateParentNode(rootNode, 'main', {'x': siblingNodeData.parentLpos, 'y': -1*this.parentLineHeight});
-		this.generateParentNode(rootNode, 'spouse', {'x': siblingNodeData.parentRpos, 'y': -1*this.parentLineHeight});
+		this.generateParentNode(rootNode, 'main', {'x': siblingNodeData.parentLpos, 'y': -1*(this.parentLineHeight + 50)});
+		this.generateParentNode(rootNode, 'spouse', {'x': siblingNodeData.parentRpos, 'y': -1*(this.parentLineHeight + 50)});
 	}
 	
 	generateSiblingNodes(personNode, leftRight){
@@ -212,7 +212,7 @@ class fullTreeSVG {
 		
 		
 		siblingNodeData.parentLpos = parentLpoint; 
-		siblingNodeData.parentRpos = (this.siblingSpacing + this.nodeWidth);
+		siblingNodeData.parentRpos = (parentLpoint + (this.siblingSpacing + this.nodeWidth));
 	}
 	
 	createLines(container, points, type){ 		
@@ -356,36 +356,31 @@ class fullTree_node {
 				'textContent': 	personName,			
 			});	
 		} else {
-			let nameArray = personName.match(/(.{1,13})(?:\s|$)/g);	
-			console.log(nameArray);
-			
+			let nameArray = personName.match(/(.{1,13})(?:\s|$)/g);				
 			
 			labelNameText = new createNewElement('text', {
 				'class': 		'fullTree_nameTxt',
 				'text-anchor': 	'middle',
 				'font-family': 	"'Galada', 'Verdana', serif",
-				'font-size': 	20,
+				'font-size': 	28,
 				'fill':	'white',
 				'stroke': '#FF928B',
 				'stroke-width': '0.6px',
 				'x': 	0,	
-				'y': 	90,			
-				'textContent': 	personName,			
+				'y': 	90,				
 			});	
+			for (let nameLine of nameArray){
+				const dyVal = (nameLine == nameArray[0]) ? "0em" : "1.2em";
+				
+				const nameTextLine = new createNewElement('tspan', {
+					'class': 'fullTree_nameTxtSpan',
+					'x': 	0,
+					'dy':	dyVal,
+					'textContent': 	nameLine ?? '',					
+				});	
+				labelNameText.appendChild(nameTextLine);
+			}
 		}
-			
-		/*const labelNameText = new createNewElement('text', {
-			'class': 		'fullTree_nameTxt',
-			'text-anchor': 	'middle',
-			'font-family': 	"'Galada', 'Verdana', serif",
-			'font-size': 	fontSizing,
-			'fill':	'white',
-			'stroke': '#FF928B',
-			'stroke-width': '0.6px',
-			'x': 	0,	
-			'y': 	90,			
-			'textContent': 	personName,			
-		});	*/
 		
 		labelGrp.appendChild(labelNameText);
 	}
