@@ -108,7 +108,8 @@ class fullTreeSVG {
 		//change svg dimensions too fit
 		let viewBoxWidth = 1000 + this.distanceFromRoot.xNeg + this.distanceFromRoot.xPos;
 		let viewBoxHeight = 1000 + this.distanceFromRoot.y;
-		let viewBoxArray = [(-1*(viewBoxWidth/2)), (-viewBoxHeight+100), viewBoxWidth, viewBoxHeight];
+		let largerViewBoxDim = (viewBoxWidth >= viewBoxHeight) ? viewBoxWidth : viewBoxHeight;
+		let viewBoxArray = [(-1*(largerViewBoxDim/2)), (-largerViewBoxDim+100), largerViewBoxDim, largerViewBoxDim];
 		this.svgElem.setAttribute("viewBox", viewBoxArray.join(" "));
 		
 		
@@ -266,8 +267,9 @@ class fullTreeSVG {
 		let parentDirection = (type == 'main') ? 'left' : 'right';
 		
 		let parentTag = (type == 'main') ? this.famData[personNode.personTag].parentMain : this.famData[personNode.personTag].parentSpouse;
-		let parentNode = new fullTree_node(personNode.nodeGrpContainer, parentTag, this.fam, position);		
-	//	let siblingNodeData = this.generateSiblingNodes(personNode, 'left');
+		let parentNode = new fullTree_node(personNode.nodeGrpContainer, parentTag, this.fam, position);	
+		
+		let siblingNodeData = this.generateSiblingNodes(parentNode, parentDirection);
 	//	this.generateParentNode(personNode, 'main', siblingNodeData.parentLpos);
 	//	this.generateParentNode(personNode, 'spouse', siblingNodeData.parentRpos);
 	}
