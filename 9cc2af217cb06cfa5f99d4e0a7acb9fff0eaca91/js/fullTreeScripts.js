@@ -89,15 +89,14 @@ class fullTreeSVG {
 		this.createPanzoom();
 		fullTreesObj.fullTreeArray[whichFam] = this;
 
-		this.distanceFromRoot = {'xNeg': 0, 'xPos': 0, 'y': 0};	
+		this.distanceFromRoot = {'xNeg': -100, 'xPos': 100, 'y': 0};	
 		
 		this.isConstructed = false;
 	}
 	
 	createPanzoom(){
-		console.log(this.familyStartPan[this.fam]);
 		this.panzoom = Panzoom(this.panzoomDiv, {
-			minScale: 0.1,
+			minScale: 4,
 			maxScale: 20,		
 			startX: this.familyStartPan[this.fam].startX,
 			startY: this.familyStartPan[this.fam].startY,
@@ -131,17 +130,13 @@ class fullTreeSVG {
 		this.formTreeFromRoot(rootNode);
 		
 		//change svg dimensions too fit
-		let viewBoxWidth = 1000 + this.distanceFromRoot.xNeg + this.distanceFromRoot.xPos;
-		let viewBoxHeight = 1000 + (-1*this.distanceFromRoot.y);
-		//let viewBoxArray = [(-1*(viewBoxWidth/2)), (-viewBoxHeight+100), viewBoxWidth, viewBoxHeight];		
+		
+		let viewBoxWidth = (Math.abs(this.distanceFromRoot.xNeg) > Math.abs(this.distanceFromRoot.xPos)) ? 2*Math.abs(this.distanceFromRoot.xNeg) : 2*Math.abs(this.distanceFromRoot.xPos);
+		let viewBoxHeight = 1000 + Math.abs(this.distanceFromRoot.y);		
 		let largerViewBoxDim = (viewBoxWidth >= viewBoxHeight) ? viewBoxWidth : viewBoxHeight;
 		let viewBoxArray = [(-1*(largerViewBoxDim/2)), (-largerViewBoxDim+100), largerViewBoxDim, largerViewBoxDim];
 		
-		
-		//this.svgElem.setAttribute("transform", "scale(3)");
 		this.svgElem.setAttribute("viewBox", viewBoxArray.join(" "));
-		console.log(this.panzoom);
-		this.panzoom.setOptions('startY', '-500px'); 
 		
 		this.isConstructed = true;
 	}
@@ -163,7 +158,6 @@ class fullTreeSVG {
 		for (let sibling of siblingList){
 			let newSibPos = {
 				'x': lastSiblingPos.x + (siblingDirection * (this.siblingSpacing + this.nodeWidth)),
-				//'y': lastSiblingPos.y
 				'y': 0
 			};
 			let sibNode = new fullTree_node(personNode.nodeGrpContainer, sibling, this.fam, newSibPos);
@@ -216,34 +210,48 @@ class fullTreeSVG {
 			});
 			$(personNode.nodeGrpContainer).prepend(linesGrp);			
 		}
-		//lineAcross
+		
 		let lineAcrossDist = siblingNodeData.lastPos.x - siblingNodeData.firstPos.x;
-		let lineAcrossPts = ['M', 0, (-1*this.relativeLineHeight), 'H', lineAcrossDist];
-		this.createLines(linesGrp, lineAcrossPts, 'siblingAcross');
 		
-		//individual lines
-		let personLinePoints = ['M', 0, 0, 'v', (-1 * this.relativeLineHeight)];			
-		this.createLines(linesGrp, personLinePoints, 'sibling');
+		if (siblingNodes.length != 0){		
+			//lineAcross
+			let lineAcrossPts = ['M', 0, (-1*this.relativeLineHeight), 'H', lineAcrossDist];
+			this.createLines(linesGrp, lineAcrossPts, 'siblingAcross');
+			
+			//individual line
+			let personLinePoints = ['M', 0, 0, 'v', (-1 * this.relativeLineHeight)];			
+			this.createLines(linesGrp, personLinePoints, 'sibling');
+			
+			for (const sibNode of siblingNodes){
+				let sibLinePoints = ['M', sibNode.pos.x, sibNode.pos.y, 'V', (-1 * this.relativeLineHeight)];			
+				this.createLines(linesGrp, sibLinePoints, 'sibling');
+			}		
+		}
 		
-		for (const sibNode of siblingNodes){
-			let sibLinePoints = ['M', sibNode.pos.x, sibNode.pos.y, 'V', (-1 * this.relativeLineHeight)];			
-			this.createLines(linesGrp, sibLinePoints, 'sibling');
-		}	
+		if ( (this.famData[personNode.personTag].hasOwnProperty('parentMain')) || (this.famData[personNode.personTag].hasOwnProperty('parentSpouse')) ){
+			if (siblingNodes.length == 0){
+				//individual line
+				let personLinePoints = ['M', 0, 0, 'v', (-1 * this.relativeLineHeight)];			
+				this.createLines(linesGrp, personLinePoints, 'sibling');			
+			}
+			
+			//parentLineAcross
+			let sibMidPointX = (lineAcrossDist/2);
+			let parentLpoint = sibMidPointX - (this.siblingSpacing + this.nodeWidth)/2;
+			
+			let parentLineAcrossPoints = ['M', parentLpoint, (-1 * this.parentLineHeight), 'h', (this.siblingSpacing + this.nodeWidth)];			
+			this.createLines(linesGrp, parentLineAcrossPoints, 'parentAcross');
+			
+			//lineUp
+			let lineUpPoints = ['M', sibMidPointX, (-1 * this.relativeLineHeight), 'V', (-1 * this.parentLineHeight)];			
+			this.createLines(linesGrp, lineUpPoints, 'parentUp');
+			
+			siblingNodeData.midPoint = sibMidPointX;
+			siblingNodeData.parentLpos = {'x': parentLpoint, 'y': -1*(this.parentLineHeight + 50)}; 
+			siblingNodeData.parentRpos = {'x': (parentLpoint + (this.siblingSpacing + this.nodeWidth)), 'y': -1*(this.parentLineHeight + 50)};
+		}
 		
-		//parentLineAcross
-		let sibMidPointX = (lineAcrossDist/2);
-		let parentLpoint = sibMidPointX - (this.siblingSpacing + this.nodeWidth)/2;
 		
-		let parentLineAcrossPoints = ['M', parentLpoint, (-1 * this.parentLineHeight), 'h', (this.siblingSpacing + this.nodeWidth)];			
-		this.createLines(linesGrp, parentLineAcrossPoints, 'parentAcross');
-		
-		//lineUp
-		let lineUpPoints = ['M', sibMidPointX, (-1 * this.relativeLineHeight), 'V', (-1 * this.parentLineHeight)];			
-		this.createLines(linesGrp, lineUpPoints, 'parentUp');
-		
-		siblingNodeData.midPoint = sibMidPointX;
-		siblingNodeData.parentLpos = {'x': parentLpoint, 'y': -1*(this.parentLineHeight + 50)}; 
-		siblingNodeData.parentRpos = {'x': (parentLpoint + (this.siblingSpacing + this.nodeWidth)), 'y': -1*(this.parentLineHeight + 50)};
 	}
 	
 	createLines(container, points, type){ 		
