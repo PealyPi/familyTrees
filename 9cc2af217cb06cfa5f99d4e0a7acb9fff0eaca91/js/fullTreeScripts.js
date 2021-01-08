@@ -26,7 +26,7 @@ class fullTrees {
 			if (val != 0){
 				setTimeout(()=> {
 					let selectedSVGobj = this.fullTreeArray[val.toLowerCase()];
-					let showTreeSVG = selectedSVGobj.svgElem;
+					let showTreeSVG = selectedSVGobj.panzoomContainer;
 					if (!selectedSVGobj.isConstructed){
 						selectedSVGobj.initialiseTree();
 					}
@@ -34,7 +34,7 @@ class fullTrees {
 					//reset panzoom
 					
 					
-					selectedSVGobj.svgElem.style.display = 'block';
+					selectedSVGobj.panzoomContainer.style.display = 'block';
 					animateGrpEnterExit(showTreeSVG, 'enter');
 					this.currentActiveTree = showTreeSVG;					
 				}, timeoutVal);		
@@ -55,28 +55,53 @@ class fullTreeSVG {
 	constructor(whichFam){
 		this.fullTreeDiv = document.getElementById('fullTreeDiv');
 		this.svgElem = document.getElementById('fullTree_' + whichFam);
-		this.panzoomDiv = document.getElementById('fullTreePanzoom');
+		this.panzoomDiv = document.getElementById('fullTreePanzoom_' + whichFam);
+		this.panzoomContainer = this.panzoomDiv.parentNode;
 		this.resetBtn = this.fullTreeDiv.querySelector('.resetTree');
 		
 		this.fam = whichFam;		
 		this.famData = PEOPLERELATIONS[whichFam];		
+		
+		this.familyStartPan = {
+			'kesby': {
+				startX: '0',
+				startY: '-480px',
+				startScale: '10',
+			},
+			'hadkiss': {
+				startX: '0',
+				startY: '-500px',
+				startScale: '5',
+			},
+			'peal': {
+				startX: '0',
+				startY: '-500px',
+				startScale: '5',
+			},
+			'mckenzie': {
+				startX: '0',
+				startY: '-500px',
+				startScale: '5',
+			},
+			
+		};		
 		
 		this.createPanzoom();
 		fullTreesObj.fullTreeArray[whichFam] = this;
 
 		this.distanceFromRoot = {'xNeg': 0, 'xPos': 0, 'y': 0};	
 		
-		
 		this.isConstructed = false;
 	}
 	
 	createPanzoom(){
+		console.log(this.familyStartPan[this.fam]);
 		this.panzoom = Panzoom(this.panzoomDiv, {
-			minScale: 0.5,
-			maxScale: 5,		
-			startX: '0',
-			startY: '0',
-			startScale: 1,
+			minScale: 0.1,
+			maxScale: 20,		
+			startX: this.familyStartPan[this.fam].startX,
+			startY: this.familyStartPan[this.fam].startY,
+			startScale: this.familyStartPan[this.fam].startScale,
 			
 			increment: 0.05,
 			
@@ -107,11 +132,16 @@ class fullTreeSVG {
 		
 		//change svg dimensions too fit
 		let viewBoxWidth = 1000 + this.distanceFromRoot.xNeg + this.distanceFromRoot.xPos;
-		let viewBoxHeight = 1000 + this.distanceFromRoot.y;
+		let viewBoxHeight = 1000 + (-1*this.distanceFromRoot.y);
+		//let viewBoxArray = [(-1*(viewBoxWidth/2)), (-viewBoxHeight+100), viewBoxWidth, viewBoxHeight];		
 		let largerViewBoxDim = (viewBoxWidth >= viewBoxHeight) ? viewBoxWidth : viewBoxHeight;
 		let viewBoxArray = [(-1*(largerViewBoxDim/2)), (-largerViewBoxDim+100), largerViewBoxDim, largerViewBoxDim];
-		this.svgElem.setAttribute("viewBox", viewBoxArray.join(" "));
 		
+		
+		//this.svgElem.setAttribute("transform", "scale(3)");
+		this.svgElem.setAttribute("viewBox", viewBoxArray.join(" "));
+		console.log(this.panzoom);
+		this.panzoom.setOptions('startY', '-500px'); 
 		
 		this.isConstructed = true;
 	}
@@ -119,8 +149,8 @@ class fullTreeSVG {
 	formTreeFromRoot(rootNode){	
 		let siblingNodeData = this.generateSiblingNodes(rootNode, 'left');
 		
-		this.generateParentNode(rootNode, 'main', {'x': siblingNodeData.parentLpos, 'y': -1*(this.parentLineHeight + 50)});
-		this.generateParentNode(rootNode, 'spouse', {'x': siblingNodeData.parentRpos, 'y': -1*(this.parentLineHeight + 50)});
+		this.generateParentNode(rootNode, 'main', siblingNodeData.parentLpos);
+		this.generateParentNode(rootNode, 'spouse', siblingNodeData.parentRpos);
 	}
 	
 	generateSiblingNodes(personNode, leftRight){
@@ -156,11 +186,11 @@ class fullTreeSVG {
 		};
 		
 		if (leftRight == 'left'){
-			this.distanceFromRoot.xNeg = (-1*lastSiblingPos.x);
+			this.distanceFromRoot.xNeg += (-1*lastSiblingPos.x);
 		} else {
-			this.distanceFromRoot.xPos = lastSiblingPos.x;			
+			this.distanceFromRoot.xPos += lastSiblingPos.x;			
 		}
-		this.distanceFromRoot.y = (-1 * (this.parentLineHeight + this.relativeLineHeight));		
+		this.distanceFromRoot.y += (-1 * (this.parentLineHeight + this.relativeLineHeight));		
 		
 		this.generateSiblingLines(personNode, siblingNodeData);
 		
@@ -168,7 +198,6 @@ class fullTreeSVG {
 	}
 	
 	generateSiblingLines(personNode, siblingNodeData){
-		let yPos = siblingNodeData.nodeArray[0].pos.y
 		let siblingNodes = siblingNodeData.nodeArray;
 		
 		let personContainerChildren = Array.from(personNode.nodeGrpContainer.childNodes);
@@ -202,7 +231,6 @@ class fullTreeSVG {
 		}	
 		
 		//parentLineAcross
-		console.log(siblingNodeData);
 		let sibMidPointX = (lineAcrossDist/2);
 		let parentLpoint = sibMidPointX - (this.siblingSpacing + this.nodeWidth)/2;
 		
@@ -214,8 +242,8 @@ class fullTreeSVG {
 		this.createLines(linesGrp, lineUpPoints, 'parentUp');
 		
 		siblingNodeData.midPoint = sibMidPointX;
-		siblingNodeData.parentLpos = parentLpoint; 
-		siblingNodeData.parentRpos = (parentLpoint + (this.siblingSpacing + this.nodeWidth));
+		siblingNodeData.parentLpos = {'x': parentLpoint, 'y': -1*(this.parentLineHeight + 50)}; 
+		siblingNodeData.parentRpos = {'x': (parentLpoint + (this.siblingSpacing + this.nodeWidth)), 'y': -1*(this.parentLineHeight + 50)};
 	}
 	
 	createLines(container, points, type){ 		
@@ -267,16 +295,21 @@ class fullTreeSVG {
 	generateParentNode(personNode, type, position){
 		let parentDirection = (type == 'main') ? 'left' : 'right';
 		
-		let parentTag = (type == 'main') ? (this.famData[personNode.personTag].parentMain ?? '') : (this.famData[personNode.personTag].parentSpouse ?? '');
+		let parentTag = (type == 'main') ? this.famData[personNode.personTag].parentMain : this.famData[personNode.personTag].parentSpouse;
 		
-		if (parentTag != ''){
-			let parentNode = new fullTree_node(personNode.nodeGrpContainer, parentTag, this.fam, position);	
-			
-			let siblingNodeData = this.generateSiblingNodes(parentNode, parentDirection);
-		//	this.generateParentNode(personNode, 'main', siblingNodeData.parentLpos);
-		//	this.generateParentNode(personNode, 'spouse', siblingNodeData.parentRpos);
-			
+		let parentNode = new fullTree_node(personNode.nodeGrpContainer, parentTag, this.fam, position);	
+		
+		let siblingNodeData = this.generateSiblingNodes(parentNode, parentDirection);
+		//console.log(siblingNodeData);
+		
+		if (this.famData[parentTag].hasOwnProperty('parentMain')){
+			this.generateParentNode(parentNode, 'main', siblingNodeData.parentLpos);
 		}
+		if (this.famData[parentTag].hasOwnProperty('parentSpouse')){
+			this.generateParentNode(parentNode, 'spouse', siblingNodeData.parentRpos);
+		}
+		
+	
 	}
 	
 }
@@ -413,9 +446,6 @@ class fullTree_node {
 	
 }
 
-function changeFullTreeSVG(val){
-	
-}
 
 function fullRoundedRect(x, y, width, height, radius) {
   return "M" + x + "," + y
@@ -433,6 +463,6 @@ function fullRoundedRect(x, y, width, height, radius) {
 /* -------------------- */
 const fullTreesObj	= new fullTrees();
 const fullTreeElem_kesby	= new fullTreeSVG('kesby');
-const fullTreeElem_hadkiss	= new fullTreeSVG('hadkiss');
+//const fullTreeElem_hadkiss	= new fullTreeSVG('hadkiss');
 
 /* -------------------- */
