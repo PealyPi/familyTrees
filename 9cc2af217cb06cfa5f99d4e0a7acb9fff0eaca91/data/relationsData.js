@@ -302,11 +302,40 @@ function nodeDataStorage(){//collapse lvl 2
 	//gen2	
 	hadkiss.berthaClaydon = {	
 		'familyName': 'claydon',
-		//'parentMain': 	'sidneyCharlesBobby',	
-		//'parentSpouse': 'adaBerriman',
-		//'siblings': 	['floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby'],
+		'parentMain': 	'georgeOliverClaydon',	
+		'parentSpouse': 'fannyAtkinson',
+		'siblings': 	['leonardClaydon', 'elsieClaydon', 'williamErnestClaydon', 'georgeClaydon', 'adaClaydon'],
 	};
+		//gen3	
+		hadkiss.georgeOliverClaydon = {	
+			'parentMain': 	'thomasClaydon',	
+			'parentSpouse': 'maryRawlinson',
+			'siblings': 	['florenceClaydon', 'majorClaydon', 'ernestEHClaydon', 'aliceClaydon', 'robertClaydon', 'harryClaydon', 'arthurClaydon', 'joshuaClaydon', 'maryClaydon', 'fredrickClaydon', 'arabellaClaydon'],
+		};
+			//gen4	
+			hadkiss.thomasClaydon = {	
+				'parentMain': 	'mary5Claydon',	
+				'parentSpouse': 'unknown5Claydon',
+			};
+				//gen5	
+				hadkiss.mary5Claydon = {};
+				hadkiss.unknown5Claydon = {};
 	
+			//gen4	
+			hadkiss.maryRawlinson = {	
+				'parentMain': 	'elizabethRawlinson',	
+				'parentSpouse': 'unknownRawlinson',
+			};
+				//gen5	
+				hadkiss.elizabethRawlinson = {};
+				hadkiss.unknownRawlinson = {};
+	
+		//gen3	
+		hadkiss.fannyAtkinson = {	
+			//'parentMain': 	'thomasClaydon',	
+		//	'parentSpouse': 'maryRawlinson',
+		//	'siblings': 	['florenceClaydon', 'majorClaydon', 'ernestEHClaydon', 'aliceClaydon', 'robertClaydon', 'harryClaydon', 'arthurClaydon', 'joshuaClaydon', 'maryClaydon', 'fredrickClaydon', 'arabellaClaydon'],
+		};
 	
 	
 	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};

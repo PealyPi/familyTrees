@@ -777,7 +777,84 @@ function personInfoStorage(){
 			'dates': 	'1896 - 1973', 
 		},
 		
+		'leonardClaydon': {
+			'name':		'Leonard Claydon',
+			'dates': 	'1903 - ', 
+		},
+		'elsieClaydon': {
+			'name':		'Elsie Claydon',
+			'dates': 	'1907 - ', 
+		},
+		'williamErnestClaydon': {
+			'name':		'William Ernest Claydon',
+			'dates': 	'1898 - 1971', 
+		},
+		'georgeClaydon': {
+			'name':		'George Claydon',
+			'dates': 	'1892 - ', 
+		},
+		'adaClaydon': {
+			'name':		'Ada Claydon',
+			'dates': 	'1894 - ', 
+		},
 		
+			//gen3	
+			'georgeOliverClaydon': {
+				'name':		'George Oliver Claydon',
+				'dates': 	'1864 - 1911', 
+			},
+			
+			'florenceClaydon': {
+				'name':		'Florence Claydon',
+				'dates': 	'1874 - ', 
+			},
+			'majorClaydon': {
+				'name':		'Major A Claydon',
+				'dates': 	'1871 - ', 
+			},
+			'ernestEHClaydon': {
+				'name':		'Ernest E H Claydon',
+				'dates': 	'1868 - ', 
+			},
+			'aliceClaydon': {
+				'name':		'Alice L Claydon',
+				'dates': 	'1866 - ', 
+			},
+			'robertClaydon': {
+				'name':		'Robert L Claydon',
+				'dates': 	'1865 - ', 
+			},
+			'harryClaydon': {
+				'name':		'Harry E Claydon',
+				'dates': 	'1863 - ', 
+			},
+			'arthurClaydon': {
+				'name':		'Arthur Claydon',
+				'dates': 	'1857 - ', 
+			},
+			'joshuaClaydon': {
+				'name':		'Joshua J Claydon',
+				'dates': 	'1856 - ', 
+			},
+			'maryClaydon': {
+				'name':		'Mary Claydon',
+				'dates': 	'1854 - ', 
+			},
+			'fredrickClaydon': {
+				'name':		'Fredrick Claydon',
+				'dates': 	'1851 - ', 
+			},
+			'arabellaClaydon': {
+				'name':		'Arabella Claydon',
+				'dates': 	'1848 - ', 
+			},
+		
+			
+				//gen4	
+				'thomasClaydon': {
+					'name':		'Thomas Claydon',
+					'dates': 	'1823 - ', 
+				},
 		
 	};
 	
