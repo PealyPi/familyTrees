@@ -15,8 +15,8 @@ function nodeDataStorage(){//collapse lvl 2
 		'mainFamily':	'kesby',
 		'familyName': 	'kesby',
 		'spouseFamily': 'hadkiss',
-		'parentSpouse':	'johnNevilleKesby',
-		'parentMain': 'maryBobby',	
+		'parentMain':	'johnNevilleKesby',
+		'parentSpouse': 'maryBobby',	
 		'siblings': 	['jackKesby'],
 		//'spouse': 	'ronaldHadkiss',	
 		//'childMain': 	['lesleyPeal'],
@@ -238,13 +238,75 @@ function nodeDataStorage(){//collapse lvl 2
 	//hadkiss
 	hadkiss.ronaldHadkiss = {	
 		'gen': 1,
-		'isRoot':	true,
-		'mainLine':		true,	
+		'isRoot':		true,
+		'isMainLine':	true,	
+		'isMainParent': true,
+		'mainFamily':	'hadkiss',
+		'familyName': 	'hadkiss',
 		'spouseFamily': 'kesby',
-		'familyName': 'hadkiss',
-		'spouse': 		'roseHadkiss',	
+		'parentSpouse':	'billHadkiss',
+		'parentMain': 'berthaClaydon',	
+		'siblings': 	['williamHadkiss, ivyHadkiss, ireneHadkiss'],
+		//'spouse': 	'ronaldHadkiss',	
+		//'childMain': 	['lesleyPeal'],
 		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};
+	
+	// ----- hadkiss ----- //	
+	//gen2	
+	hadkiss.billHadkiss = {	
+		'parentMain': 	'samuelHadkiss',	
+		'parentSpouse': 'elizabethCoombs',
+		'siblings': 	['nellHadkiss', 'maryAnnHadkiss', 'samuel2Hadkiss', 'leonardGeorgeHadkiss', 'elizabethEstherHadkiss'],
+	};
+		//gen3	
+		hadkiss.samuelHadkiss = {	
+			'parentMain': 	'william4Hadkiss',	
+			'parentSpouse': 'juliaMitchell',
+			'siblings': 	['annHadkiss', 'william3Hadkiss', 'johnHadkiss', 'thomasHadkiss', 'charlesHadkiss', 'juliaHadkiss'],
+		};
+			//gen4	
+			hadkiss.william4Hadkiss = {	
+				'parentMain': 	'thomas5Hadkiss',	
+				'parentSpouse': 'unknown5Hadkiss1',				
+			};
+				//gen5	
+				hadkiss.thomas5Hadkiss = {};
+				hadkiss.unknown5Hadkiss1 = {};
+			
+			//gen4	
+			hadkiss.juliaMitchell = {	
+				'familyName': 	'mitchell',
+				'parentMain': 	'johnMitchell',	
+				'parentSpouse': 'unknown5Hadkiss1',				
+			};
+			
+		//gen3	
+		hadkiss.elizabethCoombs = {	
+			'parentMain': 	'stephenGeorgeCoombs',	
+			'parentSpouse': 'mariaCoombs',
+			'siblings': 	['ellenCoombs', 'maryCoombs', 'stephenCoombs'],
+		};
+		hadkiss.stephenCoombs = {	
+			'spouse': 	'roberthaCoombs',	
+			'children': 	['stephen2Coombs', 'robertCoombs', 'henryCoombs', 'williamCoombs', 'adaCoombs', 'hectorCoombs'],
+		};
+			//gen4	
+			hadkiss.stephenGeorgeCoombs = {				
+			};
+			hadkiss.mariaCoombs = {				
+			};
+		
+	
+	// ----- claydon ----- //	
+	//gen2	
+	hadkiss.berthaClaydon = {	
+		'familyName': 'claydon',
+		//'parentMain': 	'sidneyCharlesBobby',	
+		//'parentSpouse': 'adaBerriman',
+		//'siblings': 	['floBobby', 'charlesEdwardBobby', 'lotBobby', 'sidBobby', 'harryBobby', 'jackBobby', 'jeanBobby'],
+	};
+	
 	
 	
 	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};

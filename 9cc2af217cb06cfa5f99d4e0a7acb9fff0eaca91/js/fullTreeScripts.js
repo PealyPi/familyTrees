@@ -471,6 +471,6 @@ function fullRoundedRect(x, y, width, height, radius) {
 /* -------------------- */
 const fullTreesObj	= new fullTrees();
 const fullTreeElem_kesby	= new fullTreeSVG('kesby');
-//const fullTreeElem_hadkiss	= new fullTreeSVG('hadkiss');
+const fullTreeElem_hadkiss	= new fullTreeSVG('hadkiss');
 
 /* -------------------- */

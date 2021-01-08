@@ -602,7 +602,8 @@ function personInfoStorage(){
 	
 	const hadkiss = {
 		'ronaldHadkiss': {
-			'name':		'Ronald Leonard Hadkiss',
+			'name':		'Ron Hadkiss',
+			'bornName':	'Ronald Leonard Hadkiss',
 			'dates': 	'1925 - 1995',	 
 			'about': { 
 				'bornOn': 	'6th August 1925',
@@ -615,6 +616,169 @@ function personInfoStorage(){
 			},	
 			//'imgIcon': true,			
 		},	
+		'williamHadkiss': {
+			'name':		'William Hadkiss',
+			'dates': 	'1922 - 1992', 
+		},
+		'ivyHadkiss': {
+			'name':		'Ivy Frances Hadkiss',
+			'dates': 	'1915 - 1919', 
+		},
+		'ireneHadkiss': {
+			'name':		'Irene Ellen Hadkiss',
+			'dates': 	'1920 - ', 
+		},
+		
+		// ----- hadkiss ----- //	
+		//gen2	
+		'billHadkiss': {
+			'name':		'Bill Hadkiss',
+			'bornName':	'William Hadkiss',
+			'dates': 	'1888 - 1968', 
+		},
+		
+		'nellHadkiss': {
+			'name':		'Nell Hadkiss',
+			'bornName':	'Ellen Hadkiss',
+			'dates': 	'1890 -', 
+		},
+		'maryAnnHadkiss': {
+			'name':		'Mary Anne Hadkiss',
+			'dates': 	'1893 - 1915', 
+		},
+		'samuel2Hadkiss': {
+			'name':		'Samuel Hadkiss',
+			'dates': 	'1895 - 1916', 
+		},
+		'leonardGeorgeHadkiss': {
+			'name':		'Leonard George Hadkiss',
+			'dates': 	'1901 - 1901', 
+		},
+		'elizabethEstherHadkiss': {
+			'name':		'Elizabeth Esther Hadkiss',
+			'dates': 	'1902 - 1903', 
+		},
+		
+			//gen3	
+			'samuelHadkiss': {
+				'name':		'Samuel Hadkiss',
+				'dates': 	'1857 - 1922', 
+			},
+			
+			'annHadkiss': {
+				'name':		'Ann Hadkiss',
+				'dates': 	'1853 - ', 
+			},
+			'william3Hadkiss': {
+				'name':		'William Hadkiss',
+				'dates': 	'1855 - ', 
+			},
+			'johnHadkiss': {
+				'name':		'John Hadkiss',
+				'dates': 	'1859 - ', 
+			},
+			'thomasHadkiss': {
+				'name':		'Thomas Hadkiss',
+				'dates': 	'1862 - ', 
+			},
+			'charlesHadkiss': {
+				'name':		'Charles Hadkiss',
+				'dates': 	'1864 - ', 
+			},
+			'juliaHadkiss': {
+				'name':		'Julia Hadkiss',
+				'dates': 	'1870 - ', 
+			},
+			
+				//gen4	
+				'william4Hadkiss': {
+					'name':		'William Hadkiss',
+					'dates': 	'1830 - ', 
+				},
+					//gen5	
+					'thomas5Hadkiss': {
+						'name':		'Thomas Hadkiss',
+						'dates': 	'1791 - ', 
+					},	
+					'unknown5Hadkiss1': {
+						'name':		'',
+						'dates': 	'', 
+					},
+					
+				//gen4	
+				'juliaMitchell': {
+					'name':		'Julia Mitchell',
+					'dates': 	'1831 - ', 
+				},
+			
+			//gen3	
+			'elizabethCoombs': {
+				'name':		'Elizabeth Esther Coombs',
+				'dates': 	'1864 - 1903', 
+			},
+			
+			'ellenCoombs': {
+				'name':		'Ellen Coombs',
+				'dates': 	'1871 - ', 
+			},
+			'maryCoombs': {
+				'name':		'Mary Coombs',
+				'dates': 	'1869 - ', 
+			},
+			'stephenCoombs': {
+				'name':		'Stephen Coombs',
+				'dates': 	'1863 - ', 
+			},
+			'roberthaCoombs': {
+				'name':		'Robertha',
+				'dates': 	'1863 - ', 
+			},
+		'stephen2Coombs': {
+			'name':		'Stephen Coombs',
+			'dates': 	'1886 - ', 
+		},
+		'robertCoombs': {
+			'name':		'Robert Coombs',
+			'dates': 	'1890 - ', 
+		},
+		'henryCoombs': {
+			'name':		'Henry Coombs',
+			'dates': 	'1892 - ', 
+		},
+		'williamCoombs': {
+			'name':		'William Coombs',
+			'dates': 	'1893 - ', 
+		},
+		'adaCoombs': {
+			'name':		'Ada Coombs',
+			'dates': 	'1896 - ', 
+		},
+		'hectorCoombs': {
+			'name':		'Hector Coombs',
+			'dates': 	'1901 - ', 
+		},
+					
+				//gen4	
+				'stephenGeorgeCoombs': {
+					'name':		'Stephen George Coombs',
+					'dates': 	'1826 - ', 
+				},
+				'mariaCoombs': {
+					'name':		'Maria',
+					'dates': 	'1838 - ', 
+				},
+		
+		
+		
+		// ----- claydon ----- //	
+		//gen2	
+		'berthaClaydon': {
+			'name':		'Bertha Isabella Claydon',
+			'dates': 	'1896 - 1973', 
+		},
+		
+		
+		
 	};
 	
 	const peal = {	
