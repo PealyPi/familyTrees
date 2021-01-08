@@ -824,11 +824,13 @@ class node {
 class nodeCircle {
 	constructor(container){
 		this.container = container;
+		this.circleRadius = 50;
+		this.circleBorder = 4;
 	}
 	
 	createCircle(whichNode){		
-		const circleRadius = 50;
-		const circleBorder = 4;
+		const circleRadius = this.circleRadius;
+		const circleBorder = this.circleBorder;
 		const circleFullWidth = circleRadius + circleBorder;		
 		
 		const circleGrp = new createNewElement('g', {

@@ -89,7 +89,6 @@ function generateRelationsData(data) {
 				'siblingMain': 	thisTag
 			};		
 			
-			let test = finalData.kesby.johnBobby ?? null;
 			
 			for (let sibling of siblingList){
 				finalData[fam][sibling] = Object.assign({}, finalData[fam][sibling] ?? {}, siblingObj);				
