@@ -33,39 +33,39 @@ function personInfoStorage(){
 		},
 		
 		'lotBobby': {
-				'name':		'Lot Coyle',
-				'bornName':	'Charlotte Bobby',
-				'dates': 	'1906 - 1990', 
-			},
+			'name':		'Lot Coyle',
+			'bornName':	'Charlotte Bobby',
+			'dates': 	'1906 - 1990', 
+		},
 		'floBobby': {
-				'name':		'Flo Bobby',
-				'bornName':	'Florence Bobby',
-				'dates': 	'1901 - 1965', 
-			},
+			'name':		'Flo Bobby',
+			'bornName':	'Florence Bobby',
+			'dates': 	'1901 - 1965', 
+		},
 		'charlesEdwardBobby': {
-				'name':		'Charles Edward Bobby',
-				'dates': 	'1904 - 1980', 
-			},
+			'name':		'Charles Edward Bobby',
+			'dates': 	'1904 - 1980', 
+		},
 		'sidBobby': {
-				'name':		'Sid Bobby',
-				'bornName':	'Sidney Grimwood Bobby',
-				'dates': 	'1911 -', 
-			},
+			'name':		'Sid Bobby',
+			'bornName':	'Sidney Grimwood Bobby',
+			'dates': 	'1911 -', 
+		},
 		'harryBobby': {
-				'name':		'Harry Bobby',
-				'bornName':	'Henry Bobby',
-				'dates': 	'1914 - 1984', 
-			},
+			'name':		'Harry Bobby',
+			'bornName':	'Henry Bobby',
+			'dates': 	'1914 - 1984', 
+		},
 		'jackBobby': {
-				'name':		'Jack Bobby',
-				'bornName':	'John Bobby',
-				'dates': 	'1914 -', 
-			},
+			'name':		'Jack Bobby',
+			'bornName':	'John Bobby',
+			'dates': 	'1914 -', 
+		},
 		'jeanBobby': {
-				'name':		'Jean Bobby',
-				'bornName':	'Margret Jean Bobby',
-				'dates': 	'1921 -', 
-			},
+			'name':		'Jean Bobby',
+			'bornName':	'Margret Jean Bobby',
+			'dates': 	'1921 -', 
+		},
 			
 			//gen3
 			'adaBerriman': {
@@ -738,7 +738,7 @@ function personInfoStorage(){
 				'name':		'Stephen Coombs',
 				'dates': 	'1863 - ', 
 			},
-			'roberthaCoombs': {
+		/*	'roberthaCoombs': {
 				'name':		'Robertha',
 				'dates': 	'1863 - ', 
 			},
@@ -765,7 +765,7 @@ function personInfoStorage(){
 		'hectorCoombs': {
 			'name':		'Hector Coombs',
 			'dates': 	'1901 - ', 
-		},
+		},*/
 					
 				//gen4	
 				'stephenGeorgeCoombs': {

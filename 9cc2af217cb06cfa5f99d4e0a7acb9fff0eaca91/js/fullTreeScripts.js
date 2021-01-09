@@ -366,6 +366,7 @@ class fullTree_node {
 			'x': 0, 'y': 0,
 		});
 		let datesData = (this.personInfo.dates ?? '');
+		var nameLabelY = 90;
 		
 		if (datesData != ''){
 			const labelDate = new createNewElement('path', {
@@ -390,6 +391,8 @@ class fullTree_node {
 			labelGrp.appendChild(labelDate);
 			labelGrp.appendChild(labelDateText);
 			
+		} else {
+			nameLabelY = 60;
 		}
 		
 		let personName = this.personInfo.name ?? '';
@@ -405,7 +408,7 @@ class fullTree_node {
 				'stroke': '#FF928B',
 				'stroke-width': '0.6px',
 				'x': 	0,	
-				'y': 	90,			
+				'y': 	nameLabelY,			
 				'textContent': 	personName,			
 			});	
 		} else {
