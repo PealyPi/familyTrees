@@ -7,7 +7,7 @@ function nodeDataStorage(){//collapse lvl 2
 	var kesby = {}, hadkiss = {}, peal = {}, mckenzie = {};
 	
 	//kesby
-	kesby.roseHadkiss = {	
+	kesby.roseKesby = {	
 		'gen': 1,
 		'isRoot':		true,
 		'isMainLine':	true,	
@@ -22,7 +22,7 @@ function nodeDataStorage(){//collapse lvl 2
 		//'childMain': 	['lesleyPeal'],
 		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};
-	//Object.freeze(kesby.roseHadkiss);
+	//Object.freeze(kesby.roseKesby);
 	
 	kesby.jackKesby = {			
 		'spouse': 		'juneKesby',	
@@ -247,7 +247,7 @@ function nodeDataStorage(){//collapse lvl 2
 		'parentSpouse':	'billHadkiss',
 		'parentMain': 'berthaClaydon',	
 		'siblings': 	['williamHadkiss, ivyHadkiss, ireneHadkiss'],
-		//'spouse': 	'ronaldHadkiss',	
+		//'spouse': 	'roseKesby',	
 		//'childMain': 	['lesleyPeal'],
 		//'children': 	['lesleyPeal, chrisHadkiss'],
 	};
@@ -278,8 +278,11 @@ function nodeDataStorage(){//collapse lvl 2
 			hadkiss.juliaMitchell = {	
 				'familyName': 	'mitchell',
 				'parentMain': 	'johnMitchell',	
-				'parentSpouse': 'unknown5Hadkiss1',				
+				'parentSpouse': 'unknownMitchell',				
 			};
+				//gen5	
+				hadkiss.johnMitchell = {};
+				hadkiss.unknownMitchell = {};
 			
 		//gen3	
 		hadkiss.elizabethCoombs = {	

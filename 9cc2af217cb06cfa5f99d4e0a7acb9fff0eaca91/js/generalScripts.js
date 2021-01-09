@@ -4,7 +4,7 @@
 /* preload info /relations data */
 class famDataInfo {
 	constructor(){
-		this.rootPeople = {'kesby': 'roseHadkiss', 'hadkiss': 'ronaldHadkiss', 'peal': '', 'mckenzie': ''};
+		this.rootPeople = {'kesby': 'roseKesby', 'hadkiss': 'ronaldHadkiss', 'peal': '', 'mckenzie': ''};
 		this.famOptions = ['kesby', 'hadkiss', 'peal', 'mckenzie'];
 	}
 	
@@ -46,30 +46,34 @@ var PEOPLEIMGs = pplImageLinks();
 
 function generateRelationsData(data) {
 	
-	var finalData = {'kesby': {}, 'hadkiss': {}, 'peal': {}, 'mckenzie': {}};
+	var finalData = {'kesby': {}, 'hadkiss': {}, 
+		//'peal': {}, 'mckenzie': {}
+	};
+	let famKeys = Object.keys(finalData);;
 	let rootPeople = famDataInfoObj.rootPeople;
 	
 	for (let fam in data){
-		if (fam == 'kesby'){
-		//get first of obj
-		let rootPerson = rootPeople[fam];
-		let rootData = data[fam][rootPerson];
-		finalData[fam][rootPerson] = rootData;
-		
-		let keyChecks = (rootData.isRoot) ? (rootData.isMainLine) ? true : false : false;
-		if (!keyChecks){
-			console.log("Error: root person " + rootPerson + " has incorrect initial keys");
+		if (famKeys.includes(fam)){
+			//get first of obj
+			let rootPerson = rootPeople[fam];
+			let rootData = data[fam][rootPerson];
+			finalData[fam][rootPerson] = rootData;
 			
-		} else {			
-			generateParent(fam, rootPerson, rootData.parentMain, true);
-			generateParent(fam, rootPerson, rootData.parentSpouse, false);
-			generateSiblings(fam, rootPerson);
-		}
+			let keyChecks = (rootData.isRoot) ? (rootData.isMainLine) ? true : false : false;
+			if (!keyChecks){
+				console.log("Error: root person " + rootPerson + " has incorrect initial keys");
+				
+			} else {			
+				generateParent(fam, rootPerson, rootData.parentMain, true);
+				generateParent(fam, rootPerson, rootData.parentSpouse, false);
+				generateSiblings(fam, rootPerson);
+			}
 		}
 	}
 	
-	//change when hadkiss added
-	finalData.hadkiss = nodeDataStorage().hadkiss;
+	//change when peal/mckenzie added
+	finalData.peal = nodeDataStorage().peal;
+	finalData.mckenzie = nodeDataStorage().mckenzie;
 	
 	return finalData;
 	
@@ -194,7 +198,7 @@ function generateRelationsData(data) {
 		}
 		let newThisObj = Object.assign({}, thisData, baseObj);
 		finalData[fam][parentTag] = newThisObj;
-		//console.log(parentTag);		console.log("gen" + newThisObj.gen); 
+		console.log(parentTag);		console.log("gen" + newThisObj.gen); 
 		//console.log( newThisObj.isMainLine);
 		
 		if (thisData.parentMain)

@@ -365,27 +365,32 @@ class fullTree_node {
 			'class': 'nodeLabelGrp',
 			'x': 0, 'y': 0,
 		});
-		const labelDate = new createNewElement('path', {
-			'class': 'nodeLabelDate',
-			'd': dateLabelD,
-			'fill': '#AB7878',
-			'stroke': '#7D5656',
-			'stroke-width': '2px',
+		let datesData = (this.personInfo.dates ?? '');
+		
+		if (datesData != ''){
+			const labelDate = new createNewElement('path', {
+				'class': 'nodeLabelDate',
+				'd': dateLabelD,
+				'fill': '#AB7878',
+				'stroke': '#7D5656',
+				'stroke-width': '2px',
+				
+			});
+			const labelDateText = new createNewElement('text', {
+				'class': 		'fullTree_dateTxt',
+				'text-anchor': 	'middle',
+				'font-family': 	"'Galada', 'Verdana', serif",
+				'font-size': 	'20',
+				'fill':	'#402828',
+				'x': 	0,	
+				'y': 	55,			
+				'textContent': datesData,			
+			});	
+			this.nodeGrp.appendChild(labelGrp);
+			labelGrp.appendChild(labelDate);
+			labelGrp.appendChild(labelDateText);
 			
-		});
-		const labelDateText = new createNewElement('text', {
-			'class': 		'fullTree_dateTxt',
-			'text-anchor': 	'middle',
-			'font-family': 	"'Galada', 'Verdana', serif",
-			'font-size': 	'20',
-			'fill':	'#402828',
-			'x': 	0,	
-			'y': 	55,			
-			'textContent': 	(this.personInfo.dates ?? ''),			
-		});	
-		this.nodeGrp.appendChild(labelGrp);
-		labelGrp.appendChild(labelDate);
-		labelGrp.appendChild(labelDateText);
+		}
 		
 		let personName = this.personInfo.name ?? '';
 		

@@ -4,7 +4,7 @@
 function personInfoStorage(){	
 	//collapse level 3
 	const kesby = {	
-		'roseHadkiss': {
+		'roseKesby': {
 			'name':		'Rose Hadkiss',
 			'bornName':	'Rosemary Kesby',
 			'dates': 	'1925 - 2020',	 
@@ -710,6 +710,15 @@ function personInfoStorage(){
 					'name':		'Julia Mitchell',
 					'dates': 	'1831 - ', 
 				},
+					//gen5	
+					'johnMitchell': {
+						'name':		'John Mitchell',
+						'dates': 	'', 
+					},	
+					'unknownMitchell': {
+						'name':		'',
+						'dates': 	'', 
+					},
 			
 			//gen3	
 			'elizabethCoombs': {
