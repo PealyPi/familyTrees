@@ -292,10 +292,8 @@ function nodeDataStorage(){//collapse lvl 2
 			'children': 	['stephen2Coombs', 'robertCoombs', 'henryCoombs', 'williamCoombs', 'adaCoombs', 'hectorCoombs'],
 		};
 			//gen4	
-			hadkiss.stephenGeorgeCoombs = {				
-			};
-			hadkiss.mariaCoombs = {				
-			};
+			hadkiss.stephenGeorgeCoombs = { };
+			hadkiss.mariaCoombs = { };
 		
 	
 	// ----- claydon ----- //	
@@ -332,10 +330,13 @@ function nodeDataStorage(){//collapse lvl 2
 	
 		//gen3	
 		hadkiss.fannyAtkinson = {	
-			//'parentMain': 	'thomasClaydon',	
-		//	'parentSpouse': 'maryRawlinson',
-		//	'siblings': 	['florenceClaydon', 'majorClaydon', 'ernestEHClaydon', 'aliceClaydon', 'robertClaydon', 'harryClaydon', 'arthurClaydon', 'joshuaClaydon', 'maryClaydon', 'fredrickClaydon', 'arabellaClaydon'],
+			'parentMain': 	'jamesAtkinson',	
+			'parentSpouse': 'rachelAtkinson',
+			'siblings': 	['kateAtkinson', 'jamesRAtkinson', 'helenaAtkinson', 'annieAtkinson', 'adaAtkinson', 'florenceAtkinson', 'georgeAtkinson', 'gertrudeAtkinson', 'sidneyAtkinson'],
 		};
+			//gen4	
+			hadkiss.jamesAtkinson = {};
+			hadkiss.rachelAtkinson = {};
 	
 	
 	var allFams = {'kesby': kesby, 'hadkiss': hadkiss, 'peal': peal, 'mckenzie': mckenzie};

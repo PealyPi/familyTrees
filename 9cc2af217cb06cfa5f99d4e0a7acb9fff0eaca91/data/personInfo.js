@@ -855,7 +855,85 @@ function personInfoStorage(){
 					'name':		'Thomas Claydon',
 					'dates': 	'1823 - ', 
 				},
+			
+					//gen5	
+					'mary5Claydon': {
+						'name':		'Mary',
+						'dates': 	'', 
+					},
+					'unknown5Claydon': {
+						'name':		'',
+						'dates': 	'', 
+					},
 		
+				//gen4	
+				'maryRawlinson': {
+					'name':		'Mary Rawlinson',
+					'dates': 	'1829 - ', 
+				},
+					//gen5	
+					'elizabethRawlinson': {
+						'name':		'Elizabeth',
+						'dates': 	'', 
+					},
+					'unknownRawlinson': {
+						'name':		'',
+						'dates': 	'', 
+					},
+					
+			//gen3	
+			'fannyAtkinson': {
+				'name':		'Fanny Atkinson',
+				'bornName':	'Frances Atkinson',
+				'dates': 	'1866 - ', 
+			},
+			
+			'kateAtkinson': {
+				'name':		'Kate Atkinson',
+				'dates': 	'1872 - ', 
+			},
+			'jamesRAtkinson': {
+				'name':		'James R Atkinson',
+				'dates': 	'1874 - ', 
+			},
+			'helenaAtkinson': {
+				'name':		'Helena (Elenor) Atkinson',
+				'dates': 	'1877 - ', 
+			},
+			'annieAtkinson': {
+				'name':		'Annie Atkinson',
+				'dates': 	'1879 - ', 
+			},
+			'adaAtkinson': {
+				'name':		'Ada Atkinson',
+				'dates': 	'1881 - ', 
+			},
+			'florenceAtkinson': {
+				'name':		'Florence Atkinson',
+				'dates': 	'1883 - ', 
+			},
+			'georgeAtkinson': {
+				'name':		'George Atkinson',
+				'dates': 	'1885 - ', 
+			},
+			'gertrudeAtkinson': {
+				'name':		'Gertrude Atkinson',
+				'dates': 	'1887 - ', 
+			},
+			'sidneyAtkinson': {
+				'name':		'Sidney Atkinson',
+				'dates': 	'1889 - ', 
+			},	
+			
+				//gen4	
+				'jamesAtkinson': {
+					'name':		'James Atkinson',
+					'dates': 	'1842 - ', 
+				},
+				'rachelAtkinson': {
+					'name':		'Rachel',
+					'dates': 	'1852 - ', 
+				},
 	};
 	
 	const peal = {	
